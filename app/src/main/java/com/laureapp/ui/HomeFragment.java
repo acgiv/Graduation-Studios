@@ -1,4 +1,4 @@
-package com.laureapp.UI;
+package com.laureapp.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

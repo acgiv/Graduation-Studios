@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.RegisterActivity">
+
+
+    <TextView
+        android:id="@+id/headerTextView"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:background="@color/color_primary"
+        android:gravity="center"
+        android:text="@string/Registrati_header"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints,TextViewEdits" />
+
+    <EditText
+        android:id="@+id/name_register"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/input_color"
+        android:elevation="4dp"
+        android:ems="10"
+        android:hint="@string/name"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:paddingStart="20dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/color_text_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerTextView"
+        tools:ignore="MissingConstraints,RtlSymmetry" />
+
+    <EditText
+        android:id="@+id/password_register"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:autofillHints=""
+        android:background="@drawable/input_color"
+        android:drawableEnd="@drawable/eye_view"
+        android:paddingEnd="12dp"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:paddingStart="20dp"
+        android:textColorHint="@color/color_text_input"
+        app:iconTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_register"
+        tools:ignore="MissingConstraints,RtlSymmetry" />
+
+    <Button
+        android:id="@+id/button_register"
+        android:layout_width="139dp"
+        android:layout_height="59dp"
+        android:background="@drawable/button_background"
+        android:layout_marginTop="40dp"
+        android:text="@string/Registrati"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="registratiClick"
+        app:layout_constraintTop_toBottomOf="@+id/studente_register"
+        tools:ignore="MissingConstraints" />
+
+    <RadioButton
+        android:id="@+id/professore_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="28dp"
+        android:text="@string/professore"
+        android:textSize="17sp"
+        app:buttonTint="@color/color_primary"
+        app:layout_constraintEnd_toStartOf="@+id/studente_register"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password"
+        tools:ignore="MissingConstraints" />
+
+    <RadioButton
+        android:id="@+id/studente_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/studente"
+        android:textSize="17sp"
+        app:buttonTint="@color/color_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/text_ruolo_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="34dp"
+        android:text="@string/ruolo"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/confirm_password"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/input_color"
+        android:drawableEnd="@drawable/eye_invisible"
+        android:paddingEnd="12dp"
+        android:ems="10"
+        android:hint="@string/confirm_password"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:paddingStart="20dp"
+        android:textColorHint="@color/color_text_input"
+        app:iconTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_register"
+        tools:ignore="MissingConstraints,RtlSymmetry" />
+
+    <EditText
+        android:id="@+id/email_register"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/input_color"
+        android:ems="10"
+        android:hint="@string/email"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:paddingStart="20dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/color_text_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cognome_register"
+        tools:ignore="MissingConstraints,RtlSymmetry" />
+
+    <EditText
+        android:id="@+id/cognome_register"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/input_color"
+        android:ems="10"
+        android:hint="@string/cognome"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:paddingStart="20dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/color_text_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_register"
+        tools:ignore="MissingConstraints,RtlSymmetry" />
+
+    <ImageView
+        android:id="@+id/back_register"
+        android:layout_width="27dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/back"
+        tools:ignore="MissingConstraints"
+        android:contentDescription="@string/back" />
+
+    <ImageView
+        android:id="@+id/user"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="118dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="269dp"
+        app:layout_constraintEnd_toEndOf="@+id/headerTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/user"
+        tools:ignore="MissingConstraints"
+        android:contentDescription="@string/user" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

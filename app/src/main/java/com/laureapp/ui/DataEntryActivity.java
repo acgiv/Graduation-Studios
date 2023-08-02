@@ -1,4 +1,4 @@
-package com.laureapp.UI;
+package com.laureapp.ui;
 
 import android.os.Bundle;
 import android.view.View;

@@ -20,13 +20,9 @@
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustPan">
-
-
-
             <!-- Set DataEntryActivity come prima pagina di avvio -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

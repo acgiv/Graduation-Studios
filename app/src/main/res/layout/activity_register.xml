@@ -9,6 +9,37 @@
     tools:context=".ui.RegisterActivity">
 
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_input"
+        android:layout_width="380dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        app:hintTextColor="@color/color_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cognome_input"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_color"
+            android:ems="10"
+            android:hint="@string/email"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:paddingStart="20dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/color_text_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LogoUniba"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         android:id="@+id/headerTextView"
         android:layout_width="0dp"
@@ -25,59 +56,140 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints,TextViewEdits" />
 
-    <EditText
-        android:id="@+id/name_register"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/name_input"
         android:layout_width="380dp"
-        android:layout_height="50dp"
+        android:layout_height="64dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/input_color"
-        android:elevation="4dp"
-        android:ems="10"
-        android:hint="@string/name"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:paddingStart="20dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/color_text_input"
+        app:hintTextColor="@color/color_secondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerTextView"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
+        tools:ignore="MissingConstraints">
 
-    <EditText
-        android:id="@+id/password_register"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/name_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_color"
+            android:ems="10"
+            android:hint="@string/name"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:paddingStart="20dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/color_text_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LogoUniba"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_input"
         android:layout_width="380dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:autofillHints=""
-        android:background="@drawable/input_color"
-        android:drawableEnd="@drawable/eye_view"
-        android:paddingEnd="12dp"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:paddingStart="20dp"
-        android:textColorHint="@color/color_text_input"
-        app:iconTint="@color/black"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        app:endIconMode="password_toggle"
+        app:hintTextColor="@color/color_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_register"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
+        app:layout_constraintTop_toBottomOf="@+id/email_input"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_color"
+            android:ems="10"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:paddingEnd="12dp"
+            app:iconTint="@color/black"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/conferma_password_input"
+        android:layout_width="380dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        app:endIconMode="password_toggle"
+        app:hintTextColor="@color/color_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_input"
+        tools:ignore="MissingConstraints">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/conferma_password_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_color"
+            android:ems="10"
+            android:hint="@string/confirm_password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:paddingStart="20dp"
+            android:paddingEnd="12dp"
+            app:iconTint="@color/black"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/text_ruolo_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="38dp"
+        android:text="@string/ruolo"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/professore_register"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/conferma_password_input"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
+
+    <RadioButton
+        android:id="@+id/studente_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:text="@string/studente"
+        android:textSize="17sp"
+        app:buttonTint="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.712"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/conferma_password_input"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/button_register"
-        android:layout_width="139dp"
-        android:layout_height="59dp"
+        android:layout_width="205dp"
+        android:layout_height="55dp"
         android:background="@drawable/button_background"
-        android:layout_marginTop="40dp"
+        android:onClick="registratiClick"
         android:text="@string/Registrati"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:onClick="registratiClick"
-        app:layout_constraintTop_toBottomOf="@+id/studente_register"
+        app:layout_constraintTop_toBottomOf="@+id/professore_register"
+        app:layout_constraintVertical_bias="0.333"
         tools:ignore="MissingConstraints" />
 
     <RadioButton
@@ -85,102 +197,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="37dp"
         android:layout_marginEnd="28dp"
         android:text="@string/professore"
         android:textSize="17sp"
         app:buttonTint="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/studente_register"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_password"
+        app:layout_constraintTop_toBottomOf="@+id/conferma_password_input"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
 
-    <RadioButton
-        android:id="@+id/studente_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/studente"
-        android:textSize="17sp"
-        app:buttonTint="@color/color_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.77"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_password"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/text_ruolo_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="34dp"
-        android:text="@string/ruolo"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_password"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/confirm_password"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cognome_input"
         android:layout_width="380dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/input_color"
-        android:drawableEnd="@drawable/eye_invisible"
-        android:paddingEnd="12dp"
-        android:ems="10"
-        android:hint="@string/confirm_password"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        android:paddingStart="20dp"
-        android:textColorHint="@color/color_text_input"
-        app:iconTint="@color/black"
+        android:layout_height="64dp"
+        android:layout_marginTop="10dp"
+        app:hintTextColor="@color/color_secondary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_register"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
+        app:layout_constraintTop_toBottomOf="@+id/name_input"
+        tools:ignore="MissingConstraints">
 
-    <EditText
-        android:id="@+id/email_register"
-        android:layout_width="380dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/input_color"
-        android:ems="10"
-        android:hint="@string/email"
-        android:importantForAutofill="no"
-        android:inputType="textEmailAddress"
-        android:paddingStart="20dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/color_text_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cognome_register"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
-
-    <EditText
-        android:id="@+id/cognome_register"
-        android:layout_width="380dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/input_color"
-        android:ems="10"
-        android:hint="@string/cognome"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:paddingStart="20dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/color_text_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_register"
-        tools:ignore="MissingConstraints,RtlSymmetry" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cognome_register"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/input_color"
+            android:ems="10"
+            android:hint="@string/cognome"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:paddingStart="20dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/color_text_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LogoUniba"
+            tools:ignore="MissingConstraints,RtlSymmetry" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/back_register"

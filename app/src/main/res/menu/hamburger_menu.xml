@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/appOption" android:checkableBehavior="single">
+        <item
+            android:id="@+id/itemRanking"
+            android:title="@string/Impostazione"
+            android:icon="@drawable/baseline_settings_24" />
+        <item
+            android:id="@+id/itemDownload"
+            android:title="@string/utente"
+            android:icon="@drawable/baseline_person_24" />
+    </group>
+<!--
+    <group android:id="@+id/profileOption" android:checkableBehavior="single">
+        <item
+            android:id="@+id/itemTutorial"
+            android:title="@string/hamburger_menu_text_tutorial"
+            android:icon="@drawable/ic_round_info_24" />
+        <item
+            android:id="@+id/itemSettings"
+            android:title="@string/hamburger_menu_text_settings"
+            android:icon="@drawable/ic_round_settings_24" />
+        <item
+            android:id="@+id/itemAbout"
+            android:title="@string/hamburger_menu_text_about_us"
+            android:visible="false"
+            android:icon="@drawable/ic_round_credits_24" />
+    </group>
+    -->
+
+    <group android:id="@+id/exitOption" android:checkableBehavior="single">
+        <item
+            android:id="@+id/itemSignOut"
+            android:title="@string/logout"
+            android:icon="@drawable/baseline_logout_24" />
+    </group>
+
+    <group
+        android:id="@+id/loginOption"
+        android:checkableBehavior="single"
+        android:visible="false">
+        <item
+            android:id="@+id/itemLogin"
+            android:icon="@drawable/baseline_login_24"
+            android:title="@string/Login" />
+    </group>
+</menu>

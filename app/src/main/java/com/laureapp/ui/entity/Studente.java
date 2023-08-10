@@ -12,6 +12,14 @@ public class Studente {
 
     private Long matricola;
 
+    public Long getMatricola() {
+        return matricola;
+    }
+
+    public void setMatricola(Long matricola) {
+        this.matricola = matricola;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,14 +1,20 @@
 package com.laureapp.ui;
 
+
+import com.google.android.material.textfield.TextInputLayout;
+import java.lang.reflect.Field;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.laureapp.R;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,5 +34,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginClick(View view) {
+    }
+
+
+    public void recupera_password(View view) {
+    }
+
+    public void link_registrati(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void button_back_login(View view) {
     }
 }

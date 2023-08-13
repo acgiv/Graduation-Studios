@@ -1,95 +1,114 @@
 package com.laureapp.ui;
-
-//import android.app.FragmentManager;
-import android.database.sqlite.SQLiteDatabase;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.util.Log;
+import android.view.MenuItem;
 
-//.R serve per riprendere gli ID delle componenti grafiche che verranno utilizzate e che si trovano all'interno del file xml
+import androidx.appcompat.widget.Toolbar;
 import com.laureapp.R;
+//.R serve per riprendere gli ID delle componenti grafiche che verranno utilizzate e che si trovano all'interno del file xml
+import com.google.android.material.navigation.NavigationView;
+
 
 
 public class MainActivity extends AppCompatActivity {
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
+    NavigationView navigationView;
+    NavController navController;
 
-        setContentView(R.layout.activity_main);
-
-        FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.container, new HomeFragment());
-        ft.addToBackStack(null);
-        ft.commit();
-
-    }*/
+    AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        // Avvia DataEntryActivity quando viene eseguita MainActivity
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
+        setContentView(R.layout.activity_main);
 
-        SQLiteDatabase database = this.openOrCreateDatabase("Laureapp", MODE_PRIVATE, null);
-        database.execSQL("CREATE TABLE IF NOT EXISTS"
-                .concat(" professore ( ")
-                .concat("ID_PROFESSORE").concat(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .concat("NOME").concat(" VARCHAR, ")
-                .concat("COGNOME").concat(" VARCHAR, ")
-                .concat("FOREIGN KEY(ID_TESI) REFERENCES tesi(ID_TESI)")
-                .concat(")")
-        );
+        navigationView = findViewById(R.id.navigation);
+        drawerLayout = findViewById(R.id.drawer);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS"
-                .concat("studente ( ")
-                .concat("ID_STUDENTE").concat(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .concat("MATRICOLA").concat(" INT(10), ")
-                .concat("DATA_IMMATRICOLAZIONE").concat(" DATETIME ")
-                .concat(")")
-        );
+        createAppBar();
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS"
-                .concat("esame ( ")
-                .concat("ID_ESAME").concat(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .concat("ESAME").concat(" VARCHAR, ")
-                .concat("DATA_CONSEGUMENTO").concat(" DATETIME ")
-                .concat(")")
-        );
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav,
+                R.string.close_nav);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS"
-                .concat("vincolo ( ")
-                .concat("ID_VINCOLO").concat(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .concat("TEMPISTICHE").concat(" VARCHAR, ")
-                .concat("MEDIA_VOTI").concat(" INT(10), ")
-                .concat("ESAMI_NECESSARI").concat(" VARCHAR, ")
-                .concat("SKILL").concat(" VARCHAR")
-                .concat(")")
-        );
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            Log.d("sono", "id");
+            if (id == R.id.itemRanking) {
+                //navController.navigate(R.id.rankingFragment);
+                return true;
+            } else if (id == R.id.itemDownload) {
+                return true;
+            } else if (id == R.id.itemLogin) {
+                return true;
+            } else if (id == R.id.itemSignOut) {
+                //faccio logout dell'utente se è loggato
+                //in entrambi i casi cancello i dati dal locale
+                   /* if(currentUser != null) {
+                        String uid = currentUser.getUid();
+                        db.userDao().deleteByUserId(uid);
+                        FirebaseAuth.getInstance().signOut();
+                    } else {
+                        db.userDao().deleteByUserId("guest");
+                    }
+                    */
+                //avvio l'activity di login
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            }
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS"
-                .concat("tesi (")
-                .concat("ID_TESI").concat(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .concat("FOREIGN KEY(id_ruolo) REFERENCES ruolo(id_ruolo), ")
-                .concat("FOREIGN KEY(ID_VINCOLO) REFERENCES vincolo(ID_VINCOLO), ")
-                .concat("TITOLO").concat(" VARCHAR, ")
-                .concat("TIPOLOGIA").concat(" VARCHAR, ")
-                .concat("ABSTRACT").concat(" VARCHAR, ")
-                .concat("DATA_PUBBLICAZIONE").concat(" DATETIME")
-                .concat(")")
-        );
+            //navController.navigate(R.id.downloadFragment);
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS"
-                .concat("tesi_professore ( ")
-                .concat("ID_tesi_professore").concat(" INTEGER PRIMARY KEY AUTOINCREMENT, ")
-                .concat("RUOLO_PROFESSORE").concat(" VARCHAR, ")
-                .concat("FOREIGN KEY(ID_STUDENTE) REFERENCES studente(ID_STUDENTE), ")
-                .concat("FOREIGN KEY(ID_PROFESSORE) REFERENCES professore(ID_PROFESSORE) ")
-                .concat(")")
-        );
+                /*
+                case R.id.itemTutorial:
+                    //avvio l'activity di visualizzazione del tutorial, passando come extra
+                    //la classe di provenienza, in modo da cambiare dinamicamente il testo
+                    //dei tasti presenti nel tutorial
+                    Intent startOnBoarding = new Intent(Main.this, OnBoarding.class);
+                    startOnBoarding.putExtra("classFrom", Main.class.toString());
+                    startActivity(startOnBoarding);
+                    return true;
+
+                case R.id.itemSettings:
+                    closeDrawerIfOpen();
+                    navController.navigate(R.id.settingsFragment);
+                    return true;
+
+                case R.id.itemAbout:
+                    closeDrawerIfOpen();
+                    navController.navigate(R.id.aboutUsFragment);
+                    return true;
+                */
+            return false;
+        });
 
     }
 
+    private void createAppBar() {// Passing each menu ID as a set of Ids because each// menu should be considered as top level destinations.
+     mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.home_fragment)
+                .setOpenableLayout(drawerLayout)
+                .build();
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
+    }
 }
 

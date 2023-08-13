@@ -21,6 +21,11 @@
     <string name="non_sei_ancora_registrato">Non sei ancora registrato?</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">logout</string>
+    <string name="Impostazione">Impostazioni</string>
+    <string name="utente">utente</string>
+    <string name="close_nav" />
+    <string name="open_nav" />
 
 
 </resources>

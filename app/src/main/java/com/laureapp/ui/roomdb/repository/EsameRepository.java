@@ -1,7 +1,7 @@
 package com.laureapp.ui.roomdb.repository;
 import android.content.Context;
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
-import com.laureapp.ui.roomdb.entity.Professore;
+import com.laureapp.ui.roomdb.entity.Esame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -9,41 +9,41 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ProfessoreRepository {
+public class EsameRepository {
 
     private final RoomDbSqlLite roomDbSqlLite;
     private final Executor executor = Executors.newSingleThreadExecutor();
 
-    public ProfessoreRepository(Context context) {
+    public EsameRepository(Context context) {
         this.roomDbSqlLite = RoomDbSqlLite.getDatabase(context);
     }
 
-    public void insertProfessore(Professore professore){
-        executor.execute(() -> roomDbSqlLite.professoreDao().insert(professore));
+    public void insertEsame(Esame esame){
+        executor.execute(() -> roomDbSqlLite.esameDao().insert(esame));
     }
 
-    public void updateProfessore (Professore professore){
-        executor.execute(() -> roomDbSqlLite.professoreDao().update(professore));
+    public void updateEsame(Esame esame){
+        executor.execute(() -> roomDbSqlLite.esameDao().update(esame));
     }
 
-    public Professore findAllById(Long id){
-        CompletableFuture<Professore> future = new CompletableFuture<>();
+    public Esame findAllById(Long id){
+        CompletableFuture<Esame> future = new CompletableFuture<>();
         executor.execute(() -> {
-            Professore professore = roomDbSqlLite.professoreDao().findAllById(id);
-            future.complete(professore);
+            Esame esame = roomDbSqlLite.esameDao().findAllById(id);
+            future.complete(esame);
         });
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return new Professore();
+            return new Esame();
         }
     }
 
-    public List<Professore> getAllProfessore(){
-        CompletableFuture<List<Professore>> future = new CompletableFuture<>();
+    public List<Esame> getAllEsame(){
+        CompletableFuture<List<Esame>> future = new CompletableFuture<>();
         executor.execute(() -> {
-            List<Professore> lista = roomDbSqlLite.professoreDao().getAllProfesssore();
+            List<Esame> lista = roomDbSqlLite.esameDao().getAllEsame();
             future.complete(lista);
         });
         try {
@@ -54,14 +54,13 @@ public class ProfessoreRepository {
         }
     }
 
-    public boolean delateProfessore(Long id){
+    public boolean delateEsame(Long id){
         boolean result = false;
-        Professore professore =  this.findAllById(id);
-        if (professore.getId() != null) {
-            executor.execute(() -> roomDbSqlLite.professoreDao().delete(professore));
+        Esame esame =  this.findAllById(id);
+        if (esame.getId() != null) {
+            executor.execute(() -> roomDbSqlLite.esameDao().delete(esame));
             result = true;
         }
         return result;
     }
-
 }

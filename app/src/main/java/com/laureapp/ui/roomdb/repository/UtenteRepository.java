@@ -1,66 +1,73 @@
 package com.laureapp.ui.roomdb.repository;
-
 import android.content.Context;
-
-
-
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Utente;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+
 public class UtenteRepository {
 
-    private RoomDbSqlLite roomDbSqlLite;
-    // questa classe ritorna un singolo thread ogni volta  consentendo alle query di essere eseguite in background
-    private Executor executor = Executors.newSingleThreadExecutor();
+    private final RoomDbSqlLite roomDbSqlLite;
+    private final Executor executor = Executors.newSingleThreadExecutor();
+
 
     public UtenteRepository(Context context){
         roomDbSqlLite = RoomDbSqlLite.getDatabase(context);
     }
 
-    public boolean insertUtente(Utente utente){
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                roomDbSqlLite.utenteDao().insert(utente);
-            }
-        });
 
-        return true;
+    public void insertUtente(Utente utente){
+        executor.execute(() -> roomDbSqlLite.utenteDao().insert(utente));
     }
 
-    public boolean updateUtente(Utente utente){
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                roomDbSqlLite.utenteDao().update(utente);
-            }
-        });
 
-        return true;
+    public void updateUtente(Utente utente){
+        executor.execute(() -> roomDbSqlLite.utenteDao().update(utente));
     }
+
 
     public Utente findAllById(Long id){
-        final Utente[] utente = new Utente[1];
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-               utente[0] =  roomDbSqlLite.utenteDao().findAllById(id);
-            }
+        CompletableFuture<Utente> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Utente utente = roomDbSqlLite.utenteDao().findAllById(id);
+            future.complete(utente);
         });
-        return utente[0];
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new Utente();
+        }
     }
 
-    public boolean delateUtente(Long id){
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                roomDbSqlLite.utenteDao().delete(findAllById(id));
-            }
-        });
 
-        return true;
+    public List<Utente> getAllUtente(){
+        CompletableFuture<List<Utente>> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            List<Utente> lista = roomDbSqlLite.utenteDao().getAllUtente();
+            future.complete(lista);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+
+    public boolean delateUtente(Long id){
+        boolean result = false;
+        Utente utente =  this.findAllById(id);
+        if (utente.getId() != null) {
+            executor.execute(() -> roomDbSqlLite.utenteDao().delete(utente));
+            result = true;
+        }
+        return result;
     }
 }

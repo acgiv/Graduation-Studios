@@ -15,6 +15,7 @@ import com.laureapp.ui.roomdb.dao.StudenteTesiDao;
 import com.laureapp.ui.roomdb.dao.TesiDao;
 import com.laureapp.ui.roomdb.dao.TesiProfessoreDao;
 import com.laureapp.ui.roomdb.dao.UtenteDao;
+import com.laureapp.ui.roomdb.dao.VincoloDao;
 import com.laureapp.ui.roomdb.entity.CorsoStudente;
 import com.laureapp.ui.roomdb.entity.Esame;
 import com.laureapp.ui.roomdb.entity.Professore;
@@ -42,6 +43,7 @@ public abstract class RoomDbSqlLite extends RoomDatabase{
         public abstract StudenteTesiDao studenteTesiDao();
         public abstract TesiProfessoreDao tesiProfessoreDao();
         public abstract TesiDao tesiDao();
+        public abstract VincoloDao vincoloDao();
 
 
         public static RoomDbSqlLite getDatabase(final Context context) {

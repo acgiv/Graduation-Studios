@@ -1,7 +1,10 @@
 package com.laureapp.ui.roomdb.repository;
+
 import android.content.Context;
+
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
-import com.laureapp.ui.roomdb.entity.Professore;
+import com.laureapp.ui.roomdb.entity.Vincolo;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -9,41 +12,41 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class ProfessoreRepository {
+public class VincoloRepository {
 
     private final RoomDbSqlLite roomDbSqlLite;
     private final Executor executor = Executors.newSingleThreadExecutor();
 
-    public ProfessoreRepository(Context context) {
+    public VincoloRepository(Context context) {
         this.roomDbSqlLite = RoomDbSqlLite.getDatabase(context);
     }
 
-    public void insertProfessore(Professore professore){
-        executor.execute(() -> roomDbSqlLite.professoreDao().insert(professore));
+    public void insertVincolo(Vincolo vincolo){
+        executor.execute(() -> roomDbSqlLite.vincoloDao().insert(vincolo));
     }
 
-    public void updateProfessore (Professore professore){
-        executor.execute(() -> roomDbSqlLite.professoreDao().update(professore));
+    public void updateVincolo(Vincolo vincolo){
+        executor.execute(() -> roomDbSqlLite.vincoloDao().update(vincolo));
     }
 
-    public Professore findAllById(Long id){
-        CompletableFuture<Professore> future = new CompletableFuture<>();
+    public Vincolo findAllById(Long id){
+        CompletableFuture<Vincolo> future = new CompletableFuture<>();
         executor.execute(() -> {
-            Professore professore = roomDbSqlLite.professoreDao().findAllById(id);
-            future.complete(professore);
+            Vincolo vincolo = roomDbSqlLite.vincoloDao().findAllById(id);
+            future.complete(vincolo);
         });
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return new Professore();
+            return new Vincolo();
         }
     }
 
-    public List<Professore> getAllProfessore(){
-        CompletableFuture<List<Professore>> future = new CompletableFuture<>();
+    public List<Vincolo> getAllVincolo(){
+        CompletableFuture<List<Vincolo>> future = new CompletableFuture<>();
         executor.execute(() -> {
-            List<Professore> lista = roomDbSqlLite.professoreDao().getAllProfesssore();
+            List<Vincolo> lista = roomDbSqlLite.vincoloDao().getAllVincolo();
             future.complete(lista);
         });
         try {
@@ -54,14 +57,13 @@ public class ProfessoreRepository {
         }
     }
 
-    public boolean delateProfessore(Long id){
+    public boolean delateVincolo(Long id){
         boolean result = false;
-        Professore professore =  this.findAllById(id);
-        if (professore.getId() != null) {
-            executor.execute(() -> roomDbSqlLite.professoreDao().delete(professore));
+        Vincolo vincolo =  this.findAllById(id);
+        if (vincolo.getId() != null) {
+            executor.execute(() -> roomDbSqlLite.vincoloDao().delete(vincolo));
             result = true;
         }
         return result;
     }
-
 }

@@ -74,7 +74,7 @@ public class UtenteRepository {
     }
 
 
-    public boolean delateUtente(Long id){
+    public boolean deleteUtente(Long id){
         boolean result = false;
         Utente utente =  this.findAllById(id);
         if (utente.getId() != null) {

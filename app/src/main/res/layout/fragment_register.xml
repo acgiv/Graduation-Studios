@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/input_color"
                 android:ems="10"
-                android:hint="@string/password"
+                android:hint="@string/email"
                 android:padding="@dimen/padding_edit_text"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"

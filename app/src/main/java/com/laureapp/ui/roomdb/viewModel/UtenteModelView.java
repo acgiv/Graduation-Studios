@@ -25,8 +25,8 @@ public class UtenteModelView{
         utenteRepository.updateUtente(utente);
     }
 
-    public boolean delateUtente(long id){
-        return utenteRepository.delateUtente(id);
+    public boolean deleteUtente(long id){
+        return utenteRepository.deleteUtente(id);
     }
 
     public Utente findAllById(Long id){

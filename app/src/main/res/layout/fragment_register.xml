@@ -11,6 +11,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,6 +22,7 @@
             android:layout_width="380dp"
             android:layout_height="64dp"
             android:layout_marginTop="10dp"
+            app:boxBackgroundMode="outline"
             app:hintTextColor="@color/color_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -32,12 +34,13 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name_register"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/input_color"
                 android:ems="10"
                 android:hint="@string/name"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:padding="@dimen/padding_edit_text"
                 android:paddingStart="20dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/color_text_input"
@@ -54,6 +57,7 @@
             android:layout_width="380dp"
             android:layout_height="64dp"
             android:layout_marginTop="10dp"
+            app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/color_secondary"
             app:errorEnabled="false"
             app:hintTextColor="@color/color_secondary"
@@ -65,12 +69,13 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cognome_register"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/input_color"
                 android:ems="10"
                 android:hint="@string/cognome"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:padding="@dimen/padding_edit_text"
                 android:paddingStart="20dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/color_text_input"
@@ -88,6 +93,7 @@
             android:layout_width="380dp"
             android:layout_height="64dp"
             android:layout_marginTop="10dp"
+            app:boxBackgroundMode="outline"
             app:hintTextColor="@color/color_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,10 +105,11 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_login"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/input_color"
                 android:ems="10"
-                android:hint="@string/email"
+                android:hint="@string/password"
+                android:padding="@dimen/padding_edit_text"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                 android:paddingStart="20dp"
@@ -123,6 +130,7 @@
             android:layout_marginTop="10dp"
             app:endIconMode="password_toggle"
             app:hintTextColor="@color/color_secondary"
+            app:boxBackgroundMode="outline"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -133,7 +141,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_register"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/input_color"
                 android:ems="10"
                 android:hint="@string/password"
@@ -153,6 +161,7 @@
             android:layout_marginTop="10dp"
             app:endIconMode="password_toggle"
             app:hintTextColor="@color/color_secondary"
+            app:boxBackgroundMode="outline"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -163,11 +172,12 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_login"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/input_color"
                 android:ems="10"
                 android:hint="@string/confirm_password"
                 android:importantForAutofill="no"
+                android:padding="@dimen/padding_edit_text"
                 android:inputType="textPassword"
                 android:paddingStart="20dp"
                 android:paddingEnd="12dp"
@@ -181,10 +191,11 @@
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <com.google.android.material.textview.MaterialTextView
@@ -222,20 +233,36 @@
 
         </RadioGroup>
 
+
+
     </LinearLayout>
+
+
+    <!-- res/layout/example_activity.xml -->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_student_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <Button
         android:id="@+id/button_register"
         android:layout_width="205dp"
         android:layout_height="55dp"
+        android:layout_marginTop="22dp"
         android:background="@drawable/button_background_primary"
         android:text="@string/registrati"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.1" />
-
+        app:layout_constraintTop_toBottomOf="@+id/fragment_student_register"
+        app:layout_constraintVertical_bias="0.272" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

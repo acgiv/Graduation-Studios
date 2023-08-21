@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/appOption" android:checkableBehavior="single">
         <item
-            android:id="@+id/itemRanking"
+            android:id="@+id/itemSettings"
             android:title="@string/Impostazione"
             android:icon="@drawable/baseline_settings_24" />
         <item
-            android:id="@+id/itemDownload"
+            android:id="@+id/itemProfile"
             android:title="@string/utente"
             android:icon="@drawable/baseline_person_24" />
     </group>
@@ -42,6 +42,6 @@
         <item
             android:id="@+id/itemLogin"
             android:icon="@drawable/baseline_login_24"
-            android:title="@string/Login" />
+            android:title="@string/accedi" />
     </group>
 </menu>

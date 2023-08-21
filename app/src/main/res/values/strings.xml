@@ -3,29 +3,29 @@
     <string name="name">Nome</string>
     <string name="cognome">Cognome</string>
     <string name="email">Email</string>
-    <string name="ruolo">Ruolo</string>
+    <string name="ruolo">Ruolo: </string>
     <string name="professore">Professore</string>
     <string name="studente">Studente</string>
     <string name="password">Password</string>
     <string name="confirm_password">Conferma Password</string>
-    <string name="Registrati">REGISTRATI</string>
-    <string name="Registrati_header">Registrati</string>
-    <string name="back">back</string>
-    <string name="user">user</string>
-    <string name="Login">Login</string>
-    <string name="Login_botton">LOGIN</string>
-    <string name="accedi_come_ospite">ACCEDI COME OSPITE</string>
+    <string name="registrati">Registrati</string>
+    <string name="indietro">Indietro</string>
+    <string name="profilo">Profilo</string>
+    <string name="accedi">Login</string>
+    <string name="accedi_come_ospite">Accedi come ospite</string>
     <string name="ricorda_credenziali">Ricorda credenziali</string>
     <string name="password_dimenticata">Password dimenticata?</string>
-    <string name="registrati_qui">Registrati qui</string>
+    <string name="registrati_qui"><u>Registrati qui</u></string>
     <string name="non_sei_ancora_registrato">Non sei ancora registrato?</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="logout">logout</string>
+    <string name="logout">Esci</string>
     <string name="Impostazione">Impostazioni</string>
     <string name="utente">utente</string>
     <string name="close_nav" />
     <string name="open_nav" />
-
-
+    <string name="errore_email">""Inserisci un indirizzo email valido."</string>
+    <string name="errore_campo_vuoto">"Campo {campo} obbligatorio mancante!"</string>
+    <string name="errore_autenticazione">"Errore di autenticazione. Assicurati che l'email e la password siano corrette."</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="matricola">Matricola</string>
 </resources>

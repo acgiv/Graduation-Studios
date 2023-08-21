@@ -1,0 +1,14 @@
+<resources>
+    <!-- Dimension TextInputEditText and TextInputLayout -->
+
+    <dimen name="input_text_layout_width">330dp</dimen>
+    <dimen name="input_text_layout_height">64dp</dimen>
+    <dimen name="input_text_layout_height_error">75dp</dimen>
+    <dimen name="input_text_layout_margin_top">32dp</dimen>
+    <dimen name="padding_edit_text">11dp</dimen>
+    <dimen name="padding_start_edit_text">20dp</dimen>
+
+
+
+
+</resources>

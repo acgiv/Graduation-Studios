@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.laureapp.ui.login.RegisterFragment"
+        android:name="com.laureapp.ui.register.RegisterFragment"
         android:label="Registrazione"
         tools:layout="@layout/fragment_register"/>
 

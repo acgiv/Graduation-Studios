@@ -1,5 +1,7 @@
 package com.laureapp.ui.roomdb.viewModel;
 import android.content.Context;
+import android.util.Log;
+
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.repository.UtenteRepository;
 
@@ -23,13 +25,22 @@ public class UtenteModelView{
         utenteRepository.updateUtente(utente);
     }
 
-    public boolean delateUtente(long id){
-        return utenteRepository.delateUtente(id);
+    public boolean deleteUtente(long id){
+        return utenteRepository.deleteUtente(id);
     }
 
     public Utente findAllById(Long id){
         return utenteRepository.findAllById(id);
    }
+
+    public boolean is_exist_email_password(String email, String password){
+        Utente utente = utenteRepository.is_exist_email_password(email, password);
+        if (utente != null) {
+            return utente.getId() != null;
+        }else{
+            return false;
+        }
+    }
 
     public List<Utente> getAllUtente(){
         return utenteRepository.getAllUtente();

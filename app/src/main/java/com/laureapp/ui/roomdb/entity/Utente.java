@@ -19,6 +19,9 @@ public class Utente {
     @ColumnInfo(name = "email")
     private String email;
 
+    @ColumnInfo(name = "password")
+    private String passwordl;
+
     public Long getId() {
         return id;
     }
@@ -51,6 +54,14 @@ public class Utente {
         email = email;
     }
 
+    public String getPasswordl() {
+        return passwordl;
+    }
+
+    public void setPasswordl(String passwordl) {
+        this.passwordl = passwordl;
+    }
+
     @Override
     public String toString() {
         return "Utente{" +
@@ -58,6 +69,7 @@ public class Utente {
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", email='" + email + '\'' +
+                ", passwordl='" + passwordl + '\'' +
                 '}';
     }
 }

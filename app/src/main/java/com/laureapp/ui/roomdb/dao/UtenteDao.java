@@ -25,6 +25,10 @@ public interface UtenteDao {
     @Query("SELECT * FROM Utente where id = :id")
     Utente findAllById(Long id);
 
+    @Query("SELECT * FROM Utente where email = :email and password =:password")
+    Utente is_exist_email_password(String email, String password);
+
+
     @Delete
     void delete(Utente utente);
 }

@@ -45,6 +45,19 @@ public class UtenteRepository {
         }
     }
 
+    public Utente is_exist_email_password(String email, String password){
+        CompletableFuture<Utente> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Utente utente = roomDbSqlLite.utenteDao().is_exist_email_password(email, password);
+            future.complete(utente);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new Utente();
+        }
+    }
 
     public List<Utente> getAllUtente(){
         CompletableFuture<List<Utente>> future = new CompletableFuture<>();
@@ -61,7 +74,7 @@ public class UtenteRepository {
     }
 
 
-    public boolean delateUtente(Long id){
+    public boolean deleteUtente(Long id){
         boolean result = false;
         Utente utente =  this.findAllById(id);
         if (utente.getId() != null) {

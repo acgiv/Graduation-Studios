@@ -9,5 +9,9 @@
         android:id="@+id/home_fragment"
         android:name="com.laureapp.ui.home.HomeFragment"
         android:label="Laureapp"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_fragment_to_registerStudenteFragment"
+           />
+    </fragment>
 </navigation>

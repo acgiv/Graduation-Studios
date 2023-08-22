@@ -54,6 +54,7 @@ public abstract class RoomDbSqlLite extends RoomDatabase{
                                 Room.databaseBuilder(context.getApplicationContext(),
                                                 RoomDbSqlLite.class, DATABASE_NAME)
                                         .allowMainThreadQueries() // questo consente di far eseguire le query in backgroud thread
+                                        .fallbackToDestructiveMigration()   // permette a Room di distruggere e ricreare il DB a seguito di un upgrade di versione
                                         .build();
                     }
                 }

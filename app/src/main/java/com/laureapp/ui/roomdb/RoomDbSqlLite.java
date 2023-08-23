@@ -29,7 +29,7 @@ import com.laureapp.ui.roomdb.entity.Vincolo;
 @Database(entities = {Studente.class, Utente.class,
         Professore.class, CorsoStudente.class, Esame.class,
         StudenteTesi.class, Vincolo.class, TesiProfessore.class, Tesi.class
-}, version = 1)
+}, version = 3)
 @TypeConverters({Converters.class})
 public abstract class RoomDbSqlLite extends RoomDatabase{
 

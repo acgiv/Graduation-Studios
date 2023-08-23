@@ -10,4 +10,5 @@
     <color name="color_text_input">#143F62</color>
     <color name="color_primary">#004070</color>
     <color name="color_secondary">#7F9FB6</color>
+    <color name="color_background_input">#F4F5F9</color>
 </resources>

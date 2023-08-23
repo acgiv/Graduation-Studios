@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/LogoUniba"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/email_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/logouniba_nobg" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/error_text"
+        android:layout_width="326dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/errore_autenticazione"
+        android:textColor="@color/design_default_color_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/password_input"
+        app:layout_constraintStart_toStartOf="@+id/password_input"
+        app:layout_constraintTop_toBottomOf="@+id/password_input"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button_login"
+        android:layout_width="330dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/button_background_primary"
+        android:text="@string/accedi"
+        android:textColor="@color/white"
+        app:cornerRadius="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/error_text" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/or_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Oppure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_login" />
+
+    <Button
+        android:id="@+id/ospite_login"
+        android:layout_width="330dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background_secondary"
+        android:text="@string/accedi_come_ospite"
+        android:textColor="@color/color_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/or_text" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ospite_login"
+        app:layout_constraintVertical_bias="0.0">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/non_sei_ancora_registrato" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/registrati_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autoLink="all"
+            android:clickable="true"
+            android:gravity="center"
+            android:linksClickable="true"
+            android:selectAllOnFocus="true"
+            android:text="@string/registrati_qui"
+            android:textColor="@color/color_secondary" />
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/recupero_password_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="3dp"
+        android:clickable="true"
+        android:clipToOutline="false"
+        android:text="@string/password_dimenticata"
+        android:textColor="@color/color_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/password_input"
+        app:layout_constraintEnd_toEndOf="@+id/email_input"
+        app:layout_constraintTop_toBottomOf="@+id/email_input"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_input"
+        android:layout_width="@dimen/input_text_layout_width"
+        android:layout_height="@dimen/input_text_layout_height"
+        android:layout_marginTop="@dimen/input_text_layout_margin_top"
+        app:boxBackgroundMode="outline"
+        app:hintTextColor="@color/color_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LogoUniba"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_color"
+            android:ems="10"
+            android:hint="@string/email"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:padding="@dimen/padding_edit_text"
+            android:paddingStart="@dimen/padding_start_edit_text"
+            android:textColor="@color/black"
+            android:textColorHint="@color/color_text_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.483"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/LogoUniba"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_input"
+        android:layout_width="@dimen/input_text_layout_width"
+        android:layout_height="@dimen/input_text_layout_height"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/mtrl_outlined_stroke_color"
+        app:endIconMode="password_toggle"
+        app:hintTextColor="@color/color_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recupero_password_login"
+        tools:ignore="PrivateResource">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/conferma_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_color"
+            android:ems="10"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:padding="@dimen/padding_edit_text"
+            android:paddingStart="20dp"
+            android:paddingEnd="12dp"
+            app:iconTint="@color/black"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.room.Update;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -25,7 +24,6 @@ import com.google.android.material.textview.MaterialTextView;
 import com.laureapp.R;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
-import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.nio.charset.StandardCharsets;
@@ -73,8 +71,8 @@ public class LoginFragment extends Fragment {
         btnLogin = view.findViewById(R.id.button_login);
         email_layout  =  view.findViewById(R.id.email_input);
         password_layout = view.findViewById(R.id.password_input);
-        email_text = view.findViewById(R.id.email_login);
-        password_text = view.findViewById(R.id.password_login);
+        email_text = view.findViewById(R.id.email_register);
+        password_text = view.findViewById(R.id.conferma_password);
         error_text = view.findViewById(R.id.error_text);
         int error_color = com.google.android.material.R.color.design_default_color_error;
         Resources resources = getResources();
@@ -86,6 +84,7 @@ public class LoginFragment extends Fragment {
                 if(email_layout != null && password_layout != null){
                     HashMap<String, Boolean> result = is_correct_email_password(error_color);
                     if (Boolean.TRUE.equals(result.get("email")) && Boolean.TRUE.equals(result.get("password"))){
+                        Log.d("utenti", utenteView.getAllUtente().toString());
                         boolean result_query = utenteView.is_exist_email_password(String.valueOf(email_text.getText()),hashWith256(String.valueOf(password_text.getText())));
                         if (Boolean.FALSE.equals(result_query)){
                             error_text.setVisibility(View.VISIBLE);
@@ -132,30 +131,30 @@ public class LoginFragment extends Fragment {
         HashMap<String,Boolean> result_error = new HashMap<String,Boolean>();
         if(StringUtils.isEmpty(String.valueOf(email_text.getText()))){
             String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", "Email");
-            set_error(email_layout, true, error_message, error_color ,R.dimen.input_text_layout_height_error);
+            ControlInput.set_error(email_layout, true, error_message, error_color, context ,R.dimen.input_text_layout_height_error, getResources());
             email_text.requestFocus();
             result_error.put("Email", false);
         // controllo che il campo email non sia valido
         }else if (!ControlInput.isValidEmailFormat(String.valueOf(email_text.getText()))) {
             String error_message = getString(R.string.errore_email);
-            set_error(email_layout, true, error_message, error_color ,R.dimen.input_text_layout_height_error);
+            ControlInput.set_error(email_layout, true, error_message, error_color, context ,R.dimen.input_text_layout_height_error, getResources());
             result_error.put("email", false);;
         }else{
             // cancello i messaggi di errore sul campo email
-            set_error(email_layout, false, "", R.color.color_primary ,R.dimen.input_text_layout_height);
+            ControlInput.set_error(email_layout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height, getResources());
             result_error.put("email", true);
         }
         // controllo che il campo password non sia vuoto
         if( StringUtils.isEmpty(String.valueOf(password_text.getText()))){
             String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", "Password");
-            set_error(password_layout, true, error_message, error_color ,R.dimen.input_text_layout_height_error);
+            ControlInput.set_error(password_layout, true, error_message, error_color,context ,R.dimen.input_text_layout_height_error, getResources());
             result_error.put("password", false);
             if (StringUtils.isNoneEmpty(String.valueOf(email_text.getText()))){
                 password_text.requestFocus();
             }
         }else{
             // cancello i messaggi di errore sul campo password
-            set_error(password_layout, false, "", R.color.color_primary ,R.dimen.input_text_layout_height);
+            ControlInput.set_error(password_layout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height, getResources());
             result_error.put("password", true);
         }
 
@@ -173,36 +172,4 @@ public class LoginFragment extends Fragment {
         }
         return "";
     }
-
-    private void set_error(TextInputLayout inputLayout, boolean value_error, String error, int color, int dimension){
-        inputLayout.setErrorEnabled(value_error);
-        if (StringUtils.isEmpty(error))
-            inputLayout.setError(null);
-        else
-            inputLayout.setError(error);
-        set_color_error(inputLayout, color );
-        change_width(inputLayout, dimension_text(dimension));
-    }
-
-    private void set_color_error(TextInputLayout inputLayout, int id_color){
-        int errorTextColor = ContextCompat.getColor( context, id_color);
-        ColorStateList errorColorStateList = ColorStateList.valueOf(errorTextColor);
-        inputLayout.setErrorTextColor(errorColorStateList);
-        inputLayout.setHintTextColor(errorColorStateList);
-    }
-
-    private int dimension_text(int id_dimension){
-        Resources resources = getResources();
-        return (int) (resources.getDimensionPixelSize(id_dimension)/ getResources().getDisplayMetrics().density);
-    }
-
-    private void change_width(TextInputLayout input_layout, int dimension){
-        float density = getResources().getDisplayMetrics().density;
-        int desiredHeightInPixels = (int) (dimension * density);
-        ViewGroup.LayoutParams layoutParams = input_layout.getLayoutParams();
-        layoutParams.height = desiredHeightInPixels;
-        input_layout.setLayoutParams(layoutParams);
-    }
-
-
 }

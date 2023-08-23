@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 import java.sql.Timestamp;
 
 @Entity(tableName ="Tesi", foreignKeys = {
-        @ForeignKey(entity = Professore.class, parentColumns = "id", childColumns = "id_studente"),
+        @ForeignKey(entity = Studente.class, parentColumns = "id", childColumns = "id_studente"),
         @ForeignKey(entity = Vincolo.class, parentColumns = "id", childColumns = "id_vincolo")
 })
 public class Tesi {

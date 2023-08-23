@@ -45,6 +45,22 @@ public class UtenteRepository {
         }
     }
 
+    public Long getIdUtente(String email){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.utenteDao().getIdUtente(email);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
+
+
     public Utente is_exist_email_password(String email, String password){
         CompletableFuture<Utente> future = new CompletableFuture<>();
         executor.execute(() -> {

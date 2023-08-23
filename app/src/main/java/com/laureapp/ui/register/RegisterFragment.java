@@ -1,6 +1,7 @@
 package com.laureapp.ui.register;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,8 +21,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegisterBinding;
+import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
@@ -42,9 +50,10 @@ public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding binding;
     private Context context;
     private final CustomTextWatcher textWatcher = new CustomTextWatcher();
-    private final HashMap<String,TextInputEditText> elem_text = new HashMap<String,TextInputEditText>();
+    private final HashMap<String,TextInputEditText> elem_text = new HashMap<>();
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
-
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
     /**
      * Chiamato quando il frammento viene creato per la prima volta.
      * In questo punto dovresti effettuare eventuali operazioni di setup e inizializzazione
@@ -56,9 +65,16 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+
         // Esegui qui eventuali operazioni di setup e inizializzazione
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+    }
     /**
      * Chiamato quando il frammento sta per creare la vista associata.
      *
@@ -69,6 +85,7 @@ public class RegisterFragment extends Fragment {
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
         context = requireContext();
 
         // Infla la vista utilizzando il binding del frammento
@@ -122,6 +139,10 @@ public class RegisterFragment extends Fragment {
                 st.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
                 st_db.insertStudente(st);
                 mNav.navigate(R.id.action_registerFragment_to_loginFragment);
+                String email = binding.emailRegister.getText().toString();
+                String password = Objects.requireNonNull(binding.passwordRegister.getText()).toString();
+
+                createAccount(email, password);
             }
             else if (binding.professoreRegister.isChecked() && cont.get() ==5){
                 UtenteModelView ut_db = insert_utente();
@@ -130,6 +151,9 @@ public class RegisterFragment extends Fragment {
                 pr.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
                 pr_db.insertProfessore(pr);
                 mNav.navigate(R.id.action_registerFragment_to_loginFragment);
+                String email = binding.emailRegister.getText().toString();
+                String password = Objects.requireNonNull(binding.passwordRegister.getText()).toString();
+                createAccount(email, password);
             }
         });
 
@@ -221,7 +245,7 @@ public class RegisterFragment extends Fragment {
             } else {
                 result_error = ControlInput.is_equal_password(error_color, Objects.requireNonNull(Objects.requireNonNull(binding.confermaPassword.getText()).toString()),
                         Objects.requireNonNull(binding.passwordRegister.getText()).toString(), binding.confermaPasswordInput,
-                        getString(R.string.non_equivalent_passwords), context, getResources());;
+                        getString(R.string.non_equivalent_passwords), context, getResources());
                     ControlInput.set_error(binding.passwordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
             }
 
@@ -350,8 +374,83 @@ public class RegisterFragment extends Fragment {
             byte[] hashedByetArray = digest.digest(byteOfTextToHash);
             return Base64.getEncoder().encodeToString(hashedByetArray);
         }catch (NoSuchAlgorithmException e){
-            Log.e("LaureApp", "Error reading file", e);;
+            Log.e("LaureApp", "Error reading file", e);
         }
         return "";
     }
+
+    /**
+     * Crea l'account dell'utente su firebase
+     * @param email email
+     * @param password password
+     */
+    private void createAccount(String email,String password) {
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                        // Esempio: Aggiornare l'UI o inviare una verifica email
+                    } else {
+                        // La registrazione ha fallito, puoi gestire l'errore qui
+                        Exception exception = task.getException();
+                        assert exception != null;
+                        Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
+                        // Esempio: Visualizzare un messaggio di errore o registrare l'errore
+                    }
+                });
+    }
+
+    private void updateUI(FirebaseUser user) {
+        if (user != null && binding.studenteRegister.isChecked()) {
+            String userId = user.getUid(); // Ottieni l'UID dell'utente autenticato
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://laureapp-21bff-default-rtdb.europe-west1.firebasedatabase.app");
+            DatabaseReference myRef = database.getReference();
+
+            DatabaseReference userRef = myRef.child("Utenti").child("Studenti").child(userId);
+
+            userRef.child("Nome").setValue(Objects.requireNonNull(binding.nameRegister.getText()).toString());
+            userRef.child("Cognome").setValue(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
+            userRef.child("Email").setValue(Objects.requireNonNull(binding.emailRegister.getText()).toString());
+            userRef.child("Password").setValue(hashWith256(Objects.requireNonNull(binding.passwordRegister.getText()).toString()));
+            userRef.child("Matricola").setValue(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
+
+            redirectToStudenteHome();
+
+        }else if (user != null && binding.professoreRegister.isChecked()) {
+            String userId = user.getUid(); // Ottieni l'UID dell'utente autenticato
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://laureapp-21bff-default-rtdb.europe-west1.firebasedatabase.app");
+            DatabaseReference myRef = database.getReference();
+
+            DatabaseReference userRef = myRef.child("Utenti").child("Professori").child(userId);
+
+            userRef.child("Nome").setValue(Objects.requireNonNull(binding.nameRegister.getText()).toString());
+            userRef.child("Cognome").setValue(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
+            userRef.child("Email").setValue(Objects.requireNonNull(binding.emailRegister.getText()).toString());
+            userRef.child("Password").setValue(Objects.requireNonNull(binding.passwordRegister.getText()).toString());
+
+            redirectToProfessoreHome();
+        }
+    }
+
+    private void redirectToStudenteHome() {
+        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+        startActivity(HomeActivity);
+        requireActivity().finish();
+    }
+
+    private void redirectToProfessoreHome() {
+        //TODO: Inserire il fragment o l'activity della home del professore
+        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+        startActivity(HomeActivity);
+        requireActivity().finish();
+    }
+
+
+
 }
+

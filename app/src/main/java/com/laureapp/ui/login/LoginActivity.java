@@ -7,15 +7,21 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.laureapp.R;
+import com.laureapp.ui.MainActivity;
 
 
 public class LoginActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     NavController navController;
+    EditText mEmail;
+    EditText mPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,4 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         navController.navigateUp();
         return super.onSupportNavigateUp();
     }
+
+
 }

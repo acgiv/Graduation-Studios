@@ -129,7 +129,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/email_login"
+            android:id="@+id/email_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/input_color"
@@ -161,7 +161,7 @@
         tools:ignore="PrivateResource">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/password_login"
+            android:id="@+id/conferma_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/input_color"

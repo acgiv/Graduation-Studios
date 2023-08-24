@@ -20,7 +20,7 @@ public class Utente {
     private String email;
 
     @ColumnInfo(name = "password")
-    private String passwordl;
+    private String password;
 
     public Long getId() {
         return id;
@@ -51,15 +51,15 @@ public class Utente {
     }
 
     public void setEmail(String email) {
-        email = email;
+        this.email = email;
     }
 
-    public String getPasswordl() {
-        return passwordl;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordl(String passwordl) {
-        this.passwordl = passwordl;
+    public void setPassword(String passwordl) {
+        this.password = passwordl;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class Utente {
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", email='" + email + '\'' +
-                ", passwordl='" + passwordl + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

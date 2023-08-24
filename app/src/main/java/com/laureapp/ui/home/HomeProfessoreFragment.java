@@ -1,5 +1,6 @@
 package com.laureapp.ui.home;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,8 +34,14 @@ public class HomeProfessoreFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home_studente, container, false);
+        View rootView;
 
+        int currentOrientation = getResources().getConfiguration().orientation; //prendo l'orientamento corrente
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) { //se è in modalità orizzontale mostra il fragment orizzontale
+            rootView = inflater.inflate(R.layout.fragment_home_studente_landscape, container, false);
+        } else { //altrimenti mostra il fragment verticale
+            rootView = inflater.inflate(R.layout.fragment_home_studente, container, false);
+        }
         CardView cardViewTesi = rootView.findViewById(R.id.cardViewTesi);
         CardView cardViewMessaggi = rootView.findViewById(R.id.cardViewMessaggi);
         CardView cardViewClassifica = rootView.findViewById(R.id.cardViewClassifica);

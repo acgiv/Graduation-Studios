@@ -11,4 +11,6 @@
     <color name="color_primary">#004070</color>
     <color name="color_secondary">#7F9FB6</color>
     <color name="color_background_input">#F4F5F9</color>
+    <color name="color_bottom_nav_menu">#D3D3D3</color>
+    <color name="light_grey">#D8D8D8</color>
 </resources>

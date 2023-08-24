@@ -62,7 +62,7 @@
                 app:defaultNavHost="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:navGraph="@navigation/nav_home" />
+                app:navGraph="@navigation/nav_home_studente" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

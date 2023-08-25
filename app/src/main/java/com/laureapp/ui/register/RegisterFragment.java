@@ -41,8 +41,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RegisterFragment extends Fragment {
@@ -273,6 +271,10 @@ public class RegisterFragment extends Fragment {
     private class CustomTextWatcher implements TextWatcher {
         private TextInputEditText editText;
 
+        public CustomTextWatcher(){
+
+        }
+
         /**
          * Chiamato prima che il testo nel campo di input cambi.
          *
@@ -386,7 +388,6 @@ public class RegisterFragment extends Fragment {
                 DatabaseReference userRef = myRef.child("Utenti").child("Studenti").child(userId);
                 user_reference(userRef);
                 userRef.child("Matricola").setValue(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
-
             } else if (binding.professoreRegister.isChecked()) {
                 DatabaseReference userRef = myRef.child("Utenti").child("Professori").child(userId);
                 user_reference(userRef);
@@ -394,13 +395,13 @@ public class RegisterFragment extends Fragment {
         }
     }
 
+
     private void  user_reference(DatabaseReference userRef){
         userRef.child("Nome").setValue(Objects.requireNonNull(binding.nameRegister.getText()).toString());
         userRef.child("Cognome").setValue(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
         userRef.child("Email").setValue(Objects.requireNonNull(binding.emailRegister.getText()).toString());
         userRef.child("Password").setValue(hashWith256(Objects.requireNonNull(binding.passwordRegister.getText()).toString()));
     }
-
 
 
 

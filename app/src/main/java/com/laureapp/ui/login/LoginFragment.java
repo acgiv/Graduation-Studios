@@ -1,10 +1,8 @@
 package com.laureapp.ui.login;
 import static android.content.ContentValues.TAG;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 import org.apache.commons.lang3.StringUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -57,6 +54,7 @@ public class LoginFragment extends Fragment {
     Context context ;
     private NavController mNav;
     private FirebaseAuth mAuth;
+    private final int error_color = com.google.android.material.R.color.design_default_color_error;
 
 
     @Override
@@ -92,16 +90,16 @@ public class LoginFragment extends Fragment {
         email_text = view.findViewById(R.id.email_register);
         password_text = view.findViewById(R.id.conferma_password);
         error_text = view.findViewById(R.id.error_text);
-        int error_color = com.google.android.material.R.color.design_default_color_error;
+
         Resources resources = getResources();
         UtenteModelView utenteView = new UtenteModelView(context);
         //Pulsante di login
         btnLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
-                HashMap<String, Boolean> result = is_correct_email_password(error_color);
+                HashMap<String, Boolean> result = is_correct_email_password();
                 if (Boolean.TRUE.equals(result.get("email")) && Boolean.TRUE.equals(result.get("password"))) {
                     //Se c'è connessione ad internet uso il db locale altrimenti uso quello in remoto
-                    if (isConnected() == false) {
+                    if (!isConnected()) {
                         boolean result_query = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
                         if (Boolean.FALSE.equals(result_query)) {
                             error_text.setVisibility(View.VISIBLE);
@@ -111,47 +109,33 @@ public class LoginFragment extends Fragment {
                             startActivity(HomeActivity);
                             requireActivity().finish();
                         }
-                    } else if (isConnected() == true) {
-                        loginUser(email_text.getText().toString(), password_text.getText().toString());
+                    } else if (isConnected()) {
+                        loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(password_text.getText()).toString());
                     }
                 }
             }
         });
 
         btnRegister = view.findViewById(R.id.registrati_login);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mNav.navigate(R.id.action_loginFragment_to_registerFragment);
-            }
-        });
+        btnRegister.setOnClickListener(view13 -> mNav.navigate(R.id.action_loginFragment_to_registerFragment));
 
         btnForgotPsw = view.findViewById(R.id.recupero_password_login);
-        btnForgotPsw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: Navigate to forgot psw fragment
-            }
+        btnForgotPsw.setOnClickListener(view12 -> {
+            // TODO: Navigate to forgot psw fragment
         });
 
         btnHostLogin = view.findViewById(R.id.ospite_login);
-        btnHostLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                startActivity(HomeActivity);
-                requireActivity().finish();
-            }
+        btnHostLogin.setOnClickListener(view14 -> {
+            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+            startActivity(HomeActivity);
+            requireActivity().finish();
         });
 
     }
 
-    private HashMap<String,Boolean> is_correct_email_password(int error_color){
+    private HashMap<String,Boolean> is_correct_email_password(){
         HashMap<String,Boolean> result_error = new HashMap<String,Boolean>();
-        if(StringUtils.isEmpty(String.valueOf(email_text.getText()))){
-            String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", "Email");
-            ControlInput.set_error(email_layout, true, error_message, error_color, context ,R.dimen.input_text_layout_height_error, getResources());
-            email_text.requestFocus();
+        if(is_empty_string(email_text , email_layout,"Email")){
             result_error.put("Email", false);
         // controllo che il campo email non sia valido
         }else if (!ControlInput.isValidEmailFormat(String.valueOf(email_text.getText()))) {
@@ -160,24 +144,36 @@ public class LoginFragment extends Fragment {
             result_error.put("email", false);;
         }else{
             // cancello i messaggi di errore sul campo email
-            ControlInput.set_error(email_layout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height, getResources());
-            result_error.put("email", true);
+            correct_text(email_layout, "email", result_error);
         }
         // controllo che il campo password non sia vuoto
-        if( StringUtils.isEmpty(String.valueOf(password_text.getText()))){
-            String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", "Password");
-            ControlInput.set_error(password_layout, true, error_message, error_color,context ,R.dimen.input_text_layout_height_error, getResources());
-            result_error.put("password", false);
+        if(is_empty_string(password_text, password_layout, "Password")){
             if (StringUtils.isNoneEmpty(String.valueOf(email_text.getText()))){
                 password_text.requestFocus();
             }
         }else{
             // cancello i messaggi di errore sul campo password
-            ControlInput.set_error(password_layout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height, getResources());
-            result_error.put("password", true);
+           correct_text(password_layout, "password", result_error);
         }
 
         return result_error;
+    }
+
+
+    private void correct_text(TextInputLayout inputLayout, String campo, HashMap<String, Boolean> error ){
+        ControlInput.set_error(inputLayout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height, getResources());
+        error.put(campo, true);
+    }
+
+    private Boolean is_empty_string(TextInputEditText editText, TextInputLayout layout_input, String campo_error){
+        boolean result = false;
+        if(StringUtils.isEmpty(Objects.requireNonNull(editText.getText()).toString())) {
+            String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", campo_error);
+            ControlInput.set_error(layout_input, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+            editText.requestFocus();
+            result = true;
+        }
+        return result;
     }
 
     private String hashWith256(String textToHash) {
@@ -224,9 +220,7 @@ public class LoginFragment extends Fragment {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.i((String) TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(context.getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
+                            error_text.setVisibility(View.VISIBLE);
                         }
                     });
         }
@@ -245,21 +239,7 @@ public class LoginFragment extends Fragment {
 
                 userRef.child("Email").get();
                 userRef.child("Password").get();
-
                 redirectToStudenteHome();
-
-            }else if (user != null) {
-                String userId = user.getUid(); // Ottieni l'UID dell'utente autenticato
-
-                FirebaseDatabase database = FirebaseDatabase.getInstance("https://laureapp-21bff-default-rtdb.europe-west1.firebasedatabase.app");
-                DatabaseReference myRef = database.getReference();
-
-                DatabaseReference userRef = myRef.child("Utenti").child("Studenti").child(userId);
-
-                userRef.child("Email").get();
-                userRef.child("Password").get();
-
-                redirectToProfessoreHome();
             }
         }
 

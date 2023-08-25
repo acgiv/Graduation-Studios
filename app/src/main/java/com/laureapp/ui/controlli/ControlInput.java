@@ -8,13 +8,11 @@
 
     import androidx.core.content.ContextCompat;
 
-    import com.google.android.material.textfield.TextInputEditText;
     import com.google.android.material.textfield.TextInputLayout;
     import com.laureapp.R;
 
     import org.apache.commons.lang3.StringUtils;
 
-    import java.util.Objects;
     import java.util.regex.Matcher;
     import java.util.regex.Pattern;
 

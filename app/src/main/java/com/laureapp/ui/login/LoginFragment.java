@@ -130,7 +130,7 @@ public class LoginFragment extends Fragment {
         btnForgotPsw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Navigate to forgot psw fragment
+                mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment);
             }
         });
 

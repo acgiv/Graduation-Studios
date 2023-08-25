@@ -36,4 +36,5 @@
     <!-- Strings related to Change Password Page  -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="matricola">Matricola</string>
+    <string name="inserisci_l_email_di_registrazione">Inserisci l\'email di registrazione</string>
 </resources>

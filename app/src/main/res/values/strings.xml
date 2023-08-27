@@ -22,19 +22,26 @@
     <string name="utente">utente</string>
     <string name="close_nav" />
     <string name="open_nav" />
-
-
-    <!-- Strings related to error input -->
-    <string name="errore_stringa">Campo {campo} deve contenere solo caratteri.</string>
-    <string name="errore_email">Inserisci un indirizzo email valido.</string>
-    <string name="errore_campo_vuoto">Campo {campo} obbligatorio mancante!</string>
-    <string name="errore_matricola">Campo {campo} deve contenere 6 cifre numeriche.</string>
-    <string name="password_not_safe_error">La password non incontra i requisiti di sicurezza</string>
-    <string name="non_equivalent_passwords">Le password non coincidono</string>
-    <string name="errore_autenticazione">Errore di autenticazione. Assicurati che l\'email e la password siano corrette.</string>
-
-    <!-- Strings related to Change Password Page  -->
+    <string name="errore_email">""Inserisci un indirizzo email valido."</string>
+    <string name="errore_campo_vuoto">"Campo {campo} obbligatorio mancante!"</string>
+    <string name="errore_autenticazione">"Errore di autenticazione. Assicurati che l'email e la password siano corrette."</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="matricola">Matricola</string>
+    <string name="home">Home</string>
+    <string name="tesi">Tesi</string>
+    <string name="messaggi">Messaggi</string>
+    <string name="classifica">Classifica</string>
+    <string name="social">Social</string>
+    <string name="tesi_description">tesi_description</string>
+    <string name="chat_description">chat</string>
+    <string name="classifica_description" />
+    <string name="social_description" />
+    <string name="messaggi_description" />
+    <string name="task">Task</string>
+    <string name="task_description" />
+    <string name="tesisti" />
+    <string name="tesisti_description" />
+    <string name="tesisti2">Tesisti</string>
     <string name="inserisci_l_email_di_registrazione">Inserisci l\'email di registrazione</string>
 </resources>

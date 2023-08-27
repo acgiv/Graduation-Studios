@@ -176,9 +176,11 @@
          */
         public static boolean is_equal_password(int error_color, String text_element1, String text_element2, TextInputLayout layout_error, String error_message, Context context, Resources resources){
             boolean result = true;
+
             if (!StringUtils.equals(text_element1,text_element2)) {
                 ControlInput.set_error(layout_error, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, resources);
                 result = false;
+                Log.d("is_equal", String.valueOf(StringUtils.equals(text_element1,text_element2)));
             }
             return result;
         }
@@ -193,4 +195,5 @@
             String regexPattern = "[1-9][0-9]{5}";
             return  Pattern.compile(regexPattern).matcher(matricola).matches();
         }
+
     }

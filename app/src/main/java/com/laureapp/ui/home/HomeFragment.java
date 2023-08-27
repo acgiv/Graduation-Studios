@@ -5,14 +5,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.laureapp.R;
 
 public class HomeFragment extends Fragment {
+
+    Button provaSocial;
+    private NavController mNav;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mNav = Navigation.findNavController(view);
+
+        provaSocial = view.findViewById(R.id.button_login);
+        provaSocial.setOnClickListener(v -> {
+            mNav.navigate(R.id.action_home_fragment_to_socialFragment);
+
+        });
+
 
     }
 }

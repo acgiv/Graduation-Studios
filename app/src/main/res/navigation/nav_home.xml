@@ -13,5 +13,12 @@
         <action
             android:id="@+id/action_home_fragment_to_registerStudenteFragment"
            />
+        <action
+            android:id="@+id/action_home_fragment_to_socialFragment"
+            app:destination="@id/socialFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/socialFragment"
+        android:name="com.laureapp.ui.home.SocialFragment"
+        android:label="SocialFragment" />
 </navigation>

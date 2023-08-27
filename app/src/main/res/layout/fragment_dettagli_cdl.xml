@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dettagliCdl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:rotation="0"
+    android:visibility="visible"
+    tools:context=".ui.profilo.DettagliCdl">
+    <!-- ... Griglia contenente le varie card ... -->
+
+    <!-- ... bottoni home e profilo ... -->
+
+    <GridLayout
+        android:id="@+id/grigliaDati"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="18dp"
+        android:columnCount="3"
+        android:rowCount="3"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.035"
+
+        >
+
+
+        <!-- ... Card Dati anagrafici ... -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewAnagrafica"
+            android:layout_width="375dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="100dp"
+            android:layout_row="0"
+            android:layout_rowWeight="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center"
+            android:layout_margin="12dp"
+            app:cardElevation="8dp"
+            app:cardCornerRadius="15dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@color/color_primary"
+                    android:visibility="visible"></View>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginTop="-8dp"
+                    android:text="Dettagli"
+                    android:textColor="@android:color/white"
+                    android:textSize="40sp"
+                    android:textStyle="bold"
+                    android:drawableLeft="@drawable/baseline_person_40_white"
+                    android:drawablePadding="8dp"
+                    tools:visibility="visible"></TextView>
+
+                <!--Campo ciclo CDL -->
+                <TextView
+                    android:layout_width="348dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="45dp"
+                    android:drawableRight="@drawable/edit_icon"
+                    android:text="Ciclo CDL:"
+                    android:textColor="@android:color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    tools:visibility="visible"></TextView>
+                <!--Linea grigia che separa campi di testo nome e cognome -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="85dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!--Campo nome corso di laurea -->
+                <TextView
+                    android:layout_width="348dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="85dp"
+                    android:drawableRight="@drawable/edit_icon"
+                    android:text="Nome CDL:"
+                    android:textColor="@android:color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    tools:visibility="visible"></TextView>
+                <!--Linea grigia che separa campi di testo cognome e email -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="125dp"
+                    android:layout_marginBottom="8dp" />
+                <!--Campo facoltà -->
+                <TextView
+                    android:layout_width="348dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="125dp"
+                    android:drawableRight="@drawable/edit_icon"
+                    android:text="Facoltà:"
+                    android:textColor="@android:color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    tools:visibility="visible"></TextView>
+                <!--Linea grigia che separa la facoltà dal pulsante -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="165dp"
+                    android:layout_marginBottom="8dp" />
+                <!--Pulsante per eliminare cdl -->
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="190dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/red"
+                    android:text="Elimina CDL"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
+    </GridLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_bottom_nav_menu"
+        app:itemIconTint="@color/color_primary"
+        app:itemTextColor="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

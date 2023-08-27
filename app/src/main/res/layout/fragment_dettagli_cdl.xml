@@ -31,12 +31,12 @@
         >
 
 
-        <!-- ... Card Dati anagrafici ... -->
+        <!-- ... Card dettagli ... -->
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewAnagrafica"
+            android:id="@+id/cardViewDettagli"
             android:layout_width="375dp"
-            android:layout_height="250dp"
+            android:layout_height="280dp"
             android:layout_marginTop="100dp"
             android:layout_row="0"
             android:layout_rowWeight="1"
@@ -54,18 +54,18 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="35dp"
                     android:background="@color/color_primary"
                     android:visibility="visible"></View>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginTop="-8dp"
+                    android:layout_marginLeft="70dp"
+                    android:layout_marginTop="-5dp"
                     android:text="Dettagli"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/baseline_person_40_white"
                     android:drawablePadding="8dp"
@@ -77,19 +77,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="45dp"
+                    android:layout_marginTop="35dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Ciclo CDL:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
-                <!--Linea grigia che separa campi di testo nome e cognome -->
+                <!--Linea grigia che separa ciclo cdl e nome corso di laurea -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginTop="85dp"
+                    android:layout_marginTop="63dp"
                     android:layout_marginBottom="8dp" />
 
                 <!--Campo nome corso di laurea -->
@@ -98,11 +98,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="85dp"
+                    android:layout_marginTop="63dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Nome CDL:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
                 <!--Linea grigia che separa campi di testo cognome e email -->
@@ -110,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginTop="91dp"
                     android:layout_marginBottom="8dp" />
                 <!--Campo facoltà -->
                 <TextView
@@ -118,26 +118,71 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginTop="91dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Facoltà:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
-                <!--Linea grigia che separa la facoltà dal pulsante -->
+
+                <!--Linea grigia che separa la facoltà dalla media -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginTop="165dp"
+                    android:layout_marginTop="119dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!--Campo media -->
+                <TextView
+                    android:layout_width="348dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="119dp"
+                    android:drawableRight="@drawable/edit_icon"
+                    android:text="Media:"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:visibility="visible"></TextView>
+
+                <!--Linea grigia che separa la media dagli esami mancanti -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="147dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!--Campo esami mancanti -->
+                <TextView
+                    android:layout_width="348dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="147dp"
+                    android:drawableRight="@drawable/edit_icon"
+                    android:text="Esami mancanti:"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:visibility="visible"></TextView>
+
+                <!--Linea grigia che separa gli esami mancanti dal pulsante elimina-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_marginTop="175dp"
                     android:layout_marginBottom="8dp" />
                 <!--Pulsante per eliminare cdl -->
                 <Button
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="190dp"
+                    android:layout_marginTop="200dp"
                     android:layout_marginLeft="10dp"
                     android:background="@color/red"
                     android:text="Elimina CDL"

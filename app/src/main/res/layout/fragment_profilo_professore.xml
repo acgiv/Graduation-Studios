@@ -36,7 +36,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewAnagrafica"
             android:layout_width="375dp"
-            android:layout_height="210dp"
+            android:layout_height="155dp"
             android:layout_marginTop="-250dp"
             android:layout_row="0"
             android:layout_rowWeight="1"
@@ -54,18 +54,18 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="35dp"
                     android:background="@color/color_primary"
                     android:visibility="visible"></View>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="-8dp"
+                    android:layout_marginLeft="60dp"
+                    android:layout_marginTop="-5dp"
                     android:text="Anagrafica"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/baseline_person_40_white"
                     android:drawablePadding="8dp"
@@ -77,11 +77,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="45dp"
+                    android:layout_marginTop="35dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Nome:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
                 <!--Linea grigia che separa campi di testo nome e cognome -->
@@ -89,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginTop="85dp"
+                    android:layout_marginTop="63dp"
                     android:layout_marginBottom="8dp" />
 
                 <!--Campo cognome -->
@@ -98,11 +98,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="85dp"
+                    android:layout_marginTop="63dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Cognome:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
                 <!--Linea grigia che separa campi di testo cognome e email -->
@@ -110,7 +110,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginTop="91dp"
                     android:layout_marginBottom="8dp" />
                 <!--Campo email -->
                 <TextView
@@ -118,11 +118,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="125dp"
+                    android:layout_marginTop="91dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Email:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
                 <!--Linea grigia che separa campi di testo email e password -->
@@ -130,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginTop="165dp"
+                    android:layout_marginTop="119dp"
                     android:layout_marginBottom="8dp" />
                 <!--Campo password -->
                 <TextView
@@ -138,13 +138,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="165dp"
+                    android:layout_marginTop="119dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Password:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
+
             </FrameLayout>
         </androidx.cardview.widget.CardView>
         <!-- ... Card Dati del corso di laurea ... -->
@@ -153,7 +154,7 @@
             android:id="@+id/cardViewCorsi"
             android:layout_width="375dp"
             android:layout_height="150dp"
-            android:layout_marginTop="450dp"
+            android:layout_marginTop="250dp"
             android:layout_row="0"
             android:layout_rowWeight="1"
             android:layout_column="0"
@@ -170,7 +171,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="35dp"
                     android:background="@color/color_primary"
                     android:visibility="visible"></View>
 
@@ -178,11 +179,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="70dp"
-                    android:layout_marginTop="-8dp"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="-5dp"
                     android:text="Corsi"
                     android:textColor="@android:color/white"
-                    android:textSize="40sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/baseline_school_40_white"
                     android:drawablePadding="8dp"
@@ -193,11 +194,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="45dp"
+                    android:layout_marginTop="40dp"
                     android:drawableRight="@drawable/baseline_arrow_forward_ios_24"
                     android:text="Corso:"
-                    android:textColor="@android:color/black"
-                    android:textSize="30sp"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     tools:visibility="visible"></TextView>
                 <!--Linea grigia che separa i corsi -->
@@ -205,7 +206,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    android:layout_marginTop="85dp"
+                    android:layout_marginTop="72dp"
                     android:layout_marginBottom="8dp" />
 
                 <!--Icona per aggiungere un nuovo corso -->

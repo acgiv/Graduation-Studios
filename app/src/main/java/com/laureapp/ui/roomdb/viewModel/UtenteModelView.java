@@ -24,7 +24,6 @@ public class UtenteModelView{
     public void updateUtente(Utente utente){
         utenteRepository.updateUtente(utente);
     }
-
     public boolean deleteUtente(long id){
         return utenteRepository.deleteUtente(id);
     }
@@ -32,6 +31,10 @@ public class UtenteModelView{
     public Utente findAllById(Long id){
         return utenteRepository.findAllById(id);
    }
+
+    public Long getIdUtente(String email){
+        return utenteRepository.getIdUtente(email);
+    }
 
     public boolean is_exist_email_password(String email, String password){
         Utente utente = utenteRepository.is_exist_email_password(email, password);

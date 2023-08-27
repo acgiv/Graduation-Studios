@@ -28,6 +28,8 @@ public interface UtenteDao {
     @Query("SELECT * FROM Utente where email = :email and password =:password")
     Utente is_exist_email_password(String email, String password);
 
+    @Query("SELECT id FROM Utente where email = :email ")
+    Long getIdUtente(String email);
 
     @Delete
     void delete(Utente utente);

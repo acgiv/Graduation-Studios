@@ -120,14 +120,8 @@ public class LoginFragment extends Fragment {
         btnRegister.setOnClickListener(view13 -> mNav.navigate(R.id.action_loginFragment_to_registerFragment));
 
         btnForgotPsw = view.findViewById(R.id.recupero_password_login);
+        btnForgotPsw.setOnClickListener(view12 -> mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment));
 
-        btnForgotPsw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment);
-            }
-
-        btnForgotPsw.setOnClickListener(view12 -> {
         btnHostLogin = view.findViewById(R.id.ospite_login);
         btnHostLogin.setOnClickListener(view14 -> {
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);

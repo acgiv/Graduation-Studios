@@ -2,16 +2,19 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_home"
+    android:id="@+id/nav_home_professore"
     app:startDestination="@id/home_fragment">
 
     <fragment
         android:id="@+id/home_fragment"
-        android:name="com.laureapp.ui.home.HomeFragment"
+        android:name="com.laureapp.ui.home.HomeProfessoreFragment"
         android:label="Laureapp"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home_professore" >
         <action
             android:id="@+id/action_home_fragment_to_registerStudenteFragment"
            />
+
     </fragment>
+
+
 </navigation>

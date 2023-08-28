@@ -8,6 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +21,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegisterBinding;
 import com.laureapp.ui.controlli.ControlInput;
@@ -42,8 +49,9 @@ public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding binding;
     private Context context;
     private final CustomTextWatcher textWatcher = new CustomTextWatcher();
-    private final HashMap<String,TextInputEditText> elem_text = new HashMap<String,TextInputEditText>();
+    private final HashMap<String,TextInputEditText> elem_text = new HashMap<>();
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
+    private FirebaseAuth mAuth;
 
     /**
      * Chiamato quando il frammento viene creato per la prima volta.
@@ -56,9 +64,16 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+
         // Esegui qui eventuali operazioni di setup e inizializzazione
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+    }
     /**
      * Chiamato quando il frammento sta per creare la vista associata.
      *
@@ -69,6 +84,7 @@ public class RegisterFragment extends Fragment {
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+
         context = requireContext();
 
         // Infla la vista utilizzando il binding del frammento
@@ -102,35 +118,39 @@ public class RegisterFragment extends Fragment {
             elem_text.forEach((key, values)-> {
                 if (StringUtils.equals(key,"matricola")){
                     if (binding.studenteRegister.isChecked()){
-                        if (Boolean.TRUE.equals(is_correct_form(values,error_color))) {
+                        if (Boolean.TRUE.equals(is_correct_form(values))) {
                              cont.addAndGet(1);
                         }
                     }
                 }else{
-                    if (Boolean.TRUE.equals(is_correct_form(values,error_color))) {
+                    if (Boolean.TRUE.equals(is_correct_form(values))) {
                         cont.addAndGet(1);
                     }
                 }
             });
+                if (binding.studenteRegister.isChecked() && cont.get() ==6){
+                        createAccount();
+                        Studente st = new Studente();
+                        StudenteModelView st_db = new StudenteModelView(context);
+                        UtenteModelView ut_db = insert_utente_sqlLite();
+                        st.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
+                        st.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
+                        st_db.insertStudente(st);
+                        mNav.navigate(R.id.action_registerFragment_to_loginFragment);
 
-            if (binding.studenteRegister.isChecked() && cont.get() ==6){
 
-                Studente st = new Studente();
-                StudenteModelView st_db = new StudenteModelView(context);
-                UtenteModelView ut_db = insert_utente();
-                st.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
-                st.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
-                st_db.insertStudente(st);
-                mNav.navigate(R.id.action_registerFragment_to_loginFragment);
-            }
-            else if (binding.professoreRegister.isChecked() && cont.get() ==5){
-                UtenteModelView ut_db = insert_utente();
-                ProfessoreModelView pr_db = new ProfessoreModelView(context);
-                Professore pr = new Professore();
-                pr.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
-                pr_db.insertProfessore(pr);
-                mNav.navigate(R.id.action_registerFragment_to_loginFragment);
-            }
+                }
+                else if (binding.professoreRegister.isChecked() && cont.get() ==5){
+
+                        createAccount();
+                        UtenteModelView ut_db = insert_utente_sqlLite();
+                        ProfessoreModelView pr_db = new ProfessoreModelView(context);
+                        Professore pr = new Professore();
+                        pr.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
+                        pr_db.insertProfessore(pr);
+                        mNav.navigate(R.id.action_registerFragment_to_loginFragment);
+
+                }
         });
 
         // Imposta l'azione del pulsante "Studente"
@@ -151,106 +171,66 @@ public class RegisterFragment extends Fragment {
      *
      * @return Il ViewModel relativo all'utente appena inserito.
      */
-    private UtenteModelView insert_utente() {
+    private UtenteModelView insert_utente_sqlLite() {
         // Crea un nuovo oggetto Utente
         Utente ut = new Utente();
 
         // Crea un nuovo ViewModel per l'Utente
         UtenteModelView ut_db = new UtenteModelView(context);
-
         // Imposta i dati dell'Utente dai campi di input
         ut.setNome(Objects.requireNonNull(binding.nameRegister.getText()).toString());
         ut.setCognome(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
         ut.setEmail(Objects.requireNonNull(binding.emailRegister.getText()).toString());
         ut.setPassword(hashWith256(Objects.requireNonNull(binding.passwordRegister.getText()).toString()));
-
         // Inserisce l'Utente nel database utilizzando il ViewModel
         ut_db.insertUtente(ut);
-
         // Restituisce il ViewModel relativo all'Utente appena inserito
         return ut_db;
     }
 
-    private  boolean is_correct_form(TextInputEditText editText, int error_color) {
-        boolean result_error = true;
-        if (binding.nameRegister.equals(editText)) {
-            if (StringUtils.isEmpty(Objects.requireNonNull(binding.nameRegister.getText()).toString())) {
-                String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", getString(R.string.name));
-                ControlInput.set_error(binding.nameInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else if (!StringUtils.isAlpha(binding.nameRegister.getText().toString())) {
-                String error_message = getString(R.string.errore_stringa).replace("{campo}", getString(R.string.name));
-                ControlInput.set_error(binding.nameInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else {
-                ControlInput.set_error(binding.nameInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+        private  boolean is_correct_form(TextInputEditText editText) {
+            boolean result_error = false;
+            if(!is_empty_string(editText ,getInputText(editText) , Objects.requireNonNull(editText.getHint()).toString())) {
+                switch (Objects.requireNonNull(editText.getHint()).toString()){
+                    case "Cognome":
+                    case "Nome":
+                        if (!StringUtils.isAlpha(Objects.requireNonNull(editText.getText()).toString())) {
+                            String error_message = getString(R.string.errore_stringa).replace("{campo}", editText.getHint().toString());
+                            ControlInput.set_error(Objects.requireNonNull(getInputText(editText)), true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+                        } else {
+                            ControlInput.set_error(Objects.requireNonNull(getInputText(editText)), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                             return true;
+                        }
+                    case "Email":
+                        if (!ControlInput.isValidEmailFormat(Objects.requireNonNull(binding.emailRegister.getText()).toString())) {
+                            String error_message = getString(R.string.errore_email);
+                            ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+                        } else {
+                            ControlInput.set_error(binding.emailInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                            return true;
+                        }
+                    case "Password":
+                        if (!ControlInput.isPasswordSafe(Objects.requireNonNull(binding.passwordRegister.getText()).toString())) {
+                            String error_message = getString(R.string.password_not_safe_error);
+                            ControlInput.set_error(binding.passwordInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+                        } else {
+                            ControlInput.set_error(binding.passwordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                            return control_confirm_password();
+                        }
+                    case "Conferma Password":
+                        return control_confirm_password();
+                    case "Matricola":
+                        if (!ControlInput.is_correct_matricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) {
+                            String error_message = getString(R.string.errore_matricola).replace("{campo}", getString(R.string.matricola));
+                            ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+                        } else {
+                            ControlInput.set_error(binding.matricolaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                            return true;
+                        }
+                }
             }
-        } else if (binding.cognomeRegister.equals(editText)) {
-            if (StringUtils.isEmpty(Objects.requireNonNull(binding.cognomeRegister.getText()).toString())) {
-                String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", getString(R.string.cognome));
-                ControlInput.set_error(binding.cognomeInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else if (!StringUtils.isAlpha(binding.cognomeRegister.getText().toString())) {
-                String error_message = getString(R.string.errore_stringa).replace("{campo}", getString(R.string.cognome));
-                ControlInput.set_error(binding.cognomeInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else {
-                ControlInput.set_error(binding.cognomeInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-            }
-        } else if (binding.emailRegister.equals(editText)) {
-            if (StringUtils.isEmpty(Objects.requireNonNull(binding.emailRegister.getText()).toString())) {
-                String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", getString(R.string.email));
-                ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else if (!ControlInput.isValidEmailFormat(binding.emailRegister.getText().toString())) {
-                String error_message = getString(R.string.errore_email);
-                ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else {
-                ControlInput.set_error(binding.emailInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-            }
-        } else if (binding.passwordRegister.equals(editText)) {
-            if (StringUtils.isEmpty(Objects.requireNonNull(binding.passwordRegister.getText()).toString())) {
-                String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", getString(R.string.password));
-                ControlInput.set_error(binding.passwordInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else if (!ControlInput.isPasswordSafe(binding.passwordRegister.getText().toString())) {
-                String error_message = getString(R.string.password_not_safe_error);
-                ControlInput.set_error(binding.passwordInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else {
-                result_error = ControlInput.is_equal_password(error_color, Objects.requireNonNull(Objects.requireNonNull(binding.confermaPassword.getText()).toString()),
-                        Objects.requireNonNull(binding.passwordRegister.getText()).toString(), binding.confermaPasswordInput,
-                        getString(R.string.non_equivalent_passwords), context, getResources());;
-                    ControlInput.set_error(binding.passwordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-            }
-
-        } else if (binding.confermaPassword.equals(editText)) {
-            if (StringUtils.isEmpty(Objects.requireNonNull(binding.confermaPassword.getText()).toString())) {
-                String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", getString(R.string.confirm_password));
-                ControlInput.set_error(binding.confermaPasswordInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else {
-                ControlInput.set_error(binding.confermaPasswordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-            }
-            result_error = ControlInput.is_equal_password(error_color, Objects.requireNonNull(binding.confermaPassword.getText().toString()),
-                    Objects.requireNonNull(binding.passwordRegister.getText()).toString(), binding.confermaPasswordInput,
-                    getString(R.string.non_equivalent_passwords), context, getResources());
-        }else if (binding.matricolaRegister.equals(editText)){
-            if (StringUtils.isEmpty(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) {
-                String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", getString(R.string.matricola));
-                ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else if (!ControlInput.is_correct_matricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) {
-                String error_message = getString(R.string.errore_matricola).replace("{campo}", getString(R.string.matricola));
-                ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                result_error = false;
-            } else {
-                ControlInput.set_error(binding.matricolaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-            }
+            return result_error;
         }
-        return result_error;
-    }
 
 
     /**
@@ -291,8 +271,9 @@ public class RegisterFragment extends Fragment {
     private class CustomTextWatcher implements TextWatcher {
         private TextInputEditText editText;
 
-        // Il colore dell'errore da utilizzare durante la validazione del form
-        private final int error_color = com.google.android.material.R.color.design_default_color_error;
+        public CustomTextWatcher(){
+
+        }
 
         /**
          * Chiamato prima che il testo nel campo di input cambi.
@@ -319,7 +300,7 @@ public class RegisterFragment extends Fragment {
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             if (editText != null) {
                 // Richiama la funzione che controlla il campo di input in focus in quel momento per verificare la correttezza.
-                is_correct_form(editText, error_color);
+                is_correct_form(editText);
             }
         }
 
@@ -343,6 +324,24 @@ public class RegisterFragment extends Fragment {
         }
     }
 
+    private TextInputLayout getInputText(TextInputEditText editText){
+        switch (Objects.requireNonNull(editText.getHint()).toString()){
+            case "Nome":
+                return binding.nameInput;
+            case "Cognome":
+                return binding.cognomeInput;
+            case "Email":
+                return binding.emailInput;
+            case "Password":
+                return binding.passwordInput;
+            case "Conferma Password":
+                return binding.confermaPasswordInput;
+            case "Matricola":
+                return binding.matricolaInput;
+        }
+        return null;
+    }
+
     private String hashWith256(String textToHash) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -350,8 +349,82 @@ public class RegisterFragment extends Fragment {
             byte[] hashedByetArray = digest.digest(byteOfTextToHash);
             return Base64.getEncoder().encodeToString(hashedByetArray);
         }catch (NoSuchAlgorithmException e){
-            Log.e("LaureApp", "Error reading file", e);;
+            Log.e("LaureApp", "Error reading file", e);
         }
         return "";
     }
+
+    /**
+     * Crea l'account dell'utente su firebase
+
+     */
+    private  void createAccount()  {
+        String email = Objects.requireNonNull(binding.emailRegister.getText()).toString();
+        String password = Objects.requireNonNull(binding.passwordRegister.getText()).toString();
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                        // Esempio: Aggiornare l'UI o inviare una verifica email
+                    } else {
+                        // La registrazione ha fallito, puoi gestire l'errore qui
+                        Exception exception = task.getException();
+                        assert exception != null;
+                        Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
+                        // Esempio: Visualizzare un messaggio di errore o registrare l'errore
+                    }
+                });
+    }
+
+    private void updateUI(FirebaseUser user) {
+        // Ottieni l'UID dell'utente autenticato
+        if (user != null) {
+            String userId = user.getUid();
+            FirebaseDatabase database = FirebaseDatabase.getInstance("https://laureapp-21bff-default-rtdb.europe-west1.firebasedatabase.app");
+            DatabaseReference myRef = database.getReference();
+            if (binding.studenteRegister.isChecked()) {
+                DatabaseReference userRef = myRef.child("Utenti").child("Studenti").child(userId);
+                user_reference(userRef);
+                userRef.child("Matricola").setValue(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
+            } else if (binding.professoreRegister.isChecked()) {
+                DatabaseReference userRef = myRef.child("Utenti").child("Professori").child(userId);
+                user_reference(userRef);
+            }
+        }
+    }
+
+
+    private void  user_reference(DatabaseReference userRef){
+        userRef.child("Nome").setValue(Objects.requireNonNull(binding.nameRegister.getText()).toString());
+        userRef.child("Cognome").setValue(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
+        userRef.child("Email").setValue(Objects.requireNonNull(binding.emailRegister.getText()).toString());
+        userRef.child("Password").setValue(hashWith256(Objects.requireNonNull(binding.passwordRegister.getText()).toString()));
+    }
+
+
+
+    private Boolean is_empty_string(TextInputEditText editText, TextInputLayout layout_input, String campo_error){
+        boolean result = false;
+        if(StringUtils.isEmpty(Objects.requireNonNull(editText.getText()).toString())){
+            String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", campo_error);
+            ControlInput.set_error(layout_input, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+            editText.requestFocus();
+            result = true;
+        }
+        return result;
+    }
+
+    private boolean control_confirm_password(){
+        boolean result_error = ControlInput.is_equal_password(error_color, Objects.requireNonNull(binding.confermaPassword.getText()).toString(),
+                Objects.requireNonNull(binding.passwordRegister.getText()).toString(), binding.confermaPasswordInput,
+                getString(R.string.non_equivalent_passwords), context, getResources());
+        if(result_error)
+            ControlInput.set_error(binding.confermaPasswordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+        return result_error;
+
+    }
+
 }
+

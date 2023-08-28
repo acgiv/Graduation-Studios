@@ -74,6 +74,7 @@ public class HomeProfessoreFragment extends Fragment {
                 // Azioni da eseguire quando la card Social viene cliccata
             }
         });
+
         return rootView;
     }
 

@@ -29,6 +29,20 @@ public class StudenteRepository {
         executor.execute(() -> roomDbSqlLite.studenteDao().update(studente));
     }
 
+    public Long findStudente(Long id_utente){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.studenteDao().findStudente(id_utente);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
     public Studente findAllById(Long id){
         CompletableFuture<Studente> future = new CompletableFuture<>();
         executor.execute(() -> {

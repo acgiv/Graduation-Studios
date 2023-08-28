@@ -31,4 +31,8 @@ public class StudenteModelView {
     public List<Studente> getAllStudente(){
         return studenteRepository.getAllStudente();
     }
+
+    public Long findStudente(Long id_utente) {
+        return studenteRepository.findStudente(id_utente);
+    }
 }

@@ -30,7 +30,8 @@
     <fragment
         android:id="@+id/passwordRecoveryFragment"
         android:name="com.laureapp.ui.login.PasswordRecoveryFragment"
-        android:label="Recupera Password" >
+        android:label="Recupera Password"
+        tools:layout="@layout/fragment_password_recovery">
         <action
             android:id="@+id/action_passwordRecoveryFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

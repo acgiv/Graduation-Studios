@@ -74,12 +74,7 @@ public class HomeProfessoreFragment extends Fragment {
                 // Azioni da eseguire quando la card Social viene cliccata
             }
         });
-        cardViewTesi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Azioni da eseguire quando la card Tesi viene cliccata
-            }
-        });
+
         return rootView;
     }
 

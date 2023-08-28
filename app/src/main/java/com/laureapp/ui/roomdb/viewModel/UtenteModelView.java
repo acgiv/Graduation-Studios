@@ -24,6 +24,7 @@ public class UtenteModelView{
     public void updateUtente(Utente utente){
         utenteRepository.updateUtente(utente);
     }
+
     public boolean deleteUtente(long id){
         return utenteRepository.deleteUtente(id);
     }

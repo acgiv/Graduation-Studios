@@ -1,6 +1,7 @@
 package com.laureapp.ui.register;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegisterBinding;
+import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
@@ -52,6 +54,7 @@ public class RegisterFragment extends Fragment {
     private final HashMap<String,TextInputEditText> elem_text = new HashMap<>();
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
     private FirebaseAuth mAuth;
+    private Bundle bundle;
 
     /**
      * Chiamato quando il frammento viene creato per la prima volta.
@@ -128,6 +131,7 @@ public class RegisterFragment extends Fragment {
                     }
                 }
             });
+            bundle = new Bundle();
                 if (binding.studenteRegister.isChecked() && cont.get() ==6){
                         createAccount();
                         Studente st = new Studente();
@@ -136,19 +140,24 @@ public class RegisterFragment extends Fragment {
                         st.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
                         st.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
                         st_db.insertStudente(st);
-                        mNav.navigate(R.id.action_registerFragment_to_loginFragment);
-
-
+                        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                        bundle.putString("ruolo", "Studente");
+                        HomeActivity.putExtras(bundle);
+                        startActivity(HomeActivity);
+                        requireActivity().finish();
                 }
                 else if (binding.professoreRegister.isChecked() && cont.get() ==5){
-
                         createAccount();
                         UtenteModelView ut_db = insert_utente_sqlLite();
                         ProfessoreModelView pr_db = new ProfessoreModelView(context);
                         Professore pr = new Professore();
                         pr.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
                         pr_db.insertProfessore(pr);
-                        mNav.navigate(R.id.action_registerFragment_to_loginFragment);
+                        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                        bundle.putString("ruolo", "Professore");
+                        HomeActivity.putExtras(bundle);
+                        startActivity(HomeActivity);
+                        requireActivity().finish();
 
                 }
         });
@@ -190,8 +199,10 @@ public class RegisterFragment extends Fragment {
 
         private  boolean is_correct_form(TextInputEditText editText) {
             boolean result_error = false;
+            Log.d("fix_error","sono qui "+editText.getHint());
             if(!is_empty_string(editText ,getInputText(editText) , Objects.requireNonNull(editText.getHint()).toString())) {
-                switch (Objects.requireNonNull(editText.getHint()).toString()){
+                String campo = Objects.requireNonNull(editText.getHint()).toString();
+                switch (campo){
                     case "Cognome":
                     case "Nome":
                         if (!StringUtils.isAlpha(Objects.requireNonNull(editText.getText()).toString())) {
@@ -201,6 +212,7 @@ public class RegisterFragment extends Fragment {
                             ControlInput.set_error(Objects.requireNonNull(getInputText(editText)), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                              return true;
                         }
+                        break;
                     case "Email":
                         if (!ControlInput.isValidEmailFormat(Objects.requireNonNull(binding.emailRegister.getText()).toString())) {
                             String error_message = getString(R.string.errore_email);
@@ -209,6 +221,7 @@ public class RegisterFragment extends Fragment {
                             ControlInput.set_error(binding.emailInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                             return true;
                         }
+                        break;
                     case "Password":
                         if (!ControlInput.isPasswordSafe(Objects.requireNonNull(binding.passwordRegister.getText()).toString())) {
                             String error_message = getString(R.string.password_not_safe_error);
@@ -217,6 +230,7 @@ public class RegisterFragment extends Fragment {
                             ControlInput.set_error(binding.passwordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                             return control_confirm_password();
                         }
+                        break;
                     case "Conferma Password":
                         return control_confirm_password();
                     case "Matricola":
@@ -227,6 +241,7 @@ public class RegisterFragment extends Fragment {
                             ControlInput.set_error(binding.matricolaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                             return true;
                         }
+                        break;
                 }
             }
             return result_error;

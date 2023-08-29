@@ -1,6 +1,7 @@
 package com.laureapp.ui;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavGraph;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.NavController;
@@ -32,16 +33,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // PASSO LE INFORMAZIONI ATTRAVERSO IL BUNDLE IN FRAGMENT_HOME
         Bundle bundle = getIntent().getExtras();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        navController.navigate(R.id.fragment_home, bundle);
 
-        HomeFragment homeFragment = new HomeFragment();
-        homeFragment.setArguments(bundle);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.nav_host_fragment_main, homeFragment)
-                .commit();
-// Imposta gli argomenti per il fragment
-
+        // Imposta gli argomenti per il fragment
         navigationView = findViewById(R.id.navigation);
         drawerLayout = findViewById(R.id.drawer);
         toolbar = findViewById(R.id.toolbar);

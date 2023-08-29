@@ -12,15 +12,34 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_fragment_home_to_soclial_fragment"
-            app:destination="@id/soclial_fragment" />
+            android:id="@+id/action_fragment_home_to_social_fragment"
+            app:destination="@id/social_fragment" />
+        <action
+            android:id="@+id/action_fragment_home_to_profilo_studente2"
+            app:destination="@id/profilo_studente" />
+        <action
+            android:id="@+id/action_fragment_home_to_profilo_professore"
+            app:destination="@id/profilo_professore" />
     </fragment>
 
+    <fragment
+        android:id="@+id/social_fragment"
+        android:name="com.laureapp.ui.home.SocialFragment"
+        android:label="Social"
+        tools:layout="@layout/fragment_social">
+    </fragment>
 
     <fragment
-        android:id="@+id/soclial_fragment"
-        android:name="com.laureapp.ui.home.SocialFragment"
-        android:label="Social "
-        tools:layout="@layout/fragment_social">
+        android:id="@+id/profilo_studente"
+        android:name="com.laureapp.ui.profilo.ProfiloProfessoreFragment"
+        android:label="Profilo"
+        tools:layout="@layout/fragment_profilo_studente">
+    </fragment>
+
+    <fragment
+        android:id="@+id/profilo_professore"
+        android:name="com.laureapp.ui.profilo.ProfiloProfessoreFragment"
+        android:label="Profilo"
+        tools:layout="@layout/fragment_profilo_professore">
     </fragment>
 </navigation>

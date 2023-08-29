@@ -1,6 +1,7 @@
 package com.laureapp.ui.home;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,8 @@ public class HomeFragment extends Fragment {
     CardView CardTesi;
     CardView CardTask;
     CardView CardSocial;
+    CardView CardMessaggi ;
+    CardView CardTesisti;
     String ruolo;
     Context context;
     Bundle args;
@@ -34,19 +37,27 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView;
+        int currentOrientation = getResources().getConfiguration().orientation; //prendo l'orientamento corrente
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) { //se è in modalità orizzontale mostra il fragment orizzontale
+            rootView = inflater.inflate(R.layout.fragment_home_landscape, container, false);
+        } else { //altrimenti mostra il fragment verticale
+            rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        }
+
+
         context = requireContext();
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
             Log.d("ruolo ", ruolo);
         }
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return rootView;
     }
 
     @Override
@@ -76,8 +87,15 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        CardTask =  view.findViewById(R.id.cardViewTask);
-        CardTask.setOnClickListener(view1 -> {
+
+        CardSocial =  view.findViewById(R.id.cardViewSocial);
+        CardSocial.setOnClickListener(view1 -> {
+            mNav.navigate(R.id.action_fragment_home_to_social_fragment);
+        });
+
+
+        CardMessaggi =  view.findViewById(R.id.cardViewMessaggi);
+        CardMessaggi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
                 Log.d("Task", "cliccato Task studente");
             }else if(StringUtils.equals("Professore", ruolo)){
@@ -87,9 +105,16 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        CardSocial =  view.findViewById(R.id.cardViewSocial);
-        CardSocial.setOnClickListener(view1 -> {
-            mNav.navigate(R.id.action_fragment_home_to_soclial_fragment);
+        CardTesisti =  view.findViewById(R.id.cardViewTesisti);
+        CardTesisti.setOnClickListener(view1 -> {
+            if(StringUtils.equals("Studente", ruolo)){
+                Log.d("Task", "cliccato Task studente");
+            }else if(StringUtils.equals("Professore", ruolo)){
+                Log.d("Task", "cliccato Task Professore");
+            }else {
+                Log.d("Task", "cliccato Task Ospite");
+            }
         });
+
     }
 }

@@ -28,6 +28,9 @@ public interface StudenteDao {
     @Query("SELECT * FROM studente where id = :id")
     Studente findAllById(Long id);
 
+    @Query("SELECT id FROM studente where id_utente = :id_utente")
+    Long findStudente(Long id_utente);
+
     @Delete
     void delete(Studente studente);
 

@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.laureapp.R;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.nio.charset.StandardCharsets;
@@ -54,6 +55,8 @@ public class LoginFragment extends Fragment {
     Context context ;
     private NavController mNav;
     private FirebaseAuth mAuth;
+    private Bundle bundle;
+    private  UtenteModelView utenteView ;
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
 
 
@@ -74,6 +77,7 @@ public class LoginFragment extends Fragment {
 
         // Inflate the layout for this fragment
         context = requireContext();
+        utenteView = new UtenteModelView(context);
         return inflater.inflate(R.layout.fragment_login, container, false);
 
     }
@@ -92,7 +96,6 @@ public class LoginFragment extends Fragment {
         error_text = view.findViewById(R.id.error_text);
 
         Resources resources = getResources();
-        UtenteModelView utenteView = new UtenteModelView(context);
         //Pulsante di login
         btnLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
@@ -105,9 +108,7 @@ public class LoginFragment extends Fragment {
                             error_text.setVisibility(View.VISIBLE);
                         } else {
                             error_text.setVisibility(View.GONE);
-                            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                            startActivity(HomeActivity);
-                            requireActivity().finish();
+                            redirectHome();
                         }
                     } else if (isConnected()) {
                         loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(password_text.getText()).toString());
@@ -125,6 +126,9 @@ public class LoginFragment extends Fragment {
         btnHostLogin = view.findViewById(R.id.ospite_login);
         btnHostLogin.setOnClickListener(view14 -> {
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+            bundle = new Bundle();
+            bundle.putString("ruolo", "Ospite");
+            HomeActivity.putExtras(bundle);
             startActivity(HomeActivity);
             requireActivity().finish();
         });
@@ -211,8 +215,10 @@ public class LoginFragment extends Fragment {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(requireActivity(), task -> {
                         if (task.isSuccessful()) {
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.i((String) TAG, "signInEmail:success");
+
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
@@ -226,7 +232,8 @@ public class LoginFragment extends Fragment {
         /**
          * In questo metodo verifichiamo se l'utente è loggato e se risulta loggato, si andrà in MainActivity
          */
-        private void updateUI(FirebaseUser user) {
+        private void
+        updateUI(FirebaseUser user) {
             if (user != null) {
                 String userId = user.getUid(); // Ottieni l'UID dell'utente autenticato
 
@@ -237,12 +244,21 @@ public class LoginFragment extends Fragment {
 
                 userRef.child("Email").get();
                 userRef.child("Password").get();
-                redirectToStudenteHome();
+                redirectHome();
             }
         }
 
-        private void redirectToStudenteHome() {
+        private void redirectHome() {
+            Bundle bundle = new Bundle();
+            Long id_utente = utenteView.getIdUtente(String.valueOf(email_text.getText()));
+            StudenteModelView stud_view = new StudenteModelView(context);
+            if( stud_view.findStudente(id_utente)!= null){
+                bundle.putString("ruolo", "Studente");
+            }else{
+                bundle.putString("ruolo", "Professore");
+            }
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+            HomeActivity.putExtras(bundle);
             startActivity(HomeActivity);
             requireActivity().finish();
         }

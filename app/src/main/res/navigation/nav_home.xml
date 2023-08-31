@@ -15,7 +15,7 @@
             android:id="@+id/action_fragment_home_to_social_fragment"
             app:destination="@id/social_fragment" />
         <action
-            android:id="@+id/action_fragment_home_to_profilo_studente2"
+            android:id="@+id/action_fragment_home_to_profilo_studente"
             app:destination="@id/profilo_studente" />
         <action
             android:id="@+id/action_fragment_home_to_profilo_professore"

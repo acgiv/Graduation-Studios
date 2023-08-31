@@ -104,6 +104,7 @@ public class LoginFragment extends Fragment {
                     //Se c'è connessione ad internet uso il db locale altrimenti uso quello in remoto
                     if (!isConnected()) {
                         boolean result_query = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
+
                         if (Boolean.FALSE.equals(result_query)) {
                             error_text.setVisibility(View.VISIBLE);
                         } else {
@@ -111,6 +112,7 @@ public class LoginFragment extends Fragment {
                             redirectHome();
                         }
                     } else if (isConnected()) {
+                        Log.d("ciao",String.valueOf(utenteView.getAllUtente()));
                         loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(password_text.getText()).toString());
                     }
                 }

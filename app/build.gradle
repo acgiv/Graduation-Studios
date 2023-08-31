@@ -59,8 +59,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-rxjava2:$room_version"
     //fragment navigation
-    implementation "androidx.navigation:navigation-fragment:2.7.0"
-    implementation "androidx.navigation:navigation-ui:2.7.0"
+    implementation "androidx.navigation:navigation-fragment:2.7.1"
+    implementation "androidx.navigation:navigation-ui:2.7.1"
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
@@ -71,4 +71,5 @@ dependencies {
     }
     implementation  'org.apache.commons:commons-lang3:3.7'
     implementation 'com.google.firebase:firebase-database:20.2.2'
+    implementation 'com.google.firebase:firebase-firestore:24.7.1'
 }

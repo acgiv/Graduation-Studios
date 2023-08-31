@@ -11,9 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +32,8 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegisterBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.RoomDbSqlLite;
+import com.laureapp.ui.roomdb.dao.UtenteDao;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -42,6 +48,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -137,9 +145,11 @@ public class RegisterFragment extends Fragment {
                         Studente st = new Studente();
                         StudenteModelView st_db = new StudenteModelView(context);
                         UtenteModelView ut_db = insert_utente_sqlLite();
+
                         st.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
                         st.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
                         st_db.insertStudente(st);
+                        Log.d("tutti gli utenti", String.valueOf(ut_db.getAllUtente()));
                         Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
                         bundle.putString("ruolo", "Studente");
                         HomeActivity.putExtras(bundle);
@@ -147,12 +157,57 @@ public class RegisterFragment extends Fragment {
                         requireActivity().finish();
                 }
                 else if (binding.professoreRegister.isChecked() && cont.get() ==5){
-                        createAccount();
-                        UtenteModelView ut_db = insert_utente_sqlLite();
-                        ProfessoreModelView pr_db = new ProfessoreModelView(context);
-                        Professore pr = new Professore();
-                        pr.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
-                        pr_db.insertProfessore(pr);
+                    FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                    RoomDbSqlLite db = RoomDbSqlLite.getDatabase(requireActivity());
+                    firestoreDB.collection("Utenti")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+
+                            // Salva i dati in SQLite
+                            for (DocumentSnapshot document : documents) {
+                                Utente utente2 = document.toObject(Utente.class); // Converte il documento in un oggetto Utente
+                                db.utenteDao().insert(utente2); // Chiama il metodo per l'inserimento o l'aggiornamento
+                            }
+                        } else {
+                            Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
+                        }
+                    });
+                    Log.d("utenti", String.valueOf(db.utenteDao().getAllUtente()));
+                    createAccount();
+                    String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
+                    Map<String, Object> utente = new HashMap<>();
+                    utente.put("nome", binding.nameRegister.getText().toString());
+                    utente.put("cognome",  binding.cognomeRegister.getText().toString());
+                    utente.put("email",  binding.emailRegister.getText().toString());
+                    utente.put("password", binding.passwordRegister.getText().toString());
+                    firestoreDB.collection("Utenti").document(uid).set(utente)
+                            .addOnSuccessListener(aVoid -> {
+                                UtenteModelView ut_db = new UtenteModelView(context);
+                                // Imposta i dati dell'Utente dai campi di input
+                                Utente utente1 = new Utente();
+                                utente1.setNome(Objects.requireNonNull(binding.nameRegister.getText()).toString());
+                                utente1.setCognome(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
+                                utente1.setEmail(Objects.requireNonNull(binding.emailRegister.getText()).toString());
+                                utente1.setPassword(hashWith256(Objects.requireNonNull(binding.passwordRegister.getText()).toString()));
+                                // Inserisce l'Utente nel database utilizzando il ViewModel
+
+                                ut_db.insertUtente(utente1);
+                                Log.d("utenti", String.valueOf(ut_db.getAllUtente()));
+                                //ProfessoreModelView pr_db = new ProfessoreModelView(context);
+                                //Professore pr = new Professore();
+                                //pr.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
+                                //pr_db.insertProfessore(pr);
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    System.out.println("Error writing document");
+                                }
+                            });
+
                         Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
                         bundle.putString("ruolo", "Professore");
                         HomeActivity.putExtras(bundle);
@@ -381,7 +436,7 @@ public class RegisterFragment extends Fragment {
                     if (task.isSuccessful()) {
                         // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
                         FirebaseUser user = mAuth.getCurrentUser();
-                        updateUI(user);
+                        //updateUI(user);
                         // Esempio: Aggiornare l'UI o inviare una verifica email
                     } else {
                         // La registrazione ha fallito, puoi gestire l'errore qui
@@ -397,6 +452,7 @@ public class RegisterFragment extends Fragment {
         // Ottieni l'UID dell'utente autenticato
         if (user != null) {
             String userId = user.getUid();
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             FirebaseDatabase database = FirebaseDatabase.getInstance("https://laureapp-21bff-default-rtdb.europe-west1.firebasedatabase.app");
             DatabaseReference myRef = database.getReference();
             if (binding.studenteRegister.isChecked()) {

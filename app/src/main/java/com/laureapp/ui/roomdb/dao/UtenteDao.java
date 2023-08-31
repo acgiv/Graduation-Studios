@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface UtenteDao {
     @Insert
-    void insert(Utente utente);
+    void insert(Utente... utente);
 
     @Update
     void update(Utente utente);

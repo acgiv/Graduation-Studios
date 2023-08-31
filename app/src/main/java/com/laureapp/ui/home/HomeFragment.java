@@ -88,16 +88,22 @@ public class HomeFragment extends Fragment {
 
         mNav = Navigation.findNavController(view);
 
+
+        CardTesisti =  view.findViewById(R.id.cardViewTesisti);
+        if(StringUtils.equals("Studente", ruolo)){
+            Log.d("Tesisti", "cliccato Tesisti studente");
+            CardTesisti.setVisibility(View.GONE);
+        }else if(StringUtils.equals("Professore", ruolo)){
+            CardTesisti.setVisibility(View.VISIBLE);
+            Log.d("Tesisti", "cliccato Tesisti Professore");
+        }else {
+            Log.d("Tesisti", "cliccato Tesisti Ospite");
+        }
+
         // Card per accedere alla sezione "Tesi"
         CardTesi =  view.findViewById(R.id.cardViewTesi);
         CardTesi.setOnClickListener(view1 -> {
-            if(StringUtils.equals("Studente", ruolo)){
-                Log.d("Tesi", "cliccato tesi studente");
-            }else if(StringUtils.equals("Professore", ruolo)){
-                Log.d("Tesi", "cliccato tesi Professore");
-            }else {
-                Log.d("Tesi", "cliccato tesi Ospite");
-            }
+
         });
 
         // Card per accedere alla sezione "Task"

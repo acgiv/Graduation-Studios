@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.laureapp.R;
+import com.laureapp.databinding.FragmentLoginBinding;
+import com.laureapp.databinding.FragmentRegisterBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
@@ -43,16 +45,13 @@ import java.util.Objects;
 
 public class LoginFragment extends Fragment {
 
-    Button btnLogin;
-    Button btnHostLogin;
-    MaterialTextView btnForgotPsw;
-    MaterialTextView btnRegister;
     TextInputLayout password_layout;
     TextInputLayout email_layout;
     TextInputEditText password_text;
     TextInputEditText email_text;
     MaterialTextView error_text;
     Context context ;
+    FragmentLoginBinding binding;
     private NavController mNav;
     private FirebaseAuth mAuth;
     private Bundle bundle;
@@ -75,10 +74,12 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
         context = requireContext();
+
         utenteView = new UtenteModelView(context);
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return binding.getRoot();
 
     }
 
@@ -88,7 +89,6 @@ public class LoginFragment extends Fragment {
 
         mNav = Navigation.findNavController(view);
 
-        btnLogin = view.findViewById(R.id.button_login);
         email_layout  =  view.findViewById(R.id.email_input);
         password_layout = view.findViewById(R.id.password_input);
         email_text = view.findViewById(R.id.email_register);
@@ -97,7 +97,7 @@ public class LoginFragment extends Fragment {
 
         Resources resources = getResources();
         //Pulsante di login
-        btnLogin.setOnClickListener(view1 -> {
+        binding.buttonLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
                 HashMap<String, Boolean> result = is_correct_email_password();
                 if (Boolean.TRUE.equals(result.get("email")) && Boolean.TRUE.equals(result.get("password"))) {
@@ -119,14 +119,10 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        btnRegister = view.findViewById(R.id.registrati_login);
-        btnRegister.setOnClickListener(view13 -> mNav.navigate(R.id.action_loginFragment_to_registerFragment));
+        binding.registratiLogin.setOnClickListener(view13 -> mNav.navigate(R.id.action_loginFragment_to_registerFragment));
 
-        btnForgotPsw = view.findViewById(R.id.recupero_password_login);
-        btnForgotPsw.setOnClickListener(view12 -> mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment));
-
-        btnHostLogin = view.findViewById(R.id.ospite_login);
-        btnHostLogin.setOnClickListener(view14 -> {
+        binding.recuperoPasswordLogin.setOnClickListener(view12 -> mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment));
+        binding.ospiteLogin.setOnClickListener(view14 -> {
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
             bundle = new Bundle();
             bundle.putString("ruolo", "Ospite");

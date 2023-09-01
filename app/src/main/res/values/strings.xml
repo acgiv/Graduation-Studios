@@ -26,15 +26,14 @@
 
     <string name="home">Home</string>
     <string name="tesi">Tesi</string>
-    <string name="messaggi">Messaggi</string>
     <string name="classifica">Classifica</string>
     <string name="social">Social</string>
     <string name="tesi_description">tesi_description</string>
     <string name="chat_description">chat</string>
     <string name="classifica_description" />
     <string name="social_description" />
-    <string name="messaggi_description" />
-    <string name="task">Task</string>
+    <string name="richieste_description" />
+    <string name="richieste">Richieste</string>
     <string name="task_description" />
     <string name="tesisti" />
     <string name="tesisti_description" />

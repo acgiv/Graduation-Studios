@@ -20,7 +20,7 @@ public interface ProfessoreDao {
     void update(Professore professore);
 
     @Query("SELECT * FROM professore")
-    List<Professore> getAllProfesssore();
+    List<Professore> getAllProfessore();
 
     @Query("SELECT * FROM professore where id = :id")
     Professore findAllById(Long id);

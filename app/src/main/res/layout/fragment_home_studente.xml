@@ -5,7 +5,7 @@
     android:id="@+id/homeStudenteLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeStudenteFragment">
+    tools:context=".ui.home.HomeFragment">
     <!-- ... Griglia contenente le varie card ... -->
 
     <!-- ... bottoni home e profilo ... -->
@@ -78,7 +78,7 @@
         <!-- ... card messaggi ... -->
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewMessaggi"
+            android:id="@+id/cardViewRichieste"
             android:layout_width="115dp"
             android:layout_height="115dp"
             android:layout_row="0"
@@ -101,7 +101,7 @@
                     android:layout_width="70dp"
                     android:layout_height="78dp"
                     android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/chat_description"
+                    android:contentDescription="@string/richieste_description"
                     android:src="@drawable/outline_chat_24">
 
 
@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/messaggi"
+                    android:text="@string/richieste"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">
@@ -227,32 +227,6 @@
             >
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="78dp"
-                    android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/task_description"
-                    android:src="@drawable/baseline_checklist_rtl_24">
-
-                </ImageView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/task"
-                    android:textColor="@color/color_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold">
-
-                </TextView>
-
-            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
     </GridLayout>

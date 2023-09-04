@@ -10,14 +10,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
+        android:layout_marginTop="18dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="18dp"
         android:columnCount="3"
         android:rowCount="3"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2">
 
 
         <!-- ... Card Tesi ... -->
@@ -102,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/messaggi"
+                    android:text="Messaggi"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">
@@ -171,7 +173,8 @@
             android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
-            app:cardCornerRadius="15dp">
+            app:cardCornerRadius="15dp"
+            >
 
 
             <LinearLayout
@@ -213,7 +216,8 @@
             android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
-            app:cardCornerRadius="15dp">
+            app:cardCornerRadius="15dp"
+            >
 
 
             <LinearLayout
@@ -234,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/task"
+                    android:text="task"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">
@@ -246,5 +250,16 @@
         </androidx.cardview.widget.CardView>
     </GridLayout>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_bottom_nav_menu"
+        app:itemIconTint="@color/color_primary"
+        app:itemTextColor="@color/color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

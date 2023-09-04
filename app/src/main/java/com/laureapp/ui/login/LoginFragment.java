@@ -1,6 +1,10 @@
 package com.laureapp.ui.login;
 import static android.content.ContentValues.TAG;
 
+import static com.laureapp.ui.controlli.ControlInput.isConnected;
+
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -96,13 +100,14 @@ public class LoginFragment extends Fragment {
         error_text = view.findViewById(R.id.error_text);
 
         Resources resources = getResources();
+        ConnectivityManager cm = (ConnectivityManager)getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         //Pulsante di login
         binding.buttonLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
                 HashMap<String, Boolean> result = is_correct_email_password();
                 if (Boolean.TRUE.equals(result.get("email")) && Boolean.TRUE.equals(result.get("password"))) {
                     //Se c'è connessione ad internet uso il db locale altrimenti uso quello in remoto
-                    if (!isConnected()) {
+                    if (!isConnected(cm)) {
                         boolean result_query = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
 
                         if (Boolean.FALSE.equals(result_query)) {
@@ -111,7 +116,7 @@ public class LoginFragment extends Fragment {
                             error_text.setVisibility(View.GONE);
                             redirectHome();
                         }
-                    } else if (isConnected()) {
+                    } else if (isConnected(cm)) {
                         Log.d("ciao",String.valueOf(utenteView.getAllUtente()));
                         loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(password_text.getText()).toString());
                     }
@@ -188,21 +193,7 @@ public class LoginFragment extends Fragment {
         return "";
     }
 
-        /**
-         *
-         * @return un booleano che indica se la connessione è presente: true se c'è connessione altrimenti false
-         */
-        public boolean isConnected() {
-            ConnectivityManager cm = (ConnectivityManager)getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-            if (isConnected) {
-                return true;
-            } else {
-                return false;
-                // show an error message or do something else
-            }
-        }
+
 
         /**
          *

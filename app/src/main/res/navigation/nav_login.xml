@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_loginFragment_to_passwordRecoveryFragment"
             app:destination="@id/passwordRecoveryFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_register2Fragment"
+            app:destination="@id/register2Fragment" />
     </fragment>
 
     <fragment
@@ -24,8 +27,8 @@
         android:label="Registrazione"
         tools:layout="@layout/fragment_register">
         <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_registerFragment_to_register2Fragment"
+            app:destination="@id/register2Fragment" />
     </fragment>
     <fragment
         android:id="@+id/passwordRecoveryFragment"
@@ -36,5 +39,10 @@
             android:id="@+id/action_passwordRecoveryFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/register2Fragment"
+        android:name="com.laureapp.ui.register.Register2Fragment"
+        android:label="Registrazione"
+        tools:layout="@layout/fragment_register2" />
 
 </navigation>

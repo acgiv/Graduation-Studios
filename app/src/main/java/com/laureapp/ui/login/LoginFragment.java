@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.laureapp.R;
+import com.laureapp.databinding.ActivityMainBinding;
 import com.laureapp.databinding.FragmentLoginBinding;
 import com.laureapp.databinding.FragmentRegisterBinding;
 import com.laureapp.ui.MainActivity;
@@ -122,6 +123,7 @@ public class LoginFragment extends Fragment {
         binding.registratiLogin.setOnClickListener(view13 -> mNav.navigate(R.id.action_loginFragment_to_registerFragment));
 
         binding.recuperoPasswordLogin.setOnClickListener(view12 -> mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment));
+
         binding.ospiteLogin.setOnClickListener(view14 -> {
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
             bundle = new Bundle();

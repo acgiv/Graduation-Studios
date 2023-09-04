@@ -54,4 +54,20 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="matricola">Matricola</string>
     <string name="inserisci_l_email_di_registrazione">Inserisci l\'email di registrazione</string>
+    <string name="avanti">Avanti</string>
+    <string name="dipartimento">Dipartimento</string>
+    <string name="media">Media</string>
+    <string name="esami_mancanti">Esami mancanti</string>
+    <string name="corsi">Corsi</string>
+
+    <string-array name="Dipartimento">
+        <item>Uniba</item>
+        <item>Poliba</item>
+    </string-array>
+    <string-array name="Corsi">
+        <item>Itps</item>
+        <item>Matematica</item>
+        <item>Informatica</item>
+    </string-array>
+
 </resources>

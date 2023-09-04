@@ -119,7 +119,7 @@
         <!-- ... card tesisti ... -->
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewTesisti"
+            android:id="@+id/cardViewSocial"
             android:layout_width="115dp"
             android:layout_height="115dp"
             android:layout_row="1"
@@ -166,7 +166,7 @@
         <!-- ... card social ... -->
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewSocial"
+            android:id="@+id/cardViewTesisti"
             android:layout_width="115dp"
             android:layout_height="115dp"
             android:layout_row="2"

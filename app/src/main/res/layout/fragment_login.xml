@@ -156,6 +156,7 @@
         app:boxBackgroundMode="outline"
         app:boxStrokeColor="@color/mtrl_outlined_stroke_color"
         app:endIconMode="password_toggle"
+        app:errorIconDrawable="@null"
         app:hintTextColor="@color/color_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

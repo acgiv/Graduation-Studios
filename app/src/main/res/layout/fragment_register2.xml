@@ -51,7 +51,7 @@
                 android:id="@+id/media_input"
                 android:layout_width="380dp"
                 android:layout_height="64dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 app:boxBackgroundMode="outline"
                 app:hintTextColor="@color/color_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +77,7 @@
                 android:id="@+id/esami_mancanti_input"
                 android:layout_width="380dp"
                 android:layout_height="64dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 app:boxBackgroundMode="outline"
                 app:hintTextColor="@color/color_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -102,16 +102,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/DipartimentoLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="374dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
-                android:hint="@string/dipartimento"
-                app:boxBackgroundColor="@color/baclgroud_input"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="10dp"
                 app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusTopStart="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -122,24 +116,24 @@
                     android:id="@+id/filled_exposed_dropdown"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/input_color"
                     android:ems="10"
-                    android:padding="10dp" />
+                    android:hint="@string/dipartimento"
+                    android:importantForAutofill="no"
+                    android:padding="7dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/corsoLayout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="374dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="24dp"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:hint="@string/corsi"
-                app:boxBackgroundColor="@color/baclgroud_input"
                 app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusTopStart="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/DipartimentoLayout">
@@ -148,8 +142,10 @@
                     android:id="@+id/dropdown_corso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:importantForAutofill="no"
+                    android:background="@drawable/input_color"
                     android:ems="10"
-                    android:padding="10dp" />
+                    android:padding="5dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -161,12 +157,12 @@
         android:id="@+id/button_register"
         android:layout_width="205dp"
         android:layout_height="55dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
+        app:backgroundTint="@null"
         android:background="@drawable/button_background_primary"
         android:text="@string/registrati"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
 

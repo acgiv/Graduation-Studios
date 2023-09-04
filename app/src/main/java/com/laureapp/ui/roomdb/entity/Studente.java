@@ -6,10 +6,12 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName ="Studente" , foreignKeys = {
         @ForeignKey(entity = Utente.class, parentColumns = "id", childColumns = "id_utente")
 })
-public class Studente {
+public class Studente implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
@@ -81,6 +83,7 @@ public class Studente {
         this.id_utente = id_utente;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Studente{" +

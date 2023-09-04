@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment {
 
         CardSocial =  view.findViewById(R.id.cardViewSocial);
         CardSocial.setOnClickListener(view1 -> {
-            mNav.navigate(R.id.action_fragment_home_to_soclial_fragment);
+            mNav.navigate(R.id.action_fragment_home_to_social_fragment);
         });
     }
 }

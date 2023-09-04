@@ -1,6 +1,10 @@
 package com.laureapp.ui.login;
 import static android.content.ContentValues.TAG;
 
+import static com.laureapp.ui.controlli.ControlInput.isConnected;
+
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -29,6 +33,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.laureapp.R;
+import com.laureapp.databinding.FragmentLoginBinding;
+import com.laureapp.databinding.FragmentRegisterBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
@@ -43,16 +49,13 @@ import java.util.Objects;
 
 public class LoginFragment extends Fragment {
 
-    Button btnLogin;
-    Button btnHostLogin;
-    MaterialTextView btnForgotPsw;
-    MaterialTextView btnRegister;
     TextInputLayout password_layout;
     TextInputLayout email_layout;
     TextInputEditText password_text;
     TextInputEditText email_text;
     MaterialTextView error_text;
     Context context ;
+    FragmentLoginBinding binding;
     private NavController mNav;
     private FirebaseAuth mAuth;
     private Bundle bundle;
@@ -75,10 +78,12 @@ public class LoginFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
         context = requireContext();
+
         utenteView = new UtenteModelView(context);
-        return inflater.inflate(R.layout.fragment_login, container, false);
+        return binding.getRoot();
 
     }
 
@@ -88,7 +93,6 @@ public class LoginFragment extends Fragment {
 
         mNav = Navigation.findNavController(view);
 
-        btnLogin = view.findViewById(R.id.button_login);
         email_layout  =  view.findViewById(R.id.email_input);
         password_layout = view.findViewById(R.id.password_input);
         email_text = view.findViewById(R.id.email_register);
@@ -96,35 +100,34 @@ public class LoginFragment extends Fragment {
         error_text = view.findViewById(R.id.error_text);
 
         Resources resources = getResources();
+        ConnectivityManager cm = (ConnectivityManager)getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         //Pulsante di login
-        btnLogin.setOnClickListener(view1 -> {
+        binding.buttonLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
                 HashMap<String, Boolean> result = is_correct_email_password();
                 if (Boolean.TRUE.equals(result.get("email")) && Boolean.TRUE.equals(result.get("password"))) {
                     //Se c'è connessione ad internet uso il db locale altrimenti uso quello in remoto
-                    if (!isConnected()) {
+                    if (!isConnected(cm)) {
                         boolean result_query = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
+
                         if (Boolean.FALSE.equals(result_query)) {
                             error_text.setVisibility(View.VISIBLE);
                         } else {
                             error_text.setVisibility(View.GONE);
                             redirectHome();
                         }
-                    } else if (isConnected()) {
+                    } else if (isConnected(cm)) {
+                        Log.d("ciao",String.valueOf(utenteView.getAllUtente()));
                         loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(password_text.getText()).toString());
                     }
                 }
             }
         });
 
-        btnRegister = view.findViewById(R.id.registrati_login);
-        btnRegister.setOnClickListener(view13 -> mNav.navigate(R.id.action_loginFragment_to_registerFragment));
+        binding.registratiLogin.setOnClickListener(view13 -> mNav.navigate(R.id.action_loginFragment_to_registerFragment));
 
-        btnForgotPsw = view.findViewById(R.id.recupero_password_login);
-        btnForgotPsw.setOnClickListener(view12 -> mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment));
-
-        btnHostLogin = view.findViewById(R.id.ospite_login);
-        btnHostLogin.setOnClickListener(view14 -> {
+        binding.recuperoPasswordLogin.setOnClickListener(view12 -> mNav.navigate(R.id.action_loginFragment_to_passwordRecoveryFragment));
+        binding.ospiteLogin.setOnClickListener(view14 -> {
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
             bundle = new Bundle();
             bundle.putString("ruolo", "Ospite");
@@ -190,21 +193,7 @@ public class LoginFragment extends Fragment {
         return "";
     }
 
-        /**
-         *
-         * @return un booleano che indica se la connessione è presente: true se c'è connessione altrimenti false
-         */
-        public boolean isConnected() {
-            ConnectivityManager cm = (ConnectivityManager)getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-            if (isConnected) {
-                return true;
-            } else {
-                return false;
-                // show an error message or do something else
-            }
-        }
+
 
         /**
          *

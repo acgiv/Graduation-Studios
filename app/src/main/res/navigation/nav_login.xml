@@ -19,6 +19,22 @@
     </fragment>
 
     <fragment
+        android:id="@+id/loadingActivity"
+        android:name="com.laureapp.ui.login.LoadingPageActivity"
+        android:label="LoadingPage"
+        tools:layout="@layout/activity_loading_page">
+        <action
+            android:id="@+id/action_fragment_loading_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.laureapp.ui.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
         android:id="@+id/registerFragment"
         android:name="com.laureapp.ui.register.RegisterFragment"
         android:label="Registrazione"
@@ -26,7 +42,12 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+
     </fragment>
+
     <fragment
         android:id="@+id/passwordRecoveryFragment"
         android:name="com.laureapp.ui.login.PasswordRecoveryFragment"

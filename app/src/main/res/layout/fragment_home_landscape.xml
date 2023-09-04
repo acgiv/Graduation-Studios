@@ -2,15 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homeProfessoreLayout"
+    android:id="@+id/homeProfessoreLayoutLandscape"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeProfessoreFragment">
+    tools:context=".ui.home.HomeFragment">
     <!-- ... Griglia contenente le varie card ... -->
 
     <!-- ... bottoni home e profilo ... -->
 
-    <GridLayout
+    <LinearLayout
         android:id="@+id/grigliaFunzioni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,8 +18,6 @@
         android:layout_marginTop="18dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="18dp"
-        android:columnCount="3"
-        android:rowCount="3"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,10 +33,6 @@
             android:id="@+id/cardViewTesi"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="0"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
@@ -81,10 +75,6 @@
             android:id="@+id/cardViewMessaggi"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="0"
-            android:layout_rowWeight="1"
-            android:layout_column="1"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
@@ -111,7 +101,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/messaggi"
+                    android:text="Messaggi"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">
@@ -127,10 +117,6 @@
             android:id="@+id/cardViewTesisti"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="1"
-            android:layout_rowWeight="1"
-            android:layout_column="1"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
@@ -174,14 +160,9 @@
             android:id="@+id/cardViewSocial"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="2"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
-            app:cardCornerRadius="15dp"
-            >
+            app:cardCornerRadius="15dp">
 
 
             <LinearLayout
@@ -217,14 +198,9 @@
             android:id="@+id/cardViewTask"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="1"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
-            app:cardCornerRadius="15dp"
-            >
+            app:cardCornerRadius="15dp">
 
 
             <LinearLayout
@@ -245,7 +221,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/task"
+                    android:text="Task"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">
@@ -255,7 +231,7 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-    </GridLayout>
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_menu"

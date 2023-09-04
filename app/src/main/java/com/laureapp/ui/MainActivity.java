@@ -1,6 +1,7 @@
 package com.laureapp.ui;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavGraph;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.NavController;
@@ -11,37 +12,43 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.laureapp.R;
 //.R serve per riprendere gli ID delle componenti grafiche che verranno utilizzate e che si trovano all'interno del file xml
 import com.google.android.material.navigation.NavigationView;
+import com.laureapp.databinding.ActivityMainBinding;
 import com.laureapp.ui.home.HomeFragment;
 import com.laureapp.ui.login.LoginActivity;
+
+import org.apache.commons.lang3.StringUtils;
 
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView navigationView;
-    NavController navController;
     AppBarConfiguration mAppBarConfiguration;
+    ActivityMainBinding binding;
+    String ruolo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // PASSO LE INFORMAZIONI ATTRAVERSO IL BUNDLE IN FRAGMENT_HOME
         Bundle bundle = getIntent().getExtras();
+        ruolo = bundle.getString("ruolo");
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        navController.navigate(R.id.fragment_home, bundle);
 
-        HomeFragment homeFragment = new HomeFragment();
-        homeFragment.setArguments(bundle);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.nav_host_fragment_main, homeFragment)
-                .commit();
-// Imposta gli argomenti per il fragment
-
+        // Imposta gli argomenti per il fragment
         navigationView = findViewById(R.id.navigation);
         drawerLayout = findViewById(R.id.drawer);
         toolbar = findViewById(R.id.toolbar);
@@ -55,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         navigationView.bringToFront();
+
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.itemSettings) {
@@ -81,30 +89,24 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             }
-
-            //navController.navigate(R.id.downloadFragment);
-
-                /*
-                case R.id.itemTutorial:
-                    //avvio l'activity di visualizzazione del tutorial, passando come extra
-                    //la classe di provenienza, in modo da cambiare dinamicamente il testo
-                    //dei tasti presenti nel tutorial
-                    Intent startOnBoarding = new Intent(Main.this, OnBoarding.class);
-                    startOnBoarding.putExtra("classFrom", Main.class.toString());
-                    startActivity(startOnBoarding);
-                    return true;
-
-                case R.id.itemSettings:
-                    closeDrawerIfOpen();
-                    navController.navigate(R.id.settingsFragment);
-                    return true;
-
-                case R.id.itemAbout:
-                    closeDrawerIfOpen();
-                    navController.navigate(R.id.aboutUsFragment);
-                    return true;
-                */
             return false;
+        });
+        binding.bottomNavigationView.setOnItemSelectedListener(item1 -> {
+            int id2 = item1.getItemId();
+            NavController navController2 = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+            if (id2 == R.id.itemProfilo) {
+                if(StringUtils.equals("Studente",ruolo) ) {
+                    navController2.navigate(R.id.action_fragment_home_to_profilo_studente, bundle);
+                }else if (StringUtils.equals("Professore",ruolo)){
+                    navController2 .navigate(R.id.action_fragment_home_to_profilo_professore);
+                }else{
+                    navController2.navigate(R.id.action_fragment_home_to_profilo_studente, bundle);
+                }
+            }
+            if (id2 == R.id.itemHome) {
+                navController2.navigate(R.id.fragment_home);
+            }
+            return true;
         });
 
     }
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     private void createAppBar() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home)
+         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home, R.id.profilo_studente,  R.id.profilo_professore)
                     .setOpenableLayout(drawerLayout)
                     .build();
 
@@ -120,5 +122,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
+
+
+
+
+
+
 }
 

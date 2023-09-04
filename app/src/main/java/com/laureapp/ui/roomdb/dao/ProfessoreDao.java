@@ -22,6 +22,9 @@ public interface ProfessoreDao {
     @Query("SELECT * FROM professore")
     List<Professore> getAllProfessore();
 
+    @Query("DELETE FROM professore")
+    public void deleteAll();
+
     @Query("SELECT * FROM professore where id = :id")
     Professore findAllById(Long id);
 

@@ -1,7 +1,10 @@
 package com.laureapp.ui.register;
+import static com.laureapp.ui.controlli.ControlInput.hashWith256;
+import static com.laureapp.ui.controlli.ControlInput.isConnected;
 
 import android.content.Context;
-import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,9 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +34,9 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegisterBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.login.LoginFragment;
+import com.laureapp.ui.roomdb.RoomDbSqlLite;
+import com.laureapp.ui.roomdb.dao.UtenteDao;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -42,6 +51,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -114,53 +125,93 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mNav = Navigation.findNavController(view);
+        ConnectivityManager cm = (ConnectivityManager)getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
         // Imposta l'azione del pulsante di registrazione
         binding.buttonRegister.setOnClickListener(view1 -> {
-            // Controlla i campi di input e stampa i risultati del controllo
-            AtomicInteger cont = new AtomicInteger();
-            elem_text.forEach((key, values)-> {
-                if (StringUtils.equals(key,"matricola")){
-                    if (binding.studenteRegister.isChecked()){
+            if (isConnected(cm)) {
+                // Controlla i campi di input e stampa i risultati del controllo
+                AtomicInteger cont = new AtomicInteger();
+                elem_text.forEach((key, values) -> {
+                    if (StringUtils.equals(key, "matricola")) {
+                        if (binding.studenteRegister.isChecked()) {
+                            if (Boolean.TRUE.equals(is_correct_form(values))) {
+                                cont.addAndGet(1);
+                            }
+
+                        }
+                    } else {
                         if (Boolean.TRUE.equals(is_correct_form(values))) {
-                             cont.addAndGet(1);
+                            cont.addAndGet(1);
                         }
                     }
-                }else{
-                    if (Boolean.TRUE.equals(is_correct_form(values))) {
-                        cont.addAndGet(1);
-                    }
-                }
-            });
-            bundle = new Bundle();
-                if (binding.studenteRegister.isChecked() && cont.get() ==6){
-                        createAccount();
-                        Studente st = new Studente();
-                        StudenteModelView st_db = new StudenteModelView(context);
-                        UtenteModelView ut_db = insert_utente_sqlLite();
-                        st.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
-                        st.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
-                        st_db.insertStudente(st);
-                        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                        bundle.putString("ruolo", "Studente");
-                        HomeActivity.putExtras(bundle);
-                        startActivity(HomeActivity);
-                        requireActivity().finish();
-                }
-                else if (binding.professoreRegister.isChecked() && cont.get() ==5){
-                        createAccount();
-                        UtenteModelView ut_db = insert_utente_sqlLite();
-                        ProfessoreModelView pr_db = new ProfessoreModelView(context);
-                        Professore pr = new Professore();
-                        pr.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
-                        pr_db.insertProfessore(pr);
-                        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                        bundle.putString("ruolo", "Professore");
-                        HomeActivity.putExtras(bundle);
-                        startActivity(HomeActivity);
-                        requireActivity().finish();
+                });
 
+                bundle = new Bundle();
+                //Gestione del Radio button dello studente quando viene premuto
+
+                if (binding.studenteRegister.isChecked() && cont.get() == 6) {
+                    FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                    RoomDbSqlLite db = RoomDbSqlLite.getDatabase(requireActivity());
+                    firestoreDB.collection("Utenti").document("Studenti").collection("Studenti")
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+
+                                    //Per salavare i dati in authentication
+                                    createAccount();
+
+                                    //Per salvare i dati su Firestore
+                                    saveStudenteToFirestore(firestoreDB);
+                                    //Per pulire la cache del db
+                                    db.studenteDao().deleteAll();
+                                    //Per salvare i dati in SQLite da Firestore
+                                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                                    for (DocumentSnapshot document : documents) {
+                                        Studente studente = document.toObject(Studente.class); // Converte il documento in un oggetto Studente
+                                        db.studenteDao().insert(studente); // Chiama il metodo per l'inserimento o l'aggiornamento
+                                    }
+
+
+                                    Log.d("studenti", String.valueOf(db.studenteDao().getAllStudente()));
+
+                                } else {
+                                    Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
+                                }
+                            });
                 }
+                //Gestione del Radio button del professore quando viene premuto
+                else if (binding.professoreRegister.isChecked() && cont.get() == 5) {
+                    FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                    RoomDbSqlLite db = RoomDbSqlLite.getDatabase(requireActivity());
+                    firestoreDB.collection("Utenti").document("Professori").collection("Professori")
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                                    //Per salavare i dati in authentication
+                                    createAccount();
+
+                                    //Per salvare i dati su Firestore
+                                    saveProfessoreToFirestore(firestoreDB);
+                                    //Per pulire la chache del db, altrimenti vengono scritti dati non più esistenti
+                                    db.studenteDao().deleteAll();
+                                    //Per salvare i dati in SQLite da Firestore
+                                    for (DocumentSnapshot document : documents) {
+                                        Professore professore = document.toObject(Professore.class); // Converte il documento in un oggetto Studente
+                                        db.professoreDao().insert(professore); // Chiama il metodo per l'inserimento o l'aggiornamento
+                                    }
+                                    Log.d("professori", String.valueOf(db.professoreDao().getAllProfessore()));
+
+                                    mNav.navigate(R.id.action_registerFragment_to_homeFragment);
+                                } else {
+                                    Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
+                                }
+                            });
+                }
+            }else{    Toast.makeText(requireContext(), "Connessione assente. Riprovare!", Toast.LENGTH_SHORT).show();}
         });
+
 
         // Imposta l'azione del pulsante "Studente"
         binding.studenteRegister.setOnClickListener(v -> {
@@ -173,6 +224,80 @@ public class RegisterFragment extends Fragment {
             // Nasconde il campo di input della matricola
             binding.matricolaInput.setVisibility(View.GONE);
         });
+    }
+
+    private void saveStudenteToFirestore(FirebaseFirestore firestoreDB)
+    {
+
+
+        String uid = mAuth.getCurrentUser().getUid();
+        String password = hashWith256(binding.passwordRegister.getText().toString());
+
+        Map<String, Object> datiMap = new HashMap<>();
+        datiMap.put("nome", binding.nameRegister.getText().toString());
+        datiMap.put("cognome",  binding.cognomeRegister.getText().toString());
+        datiMap.put("email",  binding.emailRegister.getText().toString());
+        datiMap.put("password", password);
+        firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(datiMap)
+                .addOnSuccessListener(aVoid -> {
+                    StudenteModelView st_db = new StudenteModelView(context);
+
+                    // Imposta i dati dello studente dai campi di input
+                    Studente studente = new Studente();
+                    studente.setNome(Objects.requireNonNull(binding.nameRegister.getText()).toString());
+                    studente.setCognome(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
+                    studente.setEmail(Objects.requireNonNull(binding.emailRegister.getText()).toString());
+                    studente.setPassword(password);
+                    // Inserisce l'Utente nel database utilizzando il ViewModel
+
+                    st_db.insertStudente(studente);
+
+                    Log.d("studenti", String.valueOf(st_db.getAllStudente()));
+
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error writing document");
+                    }
+                });
+        //Per reindirizzare l'utente nella home
+        mNav.navigate(R.id.action_registerFragment_to_homeFragment);
+    }
+
+    private void saveProfessoreToFirestore(FirebaseFirestore firestoreDB)
+    {
+
+        String password = hashWith256(binding.passwordRegister.getText().toString());
+
+        String uid = mAuth.getCurrentUser().getUid();
+
+        Map<String, Object> datiMap = new HashMap<>();
+        datiMap.put("nome", binding.nameRegister.getText().toString());
+        datiMap.put("cognome",  binding.cognomeRegister.getText().toString());
+        datiMap.put("email",  binding.emailRegister.getText().toString());
+        datiMap.put("password", password);
+        firestoreDB.collection("Utenti").document("Professori").collection("Professori").document(uid).set(datiMap)
+                .addOnSuccessListener(aVoid -> {
+                    ProfessoreModelView pr_db = new ProfessoreModelView(context);
+
+                    // Imposta i dati del professore dai campi di input
+                    Professore professore = new Professore();
+                    professore.setNome(Objects.requireNonNull(binding.nameRegister.getText()).toString());
+                    professore.setCognome(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
+                    professore.setEmail(Objects.requireNonNull(binding.emailRegister.getText()).toString());
+                    professore.setPassword(password);
+                    // Inserisce l'Utente nel database utilizzando il ViewModel
+
+                    pr_db.insertProfessore(professore);
+
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error writing document");
+                    }
+                });
     }
 
     /**
@@ -357,17 +482,7 @@ public class RegisterFragment extends Fragment {
         return null;
     }
 
-    private String hashWith256(String textToHash) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] byteOfTextToHash = textToHash.getBytes(StandardCharsets.UTF_8);
-            byte[] hashedByetArray = digest.digest(byteOfTextToHash);
-            return Base64.getEncoder().encodeToString(hashedByetArray);
-        }catch (NoSuchAlgorithmException e){
-            Log.e("LaureApp", "Error reading file", e);
-        }
-        return "";
-    }
+
 
     /**
      * Crea l'account dell'utente su firebase
@@ -381,7 +496,7 @@ public class RegisterFragment extends Fragment {
                     if (task.isSuccessful()) {
                         // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
                         FirebaseUser user = mAuth.getCurrentUser();
-                        updateUI(user);
+                        //updateUI(user);
                         // Esempio: Aggiornare l'UI o inviare una verifica email
                     } else {
                         // La registrazione ha fallito, puoi gestire l'errore qui
@@ -397,6 +512,7 @@ public class RegisterFragment extends Fragment {
         // Ottieni l'UID dell'utente autenticato
         if (user != null) {
             String userId = user.getUid();
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             FirebaseDatabase database = FirebaseDatabase.getInstance("https://laureapp-21bff-default-rtdb.europe-west1.firebasedatabase.app");
             DatabaseReference myRef = database.getReference();
             if (binding.studenteRegister.isChecked()) {

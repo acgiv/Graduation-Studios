@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.register.Register2Fragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/matricola_input"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                app:boxBackgroundMode="outline"
+                app:hintTextColor="@color/color_secondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/matricola_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_color"
+                    android:ems="10"
+                    android:hint="@string/matricola"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="@dimen/padding_edit_text"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="12dp"
+                    app:iconTint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/media_input"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:hintTextColor="@color/color_secondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/matricola_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/media_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_color"
+                    android:ems="10"
+                    android:hint="@string/media"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="@dimen/padding_edit_text"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="12dp"
+                    app:iconTint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/esami_mancanti_input"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="8dp"
+                app:boxBackgroundMode="outline"
+                app:hintTextColor="@color/color_secondary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/media_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/esami_mancanti_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_color"
+                    android:ems="10"
+                    android:hint="@string/esami_mancanti"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:padding="@dimen/padding_edit_text"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="12dp"
+                    app:iconTint="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/DipartimentoLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="374dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:hint="@string/dipartimento"
+                app:boxBackgroundColor="@color/baclgroud_input"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/esami_mancanti_input"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/filled_exposed_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:padding="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/corsoLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="374dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:hint="@string/corsi"
+                app:boxBackgroundColor="@color/baclgroud_input"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/DipartimentoLayout">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/dropdown_corso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:padding="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_register"
+        android:layout_width="205dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/button_background_primary"
+        android:text="@string/registrati"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

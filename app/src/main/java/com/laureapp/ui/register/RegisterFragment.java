@@ -145,9 +145,32 @@ public class RegisterFragment extends Fragment {
                             cont.addAndGet(1);
                         }
                     }
+                }else{
+                    if (Boolean.TRUE.equals(is_correct_form(values))) {
+                        cont.addAndGet(1);
+                    }
+                }
+            });
+            bundle = new Bundle();
+                //Gestione del Radio button dello studente quando viene premuto
+                if (binding.studenteRegister.isChecked() && cont.get() ==6){
+                        createAccount();
+                        Studente st = new Studente();
+                        StudenteModelView st_db = new StudenteModelView(context);
+                        UtenteModelView ut_db = insert_utente_sqlLite();
+
+                        //st.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
+                        //st.setId_utente(ut_db.getIdUtente(Objects.requireNonNull(binding.emailRegister.getText()).toString()));
+                        //st_db.insertStudente(st);
+                        Log.d("tutti gli utenti", String.valueOf(ut_db.getAllUtente()));
+                        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                        bundle.putString("ruolo", "Studente");
+                        HomeActivity.putExtras(bundle);
+                        startActivity(HomeActivity);
+                        requireActivity().finish();
                 });
 
-                bundle = new Bundle();
+                /*bundle = new Bundle();
                 //Gestione del Radio button dello studente quando viene premuto
 
                 if (binding.studenteRegister.isChecked() && cont.get() == 6) {
@@ -178,7 +201,8 @@ public class RegisterFragment extends Fragment {
                                 } else {
                                     Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
                                 }
-                            });
+                            });*/
+                            
                 }
                 //Gestione del Radio button del professore quando viene premuto
                 else if (binding.professoreRegister.isChecked() && cont.get() == 5) {
@@ -208,23 +232,13 @@ public class RegisterFragment extends Fragment {
                                     Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
                                 }
                             });
+
+                        mNav.navigate(R.id.action_registerFragment_to_register2Fragment);
+
                 }
             }else{    Toast.makeText(requireContext(), "Connessione assente. Riprovare!", Toast.LENGTH_SHORT).show();}
         });
 
-
-        // Imposta l'azione del pulsante "Studente"
-        binding.studenteRegister.setOnClickListener(v -> {
-            // Mostra il campo di input della matricola
-            binding.matricolaInput.setVisibility(View.VISIBLE);
-        });
-
-        // Imposta l'azione del pulsante "Professore"
-        binding.professoreRegister.setOnClickListener(v -> {
-            // Nasconde il campo di input della matricola
-            binding.matricolaInput.setVisibility(View.GONE);
-        });
-    }
 
     private void saveStudenteToFirestore(FirebaseFirestore firestoreDB)
     {
@@ -308,7 +322,6 @@ public class RegisterFragment extends Fragment {
     private UtenteModelView insert_utente_sqlLite() {
         // Crea un nuovo oggetto Utente
         Utente ut = new Utente();
-
         // Crea un nuovo ViewModel per l'Utente
         UtenteModelView ut_db = new UtenteModelView(context);
         // Imposta i dati dell'Utente dai campi di input
@@ -358,15 +371,6 @@ public class RegisterFragment extends Fragment {
                         break;
                     case "Conferma Password":
                         return control_confirm_password();
-                    case "Matricola":
-                        if (!ControlInput.is_correct_matricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) {
-                            String error_message = getString(R.string.errore_matricola).replace("{campo}", getString(R.string.matricola));
-                            ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                        } else {
-                            ControlInput.set_error(binding.matricolaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        }
-                        break;
                 }
             }
             return result_error;
@@ -402,7 +406,6 @@ public class RegisterFragment extends Fragment {
         elem_text.put("email", binding.emailRegister);
         elem_text.put("pass", binding.passwordRegister);
         elem_text.put("conf_password", binding.confermaPassword);
-        elem_text.put("matricola", binding.matricolaRegister);
     }
 
     /**
@@ -476,8 +479,6 @@ public class RegisterFragment extends Fragment {
                 return binding.passwordInput;
             case "Conferma Password":
                 return binding.confermaPasswordInput;
-            case "Matricola":
-                return binding.matricolaInput;
         }
         return null;
     }
@@ -495,9 +496,7 @@ public class RegisterFragment extends Fragment {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        //updateUI(user);
-                        // Esempio: Aggiornare l'UI o inviare una verifica email
+                        mAuth.getCurrentUser();
                     } else {
                         // La registrazione ha fallito, puoi gestire l'errore qui
                         Exception exception = task.getException();
@@ -507,33 +506,6 @@ public class RegisterFragment extends Fragment {
                     }
                 });
     }
-
-    private void updateUI(FirebaseUser user) {
-        // Ottieni l'UID dell'utente autenticato
-        if (user != null) {
-            String userId = user.getUid();
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-            FirebaseDatabase database = FirebaseDatabase.getInstance("https://laureapp-21bff-default-rtdb.europe-west1.firebasedatabase.app");
-            DatabaseReference myRef = database.getReference();
-            if (binding.studenteRegister.isChecked()) {
-                DatabaseReference userRef = myRef.child("Utenti").child("Studenti").child(userId);
-                user_reference(userRef);
-                userRef.child("Matricola").setValue(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
-            } else if (binding.professoreRegister.isChecked()) {
-                DatabaseReference userRef = myRef.child("Utenti").child("Professori").child(userId);
-                user_reference(userRef);
-            }
-        }
-    }
-
-
-    private void  user_reference(DatabaseReference userRef){
-        userRef.child("Nome").setValue(Objects.requireNonNull(binding.nameRegister.getText()).toString());
-        userRef.child("Cognome").setValue(Objects.requireNonNull(binding.cognomeRegister.getText()).toString());
-        userRef.child("Email").setValue(Objects.requireNonNull(binding.emailRegister.getText()).toString());
-        userRef.child("Password").setValue(hashWith256(Objects.requireNonNull(binding.passwordRegister.getText()).toString()));
-    }
-
 
 
     private Boolean is_empty_string(TextInputEditText editText, TextInputLayout layout_input, String campo_error){

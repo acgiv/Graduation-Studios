@@ -27,7 +27,8 @@
             android:name=".ui.login.LoadingPageActivity"
             android:exported="true"
             android:theme="@style/Theme.LaureApp"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
+
 
             <!-- Set DataEntryActivity come prima pagina di avvio -->
             <intent-filter>

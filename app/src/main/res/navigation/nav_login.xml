@@ -19,6 +19,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/loadingActivity"
+        android:name="com.laureapp.ui.login.LoadingPageActivity"
+        android:label="LoadingPage"
+        tools:layout="@layout/activity_loading_page">
+        <action
+            android:id="@+id/action_fragment_loading_to_login"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.laureapp.ui.home.HomeFragment"
         android:label="Home"

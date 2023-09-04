@@ -19,6 +19,11 @@
     <style name="Theme.LaureApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@color/white</item>
     </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.LaureApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
 
     <style name="Theme.LaureApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->

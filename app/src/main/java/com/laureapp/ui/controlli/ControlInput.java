@@ -1,8 +1,12 @@
     package com.laureapp.ui.controlli;
 
+    import static java.security.AccessController.getContext;
+
     import android.content.Context;
     import android.content.res.ColorStateList;
     import android.content.res.Resources;
+    import android.net.ConnectivityManager;
+    import android.net.NetworkInfo;
     import android.util.Log;
     import android.view.ViewGroup;
 
@@ -13,6 +17,10 @@
 
     import org.apache.commons.lang3.StringUtils;
 
+    import java.nio.charset.StandardCharsets;
+    import java.security.MessageDigest;
+    import java.security.NoSuchAlgorithmException;
+    import java.util.Base64;
     import java.util.regex.Matcher;
     import java.util.regex.Pattern;
 
@@ -194,6 +202,33 @@
         public static boolean is_correct_matricola(String matricola){
             String regexPattern = "[1-9][0-9]{5}";
             return  Pattern.compile(regexPattern).matcher(matricola).matches();
+        }
+
+        public static String hashWith256(String textToHash) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                byte[] byteOfTextToHash = textToHash.getBytes(StandardCharsets.UTF_8);
+                byte[] hashedByetArray = digest.digest(byteOfTextToHash);
+                return Base64.getEncoder().encodeToString(hashedByetArray);
+            }catch (NoSuchAlgorithmException e){
+                Log.e("LaureApp", "Error reading file", e);
+            }
+            return "";
+        }
+
+        /**
+         *
+         * @return un booleano che indica se la connessione è presente: true se c'è connessione altrimenti false
+         */
+        public static boolean isConnected(ConnectivityManager cm) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+            if (isConnected) {
+                return true;
+            } else {
+                return false;
+                // show an error message or do something else
+            }
         }
 
     }

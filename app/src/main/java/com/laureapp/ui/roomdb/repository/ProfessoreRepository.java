@@ -43,7 +43,7 @@ public class ProfessoreRepository {
     public List<Professore> getAllProfessore(){
         CompletableFuture<List<Professore>> future = new CompletableFuture<>();
         executor.execute(() -> {
-            List<Professore> lista = roomDbSqlLite.professoreDao().getAllProfesssore();
+            List<Professore> lista = roomDbSqlLite.professoreDao().getAllProfessore();
             future.complete(lista);
         });
         try {

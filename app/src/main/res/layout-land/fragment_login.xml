@@ -90,7 +90,7 @@
         android:layout_width="@dimen/input_text_layout_width"
         android:layout_height="@dimen/input_text_layout_height"
         app:boxBackgroundMode="outline"
-        app:boxStrokeColor="@color/mtrl_outlined_stroke_color"
+        app:errorIconDrawable="@null"
         app:endIconMode="password_toggle"
         app:hintTextColor="@color/color_secondary"
         app:layout_constraintEnd_toEndOf="parent"

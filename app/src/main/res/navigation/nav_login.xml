@@ -16,16 +16,9 @@
         <action
             android:id="@+id/action_loginFragment_to_passwordRecoveryFragment"
             app:destination="@id/passwordRecoveryFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/loadingActivity"
-        android:name="com.laureapp.ui.login.LoadingPageActivity"
-        android:label="LoadingPage"
-        tools:layout="@layout/activity_loading_page">
         <action
-            android:id="@+id/action_fragment_loading_to_login"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_loginFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment
@@ -39,12 +32,13 @@
         android:name="com.laureapp.ui.register.RegisterFragment"
         android:label="Registrazione"
         tools:layout="@layout/fragment_register">
+
         <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_registerFragment_to_homeFragment"
+            android:id="@+id/action_register2Fragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_register2Fragment"
+            app:destination="@id/register2Fragment" />
 
     </fragment>
 
@@ -56,6 +50,15 @@
         <action
             android:id="@+id/action_passwordRecoveryFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/register2Fragment"
+        android:name="com.laureapp.ui.register.Register2Fragment"
+        android:label="Registrazione"
+        tools:layout="@layout/fragment_register2" >
+        <action
+            android:id="@+id/action_register2Fragment_to_homeFragment2"
+            app:destination="@id/homeFragment" />
     </fragment>
 
 </navigation>

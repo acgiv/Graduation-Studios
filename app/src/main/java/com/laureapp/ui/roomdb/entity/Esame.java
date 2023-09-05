@@ -1,12 +1,14 @@
 package com.laureapp.ui.roomdb.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity(tableName ="Esame")
-public class Esame {
+public class Esame implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
@@ -29,6 +31,7 @@ public class Esame {
         this.data_conseguimento = data_conseguimento;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Esame{" +

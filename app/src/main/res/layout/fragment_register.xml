@@ -140,7 +140,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_input"
             app:layout_constraintVertical_bias="0.0"
-            tools:ignore="MissingConstraints">
+            app:errorIconDrawable="@null"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_register"
@@ -156,7 +157,6 @@
                 android:paddingEnd="12dp"
                 app:iconTint="@color/black"
                 tools:ignore="MissingConstraints,RtlSymmetry" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -172,6 +172,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_input"
             app:layout_constraintVertical_bias="0.0"
+            app:errorIconDrawable="@null"
             tools:ignore="MissingConstraints">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -249,6 +250,7 @@
             android:layout_height="55dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/button_background_primary"
+            app:backgroundTint="@null"
             android:text="@string/avanti"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

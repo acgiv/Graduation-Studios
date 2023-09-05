@@ -105,8 +105,8 @@
             if (StringUtils.isEmpty(error))
                 inputLayout.setError(null);
             else
-                inputLayout.setError(error);
 
+                inputLayout.setError(error);
             // Imposta il colore del testo dell'errore e del suggerimento
             set_color_error(inputLayout, color, context);
 

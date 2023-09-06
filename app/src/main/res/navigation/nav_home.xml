@@ -20,6 +20,10 @@
         <action
             android:id="@+id/action_fragment_home_to_profilo_professore"
             app:destination="@id/profilo_professore" />
+        <action
+            android:id="@+id/action_fragment_home_to_messages_fragment_fragment"
+            app:destination="@id/messages_fragment_fragment" />
+
     </fragment>
 
     <fragment
@@ -41,5 +45,12 @@
         android:name="com.laureapp.ui.profilo.ProfiloProfessoreFragment"
         android:label="Profilo"
         tools:layout="@layout/fragment_profilo_professore">
+    </fragment>
+
+    <fragment
+        android:id="@+id/messages_fragment_fragment"
+        android:name="com.laureapp.ui.home.SocialFragment"
+        android:label="Messages"
+        tools:layout="@layout/fragment_messaggi">
     </fragment>
 </navigation>

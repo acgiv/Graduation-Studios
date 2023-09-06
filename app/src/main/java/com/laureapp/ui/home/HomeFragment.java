@@ -26,6 +26,7 @@ public class HomeFragment extends Fragment {
     CardView CardTesi;
     CardView CardTask;
     CardView CardSocial;
+    CardView CardMessages;
     String ruolo;
     Context context;
     Bundle args;
@@ -47,6 +48,7 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
         }
         return inflater.inflate(R.layout.fragment_home, container, false);
+
     }
 
     @Override
@@ -90,6 +92,11 @@ public class HomeFragment extends Fragment {
         CardSocial =  view.findViewById(R.id.cardViewSocial);
         CardSocial.setOnClickListener(view1 -> {
             mNav.navigate(R.id.action_fragment_home_to_social_fragment);
+        });
+
+        CardMessages =  view.findViewById(R.id.cardViewMessaggi);
+        CardMessages.setOnClickListener(view1 -> {
+            mNav.navigate(R.id.action_fragment_home_to_messages_fragment_fragment);
         });
     }
 }

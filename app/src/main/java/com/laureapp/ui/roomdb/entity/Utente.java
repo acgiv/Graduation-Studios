@@ -1,11 +1,14 @@
 package com.laureapp.ui.roomdb.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName ="Utente")
-public class Utente {
+public class Utente implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
@@ -62,6 +65,7 @@ public class Utente {
         this.password = passwordl;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Utente{" +

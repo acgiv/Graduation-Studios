@@ -140,7 +140,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_input"
             app:layout_constraintVertical_bias="0.0"
-            tools:ignore="MissingConstraints">
+            app:errorIconDrawable="@null"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_register"
@@ -156,7 +157,6 @@
                 android:paddingEnd="12dp"
                 app:iconTint="@color/black"
                 tools:ignore="MissingConstraints,RtlSymmetry" />
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -172,6 +172,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_input"
             app:layout_constraintVertical_bias="0.0"
+            app:errorIconDrawable="@null"
             tools:ignore="MissingConstraints">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -243,47 +244,20 @@
 
     </LinearLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/matricola_input"
-        android:layout_width="380dp"
-        android:layout_height="64dp"
-        app:boxBackgroundMode="outline"
-        android:layout_marginTop="10dp"
-        app:hintTextColor="@color/color_secondary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/matricola_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:padding="@dimen/padding_edit_text"
-            android:background="@drawable/input_color"
-            android:ems="10"
-            android:hint="@string/matricola"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:paddingStart="20dp"
-            android:paddingEnd="12dp"
-            app:iconTint="@color/black" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/button_register"
-        android:layout_width="205dp"
-        android:layout_height="55dp"
-        android:background="@drawable/button_background_primary"
-        android:text="@string/registrati"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/matricola_input"
-        app:layout_constraintVertical_bias="0.272" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_register"
+            android:layout_width="205dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_background_primary"
+            app:backgroundTint="@null"
+            android:text="@string/avanti"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintVertical_bias="0.272" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

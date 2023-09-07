@@ -33,11 +33,12 @@
         app:layout_constraintTop_toBottomOf="@+id/password_input"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_login"
         android:layout_width="330dp"
         android:layout_height="50dp"
         android:layout_marginTop="25dp"
+        app:backgroundTint="@null"
         android:background="@drawable/button_background_primary"
         android:text="@string/accedi"
         android:textColor="@color/white"
@@ -56,11 +57,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_login" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/ospite_login"
         android:layout_width="330dp"
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
+        app:backgroundTint="@null"
         android:background="@drawable/button_background_secondary"
         android:text="@string/accedi_come_ospite"
         android:textColor="@color/color_primary"
@@ -154,6 +156,7 @@
         app:boxBackgroundMode="outline"
         app:boxStrokeColor="@color/mtrl_outlined_stroke_color"
         app:endIconMode="password_toggle"
+        app:errorIconDrawable="@null"
         app:hintTextColor="@color/color_secondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

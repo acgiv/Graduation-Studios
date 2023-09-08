@@ -51,7 +51,7 @@
     <fragment
         android:id="@+id/messaggiFragment"
         android:name="com.laureapp.ui.home.MessaggiFragment"
-        android:label="MessaggiFragment"
+        android:label="Messaggi"
         tools:layout="@layout/fragment_messaggi">
         <action
             android:id="@+id/action_messaggiFragment_to_discussioneFragment"
@@ -60,10 +60,11 @@
             android:id="@+id/action_messaggiFragment_to_fragment_home"
             app:destination="@id/fragment_home" />
     </fragment>
+
     <fragment
         android:id="@+id/discussioneFragment"
         android:name="com.laureapp.ui.home.DiscussioneFragment"
-        android:label="DiscussioneFragment"
+        android:label="Discussione"
         tools:layout="@layout/fragment_discussione">
         <action
             android:id="@+id/action_discussioneFragment_to_messaggiFragment"

@@ -1,60 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@color/color_bottom_nav_menu">
 
     <ListView
-        android:layout_width="387dp"
-        android:layout_height="648dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/messaggio_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/messaggio_input"
-        android:layout_width="280dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_invio"
-        app:layout_constraintStart_toStartOf="parent">
+    </ListView>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/messaggio_text"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true">
+
+        <EditText
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/input_color"
-            android:ems="10"
+            android:layout_height="48dp"
+            android:id="@+id/text_send"
+            android:background="@color/white"
             android:hint="@string/messaggio"
-            android:importantForAutofill="no"
-            android:padding="@dimen/padding_edit_text"
-            android:paddingStart="@dimen/padding_start_edit_text"
-            android:textColor="@color/black"
-            android:textColorHint="@color/color_text_input" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_toLeftOf="@id/btn_invio"
+            android:layout_centerVertical="true">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_invio"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_background_primary"
-        android:text="@string/invio"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/messaggio_input" />
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/btn_invio"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/btn_send"
+            tools:ignore="SpeakableTextPresentCheck">
+
+        </ImageButton>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -21,8 +21,8 @@
             android:id="@+id/action_fragment_home_to_profilo_professore"
             app:destination="@id/profilo_professore" />
         <action
-            android:id="@+id/action_fragment_home_to_messages_fragment_fragment"
-            app:destination="@id/messages_fragment_fragment" />
+            android:id="@+id/action_fragment_home_to_messaggiFragment"
+            app:destination="@id/messaggiFragment" />
 
     </fragment>
 
@@ -47,10 +47,26 @@
         tools:layout="@layout/fragment_profilo_professore">
     </fragment>
 
+
     <fragment
-        android:id="@+id/messages_fragment_fragment"
-        android:name="com.laureapp.ui.home.SocialFragment"
-        android:label="Messages"
+        android:id="@+id/messaggiFragment"
+        android:name="com.laureapp.ui.home.MessaggiFragment"
+        android:label="MessaggiFragment"
         tools:layout="@layout/fragment_messaggi">
+        <action
+            android:id="@+id/action_messaggiFragment_to_discussioneFragment"
+            app:destination="@id/discussioneFragment" />
+        <action
+            android:id="@+id/action_messaggiFragment_to_fragment_home"
+            app:destination="@id/fragment_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/discussioneFragment"
+        android:name="com.laureapp.ui.home.DiscussioneFragment"
+        android:label="DiscussioneFragment"
+        tools:layout="@layout/fragment_discussione">
+        <action
+            android:id="@+id/action_discussioneFragment_to_messaggiFragment"
+            app:destination="@id/messaggiFragment" />
     </fragment>
 </navigation>

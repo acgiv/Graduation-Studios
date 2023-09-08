@@ -96,7 +96,7 @@ public class HomeFragment extends Fragment {
 
         CardMessages =  view.findViewById(R.id.cardViewMessaggi);
         CardMessages.setOnClickListener(view1 -> {
-            mNav.navigate(R.id.action_fragment_home_to_messages_fragment_fragment);
+           mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
         });
     }
 }

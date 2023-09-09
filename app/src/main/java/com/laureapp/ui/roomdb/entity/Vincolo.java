@@ -1,10 +1,13 @@
 package com.laureapp.ui.roomdb.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName ="Vincolo")
-public class Vincolo {
+public class Vincolo implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
@@ -57,6 +60,7 @@ public class Vincolo {
         Skill = skill;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Vincolo{" +

@@ -30,6 +30,10 @@ public interface StudenteDao {
 
     @Query("SELECT id FROM studente where id_utente = :id_utente")
     Long findStudente(Long id_utente);
+
+    @Query("SELECT id FROM studente where matricola = :matricola")
+    Long findStudenteMatricola(Long matricola);
+
     @Query("DELETE FROM studente")
     public void deleteAll();
 

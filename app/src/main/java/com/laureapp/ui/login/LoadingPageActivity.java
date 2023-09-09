@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.laureapp.databinding.ActivityLoadingPageBinding;
 
 import com.laureapp.R;
+import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
@@ -69,8 +70,8 @@ public class LoadingPageActivity extends AppCompatActivity {
                         Log.d("studenti", String.valueOf(db.studenteDao().getAllStudente()));
                         Log.d("professori", String.valueOf(db.professoreDao().getAllProfessore()));
 
-                        Intent loginIntent = new Intent(LoadingPageActivity.this, LoginActivity.class);
-                        startActivity(loginIntent);
+                        Intent LoginActivity = new Intent(this, LoginActivity.class);
+                        startActivity(LoginActivity);
                         finish(); // Chiudi questa attività in modo che non possa essere tornata indietro.
                     } else {
                         Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());

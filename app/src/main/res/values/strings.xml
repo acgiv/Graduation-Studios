@@ -81,5 +81,5 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-  
+    <string name="student_name_placeholder">%1$s %2$s</string>
 </resources>

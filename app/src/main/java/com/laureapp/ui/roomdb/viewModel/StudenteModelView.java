@@ -35,4 +35,6 @@ public class StudenteModelView {
     public Long findStudente(Long id_utente) {
         return studenteRepository.findStudente(id_utente);
     }
+
+    public Long findStudenteMatricola(Long matricola){return studenteRepository.findStudenteMatricola(matricola);}
 }

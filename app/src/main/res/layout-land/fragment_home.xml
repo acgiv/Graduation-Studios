@@ -5,21 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridLayout
+
+    <LinearLayout
         android:id="@+id/grigliaFunzioni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginStart="1dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="18dp"
-        android:columnCount="3"
-        android:rowCount="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.361">
+        app:layout_constraintVertical_bias="0.2"
+
+        >
 
 
         <!-- ... Card Tesi ... -->
@@ -28,10 +28,6 @@
             android:id="@+id/cardViewTesi"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="0"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
@@ -42,13 +38,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
+
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center"
+                    android:layout_width="70dp"
+                    android:layout_height="78dp"
+                    android:layout_gravity="center_horizontal"
                     android:contentDescription="@string/tesi_description"
                     android:src="@drawable/outline_assignment_24">
 
@@ -74,10 +70,6 @@
             android:id="@+id/cardViewMessaggi"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="0"
-            android:layout_rowWeight="1"
-            android:layout_column="1"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
@@ -88,12 +80,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
+                    android:layout_width="70dp"
+                    android:layout_height="78dp"
                     android:layout_gravity="center_horizontal"
                     android:contentDescription="@string/chat_description"
                     android:src="@drawable/outline_chat_24">
@@ -118,13 +109,9 @@
         <!-- ... card tesisti ... -->
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewSocial"
+            android:id="@+id/cardViewTesisti"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="1"
-            android:layout_rowWeight="1"
-            android:layout_column="1"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
             app:cardCornerRadius="15dp"
@@ -132,16 +119,55 @@
             >
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+
+                >
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="78dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/tesisti_description"
+                    android:src="@drawable/outline_assignment_ind_24">
+
+                </ImageView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/tesisti2"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <!-- ... card social ... -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewSocial"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_gravity="center"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="15dp">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
+                    android:layout_width="70dp"
+                    android:layout_height="78dp"
                     android:layout_gravity="center_horizontal"
                     android:contentDescription="@string/social_description"
                     android:src="@drawable/outline_public_24">
@@ -162,77 +188,24 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-        <!-- ... card social ... -->
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardViewTesisti"
-            android:layout_width="115dp"
-            android:layout_height="115dp"
-            android:layout_row="2"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
-            android:layout_gravity="center"
-            android:layout_margin="12dp"
-            app:cardCornerRadius="15dp"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-
-                >
-
-                <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/tesisti_description"
-                    android:src="@drawable/outline_assignment_ind_24">
-
-                </ImageView>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/tesisti2"
-                    android:textColor="@color/color_primary"
-                    android:textSize="18sp"
-                    android:textStyle="bold">
-
-                </TextView>
-
-            </LinearLayout>
-
-
-        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewTask"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="1"
-            android:layout_rowWeight="1"
-            android:layout_column="0"
-            android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
-            app:cardCornerRadius="15dp"
-            >
+            app:cardCornerRadius="15dp">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
+                    android:layout_width="70dp"
+                    android:layout_height="78dp"
                     android:layout_gravity="center_horizontal"
                     android:contentDescription="@string/task_description"
                     android:src="@drawable/baseline_checklist_rtl_24">
@@ -243,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="task"
+                    android:text="Task"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">
@@ -253,8 +226,7 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-    </GridLayout>
-
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

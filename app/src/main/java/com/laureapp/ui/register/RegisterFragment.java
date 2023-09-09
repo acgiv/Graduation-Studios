@@ -15,12 +15,8 @@
     import android.view.ViewGroup;
     import android.widget.Toast;
 
-    import com.google.android.gms.tasks.OnFailureListener;
     import com.google.android.material.textfield.TextInputLayout;
-    import com.google.firebase.database.DatabaseReference;
-    import com.google.firebase.database.FirebaseDatabase;
-    import com.google.firebase.firestore.DocumentSnapshot;
-    import com.google.firebase.firestore.FirebaseFirestore;
+
 
     import androidx.annotation.NonNull;
     import androidx.annotation.Nullable;
@@ -30,31 +26,21 @@
 
     import com.google.android.material.textfield.TextInputEditText;
     import com.google.firebase.auth.FirebaseAuth;
-    import com.google.firebase.auth.FirebaseUser;
+
     import com.laureapp.R;
     import com.laureapp.databinding.FragmentRegisterBinding;
-    import com.laureapp.ui.MainActivity;
+
     import com.laureapp.ui.controlli.ControlInput;
-    import com.laureapp.ui.login.LoginFragment;
-    import com.laureapp.ui.roomdb.RoomDbSqlLite;
-    import com.laureapp.ui.roomdb.dao.UtenteDao;
-    import com.laureapp.ui.roomdb.entity.Professore;
-    import com.laureapp.ui.roomdb.entity.Studente;
+
     import com.laureapp.ui.roomdb.entity.Utente;
-    import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
-    import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
-    import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+
 
     import org.apache.commons.lang3.StringUtils;
 
     import java.io.Serializable;
-    import java.nio.charset.StandardCharsets;
-    import java.security.MessageDigest;
-    import java.security.NoSuchAlgorithmException;
-    import java.util.Base64;
+
     import java.util.HashMap;
-    import java.util.List;
-    import java.util.Map;
+
     import java.util.Objects;
     import java.util.concurrent.atomic.AtomicInteger;
 
@@ -402,7 +388,7 @@
         /**
          * Una classe personalizzata che implementa l'interfaccia TextWatcher per monitorare le modifiche del testo in un TextInputEditText.
          */
-        private class CustomTextWatcher implements TextWatcher {
+        private  class CustomTextWatcher implements TextWatcher {
             private TextInputEditText editText;
 
             public CustomTextWatcher(){

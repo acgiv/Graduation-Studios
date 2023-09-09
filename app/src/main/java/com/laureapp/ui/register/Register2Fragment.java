@@ -7,8 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,27 +15,36 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegister2Binding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.RoomDbSqlLite;
+import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,11 +60,10 @@ public class Register2Fragment extends Fragment {
     private final Register2Fragment.CustomTextWatcher textWatcher = new Register2Fragment.CustomTextWatcher();
     private final HashMap<String, Object> elem_text = new HashMap<>();
     private FirebaseAuth mAuth;
-    private ArrayAdapter<String> adapterfacolta;
-    private ArrayAdapter<String> adaptercorso;
     private String[] facolta;
     private String[] corsi;
     private Utente ut;
+    private String ruolo;
     FragmentRegister2Binding binding;
     private Context context;
     Bundle bundle;
@@ -77,8 +84,8 @@ public class Register2Fragment extends Fragment {
 
         bundle = getArguments();
         if (bundle != null) {
-            String ruolo = bundle.getString("ruolo");
-            Utente ut = bundle.getSerializable("utente", Utente.class);
+            ruolo = bundle.getString("ruolo");
+            ut = bundle.getSerializable("utente", Utente.class);
         }
         mAuth = FirebaseAuth.getInstance();
         return binding.getRoot();
@@ -86,42 +93,125 @@ public class Register2Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        NavController mNav = Navigation.findNavController(view);
         facolta = getResources().getStringArray(R.array.Dipartimento);
         corsi = getResources().getStringArray(R.array.Corsi);
         // create an array adapter and pass the required parameter
         // in our case pass the context, drop down layout , and array.
-        adapterfacolta = new ArrayAdapter<>(getContext(), R.layout.dropdown_item, facolta);
+        ArrayAdapter<String> adapterfacolta = new ArrayAdapter<>(getContext(), R.layout.dropdown_item, facolta);
         autoCompleteTextView.setAdapter(adapterfacolta);
-        adaptercorso = new ArrayAdapter<>(getContext(), R.layout.dropdown_item, corsi);
+        ArrayAdapter<String> adaptercorso = new ArrayAdapter<>(getContext(), R.layout.dropdown_item, corsi);
         autoCompleteTextViewcorso.setAdapter(adaptercorso);
 
-        //to get selected value add item click listener
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getContext(), "" + autoCompleteTextView.getText().toString(), Toast.LENGTH_SHORT).show();
 
+
+       binding.buttonRegister.setOnClickListener(view1 -> {
+
+
+               // Controlla i campi di input e stampa i risultati del controllo
+                AtomicInteger cont = new AtomicInteger(0);
+               elem_text.forEach((key, values) -> {
+                   if (Boolean.TRUE.equals(is_correct_form(values))) {
+                       cont.addAndGet(1);
+                   }
+               });
+            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+            if (StringUtils.equals(ruolo, "Studente") && cont.get()==5){
+                firestoreDB.collection("Utenti").document("Studenti").collection("Studenti")
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                //Per salavare i dati in authentication
+                                createAccount();
+                                saveStudenteToFirestore(firestoreDB);
+
+                            } else {
+                                Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
+                            }
+                        });
+                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                HomeActivity.putExtras(bundle);
+                startActivity(HomeActivity);
+                requireActivity().finish();
+            }else{
+                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                HomeActivity.putExtras(bundle);
+                startActivity(HomeActivity);
+                requireActivity().finish();
             }
+
         });
+    }
 
-        autoCompleteTextViewcorso.setOnItemClickListener((parent, view12, position, id) -> Toast.makeText(getContext(), "" + autoCompleteTextViewcorso.getText().toString(), Toast.LENGTH_SHORT).show());
-        binding.buttonRegister.setOnClickListener(view1 -> {
-            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-            HomeActivity.putExtras(bundle);
-            startActivity(HomeActivity);
-            requireActivity().finish();
+    /**
+     * Crea l'account dell'utente su firebase
+
+     */
+    private  void createAccount()  {
+        mAuth.createUserWithEmailAndPassword(ut.getEmail(),ut.getPassword())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
+                        mAuth.getCurrentUser();
+                    } else {
+                        // La registrazione ha fallito, puoi gestire l'errore qui
+                        Exception exception = task.getException();
+                        assert exception != null;
+                        Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
+                        // Esempio: Visualizzare un messaggio di errore o registrare l'errore
+                    }
+                });
+    }
+
+    private void saveStudenteToFirestore(FirebaseFirestore firestoreDB)  {
+
+        String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
+                .addOnSuccessListener(aVoid -> {
+                    UtenteModelView ut_vew = new UtenteModelView(context);
+                    ut_vew.insertUtente(ut);
+                    long userId = ut_vew.getIdUtente(ut.getEmail());
+                    future.complete(userId);
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error writing document");
+                    }
+                });
+        future.thenAccept(userId -> {
+            // Ora puoi accedere a userId quando è disponibile
+            Log.d("studente_test", "ID dell'utente: " + userId);
+
+            // Qui puoi creare e impostare il tuo oggetto Studente
+            Studente studente = new Studente();
+            studente.setId_utente(userId);
+            Log.d("studente_test",String.valueOf(studente.getId_utente()));
+            studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
+            studente.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
+            studente.setEsami_mancati(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
+            studente.setCorso_laurea(binding.dropdownCorso.getText().toString());
+
+            firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
+                    .addOnSuccessListener(aVoid -> {
+                        StudenteModelView st_db = new StudenteModelView(context);
+                        st_db.insertStudente(studente);
+                        Log.d("studenti", String.valueOf(st_db.getAllStudente()));
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.out.println("Error writing document");
+                        }
+                    });
+
+        }).exceptionally(e -> {
+            Log.e("Errore: ", String.valueOf(e.getMessage()));
+            return null;
         });
-
-
-        /**
-         * Inizializza una mappa associativa tra nomi di elementi di testo e i corrispondenti campi di input del binding.
-         * Questo metodo viene utilizzato per associare i nomi dei campi di input alle rispettive istanze di TextInputEditText nel binding.
-         * Questo è utile per semplificare l'accesso e la gestione dei campi di input durante la verifica della correttezza.
-         */
-
 
     }
+
 
 
     private void inizializzate_binding_text(){
@@ -192,14 +282,14 @@ public class Register2Fragment extends Fragment {
                         ControlInput.set_error(binding.mediaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
                     }
                     break;
-                case "Esami Mancanti":
+                case "Esami mancanti":
                     String esami =Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString();
                     if (StringUtils.isNumeric(esami) && (Integer.parseInt(esami)) >=0 && Integer.parseInt(esami) <= 40) {
-                        ControlInput.set_error(binding.mediaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                        ControlInput.set_error(binding.esamiMancantiInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                         return true;
                     } else {
                         String error_message = getString(R.string.errore_media).replace("{campo}", getString(R.string.media)).replace("30", "40");
-                        ControlInput.set_error(binding.mediaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
+                        ControlInput.set_error(binding.esamiMancantiInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
                     }
                     break;
                 case "Facoltà":
@@ -318,25 +408,7 @@ public class Register2Fragment extends Fragment {
             }
         }
 
-    /**
-     * Crea l'account dell'utente su firebase
 
-     */
-    private  void createAccount()  {
-        mAuth.createUserWithEmailAndPassword(ut.getEmail(),ut.getPassword())
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
-                        mAuth.getCurrentUser();
-                    } else {
-                        // La registrazione ha fallito, puoi gestire l'errore qui
-                        Exception exception = task.getException();
-                        assert exception != null;
-                        Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
-                        // Esempio: Visualizzare un messaggio di errore o registrare l'errore
-                    }
-                });
-    }
 
     private Boolean is_empty_string(Object component, TextInputLayout layout_input, String campo_error){
         String text = null;

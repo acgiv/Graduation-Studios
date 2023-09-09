@@ -63,8 +63,9 @@
     <string name="corsi">Corso di Laurea</string>
 
     <string-array name="Dipartimento">
-        <item>Uniba</item>
-        <item>Poliba</item>
+        <item>Matematica</item>
+        <item>Informazica</item>
+        <item>Farmacia</item>
     </string-array>
     <string-array name="Corsi">
         <item>Itps</item>

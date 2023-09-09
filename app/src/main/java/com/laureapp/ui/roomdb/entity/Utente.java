@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName ="Utente")
 public class Utente implements Serializable {
@@ -63,6 +65,15 @@ public class Utente implements Serializable {
 
     public void setPassword(String passwordl) {
         this.password = passwordl;
+    }
+
+    public Map<String, Object> getUtenteMap() {
+        Map<String, Object> utenteMap = new HashMap<>();
+        utenteMap.put("nome", this.nome);
+        utenteMap.put("cognome", this.cognome);
+        utenteMap.put("email", this.email);
+        utenteMap.put("password", this.password);
+        return utenteMap;
     }
 
     @NonNull

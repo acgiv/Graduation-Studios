@@ -69,6 +69,7 @@ public class Utente implements Serializable {
 
     public Map<String, Object> getUtenteMap() {
         Map<String, Object> utenteMap = new HashMap<>();
+        utenteMap.put("id", this.id);
         utenteMap.put("nome", this.nome);
         utenteMap.put("cognome", this.cognome);
         utenteMap.put("email", this.email);

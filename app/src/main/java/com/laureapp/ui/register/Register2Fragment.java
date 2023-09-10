@@ -116,18 +116,12 @@ public class Register2Fragment extends Fragment {
                });
             FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
             if (StringUtils.equals(ruolo, "Studente") && cont.get()==5){
-                firestoreDB.collection("Utenti").document("Studenti").collection("Studenti")
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                //Per salavare i dati in authentication
-                                createAccount();
-                                saveStudenteToFirestore(firestoreDB);
 
-                            } else {
-                                Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
-                            }
-                        });
+                //Per salavare i dati in authentication
+                createAccount();
+                saveStudenteToFirestore(firestoreDB);
+
+
                 Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
                 HomeActivity.putExtras(bundle);
                 startActivity(HomeActivity);
@@ -166,12 +160,13 @@ public class Register2Fragment extends Fragment {
 
         String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         CompletableFuture<Long> future = new CompletableFuture<>();
+
+        UtenteModelView ut_vew = new UtenteModelView(context);
+        ut_vew.insertUtente(ut);
+        ut.setId(ut_vew.getIdUtente(ut.getEmail()));
+
         firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
                 .addOnSuccessListener(aVoid -> {
-                    UtenteModelView ut_vew = new UtenteModelView(context);
-                    ut_vew.insertUtente(ut);
-                    long userId = ut_vew.getIdUtente(ut.getEmail());
-                    future.complete(userId);
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -179,14 +174,11 @@ public class Register2Fragment extends Fragment {
                         System.out.println("Error writing document");
                     }
                 });
-        future.thenAccept(userId -> {
-            // Ora puoi accedere a userId quando è disponibile
-            Log.d("studente_test", "ID dell'utente: " + userId);
+
 
             // Qui puoi creare e impostare il tuo oggetto Studente
             Studente studente = new Studente();
-            studente.setId_utente(userId);
-            Log.d("studente_test",String.valueOf(studente.getId_utente()));
+            studente.setId_utente(ut.getId());
             studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
             studente.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
             studente.setEsami_mancati(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
@@ -204,11 +196,6 @@ public class Register2Fragment extends Fragment {
                             System.out.println("Error writing document");
                         }
                     });
-
-        }).exceptionally(e -> {
-            Log.e("Errore: ", String.valueOf(e.getMessage()));
-            return null;
-        });
 
     }
 

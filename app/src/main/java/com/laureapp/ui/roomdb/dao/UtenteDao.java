@@ -33,4 +33,8 @@ public interface UtenteDao {
 
     @Delete
     void delete(Utente utente);
+
+    @Query("DELETE FROM utente")
+    public void deleteAll();
+
 }

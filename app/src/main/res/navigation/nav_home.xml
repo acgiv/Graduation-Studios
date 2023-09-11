@@ -26,6 +26,10 @@
         <action
             android:id="@+id/action_fragment_home_to_profilo_professore"
             app:destination="@id/profilo_professore" />
+        <!-- Home to tesi studente fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_tesiStudenteFragment"
+            app:destination="@id/tesiStudenteFragment" />
 
         <!-- Home to tesisti fragment -->
         <action
@@ -56,6 +60,14 @@
         android:name="com.laureapp.ui.profilo.ProfiloProfessoreFragment"
         android:label="Profilo"
         tools:layout="@layout/fragment_profilo_professore">
+    </fragment>
+
+    <!--Fragment tesi studente -->
+    <fragment
+        android:id="@+id/tesiStudenteFragment"
+        android:name="com.laureapp.ui.tesiStudente.TesiStudenteFragment"
+        android:label="Tesi"
+        tools:layout="@layout/fragment_tesi_studente" >
     </fragment>
 
     <!--Fragment tesisti -->

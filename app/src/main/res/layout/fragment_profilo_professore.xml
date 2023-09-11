@@ -26,7 +26,6 @@
         android:layout_marginBottom="18dp"
         android:columnCount="3"
         android:rowCount="3"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -173,7 +172,7 @@
                     android:src="@drawable/edit_icon"
                     android:layout_marginTop="125dp"
                     android:layout_marginLeft="340dp"
-                    android:contentDescription="Edit Password Icon" />
+                    android:contentDescription="@string/edit_password_icon" />
                 <!--Campo password -->
                 <TextView
                     android:id="@+id/pass_profilo_prof"
@@ -186,7 +185,7 @@
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:visibility="visible"></TextView>
+                    tools:visibility="visible" />
 
             </FrameLayout>
         </androidx.cardview.widget.CardView>
@@ -229,7 +228,7 @@
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/baseline_school_40_white"
                     android:drawablePadding="8dp"
-                    tools:visibility="visible"></TextView>
+                    tools:visibility="visible" />
                 <!--Campo corso-->
                 <TextView
                     android:id="@+id/corso_profilo_prof"
@@ -268,25 +267,13 @@
                     android:src="@drawable/baseline_arrow_forward_ios_24"
                     android:layout_marginTop="40dp"
                     android:layout_marginLeft="340dp"
-                    android:contentDescription="Arrow Forward Icon" />
+                    android:contentDescription="@string/arrow_forward_icon" />
                 
 
             </FrameLayout>
         </androidx.cardview.widget.CardView>
 
     </GridLayout>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_bottom_nav_menu"
-        app:itemIconTint="@color/color_primary"
-        app:itemTextColor="@color/color_primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

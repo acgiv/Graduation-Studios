@@ -47,6 +47,9 @@
     <string name="errore_email">Inserisci un indirizzo email valido.</string>
     <string name="errore_campo_vuoto">Campo {campo} obbligatorio mancante!</string>
     <string name="errore_matricola">Campo {campo} deve contenere 6 cifre numeriche.</string>
+    <string name="errore_matricola_duplicate">Esiste uno studente assosciato a questa matricola.</string>
+    <string name="errore_media">Campo {campo} deve contenere 2 cifre numeriche comprese tra 0 e 30</string>
+    <string name="errore_scelta">Il campo inserito non è presente nella scelta.</string>
     <string name="password_not_safe_error">La password non incontra i requisiti di sicurezza</string>
     <string name="non_equivalent_passwords">Le password non coincidono</string>
     <string name="errore_autenticazione">Errore di autenticazione. Assicurati che l\'email e la password siano corrette.</string>
@@ -56,14 +59,15 @@
     <string name="matricola">Matricola</string>
     <string name="inserisci_l_email_di_registrazione">Inserisci l\'email di registrazione</string>
     <string name="avanti">Avanti</string>
-    <string name="dipartimento">Dipartimento</string>
+    <string name="facolta">Facoltà</string>
     <string name="media">Media</string>
     <string name="esami_mancanti">Esami mancanti</string>
-    <string name="corsi">Corsi</string>
+    <string name="corsi">Corso di Laurea</string>
 
     <string-array name="Dipartimento">
-        <item>Uniba</item>
-        <item>Poliba</item>
+        <item>Matematica</item>
+        <item>Informazica</item>
+        <item>Farmacia</item>
     </string-array>
     <string-array name="Corsi">
         <item>Itps</item>
@@ -78,6 +82,14 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-
+    <string name="Messaggi" />
+    <string name="messaggi">Messaggi</string>
+    <string name="task">Task</string>
+    <string name="arrow_forward_icon">Arrow Forward Icon</string>
+    <string name="edit_password_icon">Edit Password Icon</string>
+    <string name="taskk">Task</string>
+    <string name="classificaTesi">Classifica</string>
+    <string name="le_mie_tesi">Le Mie Tesi</string>
+    <string name="elenco_tesi">Elenco Tesi</string>
+    <string name="student_name_placeholder">%1$s %2$s</string>
 </resources>

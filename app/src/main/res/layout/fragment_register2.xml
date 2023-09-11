@@ -100,7 +100,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/DipartimentoLayout"
+                android:id="@+id/facoltaInput"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="380dp"
                 android:layout_height="64dp"
@@ -118,13 +118,13 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_color"
                     android:ems="10"
-                    android:hint="@string/dipartimento"
+                    android:hint="@string/facolta"
                     android:importantForAutofill="no"
                     android:padding="7dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/corsoLayout"
+                android:id="@+id/corsoInput"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="380dp"
                 android:layout_height="64dp"
@@ -136,7 +136,7 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/DipartimentoLayout">
+                app:layout_constraintTop_toBottomOf="@+id/facoltaInput">
 
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/dropdown_corso"

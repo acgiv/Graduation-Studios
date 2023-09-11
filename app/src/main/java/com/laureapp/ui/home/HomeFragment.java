@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
 
     CardView CardTesi;
     CardView CardTask;
+    CardView CardTesisti;
     CardView CardSocial;
     CardView CardTesisti;
     String ruolo;
@@ -86,13 +87,15 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        CardTask.setOnClickListener(view1 -> {
-            if(StringUtils.equals("Studente", ruolo)){
-                Log.d("Task", "cliccato Task studente");
-            }else if(StringUtils.equals("Professore", ruolo)){
+
+        CardTesisti =  view.findViewById(R.id.cardViewTesisti);
+        CardTesisti.setOnClickListener(view1 -> {
+            if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Task", "cliccato Task Professore");
+                mNav.navigate(R.id.action_fragment_home_to_tesisti);
             }else {
                 Log.d("Task", "cliccato Task Ospite");
+                mNav.navigate(R.id.action_fragment_home_to_tesisti);
             }
         });
 

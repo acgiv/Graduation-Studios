@@ -35,6 +35,12 @@
         <action
             android:id="@+id/action_fragment_home_to_tesisti"
             app:destination="@id/tesisti" />
+
+        <!-- Home to messaggi fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_messaggiFragment"
+            app:destination="@id/messaggiFragment" />
+
     </fragment>
 
 
@@ -88,5 +94,30 @@
         android:name="com.laureapp.ui.card.DettagliTesistaFragment"
         android:label="Tesista"
         tools:layout="@layout/fragment_dettagli_tesista">
+    </fragment>
+
+    <!--Fragment messaggi -->
+    <fragment
+        android:id="@+id/messaggiFragment"
+        android:name="com.laureapp.ui.home.MessaggiFragment"
+        android:label="Messaggi"
+        tools:layout="@layout/fragment_messaggi">
+        <action
+            android:id="@+id/action_messaggiFragment_to_discussioneFragment"
+            app:destination="@id/discussioneFragment" />
+        <action
+            android:id="@+id/action_messaggiFragment_to_fragment_home"
+            app:destination="@id/fragment_home" />
+    </fragment>
+
+    <!--Fragment discussione -->
+    <fragment
+        android:id="@+id/discussioneFragment"
+        android:name="com.laureapp.ui.home.DiscussioneFragment"
+        android:label="Discussione"
+        tools:layout="@layout/fragment_discussione">
+        <action
+            android:id="@+id/action_discussioneFragment_to_messaggiFragment"
+            app:destination="@id/messaggiFragment" />
     </fragment>
 </navigation>

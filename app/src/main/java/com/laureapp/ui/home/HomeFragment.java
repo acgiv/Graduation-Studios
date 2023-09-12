@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment {
     CardView CardTask;
     CardView CardTesisti;
     CardView CardSocial;
-    CardView CardTesisti;
+    //CardView CardTesisti;
     CardView CardMessages;
     String ruolo;
     Context context;

@@ -22,11 +22,13 @@ import android.widget.TextView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
+import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
+import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,6 +41,7 @@ public class TesistiFragment extends Fragment {
     String ruolo;
     Context context;
     Bundle args;
+    private List<StudenteWithUtente> studentList = new ArrayList<>();
 
     public TesistiFragment() {
         // Required empty public constructor
@@ -68,16 +71,16 @@ public class TesistiFragment extends Fragment {
         CollectionReference studentsRef = firestoreDB.collection("Utenti").document("Studenti").collection("Studenti");
         mNav = Navigation.findNavController(view);
         ListView listView = view.findViewById(R.id.listView);
-        aggiornaDb();
+        //aggiornaDb();
 
         studentsRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Studente> studentList = new ArrayList<>();
+                    studentList.clear(); // Cancella la lista esistente
+                    StudenteModelView stModelView = new StudenteModelView(context);
+                    studentList = stModelView.findStudenteIdByUtente();
+                    Log.d("Lista studenti-utenti", stModelView.findStudenteIdByUtente().toString());
 
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Studente student = document.toObject(Studente.class);
-                        studentList.add(student);
-                    }
+                    Log.d("Lista Studenti Tesisti", studentList.toString());
 
                     StudentAdapter adapter = new StudentAdapter(requireContext(), studentList);
                     listView.setAdapter(adapter);
@@ -112,17 +115,17 @@ public class TesistiFragment extends Fragment {
     }
 
 
-    class StudentAdapter extends ArrayAdapter<Studente> {
+    class StudentAdapter extends ArrayAdapter<StudenteWithUtente> {
         private StudentFilter studentFilter;
         private final LayoutInflater inflater;
-        private final List<Studente> studentList;
-        private List<Studente> filteredStudentList;
+        private final List<StudenteWithUtente> studentList;
+        private List<StudenteWithUtente> filteredStudentList;
 
-        public StudentAdapter(Context context, List<Studente> studentList) {
+        public StudentAdapter(Context context, List<StudenteWithUtente> studentList) {
             super(context, 0, studentList);
             inflater = LayoutInflater.from(context);
             this.studentList = studentList;
-            this.filteredStudentList = new ArrayList<>(studentList);
+            this.filteredStudentList = new ArrayList<StudenteWithUtente>(studentList);
             this.studentFilter = new StudentFilter();
 
             Log.d("Adapter", "Numero di studenti nell'adapter: " + filteredStudentList.size());
@@ -131,8 +134,8 @@ public class TesistiFragment extends Fragment {
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            Studente studente = getItem(position);
-
+            Studente studente = getItem(position).getStudente();
+            Utente utente = getItem(position).getUtente();
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.lista_tesisti, parent, false);
             }
@@ -142,7 +145,9 @@ public class TesistiFragment extends Fragment {
                 TextView matricolaTextView = convertView.findViewById(R.id.matricolaTextView);
 
                 if (nomeTextView != null && matricolaTextView != null) {
-                    String studentName = getString(R.string.student_name_placeholder, studente.getNome(), studente.getCognome());
+                    // Ottieni il nome e il cognome dall'oggetto Utente associato allo studente
+                    String studentName = getString(R.string.student_name_placeholder, utente.getNome(), utente.getCognome());
+                    Log.d("Lista Nome Cognome Tesisti", String.valueOf(studentName));
                     nomeTextView.setText(studentName);
                     matricolaTextView.setText(String.valueOf(studente.getMatricola()));
                 }
@@ -150,6 +155,7 @@ public class TesistiFragment extends Fragment {
 
             return convertView;
         }
+
 
 
         @NonNull
@@ -168,15 +174,16 @@ public class TesistiFragment extends Fragment {
 
                 String filterText = charSequence.toString().toLowerCase();
 
-                List<Studente> filteredList = new ArrayList<>();
+                Utente utente = new Utente();
+                List<StudenteWithUtente> filteredList = new ArrayList<>();
 
                 if (filterText.isEmpty()) {
                     // Se il testo di ricerca è vuoto, mostra l'intera lista originale
                     filteredList.addAll(studentList);
                 } else {
                     // Altrimenti, filtra gli studenti in base al testo di ricerca
-                    for (Studente studente : studentList) {
-                        String studentName = (studente.getNome() + " " + studente.getCognome()).toLowerCase();
+                    for (StudenteWithUtente studente : studentList) {
+                        String studentName = (studente + " " + utente.getNome() + utente.getCognome());
                         if (studentName.contains(filterText)) {
                             filteredList.add(studente);
                         }
@@ -191,7 +198,7 @@ public class TesistiFragment extends Fragment {
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                List<Studente> filteredList = (List<Studente>) filterResults.values;
+                List<StudenteWithUtente> filteredList = (List<StudenteWithUtente>) filterResults.values;
                 filteredStudentList.clear();
                 if (filteredList != null) {
                     filteredStudentList.addAll(filteredList);

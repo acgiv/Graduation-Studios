@@ -1,14 +1,17 @@
 package com.laureapp.ui.roomdb.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName ="Tesi_Professore", foreignKeys = {
         @ForeignKey(entity = Professore.class, parentColumns = "id", childColumns = "id_professore")
 })
-public class TesiProfessore {
+public class TesiProfessore implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     private Long id;
@@ -43,6 +46,7 @@ public class TesiProfessore {
         this.ruolo_professore = ruolo_professore;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "TesiProfessore{" +

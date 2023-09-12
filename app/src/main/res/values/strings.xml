@@ -45,6 +45,9 @@
     <string name="errore_email">Inserisci un indirizzo email valido.</string>
     <string name="errore_campo_vuoto">Campo {campo} obbligatorio mancante!</string>
     <string name="errore_matricola">Campo {campo} deve contenere 6 cifre numeriche.</string>
+    <string name="errore_matricola_duplicate">Esiste uno studente assosciato a questa matricola.</string>
+    <string name="errore_media">Campo {campo} deve contenere 2 cifre numeriche comprese tra 0 e 30</string>
+    <string name="errore_scelta">Il campo inserito non è presente nella scelta.</string>
     <string name="password_not_safe_error">La password non incontra i requisiti di sicurezza</string>
     <string name="non_equivalent_passwords">Le password non coincidono</string>
     <string name="errore_autenticazione">Errore di autenticazione. Assicurati che l\'email e la password siano corrette.</string>
@@ -53,6 +56,23 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="matricola">Matricola</string>
     <string name="inserisci_l_email_di_registrazione">Inserisci l\'email di registrazione</string>
+    <string name="avanti">Avanti</string>
+    <string name="facolta">Facoltà</string>
+    <string name="media">Media</string>
+    <string name="esami_mancanti">Esami mancanti</string>
+    <string name="corsi">Corso di Laurea</string>
+
+    <string-array name="Dipartimento">
+        <item>Matematica</item>
+        <item>Informazica</item>
+        <item>Farmacia</item>
+    </string-array>
+    <string-array name="Corsi">
+        <item>Itps</item>
+        <item>Matematica</item>
+        <item>Informatica</item>
+    </string-array>
+
     <string name="title_activity_loading_page">LoadingPageActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -60,41 +80,14 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-    <string name="lorem_ipsum">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
-        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
-        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
-        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
-        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
-        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
-        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
-        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
-        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
-        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
-        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
-        bibendum, vel congue leo egestas.\n\n
-        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
-        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
-        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
-        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
-        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
-        est.\n\n
-        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
-        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
-        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
-        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
-        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
-        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
-        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
-        convallis.\n\n
-        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
-        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
-        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
-        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
-        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
-        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
-        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
-    </string>
+    <string name="Messaggi" />
+    <string name="messaggi">Messaggi</string>
+    <string name="task">Task</string>
+    <string name="arrow_forward_icon">Arrow Forward Icon</string>
+    <string name="edit_password_icon">Edit Password Icon</string>
+    <string name="taskk">Task</string>
+    <string name="classificaTesi">Classifica</string>
+    <string name="le_mie_tesi">Le Mie Tesi</string>
+    <string name="elenco_tesi">Elenco Tesi</string>
+    <string name="student_name_placeholder">%1$s %2$s</string>
 </resources>

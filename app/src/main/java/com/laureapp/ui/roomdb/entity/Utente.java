@@ -1,13 +1,19 @@
 package com.laureapp.ui.roomdb.entity;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 @Entity(tableName ="Utente")
-public class Utente {
+public class Utente implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "utente_id")
     private Long id;
 
     @ColumnInfo(name = "nome")
@@ -62,6 +68,16 @@ public class Utente {
         this.password = passwordl;
     }
 
+    public Map<String, Object> getUtenteMap() {
+        Map<String, Object> utenteMap = new HashMap<>();
+        utenteMap.put("nome", this.nome);
+        utenteMap.put("cognome", this.cognome);
+        utenteMap.put("email", this.email);
+        utenteMap.put("password", this.password);
+        return utenteMap;
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "Utente{" +

@@ -5,23 +5,40 @@
     android:id="@+id/nav_home"
     app:startDestination="@id/fragment_home">
 
+    <!--Fragment della home -->
     <fragment
         android:id="@+id/fragment_home"
         android:name="com.laureapp.ui.home.HomeFragment"
         android:label="Laureapp"
         tools:layout="@layout/fragment_home">
 
+        <!-- Home to social fragment -->
         <action
             android:id="@+id/action_fragment_home_to_social_fragment"
             app:destination="@id/social_fragment" />
+
+        <!-- Home to profilop studente fragment -->
         <action
             android:id="@+id/action_fragment_home_to_profilo_studente"
             app:destination="@id/profilo_studente" />
+
+        <!-- Home to profilo professore fragment -->
         <action
             android:id="@+id/action_fragment_home_to_profilo_professore"
             app:destination="@id/profilo_professore" />
+        <!-- Home to tesi studente fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_tesiStudenteFragment"
+            app:destination="@id/tesiStudenteFragment" />
+
+        <!-- Home to tesisti fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_tesisti"
+            app:destination="@id/tesisti" />
     </fragment>
 
+
+    <!--Fragment dei social -->
     <fragment
         android:id="@+id/social_fragment"
         android:name="com.laureapp.ui.home.SocialFragment"
@@ -29,6 +46,7 @@
         tools:layout="@layout/fragment_social">
     </fragment>
 
+    <!--Fragment profilo studente -->
     <fragment
         android:id="@+id/profilo_studente"
         android:name="com.laureapp.ui.profilo.ProfiloProfessoreFragment"
@@ -36,10 +54,39 @@
         tools:layout="@layout/fragment_profilo_studente">
     </fragment>
 
+    <!--Fragment profilo professore -->
     <fragment
         android:id="@+id/profilo_professore"
         android:name="com.laureapp.ui.profilo.ProfiloProfessoreFragment"
         android:label="Profilo"
         tools:layout="@layout/fragment_profilo_professore">
+    </fragment>
+
+    <!--Fragment tesi studente -->
+    <fragment
+        android:id="@+id/tesiStudenteFragment"
+        android:name="com.laureapp.ui.tesiStudente.TesiStudenteFragment"
+        android:label="Tesi"
+        tools:layout="@layout/fragment_tesi_studente" >
+    </fragment>
+
+    <!--Fragment tesisti -->
+    <fragment
+        android:id="@+id/tesisti"
+        android:name="com.laureapp.ui.card.TesistiFragment"
+        android:label="Tesisti"
+        tools:layout="@layout/fragment_tesisti">
+        <!-- Tesisti to dettagli tesista fragment -->
+        <action
+            android:id="@+id/action_fragment_tesisti_to_dettagli_tesista"
+            app:destination="@id/dettagli_tesista" />
+    </fragment>
+
+    <!--Fragment dettagli tesista -->
+    <fragment
+        android:id="@+id/dettagli_tesista"
+        android:name="com.laureapp.ui.card.DettagliTesistaFragment"
+        android:label="Tesista"
+        tools:layout="@layout/fragment_dettagli_tesista">
     </fragment>
 </navigation>

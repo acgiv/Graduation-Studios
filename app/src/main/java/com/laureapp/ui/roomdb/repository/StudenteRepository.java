@@ -3,7 +3,9 @@ package com.laureapp.ui.roomdb.repository;
 import android.content.Context;
 
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
+import com.laureapp.ui.roomdb.dao.StudenteDao;
 import com.laureapp.ui.roomdb.entity.Studente;
+import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,20 @@ public class StudenteRepository {
         CompletableFuture<Long> future = new CompletableFuture<>();
         executor.execute(() -> {
             Long id = roomDbSqlLite.studenteDao().findStudente(id_utente);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
+    public Long findStudenteMatricola(Long matricola){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.studenteDao().findStudenteMatricola(matricola);
             future.complete(id);
         });
         try {
@@ -79,6 +95,22 @@ public class StudenteRepository {
             result = true;
         }
         return result;
+    }
+
+
+    // Metodo per recuperare l'ID dello studente in base all'ID dell'utente associato
+    public List<StudenteWithUtente> findStudenteIdByUtenteId() {
+        CompletableFuture<List<StudenteWithUtente>> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            List<StudenteWithUtente> lista = roomDbSqlLite.studenteDao().findStudentiWithUtenti();
+            future.complete(lista);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Restituire una lista vuota in caso di errore
+        }
     }
 
 }

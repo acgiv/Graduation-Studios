@@ -61,7 +61,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         mNav = Navigation.findNavController(view);
-
         CardTesi =  view.findViewById(R.id.cardViewTesi);
         CardTask =  view.findViewById(R.id.cardViewTask);
         CardSocial =  view.findViewById(R.id.cardViewSocial);

@@ -13,6 +13,7 @@ import java.util.Map;
 public class Utente implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "utente_id")
     private Long id;
 
     @ColumnInfo(name = "nome")

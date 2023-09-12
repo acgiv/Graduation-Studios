@@ -29,6 +29,7 @@ public class HomeFragment extends Fragment {
     CardView CardTask;
     CardView CardTesisti;
     CardView CardSocial;
+    CardView CardMessaggi;
     String ruolo;
     Context context;
     Bundle args;
@@ -98,18 +99,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        CardTask.setOnClickListener(view1 -> {
-            if(StringUtils.equals("Studente", ruolo)){
-
-            }else if(StringUtils.equals("Professore", ruolo)){
-                Log.d("Task", "cliccato Task Professore");
-            }else {
-                Log.d("Task", "cliccato Task Ospite");
-            }
-        });
-
         CardSocial.setOnClickListener(view1 -> {
             mNav.navigate(R.id.action_fragment_home_to_social_fragment);
+        });
+
+        CardMessaggi =  view.findViewById(R.id.cardViewMessaggi);
+        CardMessaggi.setOnClickListener(view1 -> {
+            if(StringUtils.equals("Professore", ruolo)){
+                Log.d("Task", "cliccato Task Professore");
+                mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
+            }else {
+                Log.d("Task", "cliccato Task Ospite");
+                mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
+            }
         });
 
         /**

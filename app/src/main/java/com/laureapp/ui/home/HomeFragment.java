@@ -29,6 +29,8 @@ public class HomeFragment extends Fragment {
     CardView CardTask;
     CardView CardTesisti;
     CardView CardSocial;
+    //CardView CardTesisti;
+    CardView CardMessages;
     String ruolo;
     Context context;
     Bundle args;
@@ -110,6 +112,10 @@ public class HomeFragment extends Fragment {
 
         CardSocial.setOnClickListener(view1 -> {
             mNav.navigate(R.id.action_fragment_home_to_social_fragment);
+        });
+
+        CardMessages.setOnClickListener(view1 -> {
+            mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
         });
 
         /**

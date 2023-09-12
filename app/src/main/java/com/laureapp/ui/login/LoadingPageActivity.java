@@ -66,6 +66,7 @@ public class LoadingPageActivity extends AppCompatActivity {
                             db.professoreDao().insert(professore); // Chiama il metodo per l'inserimento o l'aggiornamento
                         }
 
+                        Log.d("utenti", String.valueOf(db.utenteDao().getAllUtente()));
 
                         Log.d("studenti", String.valueOf(db.studenteDao().getAllStudente()));
                         Log.d("professori", String.valueOf(db.professoreDao().getAllProfessore()));

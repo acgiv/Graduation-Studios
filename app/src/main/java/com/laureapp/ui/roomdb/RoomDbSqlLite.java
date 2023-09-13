@@ -22,6 +22,7 @@ import com.laureapp.ui.roomdb.entity.Esame;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
+import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.TesiProfessore;
 import com.laureapp.ui.roomdb.entity.Utente;

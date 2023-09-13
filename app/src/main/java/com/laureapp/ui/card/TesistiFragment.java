@@ -30,11 +30,14 @@ import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Questa classe gestisce la lista degli studenti mostrata dopo aver cliccato la card
+ * Tesisti, lato professore. Questa lista viene filtrata in base al testo inserito dall'utente.
+ *
+ */
 public class TesistiFragment extends Fragment {
 
     private NavController mNav;
@@ -71,7 +74,7 @@ public class TesistiFragment extends Fragment {
         CollectionReference studentsRef = firestoreDB.collection("Utenti").document("Studenti").collection("Studenti");
         mNav = Navigation.findNavController(view);
         ListView listView = view.findViewById(R.id.listView);
-        //aggiornaDb();
+        aggiornaDb();
 
         studentsRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -86,13 +89,8 @@ public class TesistiFragment extends Fragment {
                     listView.setAdapter(adapter);
 
                     listView.setOnItemClickListener((parent, view1, position, id) -> {
-                        if (StringUtils.equals("Professore", ruolo)) {
-                            mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista);
-                            Log.d("Tesi", "cliccato il tesista");
-                        } else {
-                            mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista);
-                            Log.d("Tesi", "cliccato il tesista");
-                        }
+                        mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista);
+                        Log.d("Tesi", "cliccato il tesista");
                     });
 
                     // Aggiungi il TextWatcher per il campo di ricerca
@@ -114,23 +112,39 @@ public class TesistiFragment extends Fragment {
 
     }
 
-
+    /**
+     * Questo adapter fornisce l'accesso ai data Item. In questo caso,
+     * ai ListItem della ListView e si occupare di settare graficamente
+     * gli elementi della lista
+     */
     class StudentAdapter extends ArrayAdapter<StudenteWithUtente> {
-        private StudentFilter studentFilter;
         private final LayoutInflater inflater;
         private final List<StudenteWithUtente> studentList;
         private List<StudenteWithUtente> filteredStudentList;
 
-        public StudentAdapter(Context context, List<StudenteWithUtente> studentList) {
+
+        /**
+         *
+         * @param context si riferisce al contesto in cui viene utilizzato
+         * @param studentList corrisponde alla lista di studenti da passare
+         */
+        public StudentAdapter(Context context, List<StudenteWithUtente> studentList ) {
             super(context, 0, studentList);
             inflater = LayoutInflater.from(context);
             this.studentList = studentList;
-            this.filteredStudentList = new ArrayList<StudenteWithUtente>(studentList);
-            this.studentFilter = new StudentFilter();
+            this.filteredStudentList = new ArrayList<>(studentList);
 
-            Log.d("Adapter", "Numero di studenti nell'adapter: " + filteredStudentList.size());
+            Log.d("Numero studenti adapter", "Numero di studenti nell'adapter: " + filteredStudentList.size());
         }
 
+        /**
+         *
+         * @param position si riferisce alla posizione dell'item della lista
+         * @param convertView si riferisce alla variabile che gestisce il cambiamento della view
+         * @param parent Interfaccia per le informazioni globali riguardo all'ambiente dell'applicazione.
+         *               usata per chiamare operazioni a livello applicazione launching activities, broadcasting e receiving intents
+         * @return la view con la lista aggiornata
+         */
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -147,7 +161,7 @@ public class TesistiFragment extends Fragment {
                 if (nomeTextView != null && matricolaTextView != null) {
                     // Ottieni il nome e il cognome dall'oggetto Utente associato allo studente
                     String studentName = getString(R.string.student_name_placeholder, utente.getNome(), utente.getCognome());
-                    Log.d("Lista Nome Cognome Tesisti", String.valueOf(studentName));
+                    Log.d("Lista Nome Cognome Tesisti", studentName);
                     nomeTextView.setText(studentName);
                     matricolaTextView.setText(String.valueOf(studente.getMatricola()));
                 }
@@ -157,60 +171,55 @@ public class TesistiFragment extends Fragment {
         }
 
 
-
         @NonNull
         @Override
         public Filter getFilter() {
-            if (studentFilter == null) {
-                studentFilter = new StudentFilter();
-            }
-            return studentFilter;
-        }
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    FilterResults filterResults = new FilterResults();
+                    String filterText = charSequence.toString().toLowerCase();
 
-        class StudentFilter extends Filter {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                FilterResults filterResults = new FilterResults();
+                    List<StudenteWithUtente> filteredList = new ArrayList<>();
 
-                String filterText = charSequence.toString().toLowerCase();
-
-                Utente utente = new Utente();
-                List<StudenteWithUtente> filteredList = new ArrayList<>();
-
-                if (filterText.isEmpty()) {
-                    // Se il testo di ricerca è vuoto, mostra l'intera lista originale
-                    filteredList.addAll(studentList);
-                } else {
-                    // Altrimenti, filtra gli studenti in base al testo di ricerca
-                    for (StudenteWithUtente studente : studentList) {
-                        String studentName = (studente + " " + utente.getNome() + utente.getCognome());
-                        if (studentName.contains(filterText)) {
-                            filteredList.add(studente);
+                    if (filterText.isEmpty()) {
+                        // Se il testo di ricerca è vuoto, mostra l'intera lista originale
+                        filteredList.addAll(studentList);
+                    } else {
+                        // Altrimenti, filtra gli studenti in base al testo di ricerca
+                        for (StudenteWithUtente studente : studentList) {
+                            String matricola = String.valueOf(studente.getStudente().getMatricola());
+                            String studentName = studente.getUtente().getNome() + studente.getUtente().getCognome();
+                            if (studentName.toLowerCase().contains(filterText) || matricola.contains(filterText)) {
+                                filteredList.add(studente);
+                            }
                         }
                     }
+
+                    filterResults.values = filteredList;
+                    filterResults.count = filteredList.size();
+                    return filterResults;
                 }
 
-                filterResults.values = filteredList;
-                filterResults.count = filteredList.size();
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                    List<StudenteWithUtente> filteredList = (List<StudenteWithUtente>) filterResults.values;
+                    studentList.clear();
+                    Log.d("Numero studenti adapter", "Numero di studenti nell'adapter: " + filteredStudentList.size());
 
-                return filterResults;
-            }
+                    if (filteredList != null) {
 
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                List<StudenteWithUtente> filteredList = (List<StudenteWithUtente>) filterResults.values;
-                filteredStudentList.clear();
-                if (filteredList != null) {
-                    filteredStudentList.addAll(filteredList);
+                        filteredStudentList.addAll(filteredList);
+                    }
+                    notifyDataSetChanged(); // Notifica all'adapter di aggiornare la vista
                 }
-                notifyDataSetChanged(); // Notifica all'adapter di aggiornare la vista
-            }
-
-
+            };
         }
     }
 
-
+    /**
+     * Questo metodo aggiorna il db locale di sqlite con quello di Firebase
+     */
     private void aggiornaDb() {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         RoomDbSqlLite db = RoomDbSqlLite.getDatabase(context.getApplicationContext());
@@ -240,3 +249,5 @@ public class TesistiFragment extends Fragment {
                 });
     }
 }
+
+

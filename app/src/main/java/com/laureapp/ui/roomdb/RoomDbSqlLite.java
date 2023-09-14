@@ -2,7 +2,6 @@ package com.laureapp.ui.roomdb;
 
 import android.content.Context;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -22,7 +21,6 @@ import com.laureapp.ui.roomdb.entity.Esame;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
-import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.TesiProfessore;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -31,12 +29,12 @@ import com.laureapp.ui.roomdb.entity.Vincolo;
 @Database(entities = {Studente.class, Utente.class,
         Professore.class, CorsoStudente.class, Esame.class,
         StudenteTesi.class, Vincolo.class, TesiProfessore.class, Tesi.class
-}, version = 2)
+}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class RoomDbSqlLite extends RoomDatabase{
 
         public static final String DATABASE_NAME = "Graduation_Studio";
-        private static RoomDbSqlLite INSTANCE;
+        private static volatile RoomDbSqlLite INSTANCE;
 
 
 

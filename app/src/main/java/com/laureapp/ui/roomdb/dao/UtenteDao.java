@@ -37,6 +37,9 @@ public interface UtenteDao {
     @Query("SELECT u.cognome FROM Utente u, Studente s WHERE u.utente_id = s.studente_id")
     String getCognome();
 
+    @Query("DELETE FROM professore")
+    public void deleteAll();
+
 
 
 

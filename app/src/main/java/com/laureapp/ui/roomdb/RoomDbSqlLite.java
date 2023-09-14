@@ -2,7 +2,6 @@ package com.laureapp.ui.roomdb;
 
 import android.content.Context;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -35,7 +34,7 @@ import com.laureapp.ui.roomdb.entity.Vincolo;
 public abstract class RoomDbSqlLite extends RoomDatabase{
 
         public static final String DATABASE_NAME = "Graduation_Studio";
-        private static RoomDbSqlLite INSTANCE;
+        private static volatile RoomDbSqlLite INSTANCE;
 
 
 

@@ -28,6 +28,9 @@ public interface ProfessoreDao {
     @Query("SELECT * FROM professore where id = :id")
     Professore findAllById(Long id);
 
+    @Query("SELECT * FROM professore where id = :id")
+    Professore findAllById(String id);
+
     @Delete
     void delete(Professore professore);
 

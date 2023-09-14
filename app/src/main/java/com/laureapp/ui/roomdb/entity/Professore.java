@@ -10,7 +10,8 @@ import java.io.Serializable;
 
 @Entity(tableName ="Professore",foreignKeys = {
         @ForeignKey(entity = Tesi.class, parentColumns = "id", childColumns = "id_tesi"),
-        @ForeignKey(entity = Utente.class, parentColumns = "utente_id", childColumns = "id_utente")}
+        @ForeignKey(entity = Utente.class, parentColumns = "utente_id", childColumns = "id_utente"
+        )}
 )
 public class Professore implements Serializable {
     public String getNome() {

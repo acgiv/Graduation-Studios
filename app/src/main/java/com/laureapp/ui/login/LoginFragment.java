@@ -3,20 +3,15 @@ import static android.content.ContentValues.TAG;
 
 import static com.laureapp.ui.controlli.ControlInput.isConnected;
 
-import static java.security.AccessController.getContext;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 
 import org.apache.commons.lang3.StringUtils;
 import androidx.annotation.NonNull;
@@ -33,9 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.laureapp.R;
-import com.laureapp.databinding.ActivityMainBinding;
 import com.laureapp.databinding.FragmentLoginBinding;
-import com.laureapp.databinding.FragmentRegisterBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
@@ -100,8 +93,7 @@ public class LoginFragment extends Fragment {
         password_text = view.findViewById(R.id.conferma_password);
         error_text = view.findViewById(R.id.error_text);
 
-        Resources resources = getResources();
-        ConnectivityManager cm = (ConnectivityManager)getContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) requireContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         //Pulsante di login
         binding.buttonLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
@@ -119,7 +111,7 @@ public class LoginFragment extends Fragment {
                         }
                     } else if (isConnected(cm)) {
                         Log.d("ciao",String.valueOf(utenteView.getAllUtente()));
-                        loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(password_text.getText()).toString());
+                        loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(hashWith256(String.valueOf(password_text.getText()))));
                     }
                 }
             }
@@ -141,14 +133,14 @@ public class LoginFragment extends Fragment {
     }
 
     private HashMap<String,Boolean> is_correct_email_password(){
-        HashMap<String,Boolean> result_error = new HashMap<String,Boolean>();
+        HashMap<String,Boolean> result_error = new HashMap<>();
         if(is_empty_string(email_text , email_layout,"Email")){
             result_error.put("Email", false);
         // controllo che il campo email non sia valido
         }else if (!ControlInput.isValidEmailFormat(String.valueOf(email_text.getText()))) {
             String error_message = getString(R.string.errore_email);
             ControlInput.set_error(email_layout, true, error_message, error_color, context ,R.dimen.input_text_layout_height_error, getResources());
-            result_error.put("email", false);;
+            result_error.put("email", false);
         }else{
             // cancello i messaggi di errore sul campo email
             correct_text(email_layout, "email", result_error);
@@ -190,7 +182,7 @@ public class LoginFragment extends Fragment {
             byte[] hashedByetArray = digest.digest(byteOfTextToHash);
             return Base64.getEncoder().encodeToString(hashedByetArray);
         }catch (NoSuchAlgorithmException e){
-            Log.e("LaureApp", "Error reading file", e);;
+            Log.e("LaureApp", "Error reading file", e);
         }
         return "";
     }
@@ -253,11 +245,4 @@ public class LoginFragment extends Fragment {
             startActivity(HomeActivity);
             requireActivity().finish();
         }
-
-    private void redirectToProfessoreHome() {
-        //TODO: Inserire il fragment o l'activity della home del professore
-        Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-        startActivity(HomeActivity);
-        requireActivity().finish();
-    }
 }

@@ -3,13 +3,16 @@ package com.laureapp.ui.roomdb.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity(tableName ="Utente")
+@Entity(tableName = "Utente",
+        indices = {@Index(value = "email", unique = true)})
+
 public class Utente implements Serializable {
 
     @PrimaryKey(autoGenerate = true)

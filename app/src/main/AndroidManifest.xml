@@ -18,15 +18,13 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.LaureApp"
-            android:label="@string/title_activity_login"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:label="@string/title_activity_login" />
       
         <activity
             android:name=".ui.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.LaureApp"
             android:windowSoftInputMode="adjustPan"/>
-
         <activity
             android:name=".ui.login.LoadingPageActivity"
             android:exported="true"

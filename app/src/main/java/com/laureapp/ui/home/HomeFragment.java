@@ -29,7 +29,6 @@ public class HomeFragment extends Fragment {
     CardView CardTask;
     CardView CardTesisti;
     CardView CardSocial;
-    CardView CardTesisti;
     String ruolo;
     Context context;
     Bundle args;
@@ -69,7 +68,7 @@ public class HomeFragment extends Fragment {
 
         CardTesi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
-                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment);
+                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment,args);
             }else if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Tesi", "cliccato tesi Professore");
             }else {

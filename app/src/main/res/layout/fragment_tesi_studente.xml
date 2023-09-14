@@ -10,37 +10,41 @@
     tools:context=".ui.tesiStudente.TesiStudenteFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <com.google.android.material.tabs.TabLayout
+            android:id="@+id/TabLayoutTesi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/TabLayoutTesi">
-
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/LeMieTesi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/classificaTesi"
-                android:id="@+id/ClassificaTesi"
-                />
+                android:text="@string/le_mie_tesi" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/classificaTesi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/le_mie_tesi"
-                android:id="@+id/LeMieTesi"/>
+                android:text="@string/classificaTesi" />
 
             <com.google.android.material.tabs.TabItem
+                android:id="@+id/ElencoTesi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/elenco_tesi"
-                android:id="@+id/ElencoTesi"/>
+                android:text="@string/elenco_tesi" />
 
         </com.google.android.material.tabs.TabLayout>
+
+        <!-- Aggiunta del ViewPager per visualizzare i contenuti dei tab -->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPagerTesi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/TabLayoutTesi" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

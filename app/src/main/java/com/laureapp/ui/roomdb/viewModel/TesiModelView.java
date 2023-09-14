@@ -22,7 +22,7 @@ public class TesiModelView {
     }
 
     public boolean delateTesi(long id){
-        return tesiRepository.delateTesi(id);
+        return tesiRepository.deleteTesi(id);
     }
 
     public Tesi findAllById(Long id){

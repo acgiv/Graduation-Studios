@@ -57,7 +57,7 @@ public class TesiRepository {
         }
     }
 
-    public boolean delateTesi(Long id){
+    public boolean deleteTesi(Long id){
         boolean result = false;
         Tesi tesi =  this.findAllById(id);
         if (tesi.getId() != null) {
@@ -65,5 +65,19 @@ public class TesiRepository {
             result = true;
         }
         return result;
+    }
+
+    public List<Tesi> getTesiByStudente(long idStudenteLoggato) {
+        CompletableFuture<List<Tesi>> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            List<Tesi> listaTesibyStudente = roomDbSqlLite.tesiDao().getTesiByStudente(idStudenteLoggato);
+            future.complete(listaTesibyStudente);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Restituire una lista vuota in caso di errore
+        }
     }
 }

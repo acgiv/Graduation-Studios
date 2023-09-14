@@ -14,7 +14,7 @@
     import java.util.Map;
 
     @Entity(tableName ="Studente" , foreignKeys = {
-            @ForeignKey(entity = Utente.class, parentColumns = "utente_id", childColumns = "id_utente",  onDelete = ForeignKey.CASCADE)
+            @ForeignKey(entity = Utente.class, parentColumns = "utente_id", childColumns = "id_utente")
     })
     public class Studente implements Serializable {
 

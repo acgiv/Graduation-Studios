@@ -218,31 +218,106 @@ public class TesistiFragment extends Fragment {
     }
 
     /**
-     * Questo metodo aggiorna il db locale di sqlite con quello di Firebase
+     * Questo metodo aggiorna il db locale di sqlite con quello di Firebase.
+     * Ho dovuto leggere tutte le collection per poterle aggiornare perchè altrimenti
+     * i dati non venivano letti correttamente.
      */
     private void aggiornaDb() {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         RoomDbSqlLite db = RoomDbSqlLite.getDatabase(context.getApplicationContext());
+
+        //Qui leggo la collection degli utenti. L'id dell'utente collegato allo studente è corretto
+        firestoreDB.collection("Utenti")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        //Per pulire la cache del db
+                        db.utenteDao().deleteAll();
+
+                        //Per salvare i dati in SQLite da Firestore
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                        for (DocumentSnapshot document : documents) {
+                            StudenteWithUtente studenteWithUtente = document.toObject(StudenteWithUtente.class);// Converte il documento in un oggetto Studente
+
+                            assert studenteWithUtente != null;
+                            if (studenteWithUtente.getUtente() != null) {
+                                db.utenteDao().insert(studenteWithUtente.getUtente());
+                            } else {
+                                Exception exception = task.getException();
+                                if (exception != null) {
+                                    Log.d("Firestore", "Errore nella lettura dei dati: " + exception.getMessage());
+                                    exception.printStackTrace();
+                                }
+                            }
+                        }
+                        Log.d("utenti", String.valueOf(db.utenteDao().getAllUtente()));
+
+
+                    } else {
+                        Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
+                    }
+                });
+
+        //Qui leggo la collection degli studenti. L'id che collega lo studente all'utente è corretto e rimane invariato.
+        // Ma ad ogni aggiornamento l'id dello studente viene incrementato.
+        //TODO: Verificare in futuro che l'aggiornamento del db e quindi l'incremento dell'id dello studente ad ogni aggiornamento non causi problemi
         firestoreDB.collection("Utenti").document("Studenti").collection("Studenti")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        //Per pulire la cache del db
                         db.studenteDao().deleteAll();
-                        db.professoreDao().deleteAll();
+
+                        //Per salvare i dati in SQLite da Firestore
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
                         for (DocumentSnapshot document : documents) {
                             Studente studente = document.toObject(Studente.class);
-                            db.studenteDao().insert(studente);
-                        }
+                            Log.d("studenti with utenti", String.valueOf(studente));
 
+                            if (studente != null) {
+                                db.studenteDao().insert(studente); // Chiama il metodo per l'inserimento o l'aggiornamento
+                            } else {
+                                Exception exception = task.getException();
+                                if (exception != null) {
+                                    Log.d("Firestore", "Errore nella lettura dei dati: " + exception.getMessage());
+                                    exception.printStackTrace();
+                                }
+                            }
+                        }
+                        Log.d("studenti", String.valueOf(db.studenteDao().getAllStudente()));
+
+
+                    } else {
+                        Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
+                    }
+                });
+
+
+        //Qui leggo la collection professori da Firebase
+        firestoreDB.collection("Utenti").document("Professori").collection("Professori")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        //Per pulire la cache del db
+                        db.professoreDao().deleteAll();
+
+                        //Per salvare i dati in SQLite da Firestore
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
                         for (DocumentSnapshot document : documents) {
                             Professore professore = document.toObject(Professore.class);
-                            db.professoreDao().insert(professore);
+                            Log.d("studenti with utenti", String.valueOf(professore));
+
+                            if (professore != null) {
+                                db.professoreDao().insert(professore); // Chiama il metodo per l'inserimento o l'aggiornamento
+                            } else {
+                                Exception exception = task.getException();
+                                if (exception != null) {
+                                    Log.d("Firestore", "Errore nella lettura dei dati: " + exception.getMessage());
+                                    exception.printStackTrace();
+                                }
+                            }
                         }
-
-                        Log.d("studenti", String.valueOf(db.studenteDao().getAllStudente()));
-                        Log.d("professori", String.valueOf(db.professoreDao().getAllProfessore()));
-
+                        Log.d("studenti", String.valueOf(db.professoreDao().getAllProfessore()));
                     } else {
                         Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
                     }

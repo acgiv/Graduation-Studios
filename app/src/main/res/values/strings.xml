@@ -23,6 +23,8 @@
     <string name="edit_icon">&#004070;</string>
     <string name="close_nav" />
     <string name="open_nav" />
+    <string name="messaggio">Messaggio</string>
+    <string name="invio">Invio</string>
 
     <string name="home">Home</string>
     <string name="tesi">Tesi</string>
@@ -80,6 +82,14 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
-  
+    <string name="Messaggi" />
+    <string name="messaggi">Messaggi</string>
+    <string name="task">Task</string>
+    <string name="arrow_forward_icon">Arrow Forward Icon</string>
+    <string name="edit_password_icon">Edit Password Icon</string>
+    <string name="taskk">Task</string>
+    <string name="classificaTesi">Classifica</string>
+    <string name="le_mie_tesi">Le Mie Tesi</string>
+    <string name="elenco_tesi">Elenco Tesi</string>
+    <string name="student_name_placeholder">%1$s %2$s</string>
 </resources>

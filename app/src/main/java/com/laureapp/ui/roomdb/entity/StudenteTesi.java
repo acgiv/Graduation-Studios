@@ -9,7 +9,8 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 
 @Entity(tableName = "Studente_Tesi", foreignKeys = {
-        @ForeignKey(entity = Tesi.class, parentColumns = "id", childColumns = "id_tesi")
+        @ForeignKey(entity = Tesi.class, parentColumns = "id", childColumns = "id_tesi"),
+        @ForeignKey(entity = Studente.class, parentColumns = "studente_id", childColumns = "studente_id")
 })
 public class StudenteTesi implements Serializable {
 
@@ -18,6 +19,17 @@ public class StudenteTesi implements Serializable {
 
     @ColumnInfo(name = "id_tesi")
     private Long id_tesi;
+
+    @ColumnInfo(name = "studente_id")
+    private Long studente_id;
+
+    public Long getStudente_id() {
+        return studente_id;
+    }
+
+    public void setStudente_id(Long studente_id) {
+        this.studente_id = studente_id;
+    }
 
     private String cld;
 

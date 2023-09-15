@@ -1,22 +1,27 @@
     package com.laureapp.ui.roomdb.entity;
 
+
     import androidx.annotation.NonNull;
     import androidx.room.ColumnInfo;
     import androidx.room.Entity;
     import androidx.room.ForeignKey;
     import androidx.room.PrimaryKey;
 
+    import com.laureapp.ui.roomdb.RoomDbSqlLite;
+
     import java.io.Serializable;
     import java.util.HashMap;
     import java.util.Map;
 
     @Entity(tableName ="Studente" , foreignKeys = {
-            @ForeignKey(entity = Utente.class, parentColumns = "id", childColumns = "id_utente")
+            @ForeignKey(entity = Utente.class, parentColumns = "utente_id", childColumns = "id_utente")
     })
     public class Studente implements Serializable {
 
         @PrimaryKey(autoGenerate = true)
+        @ColumnInfo(name = "studente_id")
         private Long id;
+
         @ColumnInfo(name = "id_utente")
         private Long id_utente;
         @ColumnInfo(name = "matricola")
@@ -30,7 +35,6 @@
         @ColumnInfo(name = "corso_laurea")
         private String corso_laurea;
 
-
         public Long getId() {
             return id;
         }
@@ -42,6 +46,7 @@
         public Long getId_utente() {
             return id_utente;
         }
+
 
         public void setId_utente(Long id_utente) {
             this.id_utente = id_utente;
@@ -112,4 +117,8 @@
                     ", corso_laurea=" + corso_laurea +
                     '}';
         }
+
+
+
+
     }

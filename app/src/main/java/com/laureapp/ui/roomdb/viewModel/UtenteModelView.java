@@ -48,7 +48,7 @@ public class UtenteModelView{
     public boolean is_exist_email_password(String email, String password){
         Utente utente = utenteRepository.is_exist_email_password(email, password);
         if (utente != null) {
-            return utente.getId() != null;
+            return utente.getId_utente() != null;
         }else{
             return false;
         }

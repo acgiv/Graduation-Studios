@@ -1,7 +1,10 @@
 package com.laureapp.ui.roomdb.repository;
+
 import android.content.Context;
+
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
-import com.laureapp.ui.roomdb.entity.Esame;
+import com.laureapp.ui.roomdb.entity.Ricevimenti;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -9,41 +12,41 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class EsameRepository {
+public class RicevimentiRepository {
 
     private final RoomDbSqlLite roomDbSqlLite;
     private final Executor executor = Executors.newSingleThreadExecutor();
 
-    public EsameRepository(Context context) {
+    public RicevimentiRepository(Context context) {
         this.roomDbSqlLite = RoomDbSqlLite.getDatabase(context);
     }
 
-    public void insertEsame(Esame esame){
-        executor.execute(() -> roomDbSqlLite.esameDao().insert(esame));
+    public void insertRicevimenti(Ricevimenti ricevimenti){
+        executor.execute(() -> roomDbSqlLite.ricevimentiDao().insert(ricevimenti));
     }
 
-    public void updateEsame(Esame esame){
-        executor.execute(() -> roomDbSqlLite.esameDao().update(esame));
+    public void updateRicevimenti(Ricevimenti ricevimenti){
+        executor.execute(() -> roomDbSqlLite.ricevimentiDao().update(ricevimenti));
     }
 
-    public Esame findAllById(Long id){
-        CompletableFuture<Esame> future = new CompletableFuture<>();
+    public Ricevimenti findAllById(Long id){
+        CompletableFuture<Ricevimenti> future = new CompletableFuture<>();
         executor.execute(() -> {
-            Esame esame = roomDbSqlLite.esameDao().findAllById(id);
-            future.complete(esame);
+            Ricevimenti ricevimenti = roomDbSqlLite.ricevimentiDao().findAllById(id);
+            future.complete(ricevimenti);
         });
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            return new Esame();
+            return new Ricevimenti();
         }
     }
 
-    public List<Esame> getAllEsame(){
-        CompletableFuture<List<Esame>> future = new CompletableFuture<>();
+    public List<Ricevimenti> getAllRicevimenti(){
+        CompletableFuture<List<Ricevimenti>> future = new CompletableFuture<>();
         executor.execute(() -> {
-            List<Esame> lista = roomDbSqlLite.esameDao().getAllEsame();
+            List<Ricevimenti> lista = roomDbSqlLite.ricevimentiDao().getAllRicevimenti();
             future.complete(lista);
         });
         try {
@@ -54,11 +57,11 @@ public class EsameRepository {
         }
     }
 
-    public boolean delateEsame(Long id){
+    public boolean deleteRicevimenti(Long id){
         boolean result = false;
-        Esame esame =  this.findAllById(id);
-        if (esame.getId() != null) {
-            executor.execute(() -> roomDbSqlLite.esameDao().delete(esame));
+        Ricevimenti ricevimenti =  this.findAllById(id);
+        if (ricevimenti.getId_ricevimento() != null) {
+            executor.execute(() -> roomDbSqlLite.ricevimentiDao().delete(ricevimenti));
             result = true;
         }
         return result;

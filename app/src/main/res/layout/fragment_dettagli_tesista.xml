@@ -13,42 +13,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <!-- ... Griglia contenente le varie card ... -->
+
+        <!-- ... bottoni home e profilo ... -->
+
         <Button
             android:id="@+id/button_elimina_tesista"
             android:layout_width="180dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="210dp"
-            android:layout_marginTop="400dp"
-            android:background="@color/red"
-            android:text="Elimina Tesista"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/button_blu"
+            android:text="@string/elimina"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/button_visualizza_task_tesista"/>
+            app:layout_constraintTop_toBottomOf="@+id/grigliaDati" />
 
         <Button
             android:id="@+id/button_visualizza_task_tesista"
-            android:layout_width="180dp"
+            android:layout_width="165dp"
             android:layout_height="50dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="-210dp"
-            android:layout_marginTop="-50dp"
-            android:background="@color/red"
-            android:text="Task"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/button_blu"
+            android:text="@string/pulsante_task"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_elimina_tesista"
+            app:layout_constraintHorizontal_bias="0.373"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_elimina_tesista"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-        <!-- ... Griglia contenente le varie card ... -->
-
-        <!-- ... bottoni home e profilo ... -->
+            app:layout_constraintTop_toBottomOf="@+id/grigliaDati" />
 
         <GridLayout
             android:id="@+id/grigliaDati"
@@ -75,15 +77,15 @@
                 android:id="@+id/cardViewAnagraficaTesista"
                 android:layout_width="375dp"
                 android:layout_height="120dp"
-                android:layout_marginTop="-180dp"
                 android:layout_row="0"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center"
                 android:layout_margin="12dp"
-                app:cardElevation="8dp"
-                app:cardCornerRadius="15dp">
+                android:layout_marginTop="-180dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="8dp">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -94,21 +96,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:background="@color/color_primary"
-                        android:visibility="visible"></View>
+                        android:visibility="visible" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="60dp"
+                        android:layout_marginStart="60dp"
                         android:layout_marginTop="-5dp"
-                        android:text="Anagrafica"
+                        android:drawablePadding="8dp"
+                        android:text="@string/anagrafica_task_tesista"
                         android:textColor="@android:color/white"
                         android:textSize="30sp"
                         android:textStyle="bold"
-                        android:drawableLeft="@drawable/baseline_person_40_white"
-                        android:drawablePadding="8dp"
-                        tools:visibility="visible"></TextView>
+                        app:drawableLeftCompat="@drawable/baseline_person_40_white"
+                        tools:visibility="visible" />
 
                     <!--Campo nome -->
                     <TextView
@@ -116,20 +118,20 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="35dp"
-                        android:text="Nome:"
+                        android:text="@string/nome_tesista_task"
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible"></TextView>
+                        tools:visibility="visible" />
                     <!--Linea grigia che separa campi di testo nome e cognome -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
                         android:layout_marginTop="63dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/darker_gray" />
 
                     <!--Campo cognome -->
                     <TextView
@@ -137,20 +139,20 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="63dp"
-                        android:text="Cognome:"
+                        android:text="@string/cognome_task_tesista"
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible"></TextView>
+                        tools:visibility="visible" />
                     <!--Linea grigia che separa campi di testo cognome e matricola -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
                         android:layout_marginTop="91dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/darker_gray" />
 
                     <!--Campo matricola -->
                     <TextView
@@ -158,13 +160,13 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="91dp"
-                        android:text="Matricola:"
+                        android:text="@string/matricola_task"
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible"></TextView>
+                        tools:visibility="visible" />
 
 
                 </FrameLayout>
@@ -175,15 +177,15 @@
                 android:id="@+id/cardViewCdlTesi"
                 android:layout_width="375dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="200dp"
                 android:layout_row="0"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center"
                 android:layout_margin="12dp"
-                app:cardElevation="8dp"
-                app:cardCornerRadius="15dp">
+                android:layout_marginTop="200dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="8dp">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -194,42 +196,42 @@
                         android:layout_width="match_parent"
                         android:layout_height="35dp"
                         android:background="@color/color_primary"
-                        android:visibility="visible"></View>
+                        android:visibility="visible" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="80dp"
+                        android:layout_marginStart="80dp"
                         android:layout_marginTop="-5dp"
-                        android:text="CDL"
+                        android:drawablePadding="8dp"
+                        android:text="@string/cdl_task_tesista"
                         android:textColor="@android:color/white"
                         android:textSize="30sp"
                         android:textStyle="bold"
-                        android:drawableLeft="@drawable/baseline_school_40_white"
-                        android:drawablePadding="8dp"
-                        tools:visibility="visible"></TextView>
+                        app:drawableLeftCompat="@drawable/baseline_school_40_white"
+                        tools:visibility="visible" />
                     <!--Campo facoltà-->
                     <TextView
                         android:id="@+id/facolta_tesista"
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="35dp"
-                        android:text="Facoltà:"
+                        android:text="@string/facolta_task_tesista"
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible"/>
+                        tools:visibility="visible" />
 
                     <!--Linea grigia che separa facoltà con ciclo cdl -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
                         android:layout_marginTop="63dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/darker_gray" />
 
                     <!--Campo ciclo cdl-->
                     <TextView
@@ -237,21 +239,21 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="63dp"
-                        android:text="Ciclo CDL:"
+                        android:text="@string/ciclo_cdl_task_tesista"
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible"/>
+                        tools:visibility="visible" />
 
                     <!--Linea grigia che separa facoltà con ciclo cdl -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
                         android:layout_marginTop="91dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/darker_gray" />
 
                     <!--Campo nome CDL-->
                     <TextView
@@ -259,21 +261,21 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="91dp"
-                        android:text="CDL:"
+                        android:text="@string/cdl_nome_task_tesista"
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible"/>
+                        tools:visibility="visible" />
 
                     <!--Linea grigia che separa  cdl con titolo tesi -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
                         android:layout_marginTop="119dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:background="@android:color/darker_gray" />
 
                     <!--Campo titolo tesi-->
                     <TextView
@@ -281,14 +283,13 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginTop="119dp"
-                        android:text="Titolo Tesi:"
+                        android:text="@string/titolo_tesi_task_tesista"
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        tools:visibility="visible"/>
-
+                        tools:visibility="visible" />
 
 
                 </FrameLayout>
@@ -308,6 +309,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
             app:menu="@menu/bottom_nav_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

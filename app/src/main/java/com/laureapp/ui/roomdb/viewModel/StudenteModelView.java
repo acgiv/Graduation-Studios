@@ -15,8 +15,8 @@ public class StudenteModelView {
 
     public void insertStudente(Studente studente){
         studenteRepository.insertStudente(studente);
+        studente.setId_studente(findStudenteMatricola(studente.getMatricola()));
     }
-
     public void updateStudente(Studente studente){
         studenteRepository.updateStudente(studente);
     }

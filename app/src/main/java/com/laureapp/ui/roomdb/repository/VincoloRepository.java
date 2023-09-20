@@ -57,10 +57,10 @@ public class VincoloRepository {
         }
     }
 
-    public boolean delateVincolo(Long id){
+    public boolean deleteVincolo(Long id){
         boolean result = false;
         Vincolo vincolo =  this.findAllById(id);
-        if (vincolo.getId() != null) {
+        if (vincolo.getId_vincolo() != null) {
             executor.execute(() -> roomDbSqlLite.vincoloDao().delete(vincolo));
             result = true;
         }

@@ -122,7 +122,7 @@ public class UtenteRepository {
     public boolean deleteUtente(Long id){
         boolean result = false;
         Utente utente =  this.findAllById(id);
-        if (utente.getId() != null) {
+        if (utente.getId_utente() != null) {
             executor.execute(() -> roomDbSqlLite.utenteDao().delete(utente));
             result = true;
         }

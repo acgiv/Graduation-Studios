@@ -21,8 +21,8 @@ public interface TesiProfessoreDao {
     @Query("SELECT * FROM Tesi_Professore")
     List<TesiProfessore> getAllTesiProfessore();
 
-    @Query("SELECT * FROM Tesi_Professore where id = :id")
-    TesiProfessore findAllById(Long id);
+    @Query("SELECT * FROM Tesi_Professore where id_tesi_professore = :idTesiProfessore")
+    TesiProfessore findAllById(Long idTesiProfessore);
 
     @Delete
     void delete(TesiProfessore tesiProfessore);

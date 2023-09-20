@@ -22,8 +22,8 @@ public interface VincoloDao {
     @Query("SELECT * FROM Vincolo")
     List<Vincolo> getAllVincolo();
 
-    @Query("SELECT * FROM Vincolo where id = :id")
-    Vincolo findAllById(Long id);
+    @Query("SELECT * FROM Vincolo where id_vincolo = :idVincolo")
+    Vincolo findAllById(Long idVincolo);
 
     @Delete
     void delete(Vincolo vincolo);

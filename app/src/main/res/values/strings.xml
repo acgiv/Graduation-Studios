@@ -69,6 +69,12 @@
         <item>Informazica</item>
         <item>Farmacia</item>
     </string-array>
+
+    <string-array name="StatoTask">
+        <item>Non iniziato</item>
+        <item>In corso</item>
+        <item>Completato</item>
+    </string-array>
     <string-array name="Corsi">
         <item>Itps</item>
         <item>Matematica</item>
@@ -92,4 +98,43 @@
     <string name="le_mie_tesi">Le Mie Tesi</string>
     <string name="elenco_tesi">Elenco Tesi</string>
     <string name="student_name_placeholder">%1$s %2$s</string>
+    <string name="add_icon_description">Icona add</string>
+    <string name="elimina">Elimina</string>
+    <string name="salva">Salva</string>
+    <string name="ricevimento_1">Ricevimento 1</string>
+    <string name="argomento">Argomento 1</string>
+    <string name="data_ricevimento">Data 1</string>
+    <string name="pulsante_task">Task</string>
+    <string name="nome_tesista_task">Nome:</string>
+    <string name="cognome_task_tesista">Cognome:</string>
+    <string name="matricola_task">Matricola:</string>
+    <string name="facolta_task_tesista">Facoltà:</string>
+    <string name="cdl_task_tesista">CDL</string>
+    <string name="ciclo_cdl_task_tesista">Ciclo CDL:</string>
+    <string name="cdl_nome_task_tesista">CDL:</string>
+    <string name="titolo_tesi_task_tesista">Titolo Tesi:</string>
+    <string name="anagrafica_task_tesista">Anagrafica</string>
+    <string name="titolo_dettagli_task">Task</string>
+    <string name="stato_task">Stato</string>
+    <string name="default_stato_task">Non iniziato</string>
+    <string name="data_inizio_dettagli_task">Data Inizio</string>
+    <string name="hint_data_inizio">Inizio</string>
+    <string name="hint_data_scadenza">Scadenza</string>
+    <string name="hint_data_scadenza_button">Data Scadenza</string>
+    <string name="text_ricevimenti_button">Ricevimenti</string>
+    <string name="text_dettagli">Dettagli</string>
+    <string name="dettagli_task_label">Task</string>
+    <string name="delete_icon">Icona per cancellare un item</string>
+    <string name="intestazione_colonna_ricevimento">Ricevimento</string>
+    <string name="intestazione_colonna_argomento">Argomento</string>
+    <string name="intestazione_colonna_data">Data</string>
+    <string name="error_scadenza_inizio">Data scadenza precedente alla data inizio.</string>
+    <string name="error_inizio_scadenza">Data inizio successiva alla scadenza</string>
+    <string name="errore_email_esistente">Esiste già un utente asscociato a questa email.</string>
+
+    <style name="CalendarDateText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+
 </resources>

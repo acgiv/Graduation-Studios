@@ -17,14 +17,20 @@ public class ProfessoreModelView {
 
     public void insertProfessore(Professore professore){
         professoreRepository.insertProfessore(professore);
+        professore.setId_professore(findProfessoreMatricola(Long.valueOf(professore.getMatricola())));
+    }
+    public  Long findProfessoreMatricola(Long matricola){
+        return professoreRepository.findProfessoreMatricola(matricola);
     }
 
     public void updateProfessore(Professore professore){
         professoreRepository.updateProfessore(professore);
     }
 
-    public boolean delateProfessore(long id){
-        return professoreRepository.delateProfessore(id);
+
+
+    public boolean deleteProfessore(long id){
+        return professoreRepository.deleteProfessore(id);
     }
 
     public Professore findAllById(Long id){

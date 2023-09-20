@@ -21,8 +21,8 @@ public interface TesiDao {
     @Query("SELECT * FROM Tesi")
     List<Tesi> getAllTesi();
 
-    @Query("SELECT * FROM Tesi where id = :id")
-    Tesi findAllById(Long id);
+    @Query("SELECT * FROM Tesi where id_tesi = :idTesi")
+    Tesi findAllById(Long idTesi);
 
     @Delete
     void delete(Tesi tesi);

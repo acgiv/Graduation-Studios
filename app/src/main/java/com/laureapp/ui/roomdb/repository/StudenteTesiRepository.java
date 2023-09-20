@@ -60,7 +60,7 @@ public class StudenteTesiRepository {
     public boolean delateStudenteTesi(Long id){
         boolean result = false;
         StudenteTesi studenteTesi =  this.findAllById(id);
-        if (studenteTesi.getId() != null) {
+        if (studenteTesi.getId_studente_tesi() != null) {
             executor.execute(() -> roomDbSqlLite.studenteTesiDao().delete(studenteTesi));
             result = true;
         }

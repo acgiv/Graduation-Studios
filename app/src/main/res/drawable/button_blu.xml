@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/color_primary" /> <!-- Colore del pulsante -->
+    <corners android:radius="12dp" /> <!-- Raggio degli angoli arrotondati -->
+</shape>

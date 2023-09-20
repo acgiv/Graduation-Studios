@@ -23,8 +23,8 @@ public class TesiProfessoreModelView {
         tesiProfessoreRepository.updateTesiProfessore(tesiProfessore);
     }
 
-    public boolean delateTesiProfessore(long id){
-        return tesiProfessoreRepository.delateTesiProfessore(id);
+    public boolean deleteTesiProfessore(long id){
+        return tesiProfessoreRepository.deleteTesiProfessore(id);
     }
 
     public TesiProfessore findAllById(Long id){

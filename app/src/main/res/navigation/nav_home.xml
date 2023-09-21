@@ -107,9 +107,9 @@
     <!--Fragment messaggi -->
     <fragment
         android:id="@+id/messaggiFragment"
-        android:name="com.laureapp.ui.home.MessaggiFragment"
-        android:label="Messaggi"
-        tools:layout="@layout/fragment_messaggi">
+        android:name="com.laureapp.ui.home.SegnalazioniFragment"
+        android:label="Lista Segnalazioni"
+        tools:layout="@layout/fragment_segnalazioni">
         <action
             android:id="@+id/action_messaggiFragment_to_discussioneFragment"
             app:destination="@id/discussioneFragment" />
@@ -122,7 +122,7 @@
     <fragment
         android:id="@+id/discussioneFragment"
         android:name="com.laureapp.ui.home.DiscussioneFragment"
-        android:label="Discussione"
+        android:label="Dettagni Segnalazione"
         tools:layout="@layout/fragment_discussione">
         <action
             android:id="@+id/action_discussioneFragment_to_messaggiFragment"

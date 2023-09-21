@@ -35,6 +35,12 @@
         <action
             android:id="@+id/action_fragment_home_to_tesisti"
             app:destination="@id/tesisti" />
+
+        <!-- Home to messaggi fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_messaggiFragment"
+            app:destination="@id/messaggiFragment" />
+
     </fragment>
 
 
@@ -73,7 +79,7 @@
     <!--Fragment tesisti -->
     <fragment
         android:id="@+id/tesisti"
-        android:name="com.laureapp.ui.card.TesistiFragment"
+        android:name="com.laureapp.ui.card.Task.TesistiFragment"
         android:label="Tesisti"
         tools:layout="@layout/fragment_tesisti">
         <!-- Tesisti to dettagli tesista fragment -->
@@ -85,8 +91,71 @@
     <!--Fragment dettagli tesista -->
     <fragment
         android:id="@+id/dettagli_tesista"
-        android:name="com.laureapp.ui.card.DettagliTesistaFragment"
+        android:name="com.laureapp.ui.card.Task.DettagliTesistaFragment"
         android:label="Tesista"
         tools:layout="@layout/fragment_dettagli_tesista">
+        <action
+            android:id="@+id/action_dettagli_tesista_to_task"
+            app:destination="@id/taskFragment" />
+
+        <!--TODO: CANCELLARE DOPO AVER AGGIORNATO IL DATABASE -->
+        <action
+            android:id="@+id/action_dettagli_tesista_to_dettagli_task"
+            app:destination="@id/dettagliTaskFragment" />
+    </fragment>
+
+    <!--Fragment messaggi -->
+    <fragment
+        android:id="@+id/messaggiFragment"
+        android:name="com.laureapp.ui.home.MessaggiFragment"
+        android:label="Messaggi"
+        tools:layout="@layout/fragment_messaggi">
+        <action
+            android:id="@+id/action_messaggiFragment_to_discussioneFragment"
+            app:destination="@id/discussioneFragment" />
+        <action
+            android:id="@+id/action_messaggiFragment_to_fragment_home"
+            app:destination="@id/fragment_home" />
+    </fragment>
+
+    <!--Fragment discussione -->
+    <fragment
+        android:id="@+id/discussioneFragment"
+        android:name="com.laureapp.ui.home.DiscussioneFragment"
+        android:label="Discussione"
+        tools:layout="@layout/fragment_discussione">
+        <action
+            android:id="@+id/action_discussioneFragment_to_messaggiFragment"
+            app:destination="@id/messaggiFragment" />
+    </fragment>
+
+    <!--Fragment task -->
+    <fragment
+        android:id="@+id/taskFragment"
+        android:name="com.laureapp.ui.card.Task.TaskTesiFragment"
+        android:label="Task"
+        tools:layout="@layout/fragment_task">
+        <action
+            android:id="@+id/action_task_to_dettagli_task"
+            app:destination="@id/dettagliTaskFragment" />
+    </fragment>
+
+    <!--Fragment dettagli task -->
+    <fragment
+        android:id="@+id/dettagliTaskFragment"
+        android:name="com.laureapp.ui.card.Task.DettagliTaskFragment"
+        android:label="Dettagli Task"
+        tools:layout="@layout/fragment_dettagli_task">
+        <action
+            android:id="@+id/action_dettagli_task_to_ricevimenti_fragment"
+            app:destination="@id/ricevimentiTaskFragment" />
+    </fragment>
+
+    <!--Fragment ricevimenti associati alle task -->
+    <fragment
+        android:id="@+id/ricevimentiTaskFragment"
+        android:name="com.laureapp.ui.card.Task.RicevimentiFragment"
+        android:label="Ricevimenti task"
+        tools:layout="@layout/fragment_ricevimenti">
     </fragment>
 </navigation>

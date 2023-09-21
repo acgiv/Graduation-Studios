@@ -1,101 +1,88 @@
     package com.laureapp.ui.roomdb.entity;
 
+
     import androidx.annotation.NonNull;
     import androidx.room.ColumnInfo;
     import androidx.room.Entity;
     import androidx.room.ForeignKey;
+    import androidx.room.Index;
     import androidx.room.PrimaryKey;
+
 
     import java.io.Serializable;
     import java.util.HashMap;
     import java.util.Map;
 
     @Entity(tableName ="Studente" , foreignKeys = {
-            @ForeignKey(entity = Utente.class, parentColumns = "id", childColumns = "id_utente")
-    })
+            @ForeignKey(entity = Utente.class, parentColumns = "id_utente", childColumns = "id_utente", onDelete = ForeignKey.CASCADE)
+    },
+            indices = {@Index("id_utente")})
     public class Studente implements Serializable {
 
+        //Colonne tabella
         @PrimaryKey(autoGenerate = true)
-        private Long id;
+        @ColumnInfo(name = "id_studente")
+        private Long id_studente;
+
         @ColumnInfo(name = "id_utente")
         private Long id_utente;
         @ColumnInfo(name = "matricola")
         private Long matricola;
         @ColumnInfo(name = "media")
         private int media;
-        @ColumnInfo(name = "esami_mancati")
-        private int esami_mancati;
-        @ColumnInfo(name = "facolta")
-        private String facolta;
-        @ColumnInfo(name = "corso_laurea")
-        private String corso_laurea;
+        @ColumnInfo(name = "esami_mancanti")
+        private int esami_mancanti;
 
+       //Getter e setter
 
-        public Long getId() {
-            return id;
+        public Long getId_studente() {
+            return id_studente;
         }
 
-        public void setId(Long id) {
-            this.id = id;
+        public void setId_studente(Long idStudente) {
+            this.id_studente = idStudente;
         }
 
         public Long getId_utente() {
             return id_utente;
         }
 
-        public void setId_utente(Long id_utente) {
-            this.id_utente = id_utente;
+
+        public void setId_utente(Long idUtente) {
+            this.id_utente = idUtente;
         }
 
         public Long getMatricola() {
             return matricola;
         }
 
-        public void setMatricola(Long matricola) {
-            this.matricola = matricola;
+        public void setMatricola(Long matricolaStudente) {
+            this.matricola = matricolaStudente;
         }
 
         public int getMedia() {
             return media;
         }
 
-        public void setMedia(int media) {
-            this.media = media;
+        public void setMedia(int mediaVoti) {
+            this.media = mediaVoti;
         }
 
-        public int getEsami_mancati() {
-            return esami_mancati;
+        public int getEsami_mancanti() {
+            return esami_mancanti;
         }
 
-        public void setEsami_mancati(int esami_mancati) {
-            this.esami_mancati = esami_mancati;
-        }
+        public void setEsami_mancanti(int esamiMancanti) {this.esami_mancanti = esamiMancanti;}
 
-        public String getFacolta() {
-            return facolta;
-        }
 
-        public void setFacolta(String facolta) {
-            this.facolta = facolta;
-        }
-
-        public String getCorso_laurea() {
-            return corso_laurea;
-        }
-
-        public void setCorso_laurea(String corso_laurea) {
-            this.corso_laurea = corso_laurea;
-        }
 
         public Map<String, Object> getStudenteMap() {
             Map<String, Object> studenteMap = new HashMap<>();
-            studenteMap.put("id_utente", id_utente);
+            studenteMap.put("id_studente",this.id_studente);
+            studenteMap.put("id_utente", this.id_utente);
             studenteMap.put("matricola", this.matricola);
             studenteMap.put("media" , this.media);
-            studenteMap.put("esami_mancati", esami_mancati);
-            studenteMap.put("facolta", facolta);
-            studenteMap.put("corso_laurea", corso_laurea);
-
+            studenteMap.put("esami_mancanti", this.esami_mancanti);
             return studenteMap;
         }
 
@@ -103,13 +90,15 @@
         @Override
         public String toString() {
             return "Studente{" +
-                    "id=" + id +
+                    "id_studente=" + id_studente +
                     ", id_utente=" + id_utente +
                     ", matricola=" + matricola +
                     ", media=" + media +
-                    ", esami_mancati=" + esami_mancati +
-                    ", facolta=" + facolta +
-                    ", corso_laurea=" + corso_laurea +
+                    ", esami_mancanti=" + esami_mancanti +
                     '}';
         }
+
+
+
+
     }

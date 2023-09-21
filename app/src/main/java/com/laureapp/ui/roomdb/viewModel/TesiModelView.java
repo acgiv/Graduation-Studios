@@ -21,7 +21,7 @@ public class TesiModelView {
         tesiRepository.updateTesi(tesi);
     }
 
-    public boolean delateTesi(long id){
+    public boolean deleteTesi(long id){
         return tesiRepository.deleteTesi(id);
     }
 

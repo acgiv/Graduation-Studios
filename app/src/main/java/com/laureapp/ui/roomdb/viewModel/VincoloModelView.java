@@ -23,8 +23,8 @@ public class VincoloModelView {
         vincoloRepository.updateVincolo(vincolo);
     }
 
-    public boolean delateVincolo(long id){
-        return vincoloRepository.delateVincolo(id);
+    public boolean deleteVincolo(long id){
+        return vincoloRepository.deleteVincolo(id);
     }
 
     public Vincolo findAllById(Long id){

@@ -1,6 +1,7 @@
 package com.laureapp.ui.roomdb.viewModel;
 import android.content.Context;
 import com.laureapp.ui.roomdb.entity.Studente;
+import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 import com.laureapp.ui.roomdb.repository.StudenteRepository;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class StudenteModelView {
 
     public void insertStudente(Studente studente){
         studenteRepository.insertStudente(studente);
+        studente.setId_studente(findStudenteMatricola(studente.getMatricola()));
     }
-
     public void updateStudente(Studente studente){
         studenteRepository.updateStudente(studente);
     }
@@ -37,4 +38,6 @@ public class StudenteModelView {
     }
 
     public Long findStudenteMatricola(Long matricola){return studenteRepository.findStudenteMatricola(matricola);}
+
+    public List <StudenteWithUtente> findStudenteIdByUtente(){return studenteRepository.findStudenteIdByUtenteId();};
 }

@@ -7,54 +7,19 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName ="Professore",foreignKeys = {
-        @ForeignKey(entity = Studente.class, parentColumns = "id", childColumns = "id_tesi"),
-        @ForeignKey(entity = Utente.class, parentColumns = "id", childColumns = "id_utente")}
+        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi"),
+        @ForeignKey(entity = Utente.class, parentColumns = "id_utente", childColumns = "id_utente"
+        )}
 )
 public class Professore implements Serializable {
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCognome() {
-        return cognome;
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    private String nome;
-    private String cognome;
-    private String email;
-    private String password;
-
-
-
 
     @PrimaryKey(autoGenerate = true)
-    private Long id;
+    @ColumnInfo(name = "id_professore")
+    private Long id_professore;
 
     @ColumnInfo(name = "id_tesi")
     private Long id_tesi;
@@ -62,12 +27,15 @@ public class Professore implements Serializable {
     @ColumnInfo(name = "id_utente")
     private Long id_utente;
 
-    public Long getId() {
-        return id;
+    @ColumnInfo(name = "matricola")
+    private String matricola;
+
+    public Long getId_professore() {
+        return id_professore;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId_professore(Long id_professore) {
+        this.id_professore = id_professore;
     }
 
     public Long getId_tesi() {
@@ -86,13 +54,31 @@ public class Professore implements Serializable {
         this.id_utente = id_utente;
     }
 
+    public String getMatricola() {
+        return matricola;
+    }
+
+    public void setMatricola(String matricola) {
+        this.matricola = matricola;
+    }
+
+    public Map<String, Object> getProfessoreMap() {
+        Map<String, Object> utenteMap = new HashMap<>();
+        utenteMap.put("id_professore", this.id_professore);
+        utenteMap.put("matricola", this.matricola);
+        utenteMap.put("id_utente", this.id_utente);
+        utenteMap.put("id_tesi", this.id_tesi);
+        return utenteMap;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "Professore{" +
-                "id=" + id +
+                "id=" + id_professore +
                 ", id_tesi=" + id_tesi +
                 ", id_utente=" + id_utente +
+                ", matricola='" + matricola + '\'' +
                 '}';
     }
 }

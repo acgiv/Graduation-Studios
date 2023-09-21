@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/HomeLayout"
@@ -39,9 +40,7 @@
             android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
-            app:cardCornerRadius="15dp"
-
-            >
+            app:cardCornerRadius="15dp">
 
 
             <LinearLayout

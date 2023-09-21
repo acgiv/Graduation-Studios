@@ -129,11 +129,8 @@
                 android:layout_width="380dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:hint="@string/corsi"
                 app:boxBackgroundMode="outline"
-                app:layout_constraintBottom_toBottomOf="parent"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/facoltaInput">
@@ -142,9 +139,35 @@
                     android:id="@+id/dropdown_corso"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:importantForAutofill="no"
                     android:background="@drawable/input_color"
                     android:ems="10"
+                    android:importantForAutofill="no"
+                    android:padding="5dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/corsoprofessoreInput"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="24dp"
+                android:hint="@string/corsi"
+                app:boxBackgroundMode="outline"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/corsoInput">
+
+                <MultiAutoCompleteTextView
+                    android:id="@+id/dropdownprofessore_corso"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_color"
+                    android:ems="10"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine|textAutoComplete"
                     android:padding="5dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,6 +188,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

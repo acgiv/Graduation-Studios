@@ -22,15 +22,30 @@ public interface UtenteDao {
     @Query("SELECT * FROM Utente")
     List<Utente> getAllUtente();
 
-    @Query("SELECT * FROM Utente where id = :id")
-    Utente findAllById(Long id);
+    @Query("SELECT * FROM Utente where id_utente = :idUtente")
+    Utente findAllById(Long idUtente);
 
     @Query("SELECT * FROM Utente where email = :email and password =:password")
     Utente is_exist_email_password(String email, String password);
 
-    @Query("SELECT id FROM Utente where email = :email ")
+    @Query("SELECT id_utente FROM Utente where email = :email ")
     Long getIdUtente(String email);
+
+    @Query("SELECT u.nome FROM Utente u, Studente s WHERE u.id_utente = s.id_studente")
+    String getNome();
+
+    @Query("SELECT u.cognome FROM Utente u, Studente s WHERE u.id_utente = s.id_studente")
+    String getCognome();
+
+    @Query("DELETE FROM professore")
+    public void deleteAll();
+
+    @Query("SELECT COUNT(*) FROM Utente WHERE id_utente = :idUtente")
+    int countUtenteById(long idUtente);
+
+
 
     @Delete
     void delete(Utente utente);
+
 }

@@ -60,7 +60,7 @@ public class TesiRepository {
     public boolean deleteTesi(Long id){
         boolean result = false;
         Tesi tesi =  this.findAllById(id);
-        if (tesi.getId() != null) {
+        if (tesi.getId_tesi() != null) {
             executor.execute(() -> roomDbSqlLite.tesiDao().delete(tesi));
             result = true;
         }

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 
 import com.laureapp.R;
+import com.laureapp.ui.roomdb.entity.Utente;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -29,6 +30,7 @@ public class HomeFragment extends Fragment {
     CardView CardTask;
     CardView CardTesisti;
     CardView CardSocial;
+    CardView CardMessaggi;
     String ruolo;
     Context context;
     Bundle args;
@@ -49,6 +51,8 @@ public class HomeFragment extends Fragment {
         if (args != null) {
             ruolo = args.getString("ruolo");
             Log.d("ruolo ", ruolo);
+            Log.d("utenteHome ", String.valueOf(args.getSerializable("Utente", Utente.class)));
+
         }
 
 
@@ -68,7 +72,7 @@ public class HomeFragment extends Fragment {
 
         CardTesi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
-                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment,args);
+                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment);
             }else if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Tesi", "cliccato tesi Professore");
             }else {
@@ -98,18 +102,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        CardTask.setOnClickListener(view1 -> {
-            if(StringUtils.equals("Studente", ruolo)){
-
-            }else if(StringUtils.equals("Professore", ruolo)){
-                Log.d("Task", "cliccato Task Professore");
-            }else {
-                Log.d("Task", "cliccato Task Ospite");
-            }
-        });
-
         CardSocial.setOnClickListener(view1 -> {
             mNav.navigate(R.id.action_fragment_home_to_social_fragment);
+        });
+
+        CardMessaggi =  view.findViewById(R.id.cardViewMessaggi);
+        CardMessaggi.setOnClickListener(view1 -> {
+            if(StringUtils.equals("Professore", ruolo)){
+                Log.d("Task", "cliccato Task Professore");
+                mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
+            }else {
+                Log.d("Task", "cliccato Task Ospite");
+                mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
+            }
         });
 
         /**

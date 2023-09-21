@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Studente;
+import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,11 +89,27 @@ public class StudenteRepository {
     public boolean deleteStudente(Long id){
         boolean result = false;
         Studente studente =  this.findAllById(id);
-        if (studente.getId() != null) {
+        if (studente.getId_studente() != null) {
             executor.execute(() -> roomDbSqlLite.studenteDao().delete(studente));
             result = true;
         }
         return result;
+    }
+
+
+    // Metodo per recuperare l'ID dello studente in base all'ID dell'utente associato
+    public List<StudenteWithUtente> findStudenteIdByUtenteId() {
+        CompletableFuture<List<StudenteWithUtente>> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            List<StudenteWithUtente> lista = roomDbSqlLite.studenteDao().findStudentiWithUtenti();
+            future.complete(lista);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Restituire una lista vuota in caso di errore
+        }
     }
 
 }

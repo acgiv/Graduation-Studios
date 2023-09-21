@@ -26,10 +26,10 @@ public class ProfessoreRepository {
         executor.execute(() -> roomDbSqlLite.professoreDao().update(professore));
     }
 
-    public Professore findAllById(Long id){
+    public Professore findAllById(Long uid) {
         CompletableFuture<Professore> future = new CompletableFuture<>();
         executor.execute(() -> {
-            Professore professore = roomDbSqlLite.professoreDao().findAllById(id);
+            Professore professore = roomDbSqlLite.professoreDao().findAllById(Long.valueOf(uid));
             future.complete(professore);
         });
         try {
@@ -39,6 +39,37 @@ public class ProfessoreRepository {
             return new Professore();
         }
     }
+
+    public Long findProfessoreMatricola(Long matricola){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.professoreDao().findProfessoreMatricola(matricola);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
+
+
+    public Professore findAllById(String uid) {
+        CompletableFuture<Professore> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Professore professore = roomDbSqlLite.professoreDao().findAllById(uid);
+            future.complete(professore);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new Professore();
+        }
+    }
+
 
     public List<Professore> getAllProfessore(){
         CompletableFuture<List<Professore>> future = new CompletableFuture<>();
@@ -54,10 +85,10 @@ public class ProfessoreRepository {
         }
     }
 
-    public boolean delateProfessore(Long id){
+    public boolean deleteProfessore(Long id){
         boolean result = false;
         Professore professore =  this.findAllById(id);
-        if (professore.getId() != null) {
+        if (professore.getId_professore() != null) {
             executor.execute(() -> roomDbSqlLite.professoreDao().delete(professore));
             result = true;
         }

@@ -40,6 +40,22 @@ public class ProfessoreRepository {
         }
     }
 
+    public Long findProfessoreMatricola(Long matricola){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.professoreDao().findProfessoreMatricola(matricola);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
+
+
     public Professore findAllById(String uid) {
         CompletableFuture<Professore> future = new CompletableFuture<>();
         executor.execute(() -> {
@@ -69,10 +85,10 @@ public class ProfessoreRepository {
         }
     }
 
-    public boolean delateProfessore(Long id){
+    public boolean deleteProfessore(Long id){
         boolean result = false;
         Professore professore =  this.findAllById(id);
-        if (professore.getId() != null) {
+        if (professore.getId_professore() != null) {
             executor.execute(() -> roomDbSqlLite.professoreDao().delete(professore));
             result = true;
         }

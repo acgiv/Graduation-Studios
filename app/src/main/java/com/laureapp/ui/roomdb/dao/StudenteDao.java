@@ -26,20 +26,20 @@ public interface StudenteDao {
     @Query("SELECT * FROM studente")
     List<Studente> getAllStudente();
 
-    @Query("SELECT * FROM studente where studente_id = :id")
-    Studente findAllById(Long id);
+    @Query("SELECT * FROM studente where id_studente = :idStudente")
+    Studente findAllById(Long idStudente);
 
-    @Query("SELECT studente_id FROM studente where id_utente = :id_utente")
+    @Query("SELECT id_studente FROM studente where id_utente = :id_utente")
     Long findStudente(Long id_utente);
 
-    @Query("SELECT studente_id FROM studente where matricola = :matricola")
+    @Query("SELECT id_studente FROM studente where matricola = :matricola")
     Long findStudenteMatricola(Long matricola);
 
-    @Query("SELECT s.*, u.* FROM Utente u, Studente s WHERE u.utente_id = s.id_utente")
+    @Query("SELECT s.*, u.* FROM Utente u, Studente s WHERE u.id_utente = s.id_utente")
     List<StudenteWithUtente> findStudentiWithUtenti();
 
     @Query("DELETE FROM studente")
-    public void deleteAll();
+    void deleteAll();
 
     @Delete
     void delete(Studente studente);

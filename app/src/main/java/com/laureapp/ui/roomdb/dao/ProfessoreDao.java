@@ -25,11 +25,14 @@ public interface ProfessoreDao {
     @Query("DELETE FROM professore")
     public void deleteAll();
 
-    @Query("SELECT * FROM professore where id = :id")
+    @Query("SELECT * FROM professore where id_professore = :id")
     Professore findAllById(Long id);
 
-    @Query("SELECT * FROM professore where id = :id")
+    @Query("SELECT * FROM professore where id_professore = :id")
     Professore findAllById(String id);
+
+    @Query("SELECT id_professore FROM professore where matricola = :matricola")
+    Long findProfessoreMatricola(Long matricola);
 
     @Delete
     void delete(Professore professore);

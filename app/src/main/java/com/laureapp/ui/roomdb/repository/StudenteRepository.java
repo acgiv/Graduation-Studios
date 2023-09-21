@@ -3,7 +3,6 @@ package com.laureapp.ui.roomdb.repository;
 import android.content.Context;
 
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
-import com.laureapp.ui.roomdb.dao.StudenteDao;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 
@@ -90,7 +89,7 @@ public class StudenteRepository {
     public boolean delateStudente(Long id){
         boolean result = false;
         Studente studente =  this.findAllById(id);
-        if (studente.getId() != null) {
+        if (studente.getId_studente() != null) {
             executor.execute(() -> roomDbSqlLite.studenteDao().delete(studente));
             result = true;
         }

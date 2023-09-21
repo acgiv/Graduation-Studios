@@ -34,6 +34,8 @@ public class HomeFragment extends Fragment {
     String ruolo;
     Context context;
     Bundle args;
+
+    Utente utente = new Utente();
     private NavController mNav;
 
     @Override
@@ -51,8 +53,12 @@ public class HomeFragment extends Fragment {
         if (args != null) {
             ruolo = args.getString("ruolo");
             Log.d("ruolo ", ruolo);
+
+            //questo è null quando ti registri
             Log.d("utenteHome ", String.valueOf(args.getSerializable("Utente", Utente.class)));
 
+            utente = (Utente) args.getSerializable("Utente");
+            args.putSerializable("Utente", utente);
         }
 
 
@@ -72,7 +78,7 @@ public class HomeFragment extends Fragment {
 
         CardTesi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
-                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment);
+                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment,args);
             }else if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Tesi", "cliccato tesi Professore");
             }else {

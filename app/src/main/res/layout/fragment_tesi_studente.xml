@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:rotation="0"
     android:visibility="visible"
-    tools:context=".ui.tesiStudente.TesiStudenteFragment">
+    tools:context=".ui.TesiStudente.TesiStudenteFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

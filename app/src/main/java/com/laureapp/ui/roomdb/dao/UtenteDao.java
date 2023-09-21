@@ -43,9 +43,16 @@ public interface UtenteDao {
     @Query("SELECT COUNT(*) FROM Utente WHERE id_utente = :idUtente")
     int countUtenteById(long idUtente);
 
+    /**
+     *
+     * Forse è da fixare
+     */
+    @Query("SELECT u.email FROM Utente u ")
+    String getEmail();
 
 
     @Delete
     void delete(Utente utente);
+
 
 }

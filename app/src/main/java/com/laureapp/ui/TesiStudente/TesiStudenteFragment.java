@@ -1,4 +1,4 @@
-package com.laureapp.ui.tesiStudente;
+package com.laureapp.ui.TesiStudente;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,26 +10,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.laureapp.R;
-import com.laureapp.ui.roomdb.RoomDbSqlLite;
-import com.laureapp.ui.roomdb.entity.Studente;
-import com.laureapp.ui.roomdb.entity.Tesi;
-import com.laureapp.ui.roomdb.entity.Utente;
-import com.laureapp.ui.roomdb.repository.StudenteRepository;
-import com.laureapp.ui.roomdb.repository.TesiRepository;
-import com.laureapp.ui.roomdb.repository.UtenteRepository;
-import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TesiStudenteFragment extends Fragment {
     Context context;
@@ -49,8 +33,12 @@ public class TesiStudenteFragment extends Fragment {
 
         args = getArguments(); //prendo gli argomenti passati dalla home (nel caso del login: login -> home -> tesi)
         if (args != null) {
-             email = (String) args.getSerializable("email"); //prendo il valore relativo alla email
-             id_utente = utenteView.getIdUtente(email); //ne ricavo l'id dell'utente
+
+             email = utenteView.getEmail(); //prendo il valore relativo alla email
+             Log.d("ide", String.valueOf(args));
+             Log.d("idde", String.valueOf(email));
+
+            id_utente = utenteView.getIdUtente(email); //ne ricavo l'id dell'utente
         }
 
         return id_utente;

@@ -57,10 +57,10 @@ public class TesiProfessoreRepository {
         }
     }
 
-    public boolean delateTesiProfessore(Long id){
+    public boolean deleteTesiProfessore(Long id){
         boolean result = false;
         TesiProfessore tesiProfessore =  this.findAllById(id);
-        if (tesiProfessore.getId() != null) {
+        if (tesiProfessore.getId_tesi_professore() != null) {
             executor.execute(() -> roomDbSqlLite.tesiProfessoreDao().delete(tesiProfessore));
             result = true;
         }

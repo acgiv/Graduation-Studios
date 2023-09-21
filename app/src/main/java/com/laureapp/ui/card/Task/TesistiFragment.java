@@ -1,4 +1,4 @@
-package com.laureapp.ui.card;
+package com.laureapp.ui.card.Task;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -74,7 +74,6 @@ public class TesistiFragment extends Fragment {
         CollectionReference studentsRef = firestoreDB.collection("Utenti").document("Studenti").collection("Studenti");
         mNav = Navigation.findNavController(view);
         ListView listView = view.findViewById(R.id.listView);
-        aggiornaDb();
 
         studentsRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -97,6 +96,7 @@ public class TesistiFragment extends Fragment {
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                         @Override
                         public boolean onQueryTextSubmit(String query) {
+                            adapter.getFilter().filter(query);
                             return false;
                         }
 
@@ -112,13 +112,13 @@ public class TesistiFragment extends Fragment {
 
     }
 
+
     /**
      * Questo adapter fornisce l'accesso ai data Item. In questo caso,
-     * ai ListItem della ListView e si occupare di settare graficamente
+     * ai ListItem della ListView e si occupa di settare graficamente
      * gli elementi della lista
      */
     class StudentAdapter extends ArrayAdapter<StudenteWithUtente> {
-        private final LayoutInflater inflater;
         private final List<StudenteWithUtente> studentList;
         private List<StudenteWithUtente> filteredStudentList;
 
@@ -130,7 +130,7 @@ public class TesistiFragment extends Fragment {
          */
         public StudentAdapter(Context context, List<StudenteWithUtente> studentList ) {
             super(context, 0, studentList);
-            inflater = LayoutInflater.from(context);
+            LayoutInflater.from(context);
             this.studentList = studentList;
             this.filteredStudentList = new ArrayList<>(studentList);
 
@@ -147,28 +147,29 @@ public class TesistiFragment extends Fragment {
          */
         @NonNull
         @Override
-        public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-            Studente studente = getItem(position).getStudente();
-            Utente utente = getItem(position).getUtente();
+        public View getView(int position, @NonNull View convertView, @NonNull ViewGroup parent) {
+            // Check if convertView is null, and if so, inflate the layout
             if (convertView == null) {
+                LayoutInflater inflater = LayoutInflater.from(getContext());
                 convertView = inflater.inflate(R.layout.lista_tesisti, parent, false);
             }
 
-            if (studente != null) {
+            Studente studente = getItem(position).getStudente();
+            Utente utente = getItem(position).getUtente();
+
+
+            if (studente != null && utente != null) {
                 TextView nomeTextView = convertView.findViewById(R.id.nomeTextView);
                 TextView matricolaTextView = convertView.findViewById(R.id.matricolaTextView);
 
-                if (nomeTextView != null && matricolaTextView != null) {
-                    // Ottieni il nome e il cognome dall'oggetto Utente associato allo studente
                     String studentName = getString(R.string.student_name_placeholder, utente.getNome(), utente.getCognome());
-                    Log.d("Lista Nome Cognome Tesisti", studentName);
                     nomeTextView.setText(studentName);
                     matricolaTextView.setText(String.valueOf(studente.getMatricola()));
-                }
             }
 
             return convertView;
         }
+
 
 
         @NonNull
@@ -241,8 +242,12 @@ public class TesistiFragment extends Fragment {
 
                             assert studenteWithUtente != null;
                             if (studenteWithUtente.getUtente() != null) {
-                                db.utenteDao().insert(studenteWithUtente.getUtente());
-                            } else {
+                                int count = db.utenteDao().countUtenteById(studenteWithUtente.getUtente().getId_utente());
+                                if (count > 0) {
+                                    db.utenteDao().insert(studenteWithUtente.getUtente());
+
+
+                                }
                                 Exception exception = task.getException();
                                 if (exception != null) {
                                     Log.d("Firestore", "Errore nella lettura dei dati: " + exception.getMessage());
@@ -250,6 +255,7 @@ public class TesistiFragment extends Fragment {
                                 }
                             }
                         }
+                        aggiornaStudentiDb();
                         Log.d("utenti", String.valueOf(db.utenteDao().getAllUtente()));
 
 
@@ -258,39 +264,6 @@ public class TesistiFragment extends Fragment {
                     }
                 });
 
-        //Qui leggo la collection degli studenti. L'id che collega lo studente all'utente è corretto e rimane invariato.
-        // Ma ad ogni aggiornamento l'id dello studente viene incrementato.
-        //TODO: Verificare in futuro che l'aggiornamento del db e quindi l'incremento dell'id dello studente ad ogni aggiornamento non causi problemi
-        firestoreDB.collection("Utenti").document("Studenti").collection("Studenti")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        //Per pulire la cache del db
-                        db.studenteDao().deleteAll();
-
-                        //Per salvare i dati in SQLite da Firestore
-                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                        for (DocumentSnapshot document : documents) {
-                            Studente studente = document.toObject(Studente.class);
-                            Log.d("studenti with utenti", String.valueOf(studente));
-
-                            if (studente != null) {
-                                db.studenteDao().insert(studente); // Chiama il metodo per l'inserimento o l'aggiornamento
-                            } else {
-                                Exception exception = task.getException();
-                                if (exception != null) {
-                                    Log.d("Firestore", "Errore nella lettura dei dati: " + exception.getMessage());
-                                    exception.printStackTrace();
-                                }
-                            }
-                        }
-                        Log.d("studenti", String.valueOf(db.studenteDao().getAllStudente()));
-
-
-                    } else {
-                        Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
-                    }
-                });
 
 
         //Qui leggo la collection professori da Firebase
@@ -318,6 +291,57 @@ public class TesistiFragment extends Fragment {
                             }
                         }
                         Log.d("studenti", String.valueOf(db.professoreDao().getAllProfessore()));
+                    } else {
+                        Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
+                    }
+                });
+    }
+
+
+    private void aggiornaStudentiDb() {
+        //Qui leggo la collection degli studenti. L'id che collega lo studente all'utente è corretto e rimane invariato.
+        // Ma ad ogni aggiornamento l'id dello studente viene incrementato.
+        //TODO: Verificare in futuro che l'aggiornamento del db e quindi l'incremento dell'id dello studente ad ogni aggiornamento non causi problemi
+        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+        RoomDbSqlLite db = RoomDbSqlLite.getDatabase(context.getApplicationContext());
+        firestoreDB.collection("Utenti").document("Studenti").collection("Studenti")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        //Per pulire la cache del db
+                        db.studenteDao().deleteAll();
+
+                        //Per salvare i dati in SQLite da Firestore
+                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                        for (DocumentSnapshot document : documents) {
+                            StudenteWithUtente studenteWithUtente = document.toObject(StudenteWithUtente.class);// Converte il documento in un oggetto Studente
+                            Log.d("studenti with utenti", String.valueOf(studenteWithUtente));
+
+                            if (studenteWithUtente != null && studenteWithUtente.getUtente() != null) {
+                                int count = db.utenteDao().countUtenteById(studenteWithUtente.getUtente().getId_utente());
+                                if (count > 0) {
+                                    db.studenteDao().insert(studenteWithUtente.getStudente());
+                                } else {
+                                    // Gestisci il caso in cui l'utente non esiste
+
+                                    /*assert studenteWithUtente != null;
+                                    if (studenteWithUtente.getUtente() != null) {
+                                        db.utenteDao().insert(studenteWithUtente.getUtente());
+                                        db.studenteDao().insert(studenteWithUtente.getStudente());
+                                    } else {*/
+                                    Exception exception = task.getException();
+                                    if (exception != null) {
+                                        Log.d("Firestore", "Errore nella lettura dei dati: " + exception.getMessage());
+                                        exception.printStackTrace();
+                                    }
+                                    // }
+                                }
+                            }
+
+                        }
+                        Log.d("studenti", String.valueOf(db.studenteDao().getAllStudente()));
+
+
                     } else {
                         Log.d("Firestore", "Errore nella lettura dei dati: " + task.getException());
                     }

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 
 import com.laureapp.R;
+import com.laureapp.ui.roomdb.entity.Utente;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -50,6 +51,8 @@ public class HomeFragment extends Fragment {
         if (args != null) {
             ruolo = args.getString("ruolo");
             Log.d("ruolo ", ruolo);
+            Log.d("utenteHome ", String.valueOf(args.getSerializable("Utente", Utente.class)));
+
         }
 
 

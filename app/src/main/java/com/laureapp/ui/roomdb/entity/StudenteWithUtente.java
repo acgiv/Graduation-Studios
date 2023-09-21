@@ -7,7 +7,7 @@ public class StudenteWithUtente {
     @Embedded
     public Studente studente;
 
-    @Embedded
+    @Embedded(prefix = "utente_") // Add prefix to avoid naming conflict
     public Utente utente;
 
     public Studente getStudente() {
@@ -25,6 +25,4 @@ public class StudenteWithUtente {
     public void setUtente(Utente utente) {
         this.utente = utente;
     }
-
-
 }

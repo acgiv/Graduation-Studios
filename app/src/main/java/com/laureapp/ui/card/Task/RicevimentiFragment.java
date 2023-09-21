@@ -1,4 +1,4 @@
-package com.laureapp.ui.card;
+package com.laureapp.ui.card.Task;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import com.laureapp.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DettagliTesistaFragment#newInstance} factory method to
+ * Use the {@link RicevimentiFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DettagliTesistaFragment extends Fragment {
+public class RicevimentiFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class DettagliTesistaFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DettagliTesistaFragment() {
+    public RicevimentiFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class DettagliTesistaFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DettagliTesista.
+     * @return A new instance of fragment RicevimentiFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DettagliTesistaFragment newInstance(String param1, String param2) {
-        DettagliTesistaFragment fragment = new DettagliTesistaFragment();
+    public static RicevimentiFragment newInstance(String param1, String param2) {
+        RicevimentiFragment fragment = new RicevimentiFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class DettagliTesistaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dettagli_tesista, container, false);
+        return inflater.inflate(R.layout.fragment_ricevimenti, container, false);
     }
 }

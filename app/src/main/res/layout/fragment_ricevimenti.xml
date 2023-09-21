@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Barra blu -->
+    <LinearLayout
+        android:id="@+id/blueBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_primary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Intestazione "Ricevimento" -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:gravity="center"
+            android:text="@string/intestazione_colonna_ricevimento"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Separatore -->
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="15dp"
+            android:background="#CCCCCC" />
+
+        <!-- Intestazione "Argomento" -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@color/color_primary"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <!-- Intestazione "Argomento" -->
+            <TextView
+                android:layout_width="112dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="@string/intestazione_colonna_argomento"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Separatore -->
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:background="#CCCCCC" />
+
+        <!-- Intestazione "Data" -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@color/color_primary"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/intestazione_colonna_data"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="130dp"
+                android:layout_height="59dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_horizontal"
+                android:text="@string/intestazione_colonna_argomento"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Lista di task -->
+    <ListView
+        android:id="@+id/listRicevimentiView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/blueBar"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"/>
+
+    <ImageView
+        android:id="@+id/add_ricevimento_ImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_add_circle_48"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/listRicevimentiView"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/add_icon_description"/>
+
+</RelativeLayout>

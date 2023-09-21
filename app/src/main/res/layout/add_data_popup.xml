@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Barra di testo per inserire titolo task -->
+    <EditText
+        android:id="@+id/editTextTitolo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Titolo"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Pulsante per Inizio -->
+    <Button
+        android:id="@+id/inserisciDataInizioButton"
+        style="Base.Theme.LaureApp"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/input_color"
+        android:hint="Inizio"
+        android:paddingStart="16dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/color_primary"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextTitolo"
+        tools:ignore="RtlCompat,RtlSymmetry" />
+
+    <!-- Pulsante per Scadenza -->
+    <Button
+        android:id="@+id/inserisciDataScadenzaButton"
+        style="Base.Theme.LaureApp"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="90dp"
+        android:background="@drawable/input_color"
+        android:hint="@string/hint_data_scadenza_button"
+        android:paddingStart="16dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/color_primary"
+        app:backgroundTint="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextTitolo"
+        tools:ignore="RtlCompat,RtlSymmetry" />
+
+    <!-- TextView per l'errore di Data Scadenza -->
+    <TextView
+        android:id="@+id/errorDueDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:text="@string/error_scadenza_inizio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inserisciDataScadenzaButton" />
+
+    <!-- CalendarView -->
+    <CalendarView
+        android:id="@+id/calendarAddStartTaskView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:dateTextAppearance="@style/CalendarDateText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/errorDueDate"
+        tools:ignore="MissingConstraints" />
+
+    <!-- Altre barre di testo per ulteriori dati se necessario -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

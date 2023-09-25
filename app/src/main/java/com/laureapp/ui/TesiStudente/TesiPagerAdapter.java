@@ -1,19 +1,29 @@
 package com.laureapp.ui.TesiStudente;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+
 public class TesiPagerAdapter extends FragmentPagerAdapter {
     private static final int NUM_TABS = 3; // Il numero di tab che hai
-    private Bundle args; // Aggiungi una variabile per gli argomenti
+    Context context;
+    String email;
+    Bundle args;
+    UtenteModelView utenteView =  new UtenteModelView(context);
+    Long id_utente;
 
-    public TesiPagerAdapter(FragmentManager fragmentManager) {
+    public TesiPagerAdapter(FragmentManager fragmentManager, Bundle args) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.args = args;
     }
+
 
     @Override
     public Fragment getItem(int position) {
@@ -22,11 +32,14 @@ public class TesiPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 LeMieTesiFragment leMieTesiFragment = new LeMieTesiFragment();
                 leMieTesiFragment.setArguments(args); // Passa gli argomenti
+                Log.d("q2ui", String.valueOf(args));
                 return leMieTesiFragment;
 
             case 1:
                 ClassificaTesiFragment classificaTesiFragment = new ClassificaTesiFragment();
                 classificaTesiFragment.setArguments(args); // Passa gli argomenti
+
+
                 return classificaTesiFragment;
 
             case 2:
@@ -43,6 +56,12 @@ public class TesiPagerAdapter extends FragmentPagerAdapter {
         return NUM_TABS;
     }
 
+
+    /**
+     * In questo metodo vengono mostrati i titoli delle varie tab
+     * @param position The position of the title requested
+     * @return
+     */
     @Override
     public CharSequence getPageTitle(int position) {
         // Restituisci il titolo per ciascun tab
@@ -57,4 +76,7 @@ public class TesiPagerAdapter extends FragmentPagerAdapter {
                 return null;
         }
     }
+
+
+
 }

@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.laureapp.R;
+import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 public class TesiStudenteFragment extends Fragment {
@@ -22,27 +24,7 @@ public class TesiStudenteFragment extends Fragment {
     UtenteModelView utenteView =  new UtenteModelView(context);
     Long id_utente;
 
-    /**
-     * Metodo che mi serve per ottenere l'id dell'utente ottenuto
-     * dalla mail passata come argomento in LoginFragment nel passaggio dalla pagina di login alla home
-     * @param savedInstanceState
-     *
-     * @return l'email dello studente
-     */
-    private Long getIdUtente(Bundle savedInstanceState){
 
-        args = getArguments(); //prendo gli argomenti passati dalla home (nel caso del login: login -> home -> tesi)
-        if (args != null) {
-
-             email = utenteView.getEmail(); //prendo il valore relativo alla email
-             Log.d("ide", String.valueOf(args));
-             Log.d("idde", String.valueOf(email));
-
-            id_utente = utenteView.getIdUtente(email); //ne ricavo l'id dell'utente
-        }
-
-        return id_utente;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +42,18 @@ public class TesiStudenteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
+        args = getArguments();
         TabLayout tabLayout = view.findViewById(R.id.TabLayoutTesi);
+        ViewPager viewPager = view.findViewById(R.id.viewPagerTesi); // Add this line to get the ViewPager
 
+        // Attach the ViewPager to the TabLayout
+        tabLayout.setupWithViewPager(viewPager);
+
+        // Create an instance of your TesiPagerAdapter and pass the arguments
+        TesiPagerAdapter adapter = new TesiPagerAdapter(getChildFragmentManager(),args);
+
+        // Set the adapter to the ViewPager
+        viewPager.setAdapter(adapter);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
@@ -70,8 +62,6 @@ public class TesiStudenteFragment extends Fragment {
                 switch (position){
                     case 0:
 
-                        id_utente = getIdUtente(args);
-                        Log.d("id", String.valueOf(id_utente));
                         break;
 
                     case 1:

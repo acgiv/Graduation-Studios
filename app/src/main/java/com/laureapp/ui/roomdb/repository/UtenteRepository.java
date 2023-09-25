@@ -88,10 +88,10 @@ public class UtenteRepository {
         }
     }
 
-    public String getEmail(){
+    public String getEmail(Long id_utente){
         CompletableFuture<String> future = new CompletableFuture<>();
         executor.execute(() -> {
-            String email = roomDbSqlLite.utenteDao().getEmail();
+            String email = roomDbSqlLite.utenteDao().getEmail(id_utente);
             future.complete(email);
         });
         try {

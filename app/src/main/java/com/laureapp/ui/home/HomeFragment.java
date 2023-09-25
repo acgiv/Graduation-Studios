@@ -2,6 +2,7 @@ package com.laureapp.ui.home;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.res.Configuration;
 
@@ -59,6 +60,8 @@ public class HomeFragment extends Fragment {
 
             utente = (Utente) args.getSerializable("Utente");
             args.putSerializable("Utente", utente);
+
+
         }
 
 

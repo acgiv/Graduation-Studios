@@ -3,9 +3,7 @@ package com.laureapp.ui.roomdb.viewModel;
 import android.content.Context;
 
 import com.laureapp.ui.roomdb.entity.TaskTesi;
-import com.laureapp.ui.roomdb.entity.UtenteCdl;
 import com.laureapp.ui.roomdb.repository.TaskTesiRepository;
-import com.laureapp.ui.roomdb.repository.UtenteCdlRepository;
 
 import java.util.List;
 

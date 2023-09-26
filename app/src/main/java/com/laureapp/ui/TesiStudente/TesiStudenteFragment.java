@@ -54,37 +54,7 @@ public class TesiStudenteFragment extends Fragment {
 
         // Set the adapter to the ViewPager
         viewPager.setAdapter(adapter);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-                switch (position){
-                    case 0:
-
-                        break;
-
-                    case 1:
-                        Log.d("Tag", "Selected Tab Position 1 ");
-                        break;
-
-                    case 2:
-                        Log.d("Tag", "Selected Tab Position 2 ");
-                        break;
-
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                // This method will be called when a tab is unselected.
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                // This method will be called when a tab is reselected (if applicable).
-            }
-        });
 
 
     }

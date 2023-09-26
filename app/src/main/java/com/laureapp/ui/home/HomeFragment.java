@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment {
     Context context;
     Bundle args;
 
+    String email;
     Utente utente = new Utente();
     private NavController mNav;
 
@@ -54,9 +55,9 @@ public class HomeFragment extends Fragment {
         if (args != null) {
             ruolo = args.getString("ruolo");
             Log.d("ruolo ", ruolo);
-
-            //questo è null quando ti registri
+            //questo è null quando fai login
             Log.d("utenteHome ", String.valueOf(args.getSerializable("Utente", Utente.class)));
+            saveEmailToSharedPreferences(args.getString("email"));
 
             utente = (Utente) args.getSerializable("Utente");
             args.putSerializable("Utente", utente);
@@ -136,5 +137,19 @@ public class HomeFragment extends Fragment {
 
     }
 
+    /**
+     * Salvo la mail ottenuta dal login e dalla registrazine passata mediante i Bundle
+     * Il metodo crea un "file" di preferenze denominato preferenze ed inserisce mediante
+     * l'editor la mail.
+     * Si potrebbero passare tutti i dati ma SharedPreferences è pensato per passare piccole quantità di dati
+     *
+     * @param email
+     */
+    private void saveEmailToSharedPreferences(String email) {
+        SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("email", email);
+        editor.apply();
+    }
 
 }

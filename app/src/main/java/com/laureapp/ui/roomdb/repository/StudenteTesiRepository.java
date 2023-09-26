@@ -66,4 +66,18 @@ public class StudenteTesiRepository {
         }
         return result;
     }
+
+    public Long getIdTesiFromIdStudente(Long id_studente){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.studenteTesiDao().findIdTesiByIdStudente(id_studente);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
 }

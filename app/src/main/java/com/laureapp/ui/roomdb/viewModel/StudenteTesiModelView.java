@@ -23,7 +23,7 @@ public class StudenteTesiModelView {
         studenteTesiRepository.updateStudenteTesi(studenteTesi);
     }
 
-    public boolean delateStudenteTesi(long id){
+    public boolean deleteStudenteTesi(long id){
         return studenteTesiRepository.delateStudenteTesi(id);
     }
 
@@ -34,4 +34,9 @@ public class StudenteTesiModelView {
     public List<StudenteTesi> getAllStudenteTesi(){
         return studenteTesiRepository.getAllStudenteTesi();
     }
+
+    public Long getIdTesiFromIdStudente(Long id){
+        return studenteTesiRepository.getIdTesiFromIdStudente(id);
+    }
+
 }

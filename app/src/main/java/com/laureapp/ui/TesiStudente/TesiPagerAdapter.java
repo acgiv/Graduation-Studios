@@ -32,7 +32,7 @@ public class TesiPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 LeMieTesiFragment leMieTesiFragment = new LeMieTesiFragment();
                 leMieTesiFragment.setArguments(args); // Passa gli argomenti
-                Log.d("q2ui", String.valueOf(args));
+
                 return leMieTesiFragment;
 
             case 1:

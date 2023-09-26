@@ -22,6 +22,10 @@ public interface StudenteTesiDao {
     @Query("SELECT * FROM Studente_Tesi where id_studente_tesi = :idStudenteTesi")
     StudenteTesi findAllById(Long idStudenteTesi);
 
+    @Query("SELECT id_tesi FROM Studente_Tesi WHERE id_studente = :idStudente")
+    Long findIdTesiByIdStudente(Long idStudente);
+
     @Delete
     void delete(StudenteTesi studenteTesi);
+
 }

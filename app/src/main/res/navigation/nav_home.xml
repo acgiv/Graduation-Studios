@@ -104,7 +104,7 @@
             app:destination="@id/dettagliTaskFragment" />
     </fragment>
 
-    <!--Fragment messaggi -->
+    <!--Fragment segnalazioni -->
     <fragment
         android:id="@+id/messaggiFragment"
         android:name="com.laureapp.ui.home.SegnalazioniFragment"

@@ -6,6 +6,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName ="Vincolo")
 public class Vincolo implements Serializable {
@@ -67,6 +69,17 @@ public class Vincolo implements Serializable {
 
     public void setSkill(String skill_necessarie) {
         skill = skill_necessarie;
+    }
+
+
+    public Map<String, Object> getVincoloMap() {
+        Map<String, Object> vincoloMap = new HashMap<>();
+        vincoloMap.put("id_vincolo",this.id_vincolo);
+        vincoloMap.put("tempistiche", this.tempistiche);
+        vincoloMap.put("media_voti", this.media_voti);
+        vincoloMap.put("esami_mancanti_necessari", this.esami_mancanti_necessari);
+        vincoloMap.put("skill", this.skill);
+        return vincoloMap;
     }
 
     @NonNull

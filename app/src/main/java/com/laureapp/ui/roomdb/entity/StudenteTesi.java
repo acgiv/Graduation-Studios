@@ -8,6 +8,8 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName = "Studente_Tesi", foreignKeys = {
         @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi"),
@@ -55,6 +57,16 @@ public class StudenteTesi implements Serializable {
 
     public Long getId_tesi_From_studente(Long idStudente) {
         return id_tesi;
+    }
+
+    public Map<String, Object> getStudenteTesiMap() {
+        Map<String, Object> studenteTesiMap = new HashMap<>();
+        studenteTesiMap.put("id_studente_tesi", this.id_studente_tesi);
+        studenteTesiMap.put("id_tesi",this.id_tesi);
+        studenteTesiMap.put("id_studente", this.id_studente);
+
+
+        return studenteTesiMap;
     }
 
 

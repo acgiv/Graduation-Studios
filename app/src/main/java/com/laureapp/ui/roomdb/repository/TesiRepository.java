@@ -67,17 +67,5 @@ public class TesiRepository {
         return result;
     }
 
-    public List<Tesi> getTesiByStudente(long idStudenteLoggato) {
-        CompletableFuture<List<Tesi>> future = new CompletableFuture<>();
-        executor.execute(() -> {
-            List<Tesi> listaTesibyStudente = roomDbSqlLite.tesiDao().getTesiByStudente(idStudenteLoggato);
-            future.complete(listaTesibyStudente);
-        });
-        try {
-            return future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return new ArrayList<>(); // Restituire una lista vuota in caso di errore
-        }
-    }
+
 }

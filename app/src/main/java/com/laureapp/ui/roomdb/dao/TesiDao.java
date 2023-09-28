@@ -27,7 +27,5 @@ public interface TesiDao {
     @Delete
     void delete(Tesi tesi);
 
-    @Query("SELECT * FROM Tesi WHERE id_studente = :idStudenteLoggato")
-    List<Tesi> getTesiByStudente(long idStudenteLoggato);
 
 }

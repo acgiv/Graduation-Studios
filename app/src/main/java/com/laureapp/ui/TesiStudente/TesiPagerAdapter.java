@@ -2,26 +2,27 @@ package com.laureapp.ui.TesiStudente;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+
+import java.util.ArrayList;
 
 public class TesiPagerAdapter extends FragmentPagerAdapter {
     private static final int NUM_TABS = 3; // Il numero di tab che hai
     Context context;
     String email;
     Bundle args;
-    UtenteModelView utenteView =  new UtenteModelView(context);
-    Long id_utente;
+
 
     public TesiPagerAdapter(FragmentManager fragmentManager, Bundle args) {
         super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.args = args;
+
     }
 
 

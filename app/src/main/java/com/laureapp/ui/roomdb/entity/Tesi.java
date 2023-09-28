@@ -13,10 +13,9 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity(tableName ="Tesi", foreignKeys = {
-        @ForeignKey(entity = Studente.class, parentColumns = "id_studente", childColumns = "id_studente"),
         @ForeignKey(entity = Vincolo.class, parentColumns = "id_vincolo", childColumns = "id_vincolo")
 },
-        indices = {@Index("id_studente"), @Index("id_vincolo") })
+        indices = {@Index("id_vincolo") })
 public class Tesi implements Serializable {
 
     //Colonne tabella
@@ -24,8 +23,6 @@ public class Tesi implements Serializable {
     @ColumnInfo(name = "id_tesi")
     private Long id_tesi;
 
-    @ColumnInfo(name = "id_studente")
-    private Long id_studente;
 
     @ColumnInfo(name = "id_vincolo")
     private Long id_vincolo;
@@ -49,13 +46,6 @@ public class Tesi implements Serializable {
 
     public void setId_tesi(Long idTesi) {this.id_tesi = idTesi;}
 
-    public Long getId_studente() {
-        return id_studente;
-    }
-
-    public void setId_studente(Long idStudente) {
-        this.id_studente = idStudente;
-    }
 
     public Long getId_vincolo() {
         return id_vincolo;
@@ -102,7 +92,6 @@ public class Tesi implements Serializable {
     public String toString() {
         return "Tesi{" +
                 "id=" + id_tesi +
-                ", id_studente=" + id_studente +
                 ", id_vincolo=" + id_vincolo +
                 ", titolo='" + titolo + '\'' +
                 ", Tipologia='" + tipologia + '\'' +
@@ -110,5 +99,7 @@ public class Tesi implements Serializable {
                 ", data_publicazione=" + data_pubblicazione +
                 '}';
     }
+
+
 }
 

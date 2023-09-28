@@ -2,9 +2,11 @@ package com.laureapp.ui.roomdb.viewModel;
 
 import android.content.Context;
 
+import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.repository.StudenteTesiRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudenteTesiModelView {
@@ -38,5 +40,6 @@ public class StudenteTesiModelView {
     public Long getIdTesiFromIdStudente(Long id){
         return studenteTesiRepository.getIdTesiFromIdStudente(id);
     }
+
 
 }

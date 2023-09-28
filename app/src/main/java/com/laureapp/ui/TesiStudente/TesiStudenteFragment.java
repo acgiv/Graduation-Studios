@@ -2,7 +2,6 @@ package com.laureapp.ui.TesiStudente;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.laureapp.R;
-import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 public class TesiStudenteFragment extends Fragment {

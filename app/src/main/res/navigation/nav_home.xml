@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_fragment_home_to_messaggiFragment"
             app:destination="@id/messaggiFragment" />
+        <action
+            android:id="@+id/action_fragment_home_to_listaTesi"
+            app:destination="@id/listaTesi" />
 
     </fragment>
 
@@ -158,4 +161,9 @@
         android:label="Ricevimenti task"
         tools:layout="@layout/fragment_ricevimenti">
     </fragment>
+    <fragment
+        android:id="@+id/listaTesi"
+        android:name="com.laureapp.ListaTesi"
+        android:label="ListaTesi"
+        tools:layout="@layout/fragment_lista_tesi"/>
 </navigation>

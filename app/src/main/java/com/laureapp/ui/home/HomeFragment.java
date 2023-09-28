@@ -74,6 +74,7 @@ public class HomeFragment extends Fragment {
             if(StringUtils.equals("Studente", ruolo)){
                 mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment);
             }else if(StringUtils.equals("Professore", ruolo)){
+                mNav.navigate(R.id.action_fragment_home_to_listaTesi);
                 Log.d("Tesi", "cliccato tesi Professore");
             }else {
                 mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment);

@@ -11,6 +11,8 @@ import com.google.type.DateTime;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName = "Ricevimenti", foreignKeys = {
         @ForeignKey(entity = TaskTesi.class, parentColumns = "id_task", childColumns = "id_task")},
@@ -62,6 +64,15 @@ public class Ricevimenti implements Serializable {
 
     public void setData_ricevimento(Timestamp dataRicevimento) {
         this.data_ricevimento = dataRicevimento;
+    }
+
+    public Map<String, Object> getRicevimentiMap() {
+        Map<String, Object> getRicevimentiMap = new HashMap<>();
+        getRicevimentiMap.put("id_ricevimento",this.id_ricevimento);
+        getRicevimentiMap.put("id_task", this.id_task);
+        getRicevimentiMap.put("argomento", this.argomento);
+        getRicevimentiMap.put("data_ricevimento", this.data_ricevimento);
+        return getRicevimentiMap;
     }
 
     @Override

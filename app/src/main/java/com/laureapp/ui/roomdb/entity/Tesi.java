@@ -8,9 +8,9 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName ="Tesi", foreignKeys = {
         @ForeignKey(entity = Vincolo.class, parentColumns = "id_vincolo", childColumns = "id_vincolo")
@@ -38,6 +38,10 @@ public class Tesi implements Serializable {
 
     @ColumnInfo(name="data_pubblicazione")
     private Timestamp data_pubblicazione;
+
+
+    @ColumnInfo(name="ciclo_cdl")
+    private String ciclo_cdl;
 
     //Getter e setter
     public Long getId_tesi() {
@@ -85,6 +89,30 @@ public class Tesi implements Serializable {
 
     public void setData_pubblicazione(Timestamp dataPubblicazione) {
         this.data_pubblicazione = dataPubblicazione;
+    }
+
+    public String getCiclo_cdl() {
+        return ciclo_cdl;
+    }
+
+    public void setCiclo_cdl(String ciclo_cdl) {
+        this.ciclo_cdl = ciclo_cdl;
+    }
+
+
+    public Map<String, Object> getTesiMap() {
+        Map<String, Object> tesiMap = new HashMap<>();
+        tesiMap.put("id_tesi",this.id_tesi);
+        tesiMap.put("id_vincolo", this.id_vincolo);
+        tesiMap.put("titolo", this.titolo);
+        tesiMap.put("tipologia", this.tipologia);
+        tesiMap.put("abstract_tesi", this.abstract_tesi);
+        tesiMap.put("data_pubblicazione", this.data_pubblicazione);
+        tesiMap.put("ciclo_cdl", this.ciclo_cdl);
+
+
+
+        return tesiMap;
     }
 
     @NonNull

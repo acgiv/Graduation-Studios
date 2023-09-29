@@ -10,8 +10,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-@Entity(tableName = "Utente",
-        indices = {@Index(value = "email", unique = true)})
+@Entity(tableName = "Utente")
 
 public class Utente implements Serializable {
 
@@ -30,6 +29,14 @@ public class Utente implements Serializable {
 
     @ColumnInfo(name = "password")
     private String password;
+
+
+
+    @ColumnInfo(name = "nome_cdl")
+    private String nome_cdl;
+
+    @ColumnInfo(name = "facolta")
+    private String facolta;
 
     public Long getId_utente() {
         return id_utente;
@@ -71,6 +78,22 @@ public class Utente implements Serializable {
         this.password = passwordUtente;
     }
 
+    public String getNome_cdl() {
+        return nome_cdl;
+    }
+
+    public void setNome_cdl(String nome_cdl) {
+        this.nome_cdl = nome_cdl;
+    }
+
+    public String getFacolta() {
+        return facolta;
+    }
+
+    public void setFacolta(String facolta) {
+        this.facolta = facolta;
+    }
+
     public Map<String, Object> getUtenteMap() {
         Map<String, Object> utenteMap = new HashMap<>();
         utenteMap.put("id_utente",this.id_utente);
@@ -78,6 +101,8 @@ public class Utente implements Serializable {
         utenteMap.put("cognome", this.cognome);
         utenteMap.put("email", this.email);
         utenteMap.put("password", this.password);
+        utenteMap.put("nome_cdl", this.nome_cdl);
+        utenteMap.put("facolta", this.facolta);
         return utenteMap;
     }
 
@@ -90,6 +115,8 @@ public class Utente implements Serializable {
                 ", cognome='" + cognome + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", nome_cdl='" + nome_cdl + '\'' +
+                ", facolta='" + facolta + '\'' +
                 '}';
     }
 }

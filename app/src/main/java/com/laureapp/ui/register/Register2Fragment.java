@@ -1,5 +1,7 @@
 package com.laureapp.ui.register;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,19 +24,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegister2Binding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
-import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -49,12 +47,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -76,7 +70,6 @@ public class Register2Fragment extends Fragment {
     private String[] corsi;
     private Utente ut;
     private String ruolo;
-    private int lunghezzaListaCorso;
 
     FragmentRegister2Binding binding;
     private Context context;
@@ -91,7 +84,6 @@ public class Register2Fragment extends Fragment {
         autoCompleteTextViewcorso = binding.dropdownCorso;
         professoreTextViewcorso = binding.dropdownprofessoreCorso;
         corsi = getResources().getStringArray(R.array.Corsi);
-        int lunghezzaLista = corsi.length;
         inizializzate_binding_text();
 
         // Configura gli ascoltatori per il cambiamento di testo negli elementi di input
@@ -184,55 +176,59 @@ public class Register2Fragment extends Fragment {
                 });
     }
 
-    private Long saveToFirestore(FirebaseFirestore firestoreDB)  {
+    private Long saveToFirestore(FirebaseFirestore firestoreDB) {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
-            CompletableFuture<Long> future = new CompletableFuture<>();
 
             UtenteModelView ut_vew = new UtenteModelView(context);
             ut_vew.insertUtente(ut);
             ut.setId_utente(ut_vew.getIdUtente(ut.getEmail()));
-            firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
-                    .addOnSuccessListener(aVoid -> {
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            System.out.println("Error writing document");
-                        }
-                    });
 
-            if (StringUtils.equals(ruolo, getString(R.string.studente))){
-                // Qui puoi creare e impostare il tuo oggetto Studente
+            // Verifica se il ruolo è "Studente" o "Professore" e memorizza la facoltà e il corso di laurea
+            if (StringUtils.equals(ruolo, getString(R.string.studente))) {
                 Studente studente = new Studente();
                 studente.setId_utente(ut.getId_utente());
+                studente.setId_studente(ut.getId_utente());
                 studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
-
-                //TODO: modificare studente in cdl
-                /*studente.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
-                studente.setEsami_mancati(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
-                studente.setCorso_laurea(binding.dropdownCorso.getText().toString());*/
-                StudenteModelView st_db = new StudenteModelView(context);
-                st_db.insertStudente(studente);
+                ut.setFacolta(binding.filledExposedDropdown.getText().toString());
+                ut.setNome_cdl(binding.dropdownCorso.getText().toString());
                 firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
                         .addOnSuccessListener(aVoid -> {
                         });
-            }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
+            } else if (StringUtils.equals(ruolo, getString(R.string.professore))) {
                 Professore professore = new Professore();
+
+                // In caso di ruolo "Professore", facolta e corso di laurea potrebbero essere diversi da quelli dello studente
+                // Assicurati di impostare i valori corretti per il professore qui, ad esempio:
+                ut.setFacolta(binding.filledExposedDropdown.getText().toString());
+                ut.setNome_cdl(binding.dropdownprofessoreCorso.getText().toString());
+                professore.setId_professore(ut.getId_utente());
                 professore.setId_utente(ut.getId_utente());
-                professore.setMatricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
-                ProfessoreModelView pr_db = new ProfessoreModelView(context);
-                pr_db.insertProfessore(professore);
-                firestoreDB.collection("Utenti").document("Professori").collection("Professori")
-                        .document(uid).set(professore.getProfessoreMap())
+                professore.setMatricola(String.valueOf(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())));
+
+                firestoreDB.collection("Utenti").document("Professori").collection("Professori").document(uid).set(professore.getProfessoreMap())
                         .addOnSuccessListener(aVoid -> {
                         });
             }
+
+            // Continua con l'invio dei dati a Firestore
+            firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
+                    .addOnSuccessListener(aVoid -> {
+                        // Successo: i dati sono stati memorizzati su Firestore
+                    })
+                    .addOnFailureListener(e -> {
+                        // Errore nell'invio dei dati a Firestore
+                        Log.e(TAG, "Error writing document", e);
+                    });
+
+            // Restituisci l'ID dell'utente
+            return ut.getId_utente();
         }
-        return ut.getId_utente();
+        return null;
     }
+
 
 
     private void inizializzate_binding_text(){
@@ -461,7 +457,7 @@ public class Register2Fragment extends Fragment {
                 String inputText = binding.dropdownprofessoreCorso.getText().toString();
 
                 String[] enteredCourses = StringUtils.deleteWhitespace(inputText).split(",");
-                Log.d ("corsi", String.valueOf(enteredCourses.toString()));
+                Log.d ("corsi", Arrays.toString(enteredCourses));
                 if( !insertedCourses.contains(String.valueOf(enteredCourses[enteredCourses.length-1]))){
                     validCourses.add(enteredCourses[enteredCourses.length-1]);
                 }else{

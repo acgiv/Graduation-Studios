@@ -56,10 +56,7 @@ public class HomeFragment extends Fragment {
             ruolo = args.getString("ruolo");
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
-            Log.d("utenteHome ", String.valueOf(args.getSerializable("Utente", Utente.class)));
             saveEmailToSharedPreferences(args.getString("email"));
-
-            utente = (Utente) args.getSerializable("Utente");
             args.putSerializable("Utente", utente);
 
 

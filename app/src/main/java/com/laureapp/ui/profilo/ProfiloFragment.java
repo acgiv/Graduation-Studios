@@ -4,6 +4,7 @@ import static com.google.android.material.textfield.TextInputLayout.END_ICON_PAS
 
 import android.content.Context;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,10 +49,11 @@ public class ProfiloFragment extends Fragment {
     FragmentProfiloBinding binding;
     Bundle args;
     Context context;
-    Utente utente;
+    private Utente utente;
+    private String email;
     UtenteModelView ut_view;
-    String ruolo;
-    FirebaseUser user;
+    private String ruolo;
+    private FirebaseUser user;
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
 
 
@@ -69,10 +71,10 @@ public class ProfiloFragment extends Fragment {
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            utente = args.getSerializable("Utente", Utente.class);
+            email = getEmailFromSharedPreferences(); //chiamata al metodo per ottenere la mail
         }
         user  = FirebaseAuth.getInstance().getCurrentUser();
-        utente = ut_view.findAllById(utente.getId_utente());
+        utente = ut_view.findAllById(ut_view.getIdUtente(email));
         binding = FragmentProfiloBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -287,6 +289,18 @@ public class ProfiloFragment extends Fragment {
 
     }
 
+    /**
+     * Si utilizza questo metodo per prendere le preferenze salvate nel metodo presente in HomeFragment
+     * Esso prende la cartella "preferenze" e ne ricava la mail o l'oggetto che ci serve.
+     * @return
+     */
+    private String getEmailFromSharedPreferences() {
+        if (context != null) {
+            SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
+            return preferences.getString("email", null);
 
+        }
+        return null;
+    }
 
 }

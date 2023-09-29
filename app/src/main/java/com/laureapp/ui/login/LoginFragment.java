@@ -31,6 +31,7 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentLoginBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
@@ -54,6 +55,7 @@ public class LoginFragment extends Fragment {
     private FirebaseAuth mAuth;
     private Bundle bundle;
     private  UtenteModelView utenteView ;
+    private Utente utente;
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
 
 
@@ -96,12 +98,14 @@ public class LoginFragment extends Fragment {
         ConnectivityManager cm = (ConnectivityManager) requireContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         //Pulsante di login
         binding.buttonLogin.setOnClickListener(view1 -> {
+
             if(email_layout != null && password_layout != null) {
                 HashMap<String, Boolean> result = is_correct_email_password();
                 if (Boolean.TRUE.equals(result.get("email")) && Boolean.TRUE.equals(result.get("password"))) {
                     //Se c'è connessione ad internet uso il db locale altrimenti uso quello in remoto
                     if (!isConnected(cm)) {
-                        boolean result_query = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
+                        utente = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
+                        boolean result_query = utente.getId_utente() != null ;
 
                         if (Boolean.FALSE.equals(result_query)) {
                             error_text.setVisibility(View.VISIBLE);
@@ -233,13 +237,15 @@ public class LoginFragment extends Fragment {
 
         private void redirectHome() {
             Bundle bundle = new Bundle();
-            Long id_utente = utenteView.getIdUtente(String.valueOf(email_text.getText()));
+            utente= utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
             StudenteModelView stud_view = new StudenteModelView(context);
-            if( stud_view.findStudente(id_utente)!= null){
+            if( stud_view.findStudente(utente.getId_utente())!= null){
                 bundle.putString("ruolo", "Studente");
+
             }else{
                 bundle.putString("ruolo", "Professore");
             }
+            bundle.putSerializable("Utente", utente);
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
             HomeActivity.putExtras(bundle);
             startActivity(HomeActivity);

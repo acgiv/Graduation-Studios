@@ -130,33 +130,9 @@ public class Register2Fragment extends Fragment {
         }
         binding.buttonRegister.setOnClickListener(view1 -> {
             // Controlla i campi di input e stampa i risultati del controllo
-            AtomicInteger cont = new AtomicInteger(0);
-            elem_text.forEach((key, values) -> {
-                if (Boolean.TRUE.equals(is_correct_form(values))) {
-                    cont.addAndGet(1);
-                }
-            });
-            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-            if (StringUtils.equals(ruolo, getString(R.string.studente)) && cont.get()==5){
+            createAccount();
 
-                //Per salavare i dati in authentication
-                createAccount();
-                ut.setId_utente(saveToFirestore(firestoreDB));
-                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                bundle.putSerializable("Utente", ut);
-                HomeActivity.putExtras(bundle);
-                startActivity(HomeActivity);
-                requireActivity().finish();
-            }else if (StringUtils.equals(ruolo, getString(R.string.professore)) && cont.get()==3){
-                createAccount();
-                ut.setId_utente(saveToFirestore(firestoreDB));
-                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                bundle.putSerializable("Utente", ut);
-                HomeActivity.putExtras(bundle);
-                startActivity(HomeActivity);
-                requireActivity().finish();
 
-            }
 
         });
     }
@@ -166,31 +142,57 @@ public class Register2Fragment extends Fragment {
 
      */
     private  void createAccount()  {
+        AtomicInteger cont = new AtomicInteger(0);
+        elem_text.forEach((key, values) -> {
+            if (Boolean.TRUE.equals(is_correct_form(values))) {
+                cont.addAndGet(1);
+            }
+        });
+        if (StringUtils.equals(ruolo, getString(R.string.studente)) && cont.get()==5){
+            mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                            // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                            bundle.putSerializable("Utente", ut);
+                            HomeActivity.putExtras(bundle);
+                            startActivity(HomeActivity);
+                            requireActivity().finish();
 
-        mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                        } else {
+                            Exception exception = task.getException();
+                            assert exception != null;
+                            Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
 
-                        // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
-                        mAuth.getCurrentUser();
-                        Log.d("PASSWORD-UID_UTENTE", ut.getPassword() + " " + mAuth.getUid());
-                    } else {
-                        // La registrazione ha fallito, puoi gestire l'errore qui
-                        Exception exception = task.getException();
-                        assert exception != null;
-                        Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
-                        // Esempio: Visualizzare un messaggio di errore o registrare l'errore
-                    }
-                });
+                        }
+                    });
+      }else if (StringUtils.equals(ruolo, getString(R.string.professore)) && cont.get()==3){
+            mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                            bundle.putSerializable("Utente", ut);
+                            HomeActivity.putExtras(bundle);
+                            startActivity(HomeActivity);
+                            requireActivity().finish();
+                        } else {
+                            Exception exception = task.getException();
+                            assert exception != null;
+                            Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+        }
     }
 
-    private Long saveToFirestore(FirebaseFirestore firestoreDB)  {
+    private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB)  {
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
-            CompletableFuture<Long> future = new CompletableFuture<>();
-
             UtenteModelView ut_vew = new UtenteModelView(context);
             ut_vew.insertUtente(ut);
             ut.setId_utente(ut_vew.getIdUtente(ut.getEmail()));
@@ -203,7 +205,6 @@ public class Register2Fragment extends Fragment {
                             System.out.println("Error writing document");
                         }
                     });
-
             if (StringUtils.equals(ruolo, getString(R.string.studente))){
                 // Qui puoi creare e impostare il tuo oggetto Studente
                 Studente studente = new Studente();
@@ -346,6 +347,7 @@ public class Register2Fragment extends Fragment {
                     }
                     break;
                 case "Corso di Laurea":
+
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
                         String corso_text = Objects.requireNonNull(binding.dropdownCorso.getText()).toString();
                         boolean iscorsiTextEqual = Arrays.stream(corsi)

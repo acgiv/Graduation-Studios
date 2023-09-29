@@ -22,7 +22,7 @@ public class StudenteModelView {
     }
 
     public boolean delateStudente(long id){
-        return studenteRepository.delateStudente(id);
+        return studenteRepository.deleteStudente(id);
     }
 
     public Studente findAllById(Long id){

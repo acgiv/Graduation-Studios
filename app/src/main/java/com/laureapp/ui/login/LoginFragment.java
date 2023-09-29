@@ -241,7 +241,7 @@ public class LoginFragment extends Fragment {
             StudenteModelView stud_view = new StudenteModelView(context);
             if( stud_view.findStudente(utente.getId_utente())!= null){
                 bundle.putString("ruolo", "Studente");
-
+                bundle.putString("email", String.valueOf(email_text.getText()));
             }else{
                 bundle.putString("ruolo", "Professore");
             }

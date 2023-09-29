@@ -86,7 +86,7 @@ public class StudenteRepository {
         }
     }
 
-    public boolean delateStudente(Long id){
+    public boolean deleteStudente(Long id){
         boolean result = false;
         Studente studente =  this.findAllById(id);
         if (studente.getId_studente() != null) {

@@ -31,7 +31,7 @@ public class UtenteModelView{
 
     public Utente findAllById(Long id){
         return utenteRepository.findAllById(id);
-   }
+    }
 
     public Long getIdUtente(String email){
         return utenteRepository.getIdUtente(email);
@@ -43,6 +43,10 @@ public class UtenteModelView{
 
     public String getCognome(){
         return utenteRepository.getCognome();
+    }
+
+    public String getEmail(Long id_utente){
+        return utenteRepository.getEmail(id_utente);
     }
 
     public Utente is_exist_email_password(String email, String password){

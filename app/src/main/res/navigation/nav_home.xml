@@ -71,7 +71,7 @@
     <!--Fragment tesi studente -->
     <fragment
         android:id="@+id/tesiStudenteFragment"
-        android:name="com.laureapp.ui.tesiStudente.TesiStudenteFragment"
+        android:name="com.laureapp.ui.TesiStudente.TesiStudenteFragment"
         android:label="Tesi"
         tools:layout="@layout/fragment_tesi_studente" >
     </fragment>

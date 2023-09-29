@@ -2,6 +2,7 @@ package com.laureapp.ui.home;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.content.res.Configuration;
 
@@ -34,6 +35,9 @@ public class HomeFragment extends Fragment {
     String ruolo;
     Context context;
     Bundle args;
+
+    String email;
+    Utente utente = new Utente();
     private NavController mNav;
 
     @Override
@@ -51,7 +55,13 @@ public class HomeFragment extends Fragment {
         if (args != null) {
             ruolo = args.getString("ruolo");
             Log.d("ruolo ", ruolo);
+            //questo è null quando fai login
             Log.d("utenteHome ", String.valueOf(args.getSerializable("Utente", Utente.class)));
+            saveEmailToSharedPreferences(args.getString("email"));
+
+            utente = (Utente) args.getSerializable("Utente");
+            args.putSerializable("Utente", utente);
+
 
         }
 
@@ -72,7 +82,7 @@ public class HomeFragment extends Fragment {
 
         CardTesi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
-                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment);
+                mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment,args);
             }else if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Tesi", "cliccato tesi Professore");
             }else {
@@ -127,5 +137,19 @@ public class HomeFragment extends Fragment {
 
     }
 
+    /**
+     * Salvo la mail ottenuta dal login e dalla registrazine passata mediante i Bundle
+     * Il metodo crea un "file" di preferenze denominato preferenze ed inserisce mediante
+     * l'editor la mail.
+     * Si potrebbero passare tutti i dati ma SharedPreferences è pensato per passare piccole quantità di dati
+     *
+     * @param email
+     */
+    private void saveEmailToSharedPreferences(String email) {
+        SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("email", email);
+        editor.apply();
+    }
 
 }

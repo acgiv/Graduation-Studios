@@ -45,7 +45,12 @@ public interface UtenteDao {
 
 
 
+    @Query("SELECT u.email FROM Utente u WHERE u.id_utente =:idUtente")
+    String getEmail(Long idUtente);
+
+
     @Delete
     void delete(Utente utente);
+
 
 }

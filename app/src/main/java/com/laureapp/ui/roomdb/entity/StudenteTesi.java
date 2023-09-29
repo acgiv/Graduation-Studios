@@ -55,6 +55,9 @@ public class StudenteTesi implements Serializable {
         this.id_studente = idStudente;
     }
 
+    public Long getId_tesi_From_studente(Long idStudente) {
+        return id_tesi;
+    }
 
     public Map<String, Object> getStudenteTesiMap() {
         Map<String, Object> studenteTesiMap = new HashMap<>();

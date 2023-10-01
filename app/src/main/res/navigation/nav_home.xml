@@ -163,7 +163,7 @@
     </fragment>
     <fragment
         android:id="@+id/listaTesi"
-        android:name="com.laureapp.ListaTesi"
+        android:name="com.laureapp.ui.tesiProfessore.ListaTesi"
         android:label="ListaTesi"
         tools:layout="@layout/fragment_lista_tesi"/>
 </navigation>

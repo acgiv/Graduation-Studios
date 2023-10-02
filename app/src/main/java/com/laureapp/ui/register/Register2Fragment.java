@@ -1,5 +1,7 @@
 package com.laureapp.ui.register;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -28,14 +29,12 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegister2Binding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
-import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -49,12 +48,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -76,7 +71,6 @@ public class Register2Fragment extends Fragment {
     private String[] corsi;
     private Utente ut;
     private String ruolo;
-    private int lunghezzaListaCorso;
 
     FragmentRegister2Binding binding;
     private Context context;
@@ -91,7 +85,6 @@ public class Register2Fragment extends Fragment {
         autoCompleteTextViewcorso = binding.dropdownCorso;
         professoreTextViewcorso = binding.dropdownprofessoreCorso;
         corsi = getResources().getStringArray(R.array.Corsi);
-        int lunghezzaLista = corsi.length;
         inizializzate_binding_text();
 
         // Configura gli ascoltatori per il cambiamento di testo negli elementi di input
@@ -129,35 +122,7 @@ public class Register2Fragment extends Fragment {
             autoCompleteTextViewcorso.setAdapter(adaptercorso);
         }
         binding.buttonRegister.setOnClickListener(view1 -> {
-            // Controlla i campi di input e stampa i risultati del controllo
-            AtomicInteger cont = new AtomicInteger(0);
-            elem_text.forEach((key, values) -> {
-                if (Boolean.TRUE.equals(is_correct_form(values))) {
-                    cont.addAndGet(1);
-                }
-            });
-            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-            if (StringUtils.equals(ruolo, getString(R.string.studente)) && cont.get()==5){
-
-                //Per salavare i dati in authentication
-                createAccount();
-                ut.setId_utente(saveToFirestore(firestoreDB));
-                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                bundle.putSerializable("Utente", ut);
-                HomeActivity.putExtras(bundle);
-                startActivity(HomeActivity);
-                requireActivity().finish();
-            }else if (StringUtils.equals(ruolo, getString(R.string.professore)) && cont.get()==3){
-                createAccount();
-                ut.setId_utente(saveToFirestore(firestoreDB));
-                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                bundle.putSerializable("Utente", ut);
-                HomeActivity.putExtras(bundle);
-                startActivity(HomeActivity);
-                requireActivity().finish();
-
-            }
-
+            createAccount();
         });
     }
 
@@ -166,31 +131,57 @@ public class Register2Fragment extends Fragment {
 
      */
     private  void createAccount()  {
+        AtomicInteger cont = new AtomicInteger(0);
+        elem_text.forEach((key, values) -> {
+            if (Boolean.TRUE.equals(is_correct_form(values))) {
+                cont.addAndGet(1);
+            }
+        });
+        if (StringUtils.equals(ruolo, getString(R.string.studente)) && cont.get()==5){
+            mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                            // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                            bundle.putSerializable("Utente", ut);
+                            HomeActivity.putExtras(bundle);
+                            startActivity(HomeActivity);
+                            requireActivity().finish();
 
-        mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                        } else {
+                            Exception exception = task.getException();
+                            assert exception != null;
+                            Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
 
-                        // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
-                        mAuth.getCurrentUser();
-                        Log.d("PASSWORD-UID_UTENTE", ut.getPassword() + " " + mAuth.getUid());
-                    } else {
-                        // La registrazione ha fallito, puoi gestire l'errore qui
-                        Exception exception = task.getException();
-                        assert exception != null;
-                        Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
-                        // Esempio: Visualizzare un messaggio di errore o registrare l'errore
-                    }
-                });
+                        }
+                    });
+        }else if (StringUtils.equals(ruolo, getString(R.string.professore)) && cont.get()==3){
+            mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                            bundle.putSerializable("email", ut.getEmail());
+                            HomeActivity.putExtras(bundle);
+                            startActivity(HomeActivity);
+                            requireActivity().finish();
+                        } else {
+                            Exception exception = task.getException();
+                            assert exception != null;
+                            Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+        }
     }
 
-    private Long saveToFirestore(FirebaseFirestore firestoreDB)  {
+    private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB)  {
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
-            CompletableFuture<Long> future = new CompletableFuture<>();
-
             UtenteModelView ut_vew = new UtenteModelView(context);
             ut_vew.insertUtente(ut);
             ut.setId_utente(ut_vew.getIdUtente(ut.getEmail()));
@@ -203,7 +194,6 @@ public class Register2Fragment extends Fragment {
                             System.out.println("Error writing document");
                         }
                     });
-
             if (StringUtils.equals(ruolo, getString(R.string.studente))){
                 // Qui puoi creare e impostare il tuo oggetto Studente
                 Studente studente = new Studente();
@@ -233,6 +223,8 @@ public class Register2Fragment extends Fragment {
         }
         return ut.getId_utente();
     }
+
+
 
 
     private void inizializzate_binding_text(){
@@ -461,7 +453,7 @@ public class Register2Fragment extends Fragment {
                 String inputText = binding.dropdownprofessoreCorso.getText().toString();
 
                 String[] enteredCourses = StringUtils.deleteWhitespace(inputText).split(",");
-                Log.d ("corsi", String.valueOf(enteredCourses.toString()));
+                Log.d ("corsi", Arrays.toString(enteredCourses));
                 if( !insertedCourses.contains(String.valueOf(enteredCourses[enteredCourses.length-1]))){
                     validCourses.add(enteredCourses[enteredCourses.length-1]);
                 }else{

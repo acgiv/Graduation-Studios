@@ -29,6 +29,33 @@ public class StudenteTesiRepository {
         executor.execute(() -> roomDbSqlLite.studenteTesiDao().update(studenteTesi));
     }
 
+    // Update the StudenteTesi database with the latest data
+    public void updateStudenteTesiDatabase(List<StudenteTesi> latestData) {
+        // Fetch the existing data from the Room database
+        List<StudenteTesi> existingData = roomDbSqlLite.studenteTesiDao().getAllStudenteTesi();
+
+        // Compare the existing data with the latest data
+        for (StudenteTesi latestStudenteTesi : latestData) {
+            boolean isFound = false;
+            for (StudenteTesi existingStudenteTesi : existingData) {
+                if (latestStudenteTesi.getId_studente_tesi() != null &&
+                        latestStudenteTesi.getId_studente_tesi().equals(existingStudenteTesi.getId_studente_tesi())) {
+                    // The record exists in the database, update it
+                    existingStudenteTesi.setId_studente_tesi(latestStudenteTesi.getId_studente_tesi());
+                    existingStudenteTesi.setId_tesi(latestStudenteTesi.getId_tesi());
+                    existingStudenteTesi.setId_studente(latestStudenteTesi.getId_studente());
+
+                    roomDbSqlLite.studenteTesiDao().update(existingStudenteTesi);
+                    isFound = true;
+                    break;
+                }
+            }
+            if (!isFound) {
+                // The record doesn't exist in the database, insert it
+                roomDbSqlLite.studenteTesiDao().insert(latestStudenteTesi);
+            }
+        }
+    }
     public StudenteTesi findAllById(Long id){
         CompletableFuture<StudenteTesi> future = new CompletableFuture<>();
         executor.execute(() -> {
@@ -65,5 +92,19 @@ public class StudenteTesiRepository {
             result = true;
         }
         return result;
+    }
+
+    public Long getIdTesiFromIdStudente(Long id_studente){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.studenteTesiDao().findIdTesiByIdStudente(id_studente);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
     }
 }

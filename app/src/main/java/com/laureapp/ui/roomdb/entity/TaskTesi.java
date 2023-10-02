@@ -12,6 +12,8 @@ import com.laureapp.ui.roomdb.Converters;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName = "Task_tesi", foreignKeys = {
         @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi")},
@@ -86,6 +88,20 @@ public class TaskTesi implements Serializable {
 
     public void setData_scadenza(Timestamp data_scadenza) {
         this.data_scadenza = data_scadenza;
+    }
+
+
+    public Map<String, Object> getTaskTesiMap() {
+        Map<String, Object> taskTesiMap = new HashMap<>();
+        taskTesiMap.put("id_task", this.id_task);
+        taskTesiMap.put("id_tesi",this.id_tesi);
+        taskTesiMap.put("titolo", this.titolo);
+        taskTesiMap.put("stato", this.stato);
+        taskTesiMap.put("data_inizio", this.data_inizio);
+        taskTesiMap.put("data_scadenza", this.data_scadenza);
+
+
+        return taskTesiMap;
     }
 
     @Override

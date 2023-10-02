@@ -25,4 +25,13 @@ public class StudenteWithUtente {
     public void setUtente(Utente utente) {
         this.utente = utente;
     }
+
+
+    @Override
+    public String toString() {
+        return "StudenteWithUtente{" +
+                "studente=" + studente +
+                ", utente=" + utente +
+                '}';
+    }
 }

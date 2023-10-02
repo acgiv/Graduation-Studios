@@ -31,6 +31,7 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentLoginBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
@@ -101,7 +102,8 @@ public class LoginFragment extends Fragment {
                 if (Boolean.TRUE.equals(result.get("email")) && Boolean.TRUE.equals(result.get("password"))) {
                     //Se c'è connessione ad internet uso il db locale altrimenti uso quello in remoto
                     if (!isConnected(cm)) {
-                        boolean result_query = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
+                        Utente ut = utenteView.is_exist_email_password(String.valueOf(email_text.getText()), hashWith256(String.valueOf(password_text.getText())));
+                        boolean result_query = ut.getId_utente() != null;
 
                         if (Boolean.FALSE.equals(result_query)) {
                             error_text.setVisibility(View.VISIBLE);
@@ -237,10 +239,11 @@ public class LoginFragment extends Fragment {
             StudenteModelView stud_view = new StudenteModelView(context);
             if( stud_view.findStudente(id_utente)!= null){
                 bundle.putString("ruolo", "Studente");
-                bundle.putString("email", String.valueOf(email_text.getText()));
+
             }else{
                 bundle.putString("ruolo", "Professore");
             }
+            bundle.putString("email", String.valueOf(email_text.getText()));
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
             HomeActivity.putExtras(bundle);
             startActivity(HomeActivity);

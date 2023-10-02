@@ -24,6 +24,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -121,35 +122,7 @@ public class Register2Fragment extends Fragment {
             autoCompleteTextViewcorso.setAdapter(adaptercorso);
         }
         binding.buttonRegister.setOnClickListener(view1 -> {
-            // Controlla i campi di input e stampa i risultati del controllo
-            AtomicInteger cont = new AtomicInteger(0);
-            elem_text.forEach((key, values) -> {
-                if (Boolean.TRUE.equals(is_correct_form(values))) {
-                    cont.addAndGet(1);
-                }
-            });
-            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-            if (StringUtils.equals(ruolo, getString(R.string.studente)) && cont.get()==5){
-
-                //Per salavare i dati in authentication
-                createAccount();
-                ut.setId_utente(saveToFirestore(firestoreDB));
-                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                bundle.putSerializable("Utente", ut);
-                HomeActivity.putExtras(bundle);
-                startActivity(HomeActivity);
-                requireActivity().finish();
-            }else if (StringUtils.equals(ruolo, getString(R.string.professore)) && cont.get()==3){
-                createAccount();
-                ut.setId_utente(saveToFirestore(firestoreDB));
-                Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                bundle.putSerializable("Utente", ut);
-                HomeActivity.putExtras(bundle);
-                startActivity(HomeActivity);
-                requireActivity().finish();
-
-            }
-
+            createAccount();
         });
     }
 
@@ -158,76 +131,99 @@ public class Register2Fragment extends Fragment {
 
      */
     private  void createAccount()  {
+        AtomicInteger cont = new AtomicInteger(0);
+        elem_text.forEach((key, values) -> {
+            if (Boolean.TRUE.equals(is_correct_form(values))) {
+                cont.addAndGet(1);
+            }
+        });
+        if (StringUtils.equals(ruolo, getString(R.string.studente)) && cont.get()==5){
+            mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                            // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                            bundle.putSerializable("Utente", ut);
+                            HomeActivity.putExtras(bundle);
+                            startActivity(HomeActivity);
+                            requireActivity().finish();
 
-        mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                        } else {
+                            Exception exception = task.getException();
+                            assert exception != null;
+                            Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
 
-                        // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
-                        mAuth.getCurrentUser();
-                        Log.d("PASSWORD-UID_UTENTE", ut.getPassword() + " " + mAuth.getUid());
-                    } else {
-                        // La registrazione ha fallito, puoi gestire l'errore qui
-                        Exception exception = task.getException();
-                        assert exception != null;
-                        Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
-                        // Esempio: Visualizzare un messaggio di errore o registrare l'errore
-                    }
-                });
+                        }
+                    });
+        }else if (StringUtils.equals(ruolo, getString(R.string.professore)) && cont.get()==3){
+            mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
+                            bundle.putSerializable("email", ut.getEmail());
+                            HomeActivity.putExtras(bundle);
+                            startActivity(HomeActivity);
+                            requireActivity().finish();
+                        } else {
+                            Exception exception = task.getException();
+                            assert exception != null;
+                            Toast.makeText(getContext(), exception.toString(), Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+        }
     }
 
-    private Long saveToFirestore(FirebaseFirestore firestoreDB) {
+    private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB)  {
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
-
             UtenteModelView ut_vew = new UtenteModelView(context);
             ut_vew.insertUtente(ut);
             ut.setId_utente(ut_vew.getIdUtente(ut.getEmail()));
-
-            // Verifica se il ruolo è "Studente" o "Professore" e memorizza la facoltà e il corso di laurea
-            if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+            firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
+                    .addOnSuccessListener(aVoid -> {
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.out.println("Error writing document");
+                        }
+                    });
+            if (StringUtils.equals(ruolo, getString(R.string.studente))){
+                // Qui puoi creare e impostare il tuo oggetto Studente
                 Studente studente = new Studente();
                 studente.setId_utente(ut.getId_utente());
-                studente.setId_studente(ut.getId_utente());
                 studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
-                ut.setFacolta(binding.filledExposedDropdown.getText().toString());
-                ut.setNome_cdl(binding.dropdownCorso.getText().toString());
+
+                //TODO: modificare studente in cdl
+                /*studente.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
+                studente.setEsami_mancati(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
+                studente.setCorso_laurea(binding.dropdownCorso.getText().toString());*/
+                StudenteModelView st_db = new StudenteModelView(context);
+                st_db.insertStudente(studente);
                 firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
                         .addOnSuccessListener(aVoid -> {
                         });
-            } else if (StringUtils.equals(ruolo, getString(R.string.professore))) {
+            }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
                 Professore professore = new Professore();
-
-                // In caso di ruolo "Professore", facolta e corso di laurea potrebbero essere diversi da quelli dello studente
-                // Assicurati di impostare i valori corretti per il professore qui, ad esempio:
-                ut.setFacolta(binding.filledExposedDropdown.getText().toString());
-                ut.setNome_cdl(binding.dropdownprofessoreCorso.getText().toString());
-                professore.setId_professore(ut.getId_utente());
                 professore.setId_utente(ut.getId_utente());
-                professore.setMatricola(String.valueOf(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())));
-
-                firestoreDB.collection("Utenti").document("Professori").collection("Professori").document(uid).set(professore.getProfessoreMap())
+                professore.setMatricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
+                ProfessoreModelView pr_db = new ProfessoreModelView(context);
+                pr_db.insertProfessore(professore);
+                firestoreDB.collection("Utenti").document("Professori").collection("Professori")
+                        .document(uid).set(professore.getProfessoreMap())
                         .addOnSuccessListener(aVoid -> {
                         });
             }
-
-            // Continua con l'invio dei dati a Firestore
-            firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
-                    .addOnSuccessListener(aVoid -> {
-                        // Successo: i dati sono stati memorizzati su Firestore
-                    })
-                    .addOnFailureListener(e -> {
-                        // Errore nell'invio dei dati a Firestore
-                        Log.e(TAG, "Error writing document", e);
-                    });
-
-            // Restituisci l'ID dell'utente
-            return ut.getId_utente();
         }
-        return null;
+        return ut.getId_utente();
     }
+
 
 
 

@@ -49,7 +49,6 @@
                 android:iconifiedByDefault="false"
                 android:queryHint="Cerca nomi" />
 
-
             <!-- Lista di nomi -->
 
             <ListView
@@ -69,7 +68,6 @@
                 android:layout_marginTop="75dp"
                 android:layout_marginBottom="8dp"
                 android:background="@android:color/darker_gray"/>
-
 
             <!--Icona per eliminare la tesi -->
 
@@ -94,7 +92,7 @@
             <!--Campo tesi -->
 
             <TextView
-                android:id="@+id/tesi_uno"
+                android:id="@+id/facolta_info"
                 android:layout_width="348dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

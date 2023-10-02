@@ -1,8 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.tesiProfessore.ListaTesiInfo">
 
-</FrameLayout>
+    <!-- ... Card Info ... -->
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_info"
+        android:layout_width="410dp"
+        android:layout_height="650dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.493">
+
+        <FrameLayout
+            android:id="@+id/griglia_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--Campo facoltà -->
+
+            <TextView
+                android:id="@+id/facolta_info"
+                android:layout_width="348dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:text="Facoltà "
+                android:textColor="@color/color_primary"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <!-- Icona modifica facoltà -->
+
+            <ImageView
+                android:id="@+id/icona_modifica_facolta"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="340dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/edit_icon" />
+
+            <!-- Linea grigia che separa il campo facoltà e cdl -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="90dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- Campo CDL -->
+
+            <TextView
+                android:id="@+id/cdl_info"
+                android:layout_width="348dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="120dp"
+                android:text="CDL "
+                android:textColor="@color/color_primary"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <!-- Icona modifica CDL  -->
+
+            <ImageView
+                android:id="@+id/icona_modifica_cdl"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="340dp"
+                android:layout_marginTop="122dp"
+                android:src="@drawable/edit_icon" />
+
+            <!-- Linea grigia che separa il campo cdl con ciclo cdl -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="180dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- Campo Ciclo CDL -->
+
+            <TextView
+                android:id="@+id/ciclo_cdl_info"
+                android:layout_width="348dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="210dp"
+                android:text="Ciclo CDL "
+                android:textColor="@color/color_primary"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <!--Icona modifica Ciclo CDL -->
+
+            <ImageView
+                android:id="@+id/icona_modifica_ciclo_cdl"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="340dp"
+                android:layout_marginTop="212dp"
+                android:src="@drawable/edit_icon" />
+
+            <!--Linea grigia che separa il campo ciclo cdl con i bottoni -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="270dp"
+                android:layout_marginBottom="8dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- Bottone Salva -->
+
+            <Button
+                android:id="@+id/button_salva_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:cornerRadius="8dp"
+                android:text="Salva" />
+
+            <!-- Bottone Annulla -->
+
+            <Button
+                android:id="@+id/button_annulla_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="50dp"
+                android:text="Annulla"
+                app:cornerRadius="8dp" />
+
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

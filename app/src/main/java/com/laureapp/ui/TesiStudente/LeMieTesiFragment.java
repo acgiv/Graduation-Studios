@@ -62,33 +62,27 @@ public class LeMieTesiFragment extends Fragment {
             id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
 
             //carico l'elenco degli id delle tesi appartenenti allo studente
-            loadIdTesiData(id_studente).addOnCompleteListener(new OnCompleteListener<ArrayList<Long>>() {
-                @Override
-                public void onComplete(@NonNull Task<ArrayList<Long>> task) {
-                    if (task.isSuccessful()) {
-                        ArrayList<Long> idTesiList = task.getResult();
+            loadIdTesiData(id_studente).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ArrayList<Long> idTesiList = task.getResult();
 
-                        Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
+                    Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
 
-                        // Now, call loadTesiData and pass idTesiList
-                        loadTesiData(idTesiList).addOnCompleteListener(new OnCompleteListener<ArrayList<Tesi>>() {
-                            @Override
-                            public void onComplete(@NonNull Task<ArrayList<Tesi>> tesiTask) {
-                                if (tesiTask.isSuccessful()) {
-                                    ArrayList<Tesi> tesiList = tesiTask.getResult();
+                    // Now, call loadTesiData and pass idTesiList
+                    loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> {
+                        if (tesiTask.isSuccessful()) {
+                            ArrayList<Tesi> tesiList = tesiTask.getResult();
 
-                                    // Handle the retrieved Tesi data here
-                                    Log.d("Tesi ", " Tesi : " + tesiList.toString());
+                            // Handle the retrieved Tesi data here
+                            Log.d("Tesi ", " Tesi : " + tesiList.toString());
 
-                                    // You can update your UI or perform any other actions with tesiList
-                                } else {
-                                    Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
-                                }
-                            }
-                        });
-                    } else {
-                        Log.e("Firestore Error", "Error getting data", task.getException());
-                    }
+                            // You can update your UI or perform any other actions with tesiList
+                        } else {
+                            Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
+                        }
+                    });
+                } else {
+                    Log.e("Firestore Error", "Error getting data", task.getException());
                 }
             });
 

@@ -55,7 +55,6 @@ public class PasswordRecoveryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         auth = FirebaseAuth.getInstance();
-
         mNav = Navigation.findNavController(view);
 
         binding.btnSendEmail.setOnClickListener(view1 -> {

@@ -120,12 +120,14 @@ public class Tesi implements Serializable {
     public String toString() {
         return "Tesi{" +
                 "id=" + id_tesi +
-                "id_vincolo=" + id_vincolo +
+                ", id_vincolo=" + id_vincolo +
                 ", titolo='" + titolo + '\'' +
                 ", Tipologia='" + tipologia + '\'' +
                 ", Abstract='" + abstract_tesi + '\'' +
                 ", data_publicazione=" + data_pubblicazione +
                 '}';
     }
+
+
 }
 

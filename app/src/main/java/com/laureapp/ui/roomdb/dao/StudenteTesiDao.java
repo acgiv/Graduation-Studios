@@ -2,6 +2,7 @@ package com.laureapp.ui.roomdb.dao;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
@@ -22,6 +23,11 @@ public interface StudenteTesiDao {
     @Query("SELECT * FROM Studente_Tesi where id_studente_tesi = :idStudenteTesi")
     StudenteTesi findAllById(Long idStudenteTesi);
 
+    @Query("SELECT id_tesi FROM Studente_Tesi WHERE id_studente = :idStudente")
+    Long findIdTesiByIdStudente(Long idStudente);
+
     @Delete
     void delete(StudenteTesi studenteTesi);
+
+
 }

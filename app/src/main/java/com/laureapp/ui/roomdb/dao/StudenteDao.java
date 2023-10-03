@@ -5,9 +5,12 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.laureapp.ui.card.Task.StudentAdapter;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 
+import java.util.Collection;
 import java.util.List;
 
 // è quell'oggetto che accederà al repository per fare le operazioni al db
@@ -25,6 +28,10 @@ public interface StudenteDao {
 
     @Query("SELECT * FROM studente")
     List<Studente> getAllStudente();
+
+    @Query("SELECT * FROM studente")
+    List<StudenteWithUtente> getAllStudenteWithUtente();
+
 
     @Query("SELECT * FROM studente where id_studente = :idStudente")
     Studente findAllById(Long idStudente);

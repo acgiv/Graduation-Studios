@@ -18,6 +18,9 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.laureapp.R;
 //.R serve per riprendere gli ID delle componenti grafiche che verranno utilizzate e che si trovano all'interno del file xml
 import com.google.android.material.navigation.NavigationView;
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.itemLogin) {
                 Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
             } else if (id == R.id.itemSignOut) {
+                FirebaseAuth.getInstance().signOut();
+
                 //faccio logout dell'utente se è loggato
                 //in entrambi i casi cancello i dati dal locale
                    /* if(currentUser != null) {
@@ -95,16 +100,10 @@ public class MainActivity extends AppCompatActivity {
             int id2 = item1.getItemId();
             NavController navController2 = Navigation.findNavController(this, R.id.nav_host_fragment_main);
             if (id2 == R.id.itemProfilo) {
-                if(StringUtils.equals("Studente",ruolo) ) {
-                    navController2.navigate(R.id.action_fragment_home_to_profilo_studente, bundle);
-                }else if (StringUtils.equals("Professore",ruolo)){
-                    navController2 .navigate(R.id.action_fragment_home_to_profilo_professore);
-                }else{
-                    navController2.navigate(R.id.action_fragment_home_to_profilo_studente, bundle);
-                }
+                navController2.navigate(R.id.action_fragment_home_to_profilo, bundle);
             }
             if (id2 == R.id.itemHome) {
-                navController2.navigate(R.id.fragment_home);
+                navController2.navigate(R.id.fragment_home, bundle);
             }
             return true;
         });
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     private void createAppBar() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home, R.id.profilo_studente,  R.id.profilo_professore)
+         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home, R.id.profilo_studente)
                     .setOpenableLayout(drawerLayout)
                     .build();
 

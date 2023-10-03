@@ -6,22 +6,23 @@
     android:orientation="vertical">
 
     <!-- Barra di ricerca -->
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
+    <AutoCompleteTextView
+        android:id="@+id/searchTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
-        android:queryHint="Cerca nomi"/>
+        android:hint="Cerca Tesisti"/>
     
 
     <!-- Lista di nomi -->
     <ListView
         android:id="@+id/list_view_lista_tesi"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="72dp"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="?android:attr/actionBarSize" />
 
 </LinearLayout>
 

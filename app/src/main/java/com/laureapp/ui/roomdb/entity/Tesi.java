@@ -124,7 +124,9 @@ public class Tesi implements Serializable {
                 ", titolo='" + titolo + '\'' +
                 ", Tipologia='" + tipologia + '\'' +
                 ", Abstract='" + abstract_tesi + '\'' +
-                ", data_publicazione=" + data_pubblicazione +
+                ", data_publicazione=" + data_pubblicazione + '\''+
+                ", ciclo_cdl=" + ciclo_cdl +
+
                 '}';
     }
 

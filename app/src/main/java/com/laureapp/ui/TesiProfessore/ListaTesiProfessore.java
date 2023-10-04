@@ -1,4 +1,4 @@
-package com.laureapp.ui.tesiProfessore;
+package com.laureapp.ui.TesiProfessore;
 
 import android.os.Bundle;
 
@@ -12,11 +12,7 @@ import android.view.ViewGroup;
 
 import com.laureapp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
-public class ListaTesi extends Fragment {
+public class ListaTesiProfessore extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

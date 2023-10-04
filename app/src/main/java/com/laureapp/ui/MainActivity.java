@@ -8,16 +8,21 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,6 +30,7 @@ import com.laureapp.R;
 //.R serve per riprendere gli ID delle componenti grafiche che verranno utilizzate e che si trovano all'interno del file xml
 import com.google.android.material.navigation.NavigationView;
 import com.laureapp.databinding.ActivityMainBinding;
+import com.laureapp.ui.TesiProfessore.ListaTesiProfessoreAdapter;
 import com.laureapp.ui.home.HomeFragment;
 import com.laureapp.ui.login.LoginActivity;
 
@@ -38,12 +44,42 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration mAppBarConfiguration;
     ActivityMainBinding binding;
     String ruolo;
+    ImageView whatsapp;
+    ImageView gmail;
+    ImageView qrCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //Gestione Social Fragment
+
+        whatsapp = findViewById(R.id.logoWhatsapp);
+        gmail = findViewById(R.id.logoGmail);
+        qrCode = findViewById(R.id.qrCode);
+
+        whatsapp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoUrl("https://www.whatsapp.com/?lang=it_IT");
+            }
+        });
+
+        gmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoUrl("https://www.uniba.it/it/studenti/servizi-informatici/posta-elettronica-e-servizi-associati");
+            }
+        });
+
+        qrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoUrl("https://www.uniba.it/it");
+            }
+        });
 
         // PASSO LE INFORMAZIONI ATTRAVERSO IL BUNDLE IN FRAGMENT_HOME
         Bundle bundle = getIntent().getExtras();
@@ -108,6 +144,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+    }
+
+    //Reindirizzamento link Social Fragment
+
+    private void gotoUrl(String s) {
+        Uri uri = Uri.parse(s);
+        startActivity(new Intent(Intent.ACTION_VIEW,uri));
     }
 
     private void createAppBar() {

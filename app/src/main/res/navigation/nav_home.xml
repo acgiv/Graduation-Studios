@@ -149,9 +149,23 @@
         android:label="Ricevimenti task"
         tools:layout="@layout/fragment_ricevimenti">
     </fragment>
+
+    <!-- Fragment lista tesi professore -->
+
     <fragment
         android:id="@+id/listaTesi"
-        android:name="com.laureapp.ui.tesiProfessore.ListaTesi"
+        android:name="com.laureapp.ui.TesiProfessore.ListaTesi"
         android:label="ListaTesi"
-        tools:layout="@layout/fragment_lista_tesi"/>
+        tools:layout="@layout/fragment_lista_tesi">
+        <action
+            android:id="@+id/action_listaTesi_to_listaTesiProfessore"
+            app:destination="@id/listaTesiProfessore" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listaTesiProfessore"
+        android:name="com.laureapp.ui.TesiProfessore.ListaTesiProfessore"
+        android:label="fragment_lista_tesi_professore"
+        tools:layout="@layout/fragment_lista_tesi_professore" />
+
 </navigation>

@@ -16,27 +16,4 @@
         android:layout_marginTop="16dp"
         />
 
-
-    <TextView
-        android:id="@+id/nomeStudente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome dello studente"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        />
-
-    <TextView
-        android:id="@+id/matricolaTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Matricola dello studente"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        />
-
 </LinearLayout>

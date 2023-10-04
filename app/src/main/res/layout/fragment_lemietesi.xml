@@ -4,17 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/LeMieTesiLayout">
+    android:id="@+id/LeMieTesiList"
+    >
+
 
 
     <!-- Lista di nomi -->
     <ListView
-        android:id="@+id/listLeMieTesiView"
+        android:id="@+id/listTesiView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="72dp"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="?android:attr/actionBarSize" />
 
 </LinearLayout>
 

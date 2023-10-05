@@ -40,7 +40,7 @@ public class LeMieTesiFragment extends Fragment {
     private LeMieTesiAdapter adapter;
     StudenteModelView studenteView = new StudenteModelView(context);
 
-
+    ArrayList<Long> idTesiList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -60,16 +60,18 @@ public class LeMieTesiFragment extends Fragment {
             //carico l'elenco degli id delle tesi appartenenti allo studente
             loadIdTesiData(id_studente).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) { //se il task è completato con successo
-                    ArrayList<Long> idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
-                    Log.d("Id Tesi", "Id Tesi " + id_studente);
-                    Log.d("sas", String.valueOf(id_utente));
-
+                    idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
                     Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
+
+                }else {
+                    Log.e("Firestore Error", "Error getting data", task.getException());
+                }
+
                     loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> { //chiamo il metodo per ottenere le tesi in base alle id tesi ottenute
                         if (tesiTask.isSuccessful()) {
                             ArrayList<Tesi> tesiList = tesiTask.getResult();
+                            Log.d(" Tesi", "Id Tesi " + tesiList.toString());
 
-                            Log.d("Tesi ", " Tesi : " + tesiList.toString());
 
                             //mostro sulla listview tutte le tesi dello studente
                             listView = view.findViewById(R.id.listTesiView);
@@ -79,9 +81,7 @@ public class LeMieTesiFragment extends Fragment {
                             Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
                         }
                     });
-                } else {
-                    Log.e("Firestore Error", "Error getting data", task.getException());
-                }
+
             });
 
         } else {
@@ -136,13 +136,15 @@ public class LeMieTesiFragment extends Fragment {
      */
     private Task<ArrayList<Tesi>> loadTesiData(ArrayList<Long> idTesiList) {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
-
         // Create a Firestore query to fetch Tesi documents based on idTesiList
         CollectionReference tesiCollection = FirebaseFirestore.getInstance().collection("Tesi");
+
+
 
         // Create a list of tasks to fetch Tesi documents
         List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
         for (Long idTesi : idTesiList) {
+            Log.d("Id Tese323i", "Id432 Tesi " + idTesi);
             tasks.add(tesiCollection.document(String.valueOf(idTesi)).get());
         }
 
@@ -150,6 +152,8 @@ public class LeMieTesiFragment extends Fragment {
         return Tasks.whenAllSuccess(tasks).continueWith(task -> {
             if (task.isSuccessful()) {
                 List<Object> results = task.getResult();
+                Log.d("Id Tese323i", "tesy " + results.toString());
+
                 for (Object result : results) {
                     if (result instanceof DocumentSnapshot document) {
                         if (document.exists()) {
@@ -170,6 +174,7 @@ public class LeMieTesiFragment extends Fragment {
                             tesi.setTipologia((String) document.get("tipologia"));
 
                             tesiList.add(tesi);
+
                         }
                     }
                 }

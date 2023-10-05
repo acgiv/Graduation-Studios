@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:rotation="0"
     android:visibility="visible"
-    tools:context=".ui.profilo.ProfiloProfessoreFragment">
+    tools:context=".ui.profilo.ProfiloFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

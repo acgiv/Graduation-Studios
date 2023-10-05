@@ -1,10 +1,8 @@
 package com.laureapp.ui.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.content.res.Configuration;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -148,5 +146,11 @@ public class HomeFragment extends Fragment {
         editor.putString("email", email);
         editor.apply();
     }
+
+    public static String getEmailFromSharedPreferences(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
+        return preferences.getString("email", null);
+    }
+
 
 }

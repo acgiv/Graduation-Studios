@@ -6,11 +6,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.laureapp.ui.card.Task.StudentAdapter;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 
-import java.util.Collection;
 import java.util.List;
 
 // è quell'oggetto che accederà al repository per fare le operazioni al db

@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class Tesi implements Serializable {
     private String abstract_tesi;
 
     @ColumnInfo(name="data_pubblicazione")
-    private Timestamp data_pubblicazione;
+    private Date data_pubblicazione;
 
 
     @ColumnInfo(name="ciclo_cdl")
@@ -83,11 +84,11 @@ public class Tesi implements Serializable {
         abstract_tesi = an_abstract_tesi;
     }
 
-    public Timestamp getData_pubblicazione() {
+    public Date getData_pubblicazione() {
         return data_pubblicazione;
     }
 
-    public void setData_pubblicazione(Timestamp dataPubblicazione) {
+    public void setData_pubblicazione(Date dataPubblicazione) {
         this.data_pubblicazione = dataPubblicazione;
     }
 

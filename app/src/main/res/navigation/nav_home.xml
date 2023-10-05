@@ -32,10 +32,10 @@
             android:id="@+id/action_fragment_home_to_tesisti"
             app:destination="@id/tesisti" />
 
-        <!-- Home to messaggi fragment -->
+        <!-- Home to segnalazioni fragment -->
         <action
-            android:id="@+id/action_fragment_home_to_messaggiFragment"
-            app:destination="@id/messaggiFragment" />
+            android:id="@+id/action_fragment_home_to_segnalazioniFragment"
+            app:destination="@id/segnStudentiFragment" />
 
     </fragment>
 
@@ -74,6 +74,9 @@
         <action
             android:id="@+id/action_fragment_tesisti_to_dettagli_tesista"
             app:destination="@id/dettagli_tesista" />
+        <action
+            android:id="@+id/action_tesisti_to_segnFragment"
+            app:destination="@id/segnFragment" />
     </fragment>
 
     <!--Fragment dettagli tesista -->
@@ -92,19 +95,33 @@
             app:destination="@id/dettagliTaskFragment" />
     </fragment>
 
-    <!--Fragment segnalazioni -->
+    <!--Fragment segnalazioni-->
     <fragment
-        android:id="@+id/messaggiFragment"
+        android:id="@+id/segnStudentiFragment"
+        android:name="com.laureapp.ui.home.SegnalazioniFragment"
+        android:label="Lista Segnalazioni"
+        tools:layout="@layout/fragment_segnalazioni_studente">
+        <action
+            android:id="@+id/action_segnalazioniFragment_to_discussioneFragment"
+            app:destination="@id/discussioneFragment" />
+        <action
+            android:id="@+id/action_segnalazioniFragment_to_fragment_home"
+            app:destination="@id/fragment_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/segnFragment"
         android:name="com.laureapp.ui.home.SegnalazioniFragment"
         android:label="Lista Segnalazioni"
         tools:layout="@layout/fragment_segnalazioni">
         <action
-            android:id="@+id/action_messaggiFragment_to_discussioneFragment"
+            android:id="@+id/action_segnalazioniFragment_to_discussioneFragment"
             app:destination="@id/discussioneFragment" />
         <action
-            android:id="@+id/action_messaggiFragment_to_fragment_home"
-            app:destination="@id/fragment_home" />
+            android:id="@+id/action_segnFragment_to_tesisti"
+            app:destination="@id/tesisti" />
     </fragment>
+
 
     <!--Fragment discussione -->
     <fragment
@@ -113,8 +130,8 @@
         android:label="Dettagni Segnalazione"
         tools:layout="@layout/fragment_discussione">
         <action
-            android:id="@+id/action_discussioneFragment_to_messaggiFragment"
-            app:destination="@id/messaggiFragment" />
+            android:id="@+id/action_discussioneFragment_to_segnalazioneFragment"
+            app:destination="@id/segnStudentiFragment" />
     </fragment>
 
     <!--Fragment task -->

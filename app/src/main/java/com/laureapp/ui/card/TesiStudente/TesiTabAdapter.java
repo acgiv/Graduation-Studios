@@ -1,33 +1,40 @@
-package com.laureapp.ui.TesiStudente;
+package com.laureapp.ui.card.TesiStudente;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Tesi;
-import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
-import java.util.ArrayList;
-
-public class TesiPagerAdapter extends FragmentPagerAdapter {
+public class TesiTabAdapter extends FragmentStateAdapter {
     private static final int NUM_TABS = 3; // Il numero di tab che hai
     Context context;
     String email;
     Bundle args;
 
 
-    public TesiPagerAdapter(FragmentManager fragmentManager, Bundle args) {
-        super(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        this.args = args;
+    public TesiTabAdapter(@NonNull FragmentActivity fragmentActivity){
+        super(fragmentActivity);
+
 
     }
 
-
+    @NonNull
     @Override
-    public Fragment getItem(int position) {
+    public Fragment createFragment(int position) {
         // Restituisci il fragment associato a ciascun tab
         switch (position) {
             case 0:
@@ -53,31 +60,7 @@ public class TesiPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return NUM_TABS;
     }
-
-
-    /**
-     * In questo metodo vengono mostrati i titoli delle varie tab
-     * @param position The position of the title requested
-     * @return
-     */
-    @Override
-    public CharSequence getPageTitle(int position) {
-        // Restituisci il titolo per ciascun tab
-        switch (position) {
-            case 0:
-                return "Le Mie Tesi";
-            case 1:
-                return "Classifica Tesi";
-            case 2:
-                return "Elenco Tesi";
-            default:
-                return null;
-        }
-    }
-
-
-
 }

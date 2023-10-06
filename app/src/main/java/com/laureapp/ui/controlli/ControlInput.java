@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -240,6 +241,11 @@ public class ControlInput {
             result =  true;
         }
         return result;
+    }
+
+    // Questa funzione mostra un messaggio di toast
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
 }

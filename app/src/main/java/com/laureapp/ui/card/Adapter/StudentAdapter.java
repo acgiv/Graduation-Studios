@@ -1,13 +1,20 @@
-package com.laureapp.ui.card.Task;
+package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,41 +31,45 @@ import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 import com.laureapp.ui.roomdb.entity.Utente;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Questo adapter fornisce l'accesso ai data Item. In questo caso,
  * ai ListItem della ListView e si occupa di settare graficamente
  * gli elementi della lista
  */
-public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> {
+public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements Filterable {
     private final List<StudenteWithUtente> studentList;
+    private List<StudenteWithUtente> filteredStudentList;
+    private Filter studentFilter;
+    private StudentFilter filter;
+
+
+
 
 
     /**
-     *
-     * @param context si riferisce al contesto in cui viene utilizzato
+     * @param context     si riferisce al contesto in cui viene utilizzato
      * @param studentList corrisponde alla lista di studenti da passare
      */
-    public StudentAdapter(@NonNull Context context, List<StudenteWithUtente> studentList) {
+    public StudentAdapter(@NonNull Context context, List<StudenteWithUtente> studentList, List<StudenteWithUtente> filteredStudentList) {
         super(context, 0, studentList);
         this.studentList = new ArrayList<>(studentList);
+        this.filteredStudentList = filteredStudentList; // Inizializza filteredStudentList con la stessa lista
     }
 
-    @NonNull
-    @Override
-    public Filter getFilter() {
-        return studentFilter;
-    }
 
 
 
     /**
-     *
-     * @param position si riferisce alla posizione dell'item della lista
+     * @param position    si riferisce alla posizione dell'item della lista
      * @param convertView si riferisce alla variabile che gestisce il cambiamento della view
-     * @param parent Interfaccia per le informazioni globali riguardo all'ambiente dell'applicazione.
-     *               usata per chiamare operazioni a livello applicazione launching activities, broadcasting e receiving intents
+     * @param parent      Interfaccia per le informazioni globali riguardo all'ambiente dell'applicazione.
+     *                    usata per chiamare operazioni a livello applicazione launching activities, broadcasting e receiving intents
      * @return la view con la lista aggiornata
      */
     @NonNull
@@ -67,11 +78,11 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.lista_tesisti, parent, false);
         }
-        Log.d("VistaAdapter", "Adapter View Visualizzata");
         TextView nomeTextView = convertView.findViewById(R.id.nomeTextView);
         TextView matricolaTextView = convertView.findViewById(R.id.matricolaTextView);
 
         StudenteWithUtente studenteWithUtenteItem = getItem(position);
+
 
         if (studenteWithUtenteItem != null && studenteWithUtenteItem.getUtente() != null) {
             Utente utente = studenteWithUtenteItem.getUtente();
@@ -92,44 +103,57 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> {
             matricolaTextView.setText("");
         }
 
+
         return convertView;
     }
 
-    private Filter studentFilter = new Filter() {
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new StudentFilter();
+        }
+        return filter;
+    }
+
+    private class StudentFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            List<StudenteWithUtente> suggestions = new ArrayList<>();
+            List<StudenteWithUtente> filteredStudents = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                suggestions.addAll(studentList);
+                // Se il testo di ricerca è vuoto, mostra tutti gli studenti
+                filteredStudents.addAll(studentList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
 
-                for (StudenteWithUtente item : studentList) {
-                    if (item.getUtente().getNome().toLowerCase().contains(filterPattern) || item.getUtente().getCognome().toLowerCase().contains(filterPattern) || item.getStudente().getMatricola().toString().toLowerCase().contains(filterPattern)) {
-                        suggestions.add(item);
+                for (StudenteWithUtente student : studentList) {
+                    // Filtra in base alla matricola (sostituisci "getMatricola()" con il metodo corretto)
+                    if (student.getStudente().getMatricola().toString().toLowerCase().contains(filterPattern)) {
+                        filteredStudents.add(student);
                     }
                 }
             }
 
-            results.values = suggestions;
-            results.count = suggestions.size();
-
+            results.values = filteredStudents;
+            results.count = filteredStudents.size();
             return results;
         }
 
+
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            clear();
-            addAll((List) results.values);
+            filteredStudentList.clear();
+            filteredStudentList.addAll((List<StudenteWithUtente>) results.values);
             notifyDataSetChanged();
         }
 
-        @Override
-        public CharSequence convertResultToString(Object resultValue) {
-            return ((StudenteWithUtente) resultValue).getUtente().getNome();
-        }
-    };
+    }
+
+
+
 }
+
+
 

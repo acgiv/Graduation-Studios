@@ -1,12 +1,12 @@
 package com.laureapp.ui.card.Task;
 
-import static androidx.databinding.DataBindingUtil.setContentView;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,39 +15,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Filter;
-import android.widget.ListView;
-import androidx.appcompat.widget.SearchView;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import android.widget.ListView;
+
+
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.R;
-import com.laureapp.ui.roomdb.RoomDbSqlLite;
-import com.laureapp.ui.roomdb.entity.Professore;
+import com.laureapp.ui.card.Adapter.StudentAdapter;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
 import com.laureapp.ui.roomdb.entity.Utente;
-import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+
 
 /**
  * Questa classe gestisce la lista degli studenti mostrata dopo aver cliccato la card
@@ -61,8 +48,15 @@ public class TesistiFragment extends Fragment {
     Context context;
     Bundle args;
     private FirebaseAuth mAuth;
+    SearchView searchView;
+    ListView listView;
+
+
 
     private List<StudenteWithUtente> studentList = new ArrayList<>();
+    private List<StudenteWithUtente> filteredStudentList = new ArrayList<>();
+
+
 
     public TesistiFragment() {
         // Required empty public constructor
@@ -84,10 +78,8 @@ public class TesistiFragment extends Fragment {
             Log.d("ruolo ", ruolo);
         }
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
-
-        AutoCompleteTextView editText = view.findViewById(R.id.searchTextView);
-        StudentAdapter adapter = new StudentAdapter(context, studentList);
-        editText.setAdapter(adapter);
+        searchView = view.findViewById(R.id.searchTesistiView);
+        listView = view.findViewById(R.id.listView);
 
         return view;
     }
@@ -98,8 +90,13 @@ public class TesistiFragment extends Fragment {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         CollectionReference usersRef = firestoreDB.collection("Utenti");
         mNav = Navigation.findNavController(view);
-        ListView listView = view.findViewById(R.id.listView);
-        StudentAdapter adapter = new StudentAdapter(context, studentList);
+
+
+        StudentAdapter adapter = new StudentAdapter(context, studentList,filteredStudentList);
+
+
+
+
 
 
         usersRef.get()
@@ -125,6 +122,8 @@ public class TesistiFragment extends Fragment {
 
                                                 // Aggiungi studenteWithUtente alla lista
                                                 studentList.add(studenteWithUtente);
+
+
                                                 adapter.notifyDataSetChanged();
 
                                                 Log.d("Lista Studenti Tesisti", studenteWithUtente.getUtente().toString());
@@ -144,8 +143,24 @@ public class TesistiFragment extends Fragment {
                             }
                         });
 
-                            listView.setAdapter(adapter);
 
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Quando il testo cambia, applica il filtro
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+
+        listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista);
@@ -156,7 +171,7 @@ public class TesistiFragment extends Fragment {
 
 
     /**
-     * Questo metodo mi permette di caricare da firestore gli id delle tesi dando come parametro l'id dello studente
+     * Questo metodo mi permette di caricare da firestore gli id degli studenti dando come parametro l'id dell'utente
      *
      * @param id_utente
      * @return una lista di tipo Long contenente gli id delle tesi associate allo studente

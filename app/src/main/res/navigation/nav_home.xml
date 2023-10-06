@@ -85,11 +85,6 @@
         <action
             android:id="@+id/action_dettagli_tesista_to_task"
             app:destination="@id/taskFragment" />
-
-        <!--TODO: CANCELLARE DOPO AVER AGGIORNATO IL DATABASE -->
-        <action
-            android:id="@+id/action_dettagli_tesista_to_dettagli_task"
-            app:destination="@id/dettagliTaskFragment" />
     </fragment>
 
     <!--Fragment messaggi -->

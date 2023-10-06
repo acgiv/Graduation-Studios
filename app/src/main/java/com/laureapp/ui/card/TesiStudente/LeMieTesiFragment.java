@@ -31,7 +31,6 @@ import java.util.List;
 
 public class LeMieTesiFragment extends Fragment {
     Context context;
-    UtenteModelView utenteView = new UtenteModelView(context); // Inizializza utenteView con un'istanza di UtenteModelView
 
     Long id_utente;
     Long id_studente;
@@ -54,6 +53,7 @@ public class LeMieTesiFragment extends Fragment {
         context = getContext();
         email = getEmailFromSharedPreferences(); //chiamata al metodo per ottenere la mail
         if (email != null) { // se la mail non è nulla
+            UtenteModelView utenteView = new UtenteModelView(context); // Inizializza utenteView con un'istanza di UtenteModelView
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
             id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
 

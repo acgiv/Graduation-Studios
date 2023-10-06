@@ -17,7 +17,7 @@
             android:id="@+id/action_fragment_home_to_social_fragment"
             app:destination="@id/social_fragment" />
 
-        <!-- Home to profilop studente fragment -->
+        <!-- Home to profilo studente fragment -->
         <action
             android:id="@+id/action_fragment_home_to_profilo"
             app:destination="@id/profilo_studente" />
@@ -36,9 +36,6 @@
         <action
             android:id="@+id/action_fragment_home_to_messaggiFragment"
             app:destination="@id/messaggiFragment" />
-        <action
-            android:id="@+id/action_fragment_home_to_listaTesi"
-            app:destination="@id/listaTesi" />
 
     </fragment>
 
@@ -151,21 +148,5 @@
     </fragment>
 
     <!-- Fragment lista tesi professore -->
-
-    <fragment
-        android:id="@+id/listaTesi"
-        android:name="com.laureapp.ui.TesiProfessore.ListaTesi"
-        android:label="ListaTesi"
-        tools:layout="@layout/fragment_lista_tesi">
-        <action
-            android:id="@+id/action_listaTesi_to_listaTesiProfessore"
-            app:destination="@id/listaTesiProfessore" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/listaTesiProfessore"
-        android:name="com.laureapp.ui.TesiProfessore.ListaTesiProfessore"
-        android:label="fragment_lista_tesi_professore"
-        tools:layout="@layout/fragment_lista_tesi_professore" />
 
 </navigation>

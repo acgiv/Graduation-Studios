@@ -1,4 +1,4 @@
-package com.laureapp.ui.TesiProfessore;
+package com.laureapp.ui.card.TesiProfessore;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

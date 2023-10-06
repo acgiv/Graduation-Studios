@@ -1,4 +1,4 @@
-package com.laureapp.ui.TesiProfessore;
+package com.laureapp.ui.card.TesiProfessore;
 
 import android.os.Bundle;
 
@@ -11,8 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.laureapp.R;
-
-public class ListaTesi extends Fragment {
+public class ListaTesiTesisti extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class ListaTesi extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_lista_tesi, container, false);
+        return inflater.inflate(R.layout.fragment_lista_tesi_tesisti, container, false);
     }
 
     @Override

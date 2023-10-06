@@ -81,7 +81,6 @@ public class DettagliTesistaFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        SearchView searchView = view.findViewById(R.id.searchTaskView);
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         mNav = Navigation.findNavController(view);
         Button taskButton = view.findViewById(R.id.button_visualizza_task_tesista);
@@ -94,7 +93,6 @@ public class DettagliTesistaFragment extends Fragment {
         });
 
         deleteButton.setOnClickListener(view1 ->{
-            mNav.navigate(R.id.action_dettagli_tesista_to_dettagli_task);
         });
     }
 }

@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+
+
     <!-- Barra di ricerca -->
-    <AutoCompleteTextView
-        android:id="@+id/searchTextView"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchTesistiView"
+        app:queryHint="Cerca Tesisti"
+        app:iconifiedByDefault="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:hint="Cerca Tesisti"/>
-    
+        android:iconifiedByDefault="false">
+    </androidx.appcompat.widget.SearchView>
+
 
     <!-- Lista di nomi -->
     <ListView

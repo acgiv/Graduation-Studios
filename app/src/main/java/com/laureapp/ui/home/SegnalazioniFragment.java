@@ -19,6 +19,7 @@ import java.util.List;
 
 
 import com.laureapp.R;
+import com.laureapp.ui.roomdb.entity.Segnalazione;
 
 public class SegnalazioniFragment extends Fragment {
 
@@ -33,14 +34,16 @@ public class SegnalazioniFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_segnalazioni_studente, container, false);
 
         // Ottieni il riferimento alla ListView
-        ListView listView = rootView.findViewById(R.id.list_view);
+        ListView listView = rootView.findViewById(R.id.segn_list_view);
 
 
-        // Crea una lista di dati di esempio
-        List<String> segnalazioniList = new ArrayList<>();
-        segnalazioniList.add("Segnalazione 1");
-        segnalazioniList.add("Segnalazione 2");
-        segnalazioniList.add("Segnalazione 3");
+        // Crea una lista di oggetti Segnalazione invece di una lista di stringhe
+        List<Segnalazione> segnalazioniList = new ArrayList<>();
+        // Aggiungi oggetti Segnalazione alla lista
+        segnalazioniList.add(new Segnalazione("Titolo 1", "Richiesta 1"));
+        segnalazioniList.add(new Segnalazione("Titolo 2", "Richiesta 2"));
+        segnalazioniList.add(new Segnalazione("Titolo 3", "Richiesta 3"));
+
 
 
         // Crea l'adapter personalizzato e imposta sulla ListView

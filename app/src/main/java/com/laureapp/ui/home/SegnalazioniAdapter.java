@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.laureapp.R;
+import com.laureapp.ui.roomdb.entity.Segnalazione;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,9 @@ import java.util.List;
 
 
 
-public class SegnalazioniAdapter extends ArrayAdapter<String> {
+public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
 
-    public SegnalazioniAdapter(Context context, List<String> segnalazioni) {
+    public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioni) {
         super(context, 0, segnalazioni);
     }
 
@@ -33,18 +34,17 @@ public class SegnalazioniAdapter extends ArrayAdapter<String> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.lista_segnalazioni, parent, false);
         }
 
-        // Ottieni l'elemento corrente
-        String segnalazione = getItem(position);
+        // Ottieni l'oggetto Segnalazione corrente
+        Segnalazione segnalazione = getItem(position);
 
-        // Imposta il testo nell'elemento principale
-        TextView mainTextView = convertView.findViewById(R.id.main_text_view);
-        mainTextView.setText(segnalazione);
+        // Imposta il titolo dell'elemento principale
+        TextView mainTextView = convertView.findViewById(R.id.text_title);
+        mainTextView.setText(segnalazione.getTitolo());
 
-        // Imposta il testo nell'elemento secondario (subitem)
-        TextView subTextView = convertView.findViewById(R.id.sub_text_view);
-        subTextView.setText("Sottotesto per " + segnalazione);
+        // Imposta la richiesta nell'elemento secondario (subitem)
+        TextView subTextView = convertView.findViewById(R.id.text_richiesta);
+        subTextView.setText(segnalazione.getRichiesta());
 
         return convertView;
     }
 }
-

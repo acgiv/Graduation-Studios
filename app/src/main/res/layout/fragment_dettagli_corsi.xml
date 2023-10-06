@@ -60,7 +60,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:background="@color/color_primary"
-                    android:visibility="visible"></View>
+                    android:visibility="visible" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -73,7 +74,7 @@
                     android:textStyle="bold"
                     android:drawableLeft="@drawable/baseline_person_40_white"
                     android:drawablePadding="8dp"
-                    tools:visibility="visible"></TextView>
+                    tools:visibility="visible" />
 
 
                 <!--Campo nome corso -->
@@ -81,14 +82,14 @@
                     android:layout_width="348dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="35dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Corso:"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:visibility="visible"></TextView>
+                    tools:visibility="visible" />
 
                 <!--Linea grigia che separa corso con ciclo cdl -->
                 <View
@@ -103,14 +104,14 @@
                     android:layout_width="348dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="63dp"
                     android:drawableRight="@drawable/edit_icon"
                     android:text="Ciclo CDL:"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:visibility="visible"></TextView>
+                    tools:visibility="visible" />
                 <!--Linea grigia che separa ciclo cdl e nome corso di laurea -->
                 <View
                     android:layout_width="match_parent"
@@ -131,7 +132,7 @@
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:visibility="visible"></TextView>
+                    tools:visibility="visible" />
                 <!--Linea grigia che separa campi di testo cognome e email -->
                 <View
                     android:layout_width="match_parent"
@@ -151,7 +152,7 @@
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:visibility="visible"></TextView>
+                    tools:visibility="visible" />
 
                 <!--Linea grigia che separa la fascoltà dal pulsante elimina-->
                 <View

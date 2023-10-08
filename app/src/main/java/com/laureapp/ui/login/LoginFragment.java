@@ -31,6 +31,7 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentLoginBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
@@ -42,6 +43,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class LoginFragment extends Fragment {
 
@@ -98,6 +100,12 @@ public class LoginFragment extends Fragment {
         ProfessoreModelView pr = new ProfessoreModelView(context);
         ConnectivityManager cm = (ConnectivityManager) requireContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         //Pulsante di login
+        Log.d("PROFESSORI", pr.getAllProfessore().toString());
+        Log.d("STUDENTI", st.getAllStudente().toString());
+
+
+
+
         binding.buttonLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
                 HashMap<String, Boolean> result = is_correct_email_password();

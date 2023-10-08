@@ -47,7 +47,7 @@
     <string name="errore_email">Inserisci un indirizzo email valido.</string>
     <string name="errore_campo_vuoto">Campo {campo} obbligatorio mancante!</string>
     <string name="errore_matricola">Campo {campo} deve contenere 6 cifre numeriche.</string>
-    <string name="errore_matricola_duplicate">Esiste uno studente assosciato a questa matricola.</string>
+    <string name="errore_matricola_duplicate">Esiste uno {campo} assosciato a questa matricola.</string>
     <string name="errore_media">Campo {campo} deve contenere 2 cifre numeriche comprese tra 0 e 30</string>
     <string name="errore_scelta">Il campo inserito non è presente nella scelta.</string>
     <string name="password_not_safe_error">La password non incontra i requisiti di sicurezza</string>

@@ -1,7 +1,5 @@
 package com.laureapp.ui.register;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +22,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -35,6 +32,7 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegister2Binding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -50,7 +48,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -145,7 +146,13 @@ public class Register2Fragment extends Fragment {
                         if (task.isSuccessful()) {
                             FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
                             // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
-                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            try {
+                                ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            } catch (ExecutionException | InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+
+
                             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
                             bundle.putSerializable("email", ut.getEmail());
                             HomeActivity.putExtras(bundle);
@@ -164,7 +171,11 @@ public class Register2Fragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            try {
+                                ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
+                            } catch (ExecutionException | InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
                             bundle.putSerializable("email", ut.getEmail());
                             HomeActivity.putExtras(bundle);
@@ -180,7 +191,8 @@ public class Register2Fragment extends Fragment {
         }
     }
 
-    private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB)  {
+    private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB) throws ExecutionException, InterruptedException {
+
 
         if (currentUser != null) {
             String uid = currentUser.getUid();
@@ -188,44 +200,71 @@ public class Register2Fragment extends Fragment {
             ut.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
             if (StringUtils.equals(ruolo, getString(R.string.professore))){
                 ut.setNome_cdl(binding.dropdownprofessoreCorso.getText().toString());
-            }else if (StringUtils.equals(ruolo, getString(R.string.professore))){
+            }else if (StringUtils.equals(ruolo, getString(R.string.studente))){
                 ut.setNome_cdl(binding.dropdownCorso.getText().toString());
             }
 
-            ut_vew.insertUtente(ut);
-            ut.setId_utente(ut_vew.getIdUtente(ut.getEmail()));
-            firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
-                    .addOnSuccessListener(aVoid -> {
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            System.out.println("Error writing document");
-                        }
-                    });
-            if (StringUtils.equals(ruolo, getString(R.string.studente))){
-                // Qui puoi creare e impostare il tuo oggetto Studente
-                Studente studente = new Studente();
-                studente.setId_utente(ut.getId_utente());
-                studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
-                studente.setEsami_mancanti(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
+            QueryFirestore queryFirestore = new QueryFirestore();
 
-                StudenteModelView st_db = new StudenteModelView(context);
-                st_db.insertStudente(studente);
-                firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
-                        .addOnSuccessListener(aVoid -> {
-                        });
-            }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
-                Professore professore = new Professore();
-                professore.setId_utente(ut.getId_utente());
-                professore.setMatricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
-                ProfessoreModelView pr_db = new ProfessoreModelView(context);
-                pr_db.insertProfessore(professore);
-                firestoreDB.collection("Utenti").document("Professori").collection("Professori")
-                        .document(uid).set(professore.getProfessoreMap())
-                        .addOnSuccessListener(aVoid -> {
-                        });
-            }
+
+            queryFirestore.trovaIdUtenteMax(context)
+                    .thenAccept(idMax -> {
+                        idMax = idMax+ 1L;
+                        ut.setId_utente(idMax);
+                        ut_vew.insertUtente(ut);
+                        Log.d("ID_MAX", String.valueOf(idMax)); // Stampa il nuovo valore di idMax
+                        firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
+                                .addOnSuccessListener(aVoid -> {
+                                })
+                                .addOnFailureListener(e -> System.out.println("Error writing document"));
+                        if (StringUtils.equals(ruolo, getString(R.string.studente))){
+                            // Qui puoi creare e impostare il tuo oggetto Studente
+                            Studente studente = new Studente();
+                            studente.setId_utente(idMax);
+
+                            //Setto id_studente
+                            queryFirestore.trovaIdStudenteMax(context)
+                                    .thenAccept(idMaxStudente -> {
+
+
+                                                studente.setId_studente(idMaxStudente + 1L);
+                                                studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
+                                                studente.setEsami_mancanti(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
+
+                                                StudenteModelView st_db = new StudenteModelView(context);
+                                                st_db.insertStudente(studente);
+                                                firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
+                                                        .addOnSuccessListener(aVoid -> {
+
+                                                });
+
+                            });
+                        }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
+                            Professore professore = new Professore();
+                            professore.setId_utente(idMax);
+
+                            //Setto id_professore
+                            queryFirestore.trovaIdProfessoreMax(context)
+                                    .thenAccept(idMaxProfessore -> {
+
+                                        professore.setId_professore(idMaxProfessore + 1L);
+                                        professore.setMatricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
+                                        ProfessoreModelView pr_db = new ProfessoreModelView(context);
+                                        pr_db.insertProfessore(professore);
+                                        firestoreDB.collection("Utenti").document("Professori").collection("Professori")
+                                                .document(uid).set(professore.getProfessoreMap())
+                                                .addOnSuccessListener(aVoid -> {
+                                                });
+
+                                    });
+
+
+                        }
+                    })
+                    .exceptionally(e -> {
+                        throw new RuntimeException(e);
+                    });
+
         }
         return ut.getId_utente();
     }
@@ -301,7 +340,7 @@ public class Register2Fragment extends Fragment {
                             ControlInput.set_error(binding.matricolaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                             return true;
                         }else{
-                            String error_message = getString(R.string.errore_matricola_duplicate);
+                            String error_message = getString(R.string.errore_matricola_duplicate).replace("{campo}", ruolo);
                             ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
                         }
                     }
@@ -309,7 +348,7 @@ public class Register2Fragment extends Fragment {
                 case "Media":
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
                         String media = Objects.requireNonNull(binding.mediaRegister.getText()).toString();
-                        if (StringUtils.isNumeric(media) && (Integer.parseInt(media)) >= 0 && Integer.parseInt(media) <= 30) {
+                        if (StringUtils.isNumeric(media) && (Integer.parseInt(media)) >= 18 && Integer.parseInt(media) <= 30) {
                             ControlInput.set_error(binding.mediaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                             return true;
                         } else {

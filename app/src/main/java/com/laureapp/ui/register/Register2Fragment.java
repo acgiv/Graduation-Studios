@@ -81,6 +81,11 @@ public class Register2Fragment extends Fragment {
                              Bundle savedInstanceState) {
         context = requireContext();
         binding = FragmentRegister2Binding.inflate(inflater, container, false);
+        bundle = getArguments();
+        if (bundle != null) {
+            ruolo = bundle.getString("ruolo");
+            ut = bundle.getSerializable("utente", Utente.class);
+        }
         autoCompleteTextView = binding.filledExposedDropdown;
         autoCompleteTextViewcorso = binding.dropdownCorso;
         professoreTextViewcorso = binding.dropdownprofessoreCorso;
@@ -90,11 +95,7 @@ public class Register2Fragment extends Fragment {
         // Configura gli ascoltatori per il cambiamento di testo negli elementi di input
         setupTextWatchers();
 
-        bundle = getArguments();
-        if (bundle != null) {
-            ruolo = bundle.getString("ruolo");
-            ut = bundle.getSerializable("utente", Utente.class);
-        }
+
         mAuth = FirebaseAuth.getInstance();
         return binding.getRoot();
     }
@@ -137,6 +138,7 @@ public class Register2Fragment extends Fragment {
                 cont.addAndGet(1);
             }
         });
+        Log.d("cont", String.valueOf(cont.get()));
         if (StringUtils.equals(ruolo, getString(R.string.studente)) && cont.get()==5){
             mAuth.createUserWithEmailAndPassword(ut.getEmail(), ut.getPassword())
                     .addOnCompleteListener(task -> {
@@ -145,7 +147,7 @@ public class Register2Fragment extends Fragment {
                             // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
                             ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
                             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
-                            bundle.putSerializable("Utente", ut);
+                            bundle.putSerializable("email", ut.getEmail());
                             HomeActivity.putExtras(bundle);
                             startActivity(HomeActivity);
                             requireActivity().finish();
@@ -183,6 +185,13 @@ public class Register2Fragment extends Fragment {
         if (currentUser != null) {
             String uid = currentUser.getUid();
             UtenteModelView ut_vew = new UtenteModelView(context);
+            ut.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
+            if (StringUtils.equals(ruolo, getString(R.string.professore))){
+                ut.setNome_cdl(binding.dropdownprofessoreCorso.getText().toString());
+            }else if (StringUtils.equals(ruolo, getString(R.string.professore))){
+                ut.setNome_cdl(binding.dropdownCorso.getText().toString());
+            }
+
             ut_vew.insertUtente(ut);
             ut.setId_utente(ut_vew.getIdUtente(ut.getEmail()));
             firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
@@ -199,11 +208,8 @@ public class Register2Fragment extends Fragment {
                 Studente studente = new Studente();
                 studente.setId_utente(ut.getId_utente());
                 studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
+                studente.setEsami_mancanti(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
 
-                //TODO: modificare studente in cdl
-                /*studente.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
-                studente.setEsami_mancati(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
-                studente.setCorso_laurea(binding.dropdownCorso.getText().toString());*/
                 StudenteModelView st_db = new StudenteModelView(context);
                 st_db.insertStudente(studente);
                 firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
@@ -229,11 +235,14 @@ public class Register2Fragment extends Fragment {
 
     private void inizializzate_binding_text(){
         elem_text.put("matricola", binding.matricolaRegister);
-        elem_text.put("mancanti", binding.esamiMancantiRegister);
-        elem_text.put("media", binding.mediaRegister);
-        elem_text.put("Corsi", binding.dropdownCorso);
         elem_text.put("Dipartimento", binding.filledExposedDropdown);
-        elem_text.put("CorsiProfessore", binding.dropdownprofessoreCorso);
+        if(StringUtils.equals(ruolo, getString(R.string.professore))){
+            elem_text.put("CorsiProfessore", binding.dropdownprofessoreCorso);
+        }else if (StringUtils.equals(ruolo, getString(R.string.studente))){
+            elem_text.put("mancanti", binding.esamiMancantiRegister);
+            elem_text.put("media", binding.mediaRegister);
+            elem_text.put("Corsi", binding.dropdownCorso);
+        }
     }
 
     private void setupTextWatchers(){
@@ -453,7 +462,7 @@ public class Register2Fragment extends Fragment {
                 String inputText = binding.dropdownprofessoreCorso.getText().toString();
 
                 String[] enteredCourses = StringUtils.deleteWhitespace(inputText).split(",");
-                Log.d ("corsi", Arrays.toString(enteredCourses));
+                Log.d ("corsi", String.valueOf(enteredCourses.toString()));
                 if( !insertedCourses.contains(String.valueOf(enteredCourses[enteredCourses.length-1]))){
                     validCourses.add(enteredCourses[enteredCourses.length-1]);
                 }else{

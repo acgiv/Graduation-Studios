@@ -13,17 +13,15 @@
     import java.util.HashMap;
     import java.util.Map;
 
-    @Entity(tableName ="Studente" , foreignKeys = {
+    @Entity(tableName = "Studente", foreignKeys = {
             @ForeignKey(entity = Utente.class, parentColumns = "id_utente", childColumns = "id_utente", onDelete = ForeignKey.CASCADE)
-    },
-            indices = {@Index("id_utente")})
+    }, indices = {@Index("id_utente")})
     public class Studente implements Serializable {
 
         //Colonne tabella
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id_studente")
         private Long id_studente;
-
         @ColumnInfo(name = "id_utente")
         private Long id_utente;
         @ColumnInfo(name = "matricola")
@@ -33,7 +31,16 @@
         @ColumnInfo(name = "esami_mancanti")
         private int esami_mancanti;
 
-       //Getter e setter
+        public Studente(Long id_studente, Long id_utente, Long matricola, int media, int esami_mancanti) {
+            this.id_studente = id_studente;
+            this.id_utente = id_utente;
+            this.matricola = matricola;
+            this.media = media;
+            this.esami_mancanti = esami_mancanti;
+        }
+
+        public Studente(){}
+        //Getter e setter
 
         public Long getId_studente() {
             return id_studente;

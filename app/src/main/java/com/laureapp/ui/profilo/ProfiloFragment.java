@@ -71,10 +71,13 @@ public class ProfiloFragment extends Fragment {
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            email = getEmailFromSharedPreferences(); //chiamata al metodo per ottenere la mail
+            email = args.getString("email");
         }
         user  = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("email", String.valueOf(utente));
+
         utente = ut_view.findAllById(ut_view.getIdUtente(email));
+        Log.d("utente", String.valueOf(utente));
         binding = FragmentProfiloBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

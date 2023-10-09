@@ -16,6 +16,8 @@ public class ElencoTesiFragment extends Fragment {
                              Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_elenco_tesi_studente,container,false);
 
+
+
     }
 
 }

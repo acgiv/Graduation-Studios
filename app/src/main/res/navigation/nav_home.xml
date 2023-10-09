@@ -61,7 +61,12 @@
         android:id="@+id/tesiStudenteFragment"
         android:name="com.laureapp.ui.card.TesiStudente.TesiStudenteFragment"
         android:label="Tesi"
-        tools:layout="@layout/fragment_tesi_studente" >
+        tools:layout="@layout/fragment_tab_tesi_studente" >
+
+        <action
+            android:id="@+id/action_fragment_tesistudenteFragment_to_dettagli_tesi_studente"
+            app:destination="@id/dettagliTesiStudente" />
+
     </fragment>
 
     <!--Fragment tesisti -->
@@ -144,4 +149,12 @@
 
     <!-- Fragment lista tesi professore -->
 
+
+    <!--Fragment Dettaglio tesi studente-->
+    <fragment
+        android:id="@+id/dettagliTesiStudente"
+        android:name="com.laureapp.ui.card.TesiStudente.DettagliTesiStudenteFragment"
+        android:label="Dettaglio Tesi"
+        tools:layout="@layout/fragment_dettagli_tesi_studente">
+    </fragment>
 </navigation>

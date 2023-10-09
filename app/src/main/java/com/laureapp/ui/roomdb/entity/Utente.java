@@ -3,7 +3,6 @@ package com.laureapp.ui.roomdb.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -30,13 +29,23 @@ public class Utente implements Serializable {
     @ColumnInfo(name = "password")
     private String password;
 
-
-
     @ColumnInfo(name = "nome_cdl")
     private String nome_cdl;
 
     @ColumnInfo(name = "facolta")
     private String facolta;
+
+
+    public Utente(Long id_utente, String nome, String cognome, String email, String password, String nome_cdl, String facolta) {
+        this.id_utente = id_utente;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.password = password;
+        this.nome_cdl = nome_cdl;
+        this.facolta = facolta;
+    }
+    public Utente(){}
 
     public Long getId_utente() {
         return id_utente;

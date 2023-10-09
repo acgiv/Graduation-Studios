@@ -1,11 +1,16 @@
 package com.laureapp.ui.card.TesiStudente;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import androidx.navigation.Navigation;
+
 import com.laureapp.R; // Replace with the correct package name
 import com.laureapp.ui.roomdb.entity.Tesi;
 
@@ -29,22 +34,31 @@ public class LeMieTesiAdapter extends ArrayAdapter<Tesi> {
             listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_studente, parent, false);
         }
 
-        Tesi currentTesi = mTesiList.get(position);
+        final Tesi currentTesi = mTesiList.get(position);
 
         TextView titleTextView = listItemView.findViewById(R.id.titoloTesi);
 
-        // Check for null values before setting text
         if (currentTesi != null) {
-            String title = currentTesi.getTitolo();
+            String titolo = currentTesi.getTitolo();
 
-            if (title != null) {
-                titleTextView.setText(title);
+            if (titolo != null) {
+                titleTextView.setText(titolo);
             } else {
                 titleTextView.setText("Nessuna tesi trovata"); // Set an empty string or handle it as needed
             }
-
         }
+
+        //Qui gestisco quando l'utnte clicca una tesi
+        listItemView.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putSerializable("Tesi",currentTesi);
+            Navigation.findNavController(v).navigate(R.id.action_fragment_tesistudenteFragment_to_dettagli_tesi_studente,args);
+
+
+
+        });
 
         return listItemView;
     }
+
 }

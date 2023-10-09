@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity(tableName ="Professore",foreignKeys = {
-        @ForeignKey(entity = Utente.class, parentColumns = "id_utente", childColumns = "id_utente"
+        @ForeignKey(entity = Utente.class, parentColumns = "id_utente", childColumns = "id_utente",onDelete = ForeignKey.CASCADE
         )}
 )
 public class Professore implements Serializable {
@@ -25,6 +25,14 @@ public class Professore implements Serializable {
 
     @ColumnInfo(name = "matricola")
     private String matricola;
+
+    public Professore(Long id_professore, Long id_utente, String matricola) {
+        this.id_professore = id_professore;
+        this.id_utente = id_utente;
+        this.matricola = matricola;
+    }
+
+    public Professore(){}
 
     public Long getId_professore() {
         return id_professore;

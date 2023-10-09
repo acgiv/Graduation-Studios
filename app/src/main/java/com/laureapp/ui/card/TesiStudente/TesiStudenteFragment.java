@@ -27,7 +27,7 @@ public class TesiStudenteFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tesi_studente, container, false);
+        View view = inflater.inflate(R.layout.fragment_tab_tesi_studente, container, false);
         tabLayout = view.findViewById(R.id.TabLayoutTesi);
         viewPager2 = view.findViewById(R.id.viewPager2);
         return view;

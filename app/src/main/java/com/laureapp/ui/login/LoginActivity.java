@@ -8,7 +8,9 @@
     import androidx.navigation.ui.NavigationUI;
 
     import android.os.Bundle;
+
     import com.laureapp.R;
+    import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 
 
     public class LoginActivity extends AppCompatActivity {
@@ -25,6 +27,7 @@
 
             navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
             NavigationUI.setupActionBarWithNavController(this, navController);
+
         }
 
         @Override

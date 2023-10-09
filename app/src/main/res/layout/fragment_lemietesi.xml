@@ -7,18 +7,14 @@
     android:id="@+id/LeMieTesiList"
     >
 
-
-
-    <!-- Lista di nomi -->
+    <!-- Lista di tesi -->
     <ListView
         android:id="@+id/listTesiView"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="500dp"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
         android:layout_marginBottom="?android:attr/actionBarSize" />
 
 </LinearLayout>
-
-

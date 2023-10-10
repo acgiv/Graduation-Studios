@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity(tableName = "Studente_Tesi", foreignKeys = {
-        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi"),
-        @ForeignKey(entity = Studente.class, parentColumns = "id_studente", childColumns = "id_studente")
+        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi", onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = Studente.class, parentColumns = "id_studente", childColumns = "id_studente", onDelete = ForeignKey.CASCADE)
 },
         indices = {@Index("id_tesi"), @Index("id_studente") })
 public class StudenteTesi implements Serializable {

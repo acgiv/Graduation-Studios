@@ -29,14 +29,12 @@ import com.laureapp.ui.roomdb.entity.Vincolo;
 @Database(entities = {Studente.class, Utente.class,
         Professore.class, StudenteTesi.class, Vincolo.class,Ricevimenti.class,
         TesiProfessore.class, Tesi.class, TaskTesi.class
-}, version = 3)
+}, version = 8)
 @TypeConverters({Converters.class})
 public abstract class RoomDbSqlLite extends RoomDatabase{
 
-        public static final String DATABASE_NAME = "Graduation_Studio";
+        public static final String DATABASE_NAME = "Graduation_Studio_V2";
         private static volatile RoomDbSqlLite INSTANCE;
-
-
 
         public abstract StudenteDao studenteDao();
         public abstract UtenteDao utenteDao();
@@ -56,7 +54,7 @@ public abstract class RoomDbSqlLite extends RoomDatabase{
                         INSTANCE =
                                 Room.databaseBuilder(context.getApplicationContext(),
                                                 RoomDbSqlLite.class, DATABASE_NAME)
-                                        .allowMainThreadQueries() // questo consente di far eseguire le query in backgroud thread
+                                        .allowMainThreadQueries()// questo consente di far eseguire le query in backgroud thread
                                         .fallbackToDestructiveMigration()   // permette a Room di distruggere e ricreare il DB a seguito di un upgrade di versione
                                         .build();
                     }

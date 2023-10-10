@@ -114,11 +114,11 @@ public class HomeFragment extends Fragment {
         CardSegnalazioni =  view.findViewById(R.id.cardViewMessaggi);
         CardSegnalazioni.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
-                Log.d("Task", "cliccato Task Professore");
+                Log.d("Segn", "cliccato Segnalazione Professore");
                 mNav.navigate(R.id.action_fragment_home_to_tesisti);
-            }else {
-                Log.d("Task", "cliccato Task Ospite");
-                mNav.navigate(R.id.action_fragment_home_to_segnalazioniFragment);
+            }else if(StringUtils.equals("Studente", ruolo)){
+                Log.d("Segn", "cliccato Segnalazione Studente");
+                mNav.navigate(R.id.action_fragment_home_to_segnStudentiFragment);
             }
         });
 

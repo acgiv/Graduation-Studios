@@ -34,8 +34,9 @@
 
         <!-- Home to segnalazioni fragment -->
         <action
-            android:id="@+id/action_fragment_home_to_segnalazioniFragment"
+            android:id="@+id/action_fragment_home_to_segnStudentiFragment"
             app:destination="@id/segnStudentiFragment" />
+
 
     </fragment>
 
@@ -98,7 +99,7 @@
     <!--Fragment segnalazioni-->
     <fragment
         android:id="@+id/segnStudentiFragment"
-        android:name="com.laureapp.ui.home.SegnalazioniFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
         android:label="Lista Segnalazioni"
         tools:layout="@layout/fragment_segnalazioni_studente">
         <action
@@ -107,11 +108,14 @@
         <action
             android:id="@+id/action_segnalazioniFragment_to_fragment_home"
             app:destination="@id/fragment_home" />
+        <action
+            android:id="@+id/action_segnStudentiFragment_to_newSegnalazioni"
+            app:destination="@id/newSegnalazione" />
     </fragment>
 
     <fragment
         android:id="@+id/segnFragment"
-        android:name="com.laureapp.ui.home.SegnalazioniFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
         android:label="Lista Segnalazioni"
         tools:layout="@layout/fragment_segnalazioni">
         <action
@@ -126,11 +130,22 @@
     <!--Fragment discussione -->
     <fragment
         android:id="@+id/discussioneFragment"
-        android:name="com.laureapp.ui.home.DiscussioneFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
         android:label="Dettagni Segnalazione"
         tools:layout="@layout/fragment_discussione">
         <action
             android:id="@+id/action_discussioneFragment_to_segnalazioneFragment"
+            app:destination="@id/segnStudentiFragment" />
+    </fragment>
+
+    <!--Fragment Nuova Segnalazione-->
+    <fragment
+        android:id="@+id/newSegnalazione"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
+        android:label="Nuova Segnalazione"
+        tools:layout="@layout/fragment_new_segnalazione" >
+        <action
+            android:id="@+id/action_newSegnFragment_to_segnStudentiFragment"
             app:destination="@id/segnStudentiFragment" />
     </fragment>
 
@@ -171,4 +186,5 @@
         android:label="Dettaglio Tesi"
         tools:layout="@layout/fragment_dettagli_tesi_studente">
     </fragment>
+
 </navigation>

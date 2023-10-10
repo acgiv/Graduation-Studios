@@ -23,7 +23,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/matricola_input"
+                android:id="@+id/titolo_input"
                 android:layout_width="380dp"
                 android:layout_height="64dp"
                 app:boxBackgroundMode="outline"
@@ -48,7 +48,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/media_input"
+                android:id="@+id/richiesta_input"
                 android:layout_width="380dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="10dp"
@@ -56,10 +56,10 @@
                 app:hintTextColor="@color/color_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/matricola_input">
+                app:layout_constraintTop_toBottomOf="@+id/titolo_input">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/media_register"
+                    android:id="@+id/richiesta_register"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/input_color"
@@ -73,37 +73,14 @@
                     app:iconTint="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/corsoprofessoreInput"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="380dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:hint="@string/corsi"
-                android:visibility="gone"
-                app:boxBackgroundMode="outline"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <MultiAutoCompleteTextView
-                    android:id="@+id/dropdownprofessore_corso"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/input_color"
-                    android:ems="10"
-                    android:importantForAutofill="no"
-                    android:inputType="textMultiLine|textAutoComplete"
-                    android:padding="5dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_register"
+
+
+    <Button
+        android:id="@+id/button_add_segn"
         android:layout_width="205dp"
         android:layout_height="55dp"
         android:layout_marginTop="32dp"
@@ -113,6 +90,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+        ></Button>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

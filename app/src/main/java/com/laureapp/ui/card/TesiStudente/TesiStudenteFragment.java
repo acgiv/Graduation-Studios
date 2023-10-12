@@ -15,6 +15,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.laureapp.R;
+import com.laureapp.ui.card.Adapter.TesiTabAdapter;
 
 public class TesiStudenteFragment extends Fragment {
 

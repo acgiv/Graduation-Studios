@@ -1,4 +1,4 @@
-package com.laureapp.ui.card.TesiStudente;
+package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,11 +16,11 @@ import com.laureapp.ui.roomdb.entity.Tesi;
 
 import java.util.ArrayList;
 
-public class ElencoTesiAdapter extends ArrayAdapter<Tesi> {
+public class ClassificaTesiAdapter extends ArrayAdapter<Tesi> {
     private Context mContext;
     private ArrayList<Tesi> mTesiList;
 
-    public ElencoTesiAdapter(Context context, ArrayList<Tesi> tesiList) {
+    public ClassificaTesiAdapter(Context context, ArrayList<Tesi> tesiList) {
         super(context, 0, tesiList);
         mContext = context;
         mTesiList = tesiList;

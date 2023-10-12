@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
+import com.laureapp.ui.card.Adapter.ElencoTesiAdapter;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,6 +73,10 @@ public class ElencoTesiFragment extends Fragment {
         });
     }
 
+    /**
+     * Questo metodo serve per caricare la lista di tutte le tesi
+     * @return la lista delle tesi
+     */
     private Task<ArrayList<Tesi>> loadAllTesiData() {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
 

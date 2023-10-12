@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:id="@+id/ClassificaTesi">
+    android:id="@+id/ElencoTesi">
 
     <!-- Barra di ricerca -->
     <androidx.appcompat.widget.SearchView
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="">
 
         <Button
             android:id="@+id/filterButton"
@@ -29,11 +29,19 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:text="Filtra"
+            android:layout_marginStart="2dp"
             android:textColor="@color/color_text_input"
             android:textStyle="bold"
-            android:drawableStart="@drawable/filtra"
-            android:drawablePadding="8dp"
         />
+
+        <ImageView
+            android:id="@+id/expandFiltra"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="-11dp"
+            android:layout_gravity="center"
+            android:contentDescription="forward Icon"
+            android:src="@drawable/baseline_keyboard_arrow_down_24" />
 
     </LinearLayout>
 
@@ -47,4 +55,10 @@
         android:dividerHeight="1dp"
         android:layout_marginBottom="?android:attr/actionBarSize" />
 
+    <!-- Include the filtra_tesi layout -->
+    <include
+        layout="@layout/fragment_popup_filtra_tesi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </LinearLayout>

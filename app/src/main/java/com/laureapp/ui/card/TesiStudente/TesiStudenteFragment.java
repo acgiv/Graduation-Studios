@@ -15,13 +15,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.laureapp.R;
-import com.laureapp.ui.card.Adapter.TesiTabAdapter;
+import com.laureapp.ui.card.Adapter.TesiStudenteTabAdapter;
 
 public class TesiStudenteFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
-    private TesiTabAdapter viewPagerAdapter;
+    private TesiStudenteTabAdapter viewPagerAdapter;
 
     private NavigationView navigationView;
     private AppBarConfiguration mAppBarConfiguration;
@@ -37,7 +37,7 @@ public class TesiStudenteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewPagerAdapter = new TesiTabAdapter((FragmentActivity) requireContext());
+        viewPagerAdapter = new TesiStudenteTabAdapter((FragmentActivity) requireContext());
         viewPager2.setAdapter(viewPagerAdapter);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

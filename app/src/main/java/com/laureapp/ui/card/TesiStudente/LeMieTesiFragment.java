@@ -52,17 +52,19 @@ public class LeMieTesiFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
         email = getEmailFromSharedPreferences(); //chiamata al metodo per ottenere la mail
+
         if (email != null) { // se la mail non è nulla
+
             UtenteModelView utenteView = new UtenteModelView(context); // Inizializza utenteView con un'istanza di UtenteModelView
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
             id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
+
 
             //carico l'elenco degli id delle tesi appartenenti allo studente
             loadIdTesiData(id_studente).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) { //se il task è completato con successo
                     idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
                     Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
-
                 }else {
                     Log.e("Firestore Error", "Error getting data", task.getException());
                 }
@@ -182,6 +184,8 @@ public class LeMieTesiFragment extends Fragment {
             return tesiList;
         });
     }
+
+
 
 
 }

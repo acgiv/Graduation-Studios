@@ -1,16 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/classificaTesi"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/ClassificaTesi">
 
-    <TextView
+    <!-- Barra di ricerca -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchTesiView"
+        app:queryHint="Cerca Tesi"
+        app:iconifiedByDefault="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false">
+    </androidx.appcompat.widget.SearchView>
+
+    <!-- Pulsante Filtra -->
+    <Button
+        android:id="@+id/filterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notification Fragment"
-        android:layout_centerInParent="true"
-        android:textSize="32dp"/>
+        android:text="Filtra" />
 
-</RelativeLayout>
+    <!-- Lista di tesi -->
+    <ListView
+        android:id="@+id/listClassificaTesiView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_weight="1"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="?android:attr/actionBarSize" />
+
+</LinearLayout>

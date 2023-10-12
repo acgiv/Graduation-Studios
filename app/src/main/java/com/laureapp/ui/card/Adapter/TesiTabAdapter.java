@@ -1,4 +1,4 @@
-package com.laureapp.ui.card.TesiStudente;
+package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.laureapp.R;
+import com.laureapp.ui.card.TesiStudente.ClassificaTesiFragment;
+import com.laureapp.ui.card.TesiStudente.ElencoTesiFragment;
+import com.laureapp.ui.card.TesiStudente.LeMieTesiFragment;
 import com.laureapp.ui.roomdb.entity.Tesi;
 
 public class TesiTabAdapter extends FragmentStateAdapter {

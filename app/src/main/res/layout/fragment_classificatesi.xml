@@ -17,11 +17,25 @@
     </androidx.appcompat.widget.SearchView>
 
     <!-- Pulsante Filtra -->
-    <Button
-        android:id="@+id/filterButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Filtra" />
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/filterButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Filtra"
+            android:textColor="@color/color_text_input"
+            android:textStyle="bold"
+            android:drawableStart="@drawable/filtra"
+            android:drawablePadding="8dp"
+        />
+
+    </LinearLayout>
 
     <!-- Lista di tesi -->
     <ListView

@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
+import com.laureapp.ui.card.Adapter.ClassificaTesiAdapter;
 import com.laureapp.ui.card.Adapter.ElencoTesiAdapter;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import java.util.ArrayList;
@@ -24,14 +25,14 @@ import java.util.Date;
 public class ClassificaTesiFragment extends Fragment {
 
     Context context;
-    private ElencoTesiAdapter adapter;
+    private ClassificaTesiAdapter adapter;
     private ListView listView;
     private String titoloTesiCercata = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_elenco_tesi_studente, container, false);
+        return inflater.inflate(R.layout.fragment_classificatesi, container, false);
     }
 
     @Override
@@ -39,12 +40,12 @@ public class ClassificaTesiFragment extends Fragment {
         context = getContext();
 
         SearchView searchView = view.findViewById(R.id.searchTesiView);
-        listView = view.findViewById(R.id.listAllTesiView);
+        listView = view.findViewById(R.id.listClassificaTesiView);
 
         loadAllTesiData().addOnCompleteListener(tesiTask -> {
             if (tesiTask.isSuccessful()) {
                 ArrayList<Tesi> tesiList = tesiTask.getResult();
-                adapter = new ElencoTesiAdapter(getContext(), tesiList);
+                adapter = new ClassificaTesiAdapter(getContext(), tesiList);
                 listView.setAdapter(adapter);
             } else {
                 Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());

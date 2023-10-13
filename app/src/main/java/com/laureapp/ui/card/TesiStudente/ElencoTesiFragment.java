@@ -1,6 +1,8 @@
 package com.laureapp.ui.card.TesiStudente;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,12 +32,19 @@ public class ElencoTesiFragment extends Fragment {
     private ListView listView;
     private String titoloTesiCercata = "";
 
+    private AlertDialog filterDialog;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_elencotesi, container, false);
 
+        Button filterButton = rootView.findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(view1 -> {
+            rootView.setAlpha(0.1f); // Imposta l'opacità desiderata (0.0-1.0)
+            showFilterDialog(rootView);
+        });
 
         // Nascondi il layout di filtraggio all'inizio
         return rootView;
@@ -49,6 +58,9 @@ public class ElencoTesiFragment extends Fragment {
 
         SearchView searchView = view.findViewById(R.id.searchTesiView);
         listView = view.findViewById(R.id.listClassificaTesiView);
+
+
+
 
 
         loadAllTesiData().addOnCompleteListener(tesiTask -> {
@@ -81,6 +93,7 @@ public class ElencoTesiFragment extends Fragment {
                 return true;
             }
         });
+
 
 
 
@@ -167,5 +180,35 @@ public class ElencoTesiFragment extends Fragment {
                     }
                     return tesiList;
                 });
+    }
+
+    public void showFilterDialog(View rootView) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_popup_filtra_tesi, null);
+        builder.setView(view);
+
+
+
+        Button annullaButton = view.findViewById(R.id.annullaFiltra); // Find the "Annulla" button by its id
+
+        annullaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterDialog.dismiss();
+            }
+        });
+
+        filterDialog = builder.create();
+        filterDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                rootView.setAlpha(1); //reimposto l'opacità di default
+
+            }
+        });
+
+
+        filterDialog.show();
     }
 }

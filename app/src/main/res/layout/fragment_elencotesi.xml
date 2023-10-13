@@ -32,16 +32,9 @@
             android:layout_marginStart="2dp"
             android:textColor="@color/color_text_input"
             android:textStyle="bold"
+            android:gravity="center"
         />
 
-        <ImageView
-            android:id="@+id/expandFiltra"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="-11dp"
-            android:layout_gravity="center"
-            android:contentDescription="forward Icon"
-            android:src="@drawable/baseline_keyboard_arrow_down_24" />
 
     </LinearLayout>
 
@@ -55,10 +48,4 @@
         android:dividerHeight="1dp"
         android:layout_marginBottom="?android:attr/actionBarSize" />
 
-    <!-- Include the filtra_tesi layout -->
-    <include
-        layout="@layout/fragment_popup_filtra_tesi"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
 </LinearLayout>

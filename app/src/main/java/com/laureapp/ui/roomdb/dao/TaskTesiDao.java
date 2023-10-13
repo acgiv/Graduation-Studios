@@ -6,7 +6,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.laureapp.ui.roomdb.entity.Cdl;
 import com.laureapp.ui.roomdb.entity.TaskTesi;
 
 import java.util.List;

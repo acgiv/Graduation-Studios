@@ -26,4 +26,6 @@ public interface TesiDao {
 
     @Delete
     void delete(Tesi tesi);
+
+
 }

@@ -39,6 +39,20 @@ public class Converters {
     public static Timestamp stringToTimestamp(String dateString) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", new Locale("italian"));
         Date date = sdf.parse(dateString);
+        assert date != null;
         return new Timestamp(date.getTime());
     }
+
+
+    @TypeConverter
+    public static Date toDate(Long timestamp) {
+        return timestamp == null ? null : new Date(timestamp);
+    }
+
+    @TypeConverter
+    public static Long toTimestamp(Date date) {
+        return date == null ? null : date.getTime();
+    }
+
+
 }

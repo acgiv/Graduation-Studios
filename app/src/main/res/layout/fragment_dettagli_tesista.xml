@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:rotation="0"
     android:visibility="visible"
-    tools:context=".ui.profilo.ProfiloProfessoreFragment">
+    tools:context=".ui.profilo.ProfiloFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -125,6 +125,19 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         tools:visibility="visible" />
+
+                    <!--Campo inserisci nome -->
+                    <TextView
+                        android:id="@+id/insert_nome_tesista"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="70dp"
+                        android:layout_marginTop="35dp"
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textSize="18sp"
+                        tools:visibility="visible" />
                     <!--Linea grigia che separa campi di testo nome e cognome -->
                     <View
                         android:layout_width="match_parent"
@@ -145,6 +158,18 @@
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        tools:visibility="visible" />
+
+                    <!--Campo inserisci cognome -->
+                    <TextView
+                        android:id="@+id/insert_cognome_tesista"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginTop="63dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         tools:visibility="visible" />
                     <!--Linea grigia che separa campi di testo cognome e matricola -->
                     <View
@@ -168,6 +193,17 @@
                         android:textStyle="bold"
                         tools:visibility="visible" />
 
+                    <!--Campo inserisci matricola -->
+                    <TextView
+                        android:id="@+id/insert_matricola_tesista"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginTop="91dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:visibility="visible" />
 
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
@@ -198,6 +234,24 @@
                         android:background="@color/color_primary"
                         android:visibility="visible" />
 
+
+                    <!--Campo nome cdl -->
+                    <TextView
+                        android:id="@+id/nome_cdl_textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="-5dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/cdl_task_tesista"
+                        android:textColor="@android:color/white"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        app:drawableLeftCompat="@drawable/baseline_school_40_white"
+                        tools:visibility="visible" />
+
+                    <!--Titolo card Cdl -->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -211,6 +265,7 @@
                         android:textStyle="bold"
                         app:drawableLeftCompat="@drawable/baseline_school_40_white"
                         tools:visibility="visible" />
+
                     <!--Campo facoltà-->
                     <TextView
                         android:id="@+id/facolta_tesista"
@@ -223,6 +278,18 @@
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        tools:visibility="visible" />
+
+                    <!--Campo inserisci facoltà-->
+                    <TextView
+                        android:id="@+id/insert_facolta_tesista"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="35dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         tools:visibility="visible" />
 
                     <!--Linea grigia che separa facoltà con ciclo cdl -->
@@ -247,6 +314,18 @@
                         android:textStyle="bold"
                         tools:visibility="visible" />
 
+                    <!--Campo inserisci ciclo cdl-->
+                    <TextView
+                        android:id="@+id/insert_ciclo_cdl_tesista"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="100dp"
+                        android:layout_marginTop="63dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:visibility="visible" />
+
                     <!--Linea grigia che separa facoltà con ciclo cdl -->
                     <View
                         android:layout_width="match_parent"
@@ -269,6 +348,18 @@
                         android:textStyle="bold"
                         tools:visibility="visible" />
 
+                    <!--Campo inserisci nome CDL-->
+                    <TextView
+                        android:id="@+id/insert_cdl_tesista"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart= "55dp"
+                        android:layout_marginTop="91dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:visibility="visible" />
+
                     <!--Linea grigia che separa  cdl con titolo tesi -->
                     <View
                         android:layout_width="match_parent"
@@ -289,6 +380,18 @@
                         android:textColor="@color/color_primary"
                         android:textSize="18sp"
                         android:textStyle="bold"
+                        tools:visibility="visible" />
+
+                    <!--Campo inserisci titolo tesi-->
+                    <TextView
+                        android:id="@+id/insert_titolo_tesi_tesista"
+                        android:layout_width="348dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="105dp"
+                        android:layout_marginTop="119dp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         tools:visibility="visible" />
 
 

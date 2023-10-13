@@ -2,9 +2,11 @@ package com.laureapp.ui.roomdb.viewModel;
 
 import android.content.Context;
 
+import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.repository.StudenteTesiRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudenteTesiModelView {
@@ -23,7 +25,7 @@ public class StudenteTesiModelView {
         studenteTesiRepository.updateStudenteTesi(studenteTesi);
     }
 
-    public boolean delateStudenteTesi(long id){
+    public boolean deleteStudenteTesi(long id){
         return studenteTesiRepository.delateStudenteTesi(id);
     }
 
@@ -34,4 +36,10 @@ public class StudenteTesiModelView {
     public List<StudenteTesi> getAllStudenteTesi(){
         return studenteTesiRepository.getAllStudenteTesi();
     }
+
+    public Long getIdTesiFromIdStudente(Long id){
+        return studenteTesiRepository.getIdTesiFromIdStudente(id);
+    }
+
+
 }

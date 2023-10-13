@@ -11,10 +11,14 @@ import com.laureapp.ui.roomdb.Converters;
 
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName = "Task_tesi", foreignKeys = {
-        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi")},
+        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi", onDelete = ForeignKey.CASCADE)},
         indices = {@Index("id_tesi")})
 @TypeConverters({Converters.class})
 public class TaskTesi implements Serializable {
@@ -25,7 +29,7 @@ public class TaskTesi implements Serializable {
     private Long id_task;
 
     @ColumnInfo(name="id_tesi")
-    private String id_tesi;
+    private Long id_tesi;
 
     @ColumnInfo(name="titolo")
     private String titolo;
@@ -34,10 +38,10 @@ public class TaskTesi implements Serializable {
     private String stato;
 
     @ColumnInfo(name="data_inizio")
-    private Timestamp data_inizio;
+    private Date data_inizio;
 
     @ColumnInfo(name="data_scadenza")
-    private Timestamp data_scadenza;
+    private Date data_scadenza;
 
     //Getter e setter
     public Long getId_task() {
@@ -48,11 +52,11 @@ public class TaskTesi implements Serializable {
         this.id_task = idTask;
     }
 
-    public String getId_tesi() {
+    public Long getId_tesi() {
         return id_tesi;
     }
 
-    public void setId_tesi(String idTesi) {
+    public void setId_tesi(Long idTesi) {
         this.id_tesi = idTesi;
     }
 
@@ -72,20 +76,34 @@ public class TaskTesi implements Serializable {
         this.stato = statoTask;
     }
 
-    public Timestamp getData_inizio() {
+    public Date getData_inizio() {
         return data_inizio;
     }
 
-    public void setData_inizio(Timestamp data_inizio) {
+    public void setData_inizio(Date data_inizio) {
         this.data_inizio = data_inizio;
     }
 
-    public Timestamp getData_scadenza() {
+    public Date getData_scadenza() {
         return data_scadenza;
     }
 
-    public void setData_scadenza(Timestamp data_scadenza) {
+    public void setData_scadenza(Date data_scadenza) {
         this.data_scadenza = data_scadenza;
+    }
+
+
+    public Map<String, Object> getTaskTesiMap() {
+        Map<String, Object> taskTesiMap = new HashMap<>();
+        taskTesiMap.put("id_task", this.id_task);
+        taskTesiMap.put("id_tesi",this.id_tesi);
+        taskTesiMap.put("titolo", this.titolo);
+        taskTesiMap.put("stato", this.stato);
+        taskTesiMap.put("data_inizio", this.data_inizio);
+        taskTesiMap.put("data_scadenza", this.data_scadenza);
+
+
+        return taskTesiMap;
     }
 
     @Override
@@ -99,4 +117,6 @@ public class TaskTesi implements Serializable {
                 ", data_scadenza=" + data_scadenza +
                 '}';
     }
+
+
 }

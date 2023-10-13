@@ -37,7 +37,7 @@ public interface UtenteDao {
     @Query("SELECT u.cognome FROM Utente u, Studente s WHERE u.id_utente = s.id_studente")
     String getCognome();
 
-    @Query("DELETE FROM professore")
+    @Query("DELETE FROM Utente")
     public void deleteAll();
 
     @Query("SELECT COUNT(*) FROM Utente WHERE id_utente = :idUtente")
@@ -45,7 +45,11 @@ public interface UtenteDao {
 
 
 
+    @Query("SELECT u.email FROM Utente u WHERE u.id_utente =:idUtente")
+    String getEmail(Long idUtente);
+
     @Delete
     void delete(Utente utente);
+
 
 }

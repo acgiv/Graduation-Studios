@@ -8,9 +8,12 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity(tableName ="Tesi_Professore", foreignKeys = {
-        @ForeignKey(entity = Professore.class, parentColumns = "id_professore", childColumns = "id_professore")
+        @ForeignKey(entity = Professore.class, parentColumns = "id_professore", childColumns = "id_professore", onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi", onDelete = ForeignKey.CASCADE)
 },
         indices = {@Index("id_professore") })
 public class TesiProfessore implements Serializable {
@@ -22,6 +25,9 @@ public class TesiProfessore implements Serializable {
 
     @ColumnInfo(name = "id_professore")
     private Long id_professore;
+
+    @ColumnInfo(name = "id_tesi")
+    private Long id_tesi;
 
     @ColumnInfo(name = "ruolo_professore")
     private String ruolo_professore;
@@ -49,6 +55,23 @@ public class TesiProfessore implements Serializable {
 
     public void setRuolo_professore(String ruoloProfessore) {
         this.ruolo_professore = ruoloProfessore;
+    }
+
+    public Long getId_tesi() {
+        return id_tesi;
+    }
+
+    public void setId_tesi(Long id_tesi) {
+        this.id_tesi = id_tesi;
+    }
+
+    public Map<String, Object> getTesiProfessoreMap() {
+        Map<String, Object> tesiProfessoreMap = new HashMap<>();
+        tesiProfessoreMap.put("id_tesi_professore",this.id_tesi_professore);
+        tesiProfessoreMap.put("id_professore", this.id_professore);
+        tesiProfessoreMap.put("id_Tesi", this.id_tesi);
+        tesiProfessoreMap.put("ruolo_professore", this.ruolo_professore);
+        return tesiProfessoreMap;
     }
 
     @NonNull

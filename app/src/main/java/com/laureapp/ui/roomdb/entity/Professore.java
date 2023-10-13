@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity(tableName ="Professore",foreignKeys = {
-        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi"),
-        @ForeignKey(entity = Utente.class, parentColumns = "id_utente", childColumns = "id_utente"
+        @ForeignKey(entity = Utente.class, parentColumns = "id_utente", childColumns = "id_utente",onDelete = ForeignKey.CASCADE
         )}
 )
 public class Professore implements Serializable {
@@ -21,14 +20,19 @@ public class Professore implements Serializable {
     @ColumnInfo(name = "id_professore")
     private Long id_professore;
 
-    @ColumnInfo(name = "id_tesi")
-    private Long id_tesi;
-
     @ColumnInfo(name = "id_utente")
     private Long id_utente;
 
     @ColumnInfo(name = "matricola")
     private String matricola;
+
+    public Professore(Long id_professore, Long id_utente, String matricola) {
+        this.id_professore = id_professore;
+        this.id_utente = id_utente;
+        this.matricola = matricola;
+    }
+
+    public Professore(){}
 
     public Long getId_professore() {
         return id_professore;
@@ -38,13 +42,6 @@ public class Professore implements Serializable {
         this.id_professore = id_professore;
     }
 
-    public Long getId_tesi() {
-        return id_tesi;
-    }
-
-    public void setId_tesi(Long id_tesi) {
-        this.id_tesi = id_tesi;
-    }
 
     public Long getId_utente() {
         return id_utente;
@@ -67,7 +64,6 @@ public class Professore implements Serializable {
         utenteMap.put("id_professore", this.id_professore);
         utenteMap.put("matricola", this.matricola);
         utenteMap.put("id_utente", this.id_utente);
-        utenteMap.put("id_tesi", this.id_tesi);
         return utenteMap;
     }
 
@@ -76,7 +72,6 @@ public class Professore implements Serializable {
     public String toString() {
         return "Professore{" +
                 "id=" + id_professore +
-                ", id_tesi=" + id_tesi +
                 ", id_utente=" + id_utente +
                 ", matricola='" + matricola + '\'' +
                 '}';

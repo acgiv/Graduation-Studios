@@ -12,6 +12,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * Repository:
+ *
+ * I repository sono classi che fungono da intermediari tra l'applicazione e il database.
+ * Gestiscono la logica di accesso ai dati utilizzando i DAO.
+ * Eseguono operazioni CRUD in thread separati per evitare il blocco dell'interfaccia utente.
+ */
+
 public class SegnalazioneRepository {
 
     private final RoomDbSqlLite roomDbSqlLite;
@@ -35,7 +43,7 @@ public class SegnalazioneRepository {
         executor.execute(() -> segnalazioneDao.delete(segnalazione));
     }
 
-    public Segnalazione findSegnalazioneById(int idSegnalazione) {
+    public Segnalazione findSegnalazioneById(Long idSegnalazione) {
         CompletableFuture<Segnalazione> future = new CompletableFuture<>();
         executor.execute(() -> {
             Segnalazione segnalazione = segnalazioneDao.findById(idSegnalazione);
@@ -49,7 +57,7 @@ public class SegnalazioneRepository {
         }
     }
 
-    public List<Segnalazione> findSegnalazioniByTesiId(int idTesi) {
+    public List<Segnalazione> findSegnalazioniByTesiId(Long idTesi) {
         CompletableFuture<List<Segnalazione>> future = new CompletableFuture<>();
         executor.execute(() -> {
             List<Segnalazione> segnalazioni = segnalazioneDao.findByTesiId(idTesi);
@@ -63,7 +71,7 @@ public class SegnalazioneRepository {
         }
     }
 
-    public boolean deleteSegnalazioneById(int idSegnalazione) {
+    public boolean deleteSegnalazioneById(Long idSegnalazione) {
         boolean result = false;
         Segnalazione segnalazione = findSegnalazioneById(idSegnalazione);
         if (segnalazione != null) {

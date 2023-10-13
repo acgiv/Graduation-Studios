@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.register.Register2Fragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/titolo_register"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:background="@drawable/input_color"
+                android:ems="10"
+                android:hint="@string/titolo"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="@dimen/padding_edit_text"
+                android:paddingStart="20dp"
+                android:paddingEnd="12dp"
+                app:iconTint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/richiesta_register"
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/input_color"
+                android:ems="10"
+                android:hint="@string/richiesta"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:padding="@dimen/padding_edit_text"
+                android:paddingStart="20dp"
+                android:paddingEnd="12dp"
+                app:iconTint="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titolo_register" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_add_segn"
+        android:layout_width="205dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="32dp"
+        app:backgroundTint="@null"
+        android:background="@drawable/button_background_primary"
+        android:text="@string/aggiungi"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

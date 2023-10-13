@@ -26,23 +26,23 @@ public class NewSegnalazioniFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);}
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_new_segnalazione, container, false);
+        View rootView = inflater.inflate(R.layout.add_segn_popup, container, false);
 
-        // Inizializza i campi di input e il pulsante
-        titoloEditText = rootView.findViewById(R.id.titolo_register);
-        richiestaEditText = rootView.findViewById(R.id.richiesta_register);
         addButton = rootView.findViewById(R.id.button_add_segn);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Recupera i dati dai campi di input
-                String titolo = titoloEditText.getText().toString();
-                String richiesta = richiestaEditText.getText().toString();
+                // Qui preleva i dati dai campi di input e fai qualcosa con essi
+                String titolo = ((TextInputEditText) view.findViewById(R.id.titolo_register)).getText().toString();
+                String richiesta = ((TextInputEditText) view.findViewById(R.id.richiesta_register)).getText().toString();
+
 
                 // Crea un oggetto Segnalazione
                 Segnalazione segnalazione = new Segnalazione();

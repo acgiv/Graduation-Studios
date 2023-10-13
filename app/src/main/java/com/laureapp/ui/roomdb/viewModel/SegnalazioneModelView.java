@@ -6,11 +6,12 @@ import com.laureapp.ui.roomdb.repository.SegnalazioneRepository;
 
 import java.util.List;
 
-/*  ViewModel:
+/**
+ * ViewModel:
 *
-*   I ViewModel sono classi utilizzate per gestire la logica di visualizzazione dei dati nell'applicazione Android.
-*   Forniscono un'interfaccia semplificata per l'accesso ai dati e la comunicazione tra la UI e il repository.
-*/
+*I ViewModel sono classi utilizzate per gestire la logica di visualizzazione dei dati nell'applicazione Android.
+*Forniscono un'interfaccia semplificata per l'accesso ai dati e la comunicazione tra la UI e il repository.
+**/
 
 public class SegnalazioneModelView {
 
@@ -30,15 +31,15 @@ public class SegnalazioneModelView {
         // Puoi eseguire ulteriori operazioni dopo l'aggiornamento se necessario
     }
 
-    public boolean deleteSegnalazioneById(int idSegnalazione) {
+    public boolean deleteSegnalazioneById(Long idSegnalazione) {
         return segnalazioneRepository.deleteSegnalazioneById(idSegnalazione);
     }
 
-    public Segnalazione findSegnalazioneById(int idSegnalazione) {
+    public Segnalazione findSegnalazioneById(Long idSegnalazione) {
         return segnalazioneRepository.findSegnalazioneById(idSegnalazione);
     }
 
-    public List<Segnalazione> findSegnalazioniByTesiId(int idTesi) {
+    public List<Segnalazione> findSegnalazioniByTesiId(Long idTesi) {
         return segnalazioneRepository.findSegnalazioniByTesiId(idTesi);
     }
 

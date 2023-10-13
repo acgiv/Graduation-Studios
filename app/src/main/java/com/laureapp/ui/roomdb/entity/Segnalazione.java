@@ -28,10 +28,10 @@ import androidx.room.PrimaryKey;
 public class Segnalazione {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_segn")
-    private int idSegnalazione;
+    private Long idSegnalazione;
 
     @ColumnInfo(name = "id_tesi")
-    private int idTesi;
+    private Long idTesi;
 
     @ColumnInfo(name = "titolo")
     private String titolo;
@@ -45,26 +45,26 @@ public class Segnalazione {
     }
 
     // Costruttore per creare una nuova segnalazioni
-    public Segnalazione(int idTesi, String titolo, String richiesta) {
+    public Segnalazione(Long idTesi, String titolo, String richiesta) {
         this.idTesi = idTesi;
         this.titolo = titolo;
         this.richiesta = richiesta;
     }
 
     // Getter e Setter per gli attributi
-    public int getIdSegnalazione() {
+    public Long getIdSegnalazione() {
         return idSegnalazione;
     }
 
-    public void setIdSegnalazione(int idSegnalazione) {
+    public void setIdSegnalazione(Long idSegnalazione) {
         this.idSegnalazione = idSegnalazione;
     }
 
-    public int getIdTesi() {
+    public Long getIdTesi() {
         return idTesi;
     }
 
-    public void setIdTesi(int idTesi) {
+    public void setIdTesi(Long idTesi) {
         this.idTesi = idTesi;
     }
 

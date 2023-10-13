@@ -1,5 +1,7 @@
 package com.laureapp.ui.home;
 
+import static com.laureapp.ui.controlli.ControlInput.showToast;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,20 +36,11 @@ public class HomeFragment extends Fragment {
     Context context;
     Bundle args;
 
-    String email;
-    Utente utente = new Utente();
     private NavController mNav;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
         context = requireContext();
         args = getArguments();
         if (args != null) {
@@ -55,10 +48,15 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
-            args.putSerializable("Utente", utente);
-
+            args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
 
         }
+
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
 
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -99,10 +97,10 @@ public class HomeFragment extends Fragment {
         CardTesisti =  view.findViewById(R.id.cardViewTesisti);
         CardTesisti.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
-                Log.d("Task", "cliccato Task Professore");
-                mNav.navigate(R.id.action_fragment_home_to_tesisti);
+                Log.d("Tesisti", "cliccato Tesisti Professore");
+                mNav.navigate(R.id.action_fragment_home_to_tesisti,args);
             }else {
-                Log.d("Task", "cliccato Task Ospite");
+                Log.d("Tesisti", "cliccato Tesisti Ospite");
                 mNav.navigate(R.id.action_fragment_home_to_tesisti);
             }
         });

@@ -230,6 +230,7 @@ public class Register2Fragment extends Fragment {
                                                 studente.setId_studente(idMaxStudente + 1L);
                                                 studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
                                                 studente.setEsami_mancanti(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
+                                                studente.setMedia(Integer.parseInt(Objects.requireNonNull(binding.mediaRegister.getText()).toString()));
 
                                                 StudenteModelView st_db = new StudenteModelView(context);
                                                 st_db.insertStudente(studente);

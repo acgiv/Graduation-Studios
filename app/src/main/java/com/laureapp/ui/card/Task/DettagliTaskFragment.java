@@ -1,8 +1,12 @@
 package com.laureapp.ui.card.Task;
 
+import static androidx.databinding.DataBindingUtil.setContentView;
+import static com.laureapp.ui.controlli.ControlInput.showToast;
 import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,29 +28,40 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentDettagliTaskBinding;
+import com.laureapp.ui.roomdb.entity.TaskTesi;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DettagliTaskFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class DettagliTaskFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
     private NavController mNav;
     private AutoCompleteTextView autoCompleteTextView;
     FragmentDettagliTaskBinding binding;
-    Bundle bundle;
+    FirebaseFirestore db;
+    Bundle args;
+    TaskTesi taskTesi;
+    Context context;
+    Button startDateButton;
+    Button dueDateButton;
+
     private final HashMap<String, Object> elem_text = new HashMap<>();
 
 
@@ -54,87 +69,93 @@ public class DettagliTaskFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DettagliTaskFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DettagliTaskFragment newInstance(String param1, String param2) {
-        DettagliTaskFragment fragment = new DettagliTaskFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            // TODO: Rename and change types of parameters
-            String mParam1 = getArguments().getString(ARG_PARAM1);
-            String mParam2 = getArguments().getString(ARG_PARAM2);
+        args = getArguments();
+        if(args != null) {
+
+            taskTesi = args.getSerializable("SelectedTask", TaskTesi.class);
+            //Carico i dati delle task in base all'utente loggato
         }
+
+
+
+        // Altri codici del tuo fragment
+        db = FirebaseFirestore.getInstance();
+
+
+
+        // Inizializza il mapping degli elementi di testo associandoli al binding
+        //inizializzate_binding_text();
+
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Context context = requireContext();
         binding = FragmentDettagliTaskBinding.inflate(inflater, container, false);
+        // Inizializza le variabili nel metodo onCreate
+        startDateButton = binding.startDateBar;
+        dueDateButton = binding.dueDateBar;
         autoCompleteTextView = binding.filledExposedDropdown;
-
-
-
-        /*// Trova il tuo MaterialAutoCompleteTextView e TextInputLayout
-        TextInputLayout textInputLayout = binding.getRoot().findViewById(R.id.dropdownStatoTask);
-
-        // Nascondi la freccia del dropdown menu
-        Drawable transparentDrawable = new ColorDrawable(android.graphics.Color.TRANSPARENT);
-        autoCompleteTextView.setDropDownBackgroundDrawable(transparentDrawable);
-        textInputLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
-        */
-
-        // Inizializza il mapping degli elementi di testo associandoli al binding
-        inizializzate_binding_text();
-
-        // Configura gli ascoltatori per il cambiamento di testo negli elementi di input
-
-
-        bundle = getArguments();
+        context = requireContext();
 
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         mNav = Navigation.findNavController(view);
         //Inizializzazione delle variabili
-        Button startDateButton = view.findViewById(R.id.startDateBar);
-        Button dueDateButton = view.findViewById(R.id.dueDateBar);
-        Button ricevimentiButton = view.findViewById(R.id.button_visualizza_ricevimenti_task);
-        Button salvaButton = view.findViewById(R.id.button_salva_modifiche_task);
+        EditText titoloTask = binding.titoloTaskBar;
+        Button ricevimentiButton = binding.buttonVisualizzaRicevimentiTask;
+        Button salvaButton = binding.buttonSalvaModificheTask;
+        CalendarView calendarView = binding.calendarStartTaskView;
 
-        CalendarView calendarView = view.findViewById(R.id.calendarStartTaskView);
+
+        //Setto i valori della task cliccata
+        titoloTask.setText(taskTesi.getTitolo());
+
+        //Setto i valori del dropdown dello stato task
+        autoCompleteTextView.setText(taskTesi.getStato());
+        Log.d("statoTask", taskTesi.getStato());
+
+        Date dataScadenza = taskTesi.getData_scadenza();
+        if (dataScadenza != null) {
+            LocalDate localDate = dataScadenza.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String formattedDate = localDate.toString(); // Formatta la data come preferisci
+
+            dueDateButton.setText(formattedDate);
+        } else {
+            dueDateButton.setText("Data non disponibile");
+        }
+
+        Date dataInizio = taskTesi.getData_inizio();
+        if (dataInizio != null) {
+            LocalDate localDateInizio = dataInizio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String formattedDateInizio = localDateInizio.toString(); // Formatta la data come preferisci
+
+            startDateButton.setText(formattedDateInizio);
+        } else {
+            startDateButton.setText("Data di inizio non disponibile");
+        }
+
+
+
+
 
         //Setto la visibilità a GONE del calendario non appena viene visualizzato il fragment
         calendarView.setVisibility(View.GONE);
 
-        //salvo in questa variabile la lista del dropdown menu dello stato
+
+
         String[] stato = getResources().getStringArray(R.array.StatoTask);
-
-
 
          // create an array adapter and pass the required parameter
         // in our case pass the context, drop down layout , and array.
-        ArrayAdapter<String> adapterStato = new ArrayAdapter<>(getContext(), R.layout.dropdown_item, stato);
+        ArrayAdapter<String> adapterStato = new ArrayAdapter<>(context, R.layout.dropdown_item, stato);
         autoCompleteTextView.setAdapter(adapterStato);
 
 
@@ -181,9 +202,28 @@ public class DettagliTaskFragment extends Fragment {
             Log.d("Click ricevimenti","cliccato ricevimenti");
         });
 
-        //TODO: Implementare il salvataggio sul db delle modifiche con un'apposita finestra di dialogo
         salvaButton.setOnClickListener(view1 -> {
+            // Crea un AlertDialog per la conferma del salvataggio
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Conferma salvataggio");
+            builder.setMessage("Sei sicuro di voler salvare le modifiche?");
+
+            // Aggiungi un pulsante "Conferma" che effettuerà il salvataggio
+            builder.setPositiveButton("Conferma", (dialog, which) -> {
+                modificaDatiTask(); // Esegui il salvataggio
+                dialog.dismiss(); // Chiudi il popup
+            });
+
+            // Aggiungi un pulsante "Annulla" che chiuderà il popup senza effettuare il salvataggio
+            builder.setNegativeButton("Annulla", (dialog, which) -> {
+                dialog.dismiss(); // Chiudi il popup
+            });
+
+            // Mostra il popup
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
+
 
 
     }
@@ -250,8 +290,8 @@ public class DettagliTaskFragment extends Fragment {
     {
         //Inizializzo le variabili
         //Button
-        Button startDateButton = view.findViewById(R.id.startDateBar);
-        Button dueDateButton = view.findViewById(R.id.dueDateBar);
+        startDateButton = view.findViewById(R.id.startDateBar);
+        dueDateButton = view.findViewById(R.id.dueDateBar);
         Button ricevimentiButton = view.findViewById(R.id.button_visualizza_ricevimenti_task);
         Button salvaButton = view.findViewById(R.id.button_salva_modifiche_task);
 
@@ -324,5 +364,80 @@ public class DettagliTaskFragment extends Fragment {
             errorDueDate.setVisibility(View.VISIBLE);
         }
     }
+
+
+    // Questo metodo viene chiamato quando l'utente vuole salvare le modifiche
+    // Questo metodo viene chiamato quando l'utente vuole salvare le modifiche
+    private void modificaDatiTask() {
+        // Esegui il recupero dei dati inseriti dall'utente
+        String nuovoTitolo = binding.titoloTaskBar.getText().toString();
+        String nuovoStato = autoCompleteTextView.getText().toString();
+        String nuovaDataInizio = startDateButton.getText().toString();
+        String nuovaDataScadenza = dueDateButton.getText().toString();
+
+        if (nuovoTitolo.isEmpty()) {
+            // Se il titolo è vuoto, mostra un messaggio di errore
+            showToast(context, "Il titolo non può essere vuoto");
+        } else {
+            // Aggiorna gli oggetti TaskTesi con i nuovi dati
+            taskTesi.setTitolo(nuovoTitolo);
+            taskTesi.setStato(nuovoStato);
+
+            try {
+                taskTesi.setData_inizio(stringToTimestamp(nuovaDataInizio));
+                taskTesi.setData_scadenza(stringToTimestamp(nuovaDataScadenza));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            // Salva i dati nel database
+            salvaDatiTaskTesi(taskTesi);
+
+            // Puoi anche aggiungere un messaggio di successo o altre azioni qui.
+            showToast(context, "Modifiche effettuate con successo");
+
+        }
+    }
+
+
+    private void salvaDatiTaskTesi(TaskTesi taskTesi) {
+        // Ottieni un riferimento alla collezione "Task" nel tuo database Firestore
+        CollectionReference taskRef = db.collection("Task");
+
+        // Recupera un riferimento al documento in base all'ID della task
+        Long taskId = taskTesi.getId_task(); // Assumi che TaskTesi abbia un campo "id_task" per identificare la task
+        Query query = taskRef.whereEqualTo("id_task", taskId);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Ottieni l'ID del documento trovato
+                    String documentId = document.getId();
+
+                    // Crea un oggetto con i dati da salvare
+                    Map<String, Object> datiTask = new HashMap<>();
+                    datiTask.put("titolo", taskTesi.getTitolo());
+                    datiTask.put("stato", taskTesi.getStato());
+                    datiTask.put("data_inizio", taskTesi.getData_inizio());
+                    datiTask.put("data_scadenza", taskTesi.getData_scadenza());
+
+                    // Esegui l'operazione di aggiornamento del documento
+                    db.collection("Task").document(documentId)
+                            .update(datiTask)
+                            .addOnSuccessListener(aVoid -> {
+                                // Aggiornamento avvenuto con successo
+                                Log.d("Firestore", "Dati aggiornati con successo.");
+                            })
+                            .addOnFailureListener(e -> {
+                                // Gestione degli errori in caso di fallimento dell'aggiornamento
+                                Log.e("Firestore", "Errore nell'aggiornamento dei dati: " + e.getMessage());
+                            });
+                }
+            } else {
+                Log.e("Firestore", "Errore nella ricerca del documento: " + task.getException());
+            }
+        });
+    }
+
 
 }

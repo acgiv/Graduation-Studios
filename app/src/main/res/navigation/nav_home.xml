@@ -93,6 +93,9 @@
         <action
             android:id="@+id/action_dettagli_tesista_to_task"
             app:destination="@id/taskFragment" />
+        <action
+            android:id="@+id/action_dettagli_tesista_to_lista_tesisti"
+            app:destination="@id/tesisti" />
     </fragment>
 
     <!--Fragment messaggi -->

@@ -12,6 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
+import com.laureapp.ui.roomdb.entity.TaskTesi;
 import com.laureapp.ui.roomdb.entity.Utente;
 
 import java.util.concurrent.CompletableFuture;
@@ -21,6 +22,7 @@ public class QueryFirestore {
     CollectionReference utentiRef = db.collection("Utenti");
     CollectionReference studentiRef = db.collection("Utenti/Studenti/Studenti");
     CollectionReference professoriRef = db.collection("Utenti/Professori/Professori");
+    CollectionReference taskRef = db.collection("Task");
 
 
     public CompletableFuture<Long> trovaIdUtenteMax(Context context) {
@@ -92,6 +94,34 @@ public class QueryFirestore {
                         Professore professore = document.toObject(Professore.class);
                         if (professore != null) {
                             Long idMax = professore.getId_professore();
+                            future.complete(idMax);
+                        }
+                    } else {
+                        future.complete(0L); // Completa con 0L in caso di nessun studente
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Errore durante la ricerca dell'ID più grande degli studenti", e);
+                    ControlInput.showToast(context, "Errore durante la ricerca dell'ID più grande degli studenti");
+                    future.completeExceptionally(e); // Completa con l'eccezione in caso di errore
+                });
+
+        return future;
+    }
+
+    public CompletableFuture<Long> trovaIdTaskMax(Context context) {
+        CompletableFuture<Long> future = new CompletableFuture<>();
+
+        taskRef
+                .orderBy("id_task", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                        TaskTesi taskTesi = document.toObject(TaskTesi.class);
+                        if (taskTesi != null) {
+                            Long idMax = taskTesi.getId_task();
                             future.complete(idMax);
                         }
                     } else {

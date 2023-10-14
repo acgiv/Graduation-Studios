@@ -4,6 +4,14 @@ import androidx.room.Embedded;
 
 public class StudenteWithUtente {
 
+    //Costruttore vuoto
+    public StudenteWithUtente(){}
+
+    public StudenteWithUtente(Studente studente , Utente utente){
+        this.studente = studente;
+        this.utente = utente;
+    }
+
     @Embedded
     public Studente studente;
 

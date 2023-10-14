@@ -29,7 +29,6 @@ public class TesiTabAdapter extends FragmentStateAdapter {
     public TesiTabAdapter(@NonNull FragmentActivity fragmentActivity){
         super(fragmentActivity);
 
-
     }
 
     @NonNull

@@ -1,48 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.card.TesiProfessore.ListaTesiProfessore"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/TabLayoutTesi"
+    <!-- Lista di nomi -->
+
+    <ListView
+        android:id="@+id/listTesiProfessoreView"
         android:layout_width="match_parent"
+        android:layout_height="585dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp" />
+
+    <!--Icona per aggiungere una tesi -->
+
+    <ImageButton
+        android:id="@+id/addTesiProfessore"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/add_icon_description"
+        android:src="@drawable/baseline_add_circle_48"
+        android:visibility="visible">
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/Info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Info" />
+    </ImageButton>
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/Vincoli"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Vincoli" />
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/Tesisti"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tesisti" />
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <!-- Aggiunta del ViewPager per visualizzare i contenuti dei tab -->
-
-    <androidx.viewpager2.widget.ViewPager2
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/viewPager"
-        android:layout_below="@id/TabLayoutTesi" >
-
-    </androidx.viewpager2.widget.ViewPager2>
-
-</LinearLayout>
+</RelativeLayout>

@@ -34,6 +34,9 @@ public interface ProfessoreDao {
     @Query("SELECT id_professore FROM professore where matricola = :matricola")
     Long findProfessoreMatricola(Long matricola);
 
+    @Query("SELECT id_professore FROM professore WHERE id_utente = :id_utente")
+    Long findProfessore(Long id_utente);
+
     @Delete
     void delete(Professore professore);
 

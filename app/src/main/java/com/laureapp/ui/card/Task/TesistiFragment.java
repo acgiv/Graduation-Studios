@@ -1,6 +1,5 @@
 package com.laureapp.ui.card.Task;
 
-
 import android.content.Context;
 import android.os.Bundle;
 
@@ -36,8 +35,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 
-/**
- * Questa classe gestisce la lista degli studenti mostrata dopo aver cliccato la card
+/* Questa classe gestisce la lista degli studenti mostrata dopo aver cliccato la card
  * Tesisti, lato professore. Questa lista viene filtrata in base al testo inserito dall'utente.
  *
  */
@@ -79,7 +77,7 @@ public class TesistiFragment extends Fragment {
         }
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
         searchView = view.findViewById(R.id.searchTesistiView);
-        listView = view.findViewById(R.id.listView);
+        listView = view.findViewById(R.id.list_view_lista_tesi);
 
         return view;
     }
@@ -93,55 +91,49 @@ public class TesistiFragment extends Fragment {
 
 
         StudentAdapter adapter = new StudentAdapter(context, studentList,filteredStudentList);
-
-
-
-
-
-
         usersRef.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                            studentList.clear(); // Cancella la lista esistente
+                    studentList.clear(); // Cancella la lista esistente
 
-                            // Qui ottieni gli studenti con utenti associati
-                            for (DocumentSnapshot userSnapshot : queryDocumentSnapshots) {
-                                Utente utente = userSnapshot.toObject(Utente.class); // Ottieni lo studente da Firestore
+                    // Qui ottieni gli studenti con utenti associati
+                    for (DocumentSnapshot userSnapshot : queryDocumentSnapshots) {
+                        Utente utente = userSnapshot.toObject(Utente.class); // Ottieni lo studente da Firestore
 
-                                if (utente != null) {
-                                    // Crea un oggetto StudenteWithUtente e imposta lo studente
-                                    StudenteWithUtente studenteWithUtente = new StudenteWithUtente();
-                                    studenteWithUtente.setUtente(utente);
+                        if (utente != null) {
+                            // Crea un oggetto StudenteWithUtente e imposta lo studente
+                            StudenteWithUtente studenteWithUtente = new StudenteWithUtente();
+                            studenteWithUtente.setUtente(utente);
 
-                                    loadStudenteById(utente.getId_utente()).addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            Studente studente = task.getResult();
+                            loadStudenteById(utente.getId_utente()).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Studente studente = task.getResult();
 
-                                            if (studente != null) {
-                                                // Imposta lo studente ottenuto nell'oggetto StudenteWithUtente
-                                                studenteWithUtente.setStudente(studente);
+                                    if (studente != null) {
+                                        // Imposta lo studente ottenuto nell'oggetto StudenteWithUtente
+                                        studenteWithUtente.setStudente(studente);
 
-                                                // Aggiungi studenteWithUtente alla lista
-                                                studentList.add(studenteWithUtente);
+                                        // Aggiungi studenteWithUtente alla lista
+                                        studentList.add(studenteWithUtente);
 
 
-                                                adapter.notifyDataSetChanged();
+                                        adapter.notifyDataSetChanged();
 
-                                                Log.d("Lista Studenti Tesisti", studenteWithUtente.getUtente().toString());
-                                                Log.d("Lista StudentiWithUtenti", studenteWithUtente.toString());
-                                            } else {
-                                                // Gestisci il caso in cui lo studente sia null
-                                            }
-                                        } else {
-                                            // Gestisci l'errore se la promessa non è stata completata con successo
-                                            Exception exception = task.getException();
-                                            if (exception != null) {
-                                                // Log o gestione dell'errore
-                                            }
-                                        }
-                                    });
+                                        Log.d("Lista Studenti Tesisti", studenteWithUtente.getUtente().toString());
+                                        Log.d("Lista StudentiWithUtenti", studenteWithUtente.toString());
+                                    } else {
+                                        // Gestisci il caso in cui lo studente sia null
+                                    }
+                                } else {
+                                    // Gestisci l'errore se la promessa non è stata completata con successo
+                                    Exception exception = task.getException();
+                                    if (exception != null) {
+                                        // Log o gestione dell'errore
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                    }
+                });
 
 
 
@@ -170,10 +162,9 @@ public class TesistiFragment extends Fragment {
     }
 
 
-    /**
-     * Questo metodo mi permette di caricare da firestore gli id degli studenti dando come parametro l'id dell'utente
+    /* Questo metodo mi permette di caricare da firestore gli id degli studenti dando come parametro l'id dell'utente
      *
-     * @param id_utente
+             * @param id_utente
      * @return una lista di tipo Long contenente gli id delle tesi associate allo studente
      */
     private Task<Studente> loadStudenteById(Long id_utente) {
@@ -200,8 +191,3 @@ public class TesistiFragment extends Fragment {
 
 
 }
-
-
-
-
-

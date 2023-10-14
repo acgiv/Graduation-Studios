@@ -27,7 +27,9 @@ public class ProfessoreModelView {
         professoreRepository.updateProfessore(professore);
     }
 
-
+    public long findProfessore (Long id_professore) {
+        return professoreRepository.findProfessore(id_professore);
+    }
 
     public boolean deleteProfessore(long id){
         return professoreRepository.deleteProfessore(id);

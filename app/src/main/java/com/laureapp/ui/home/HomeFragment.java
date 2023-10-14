@@ -34,7 +34,6 @@ public class HomeFragment extends Fragment {
     String ruolo;
     Context context;
     Bundle args;
-
     String email;
     Utente utente = new Utente();
     private NavController mNav;
@@ -49,6 +48,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //funzione che passa gli argomenti da una card all'altra
         context = requireContext();
         args = getArguments();
         if (args != null) {
@@ -81,6 +81,7 @@ public class HomeFragment extends Fragment {
                 mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment,args);
             }else if(StringUtils.equals("Professore", ruolo)){
                 //Inserire tesiProfessoreFragment
+                mNav.navigate(R.id.action_fragment_home_to_listaTesi);
                 Log.d("Tesi", "cliccato tesi Professore");
             }else {
                 mNav.navigate(R.id.action_fragment_home_to_tesiStudenteFragment);
@@ -98,7 +99,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        CardTesisti =  view.findViewById(R.id.cardViewTesisti);
+        CardTesisti = view.findViewById(R.id.cardViewTesisti);
         CardTesisti.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Task", "cliccato Task Professore");

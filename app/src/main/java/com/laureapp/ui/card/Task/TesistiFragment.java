@@ -22,6 +22,7 @@ import android.widget.ListView;
 
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -49,6 +50,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 
 /**
@@ -282,10 +286,10 @@ public class TesistiFragment extends Fragment {
                 .collection("StudenteTesi")
                 .whereEqualTo("id_studente", id_studente)
                 .get()
-                .continueWith(studenteTesiTask -> {
-                    if (studenteTesiTask.isSuccessful() && !studenteTesiTask.getResult().isEmpty()) {
+                .continueWith(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         List<Long> studenteIds = new ArrayList<>();
-                        for (QueryDocumentSnapshot studenteTesiDoc : studenteTesiTask.getResult()) {
+                        for (QueryDocumentSnapshot studenteTesiDoc : task.getResult()) {
                             studenteIds.add(studenteTesiDoc.getLong("id_studente"));
                         }
                         return studenteIds;
@@ -296,37 +300,17 @@ public class TesistiFragment extends Fragment {
                 .continueWithTask(studenteIdsTask -> {
                     List<Long> studenteIds = studenteIdsTask.getResult();
 
-                    // Ora ottieni le informazioni degli studenti e degli utenti corrispondenti
+                    // Ottieni le informazioni degli studenti e degli utenti corrispondenti
                     List<Task<StudenteWithUtente>> tasks = new ArrayList<>();
                     for (Long studenteId : studenteIds) {
                         Task<StudenteWithUtente> task = getStudenteWithUtente(studenteId);
                         tasks.add(task);
                     }
 
-                    return Tasks.whenAll(tasks)
-                            .continueWith(taskList -> {
-                                if (taskList.isSuccessful()) {
-                                    List<StudenteWithUtente> studenti = new ArrayList<>();
-                                    for (Task<StudenteWithUtente> task : tasks) {
-                                        if (task.isSuccessful()) {
-                                            StudenteWithUtente studenteWithUtente = task.getResult();
-                                            studenti.add(studenteWithUtente);
-                                        }
-                                    }
-                                    return studenti;
-                                } else {
-                                    // Gestire l'errore se necessario
-                                    Exception exception = taskList.getException();
-                                    if (exception != null) {
-                                        // Gestire l'eccezione
-                                    }
-                                    return new ArrayList<>(); // O un altro valore di fallback
-                                }
-                            });
-
-
+                    return Tasks.whenAllSuccess(tasks);
                 });
     }
+
 
 
 
@@ -459,22 +443,35 @@ public class TesistiFragment extends Fragment {
 
 
     private Task<Studente> loadStudenteById(Long studenteId) {
+        TaskCompletionSource<Studente> tcs = new TaskCompletionSource<>();
+
         // Implementa la logica per caricare uno studente per id da dove sono conservati i dati (database, API, ecc.)
-        // Restituisci il risultato come un Task
         // Ad esempio:
         StudenteRepository stRep = new StudenteRepository(context);
         Studente studente = stRep.findAllById(studenteId);
-        return Tasks.forResult(studente);
+
+        // Completa la task con il risultato
+        tcs.setResult(studente);
+
+        return tcs.getTask();
     }
 
+
     private Task<Utente> loadUtenteByStudente(Studente studente) {
+        TaskCompletionSource<Utente> tcs = new TaskCompletionSource<>();
+
         // Implementa la logica per caricare l'utente associato a uno studente da dove sono conservati i dati
-        // Restituisci il risultato come un Task
         // Ad esempio:
         UtenteRepository utRep = new UtenteRepository(context);
         Utente utente = utRep.findAllById(studente.getId_utente());
-        return Tasks.forResult(utente);
+
+        // Completa la task con il risultato
+        tcs.setResult(utente);
+
+        return tcs.getTask();
     }
+
+
 
 
 

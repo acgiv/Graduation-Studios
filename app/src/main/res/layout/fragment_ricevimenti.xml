@@ -17,97 +17,83 @@
         <!-- Intestazione "Ricevimento" -->
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="37dp"
+            android:layout_height="48dp"
             android:gravity="center"
             android:text="@string/intestazione_colonna_ricevimento"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
-        <!-- Separatore -->
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="15dp"
-            android:background="#CCCCCC" />
-
         <!-- Intestazione "Argomento" -->
-        <LinearLayout
+        <TextView
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:background="@color/color_primary"
+            android:gravity="center"
             android:layout_marginStart="10dp"
-            android:orientation="vertical">
-
-            <!-- Intestazione "Argomento" -->
-            <TextView
-                android:layout_width="112dp"
-                android:layout_height="48dp"
-                android:gravity="center"
-                android:text="@string/intestazione_colonna_argomento"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <!-- Separatore -->
-        <View
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
-            android:background="#CCCCCC" />
+            android:text="@string/intestazione_colonna_argomento"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <!-- Intestazione "Data" -->
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="71dp"
             android:layout_height="48dp"
-            android:layout_weight="1"
-            android:background="@color/color_primary"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="54dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/intestazione_colonna_data"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="130dp"
-                android:layout_height="59dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
-                android:gravity="center_horizontal"
-                android:text="@string/intestazione_colonna_argomento"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
+            android:layout_marginRight="70dp"
+            android:gravity="center"
+            android:text="@string/intestazione_colonna_data"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Lista di task -->
+    <!-- Lista di ricevimenti -->
     <ListView
         android:id="@+id/listRicevimentiView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="632dp"
+        android:layout_above="@id/add_ricevimento_ImageButton"
         android:layout_below="@id/blueBar"
+        android:layout_marginBottom="107dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="1dp"
+        android:focusable="true" />
 
-    <ImageView
-        android:id="@+id/add_ricevimento_ImageView"
+
+    <TextView
+        android:id="@+id/titleLabelTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/baseline_add_circle_48"
+        android:layout_below="@+id/listRicevimentiView"
+        android:layout_marginTop="-65dp"
+        android:layout_marginLeft="5dp"
+        android:text="Task:"
+        android:textColor="#000000"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listRicevimentiView"
+        android:layout_marginTop="-65dp"
+        android:layout_marginLeft="78dp"
+        android:textColor="@color/color_primary"
+        android:textSize="28sp"/>
+
+    <!-- Pulsante di aggiunta -->
+    <ImageButton
+        android:id="@+id/add_ricevimento_ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/listRicevimentiView"
-        android:layout_marginTop="16dp"
-        android:contentDescription="@string/add_icon_description"/>
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/add_icon_description"
+        android:src="@drawable/baseline_add_circle_48"
+        android:visibility="visible"
+        android:layout_marginBottom="?android:attr/actionBarSize" />
 
 </RelativeLayout>

@@ -14,7 +14,8 @@
         android:focusable="true"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
-        android:layout_marginBottom="?android:attr/actionBarSize"/>
+        android:layout_marginBottom="?android:attr/actionBarSize" />
+
     <!-- Pulsante di aggiunta -->
     <ImageButton
         android:id="@+id/add_task_ImageButton"
@@ -26,6 +27,5 @@
         android:contentDescription="@string/add_icon_description"
         android:src="@drawable/baseline_add_circle_48"
         android:visibility="visible"
-        android:layout_marginBottom="?android:attr/actionBarSize"/>
-
+        android:layout_marginBottom="?android:attr/actionBarSize" />
 </RelativeLayout>

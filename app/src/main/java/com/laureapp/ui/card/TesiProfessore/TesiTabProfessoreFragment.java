@@ -22,7 +22,7 @@ public class TesiTabProfessoreFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager2;
-    private TesiTabAdapter viewPagerAdapter;
+    private TesiTabProfessoreAdapter viewPagerAdapter;
 
     private NavigationView navigationView;
     private AppBarConfiguration mAppBarConfiguration;
@@ -38,7 +38,7 @@ public class TesiTabProfessoreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewPagerAdapter = new TesiTabAdapter((FragmentActivity) requireContext());
+        viewPagerAdapter = new TesiTabProfessoreAdapter((FragmentActivity) requireContext());
         viewPager2.setAdapter(viewPagerAdapter);
 
         Log.d("qualcosa","qualcosa");

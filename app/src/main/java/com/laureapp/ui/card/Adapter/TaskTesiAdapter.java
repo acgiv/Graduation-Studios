@@ -1,31 +1,20 @@
 package com.laureapp.ui.card.Adapter;
 
-
-import static com.laureapp.ui.card.Task.TaskTesiFragment.deleteTask;
-
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Typeface;
-import android.os.Bundle;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
 
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.TaskTesi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,21 +25,16 @@ import java.util.List;
 public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
     private final LayoutInflater inflater;
     private final List<TaskTesi> taskList;
-    private NavController mNav;
-    private Context context;
-
 
 
     /**
      * @param context  si riferisce al contesto in cui viene utilizzato
      * @param taskList corrisponde alla lista di task da passare
      */
-    public TaskTesiAdapter(Context context, List<TaskTesi> taskList, NavController navController) {
+    public TaskTesiAdapter(Context context, List<TaskTesi> taskList) {
         super(context, 0, taskList);
         inflater = LayoutInflater.from(context);
-        this.context = context;
         this.taskList = taskList;
-        this.mNav = navController;  // Inizializza il NavController
 
     }
 
@@ -64,81 +48,31 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
      */
     @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-        View itemView = convertView;
-        if (itemView == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            itemView = inflater.inflate(R.layout.lista_task, parent, false);
+    public View getView(int position, @NonNull View convertView, @NonNull ViewGroup parent) {
+
+
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.lista_task, parent, false);
         }
 
-        // Ora puoi ottenere le viste all'interno di 'lista_task.xml' e impostare i dati corrispondenti
+        TextView taskTextView = convertView.findViewById(R.id.taskTextView);
 
-        TextView taskTextView = itemView.findViewById(R.id.taskTextView);
-        ImageButton deleteTaskImageButton = itemView.findViewById(R.id.delete_task_ImageButton);
-
-        TaskTesi task = getItem(position);
-
-        if (task != null) {
-            taskTextView.setText(task.getTitolo());
-
-            deleteTaskImageButton.setOnClickListener(view -> {
-                //Titolo della task
-                String titolo = task.getTitolo();
-                showConfirmationDialog(titolo, position);
-            });
+        TaskTesi taskListView = getItem(position);
 
 
+        if (taskListView != null) {
+
+
+            if (taskTextView != null) {
+                // Ottieni il nome e il cognome dall'oggetto Utente associato allo studente
+                String nomeTask = taskListView.getTitolo();
+
+                taskTextView.setText(nomeTask);
+            }
         }
-        // Gestisci il clic sull'elemento della lista
-        itemView.setOnClickListener(v -> {
-            TaskTesi selectedTask = getItem(position);
 
-            if (selectedTask != null) {
-                Bundle args = new Bundle();
-                args.putSerializable("SelectedTask", selectedTask);
-
-                // Utilizza la NavHostController per navigare al dettaglio del task
-                mNav.navigate(R.id.action_task_to_dettagli_task, args);
-            }
-        });
-
-
-        return itemView;
+        return convertView;
     }
-
-    private void showConfirmationDialog(String titolo, int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Conferma eliminazione");
-
-        String messageText = "Vuoi davvero eliminare la task <b>" + titolo + "</b>?";
-
-        // Crea un oggetto SpannableString utilizzando Html.fromHtml per poter utilizzare la formattazione html
-        //Il testo è ora in grassetto
-        SpannableString message = new SpannableString(Html.fromHtml(messageText, Html.FROM_HTML_MODE_LEGACY));
-
-        builder.setMessage(message);
-
-        builder.setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Elimina l'elemento
-                deleteTask(position);
-                dialog.dismiss(); // Chiudi il popup
-            }
-        });
-
-        builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Chiudi il popup
-            }
-        });
-
-        // Mostra il popup
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
 
 }
 

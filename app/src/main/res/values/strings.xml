@@ -131,6 +131,7 @@
     <string name="error_scadenza_inizio">Data scadenza precedente alla data inizio.</string>
     <string name="error_inizio_scadenza">Data inizio successiva alla scadenza</string>
     <string name="errore_email_esistente">Esiste già un utente asscociato a questa email.</string>
+    <string name="ElencoTesi">Elenco Tesi</string>
     <string name="titolo">Titolo</string>
     <string name="richiesta">Richiesta</string>
     <string name="aggiungi">Aggiungi</string>

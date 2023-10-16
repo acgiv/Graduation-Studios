@@ -1,4 +1,4 @@
-package com.laureapp.ui.card.TesiStudente;
+package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;

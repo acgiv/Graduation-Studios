@@ -30,13 +30,7 @@
                 android:id="@+id/classificaTesi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/classificaTesi" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/ElencoTesi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/elenco_tesi" />
+                android:text="@string/ElencoTesi" />
 
         </com.google.android.material.tabs.TabLayout>
 

@@ -80,7 +80,6 @@ public class UtenteRepository {
             future.complete(cognome);
         });
         try {
-
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

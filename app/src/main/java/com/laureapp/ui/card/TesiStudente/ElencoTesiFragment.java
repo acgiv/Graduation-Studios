@@ -59,10 +59,6 @@ public class ElencoTesiFragment extends Fragment {
         SearchView searchView = view.findViewById(R.id.searchTesiView);
         listView = view.findViewById(R.id.listClassificaTesiView);
 
-
-
-
-
         loadAllTesiData().addOnCompleteListener(tesiTask -> {
             if (tesiTask.isSuccessful()) {
                 ArrayList<Tesi> tesiList = tesiTask.getResult();

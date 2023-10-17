@@ -168,7 +168,7 @@
     <fragment
         android:id="@+id/tesiProfessoreFragment"
         android:name="com.laureapp.ui.card.TesiProfessore.ListaTesiProfessoreFragment"
-        android:label="TesiProfessoreFragment"
+        android:label="Lista Tesi"
         tools:layout="@layout/fragment_lista_tesi_professore">
         <action
             android:id="@+id/action_tesiProfessoreFragment_to_tesiTabProfessoreFragment"
@@ -180,7 +180,7 @@
     <fragment
         android:id="@+id/tesiTabProfessoreFragment"
         android:name="com.laureapp.ui.card.TesiProfessore.TesiTabProfessoreFragment"
-        android:label="fragment_tab_tesi_professore"
+        android:label="Tesi"
         tools:layout="@layout/fragment_tab_tesi_professore" >
     </fragment>
 

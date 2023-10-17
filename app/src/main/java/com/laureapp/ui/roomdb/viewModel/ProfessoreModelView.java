@@ -31,8 +31,6 @@ public class ProfessoreModelView {
         return professoreRepository.findProfessore(id_utente);
     }
 
-
-
     public boolean deleteProfessore(long id){
         return professoreRepository.deleteProfessore(id);
     }

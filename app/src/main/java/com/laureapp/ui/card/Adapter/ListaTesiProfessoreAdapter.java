@@ -8,11 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Tesi;
@@ -56,7 +52,7 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
         listItemView.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putSerializable("Tesi",currentTesi);
-            Navigation.findNavController(v).navigate(R.id.action_tesiProfessoreFragment_to_tesiTabProfessoreFragment);
+            Navigation.findNavController(v).navigate(R.id.action_tesiProfessoreFragment_to_tesiTabProfessoreFragment,args);
 
         });
 

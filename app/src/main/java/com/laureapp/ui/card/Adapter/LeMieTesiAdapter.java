@@ -2,7 +2,6 @@ package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +52,6 @@ public class LeMieTesiAdapter extends ArrayAdapter<Tesi> {
             Bundle args = new Bundle();
             args.putSerializable("Tesi",currentTesi);
             Navigation.findNavController(v).navigate(R.id.action_fragment_tesistudenteFragment_to_dettagli_tesi_studente,args);
-
-
 
         });
 

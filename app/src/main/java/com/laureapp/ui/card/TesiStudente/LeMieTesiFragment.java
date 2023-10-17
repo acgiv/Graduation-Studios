@@ -45,7 +45,6 @@ public class LeMieTesiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
         return inflater.inflate(R.layout.fragment_lemietesi, container, false);
 
-
     }
 
     @Override

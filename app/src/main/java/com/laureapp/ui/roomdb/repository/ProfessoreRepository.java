@@ -69,7 +69,6 @@ public class ProfessoreRepository {
     }
 
 
-
     public Professore findAllById(String uid) {
         CompletableFuture<Professore> future = new CompletableFuture<>();
         executor.execute(() -> {

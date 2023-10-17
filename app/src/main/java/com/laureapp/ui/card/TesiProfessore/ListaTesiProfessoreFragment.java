@@ -38,14 +38,9 @@ public class ListaTesiProfessoreFragment extends Fragment {
     Long id_professore;
     private ListView listView;
     private ListaTesiProfessoreAdapter adapter;
-    ProfessoreModelView professoreModelView = new ProfessoreModelView(context);
+    ProfessoreModelView professoreView = new ProfessoreModelView(context);
 
     ArrayList<Long> idTesiList = new ArrayList<>();
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,13 +55,13 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
             UtenteModelView utenteView =  new UtenteModelView(context); //inizializza utenteView con un'istanza di UtenteModelView
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
-            id_professore = professoreModelView.findProfessore(id_utente); //ottengo l'id del professore corrispondente all'id dell'utente
+            id_professore = professoreView.findProfessore(id_utente); //ottengo l'id del professore corrispondente all'id dell'utente
 
             Log.d("scasca", String.valueOf(id_professore));
             Log.d("scuscu", String.valueOf(id_utente));
 
             //carico l'elenco degli id delle tesi collegate con il professore
-            loadIdTesiData(id_professore).addOnCompleteListener(task -> {
+            loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) { //se il task è completato con successo
                     idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
                     Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
@@ -111,7 +106,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
      * @return una lista di tipo Long contenente gli id delle tesi associate allo studente
      */
 
-    private Task<ArrayList<Long>> loadIdTesiData(Long id_professore) {
+    private Task<ArrayList<Long>> loadIdTesiDataByProfessoreId(Long id_professore) {
         final ArrayList<Long> idTesiList = new ArrayList<>();
 
         return FirebaseFirestore.getInstance()
@@ -146,7 +141,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
         //Crea una lista di task per prendere documenti Tesi
         List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
         for(Long idTesi : idTesiList) {
-            Log.d("Id Tese323i", "Id432 Tesi" + idTesi);
+            Log.d("Id Tese123i", "Id321 Tesi" + idTesi);
             tasks.add(tesiCollection.document(String.valueOf(idTesi)).get());
         }
 

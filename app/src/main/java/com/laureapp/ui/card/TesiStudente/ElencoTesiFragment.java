@@ -3,6 +3,7 @@ package com.laureapp.ui.card.TesiStudente;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -213,7 +214,7 @@ public class ElencoTesiFragment extends Fragment {
         EditText editTextCiclocdl = view.findViewById(R.id.ciclocdl);
         EditText editTextMedia = view.findViewById(R.id.media);
         EditText editTextEsami = view.findViewById(R.id.numeroEsamiMancanti);
-
+        EditText editTextTempistiche = view.findViewById(R.id.tempiticheTesi);
 
         /**
          * Gestione del bottone conferma
@@ -226,7 +227,9 @@ public class ElencoTesiFragment extends Fragment {
             String ciclocdl = editTextCiclocdl.getText().toString();
             String media = editTextMedia.getText().toString();
             String esami = editTextEsami.getText().toString();
+            String tempistiche = editTextTempistiche.getText().toString();
 
+            //filtro in base al cognome del relatore
            Long id_utente =  getIdUtenteByCognome(cognome);
            if(id_utente != null) {
 
@@ -242,17 +245,14 @@ public class ElencoTesiFragment extends Fragment {
                    }
                });
 
-
-
-           }else{
-               filterDialog.dismiss();
-               Toast toast = Toast.makeText(context, "Nessun risultato", Toast.LENGTH_SHORT);
-               toast.setGravity(Gravity.TOP, 0, 0); // Imposta il Toast in alto
-               toast.show();
            }
+           //filtro in base alla tipologia e/o al ciclo di laurea
+           filterTesiByTipologiaCdl(tipologia,ciclocdl);
 
-           Log.d("cogn3", String.valueOf(id_utente));
 
+
+           //chiamo questo metodo se non ci sono risultati
+           listIsBlank(context);
         });
 
         /**
@@ -388,6 +388,61 @@ public class ElencoTesiFragment extends Fragment {
                 });
     }
 
+    /**
+     * Questo metodo mi consente di filtrare le tesi in base alla tipologia e al cicloCdl
+     * poiché questi due campi fanno parte della entity Tesi,posso lavorare con l'array tesiList
+     * senza utilizzare firestore
+     *
+     * @param tipologia
+     * @param cicloCdl
+     */
+    private void filterTesiByTipologiaCdl(String tipologia, String cicloCdl) {
+        ArrayList<Tesi> filteredTesiList = new ArrayList<>();
+
+        for (Tesi tesi : tesiList) {
+            if (TextUtils.isEmpty(tipologia) && TextUtils.isEmpty(cicloCdl)) {
+                // Se entrambi i campi di filtro sono vuoti, aggiungi tutte le tesi
+                filteredTesiList.add(tesi);
+            } else if (TextUtils.isEmpty(tipologia) && !TextUtils.isEmpty(cicloCdl)) {
+                // Se il campo tipologia è vuoto ma c'è un filtro per il cicloCdl
+                if (tesi.getCiclo_cdl().equals(cicloCdl)) {
+                    filteredTesiList.add(tesi);
+                }
+            } else if (!TextUtils.isEmpty(tipologia) && TextUtils.isEmpty(cicloCdl)) {
+                // Se il campo cicloCdl è vuoto ma c'è un filtro per la tipologia
+                if (tesi.getTipologia().equals(tipologia)) {
+                    filteredTesiList.add(tesi);
+                }
+            } else {
+                // Se ci sono filtri per entrambi i campi
+                if (tesi.getCiclo_cdl().equals(cicloCdl) && tesi.getTipologia().equals(tipologia)) {
+                    filteredTesiList.add(tesi);
+                }
+            }
+        }
+        //chiudo il filtro dopo la ricerca
+        if (filterDialog != null && filterDialog.isShowing()) {
+            filterDialog.dismiss();
+        }
+        // aggiorno  l'adapter con la lista filtrata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(filteredTesiList);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Questo metodo serve per far comparire un messaggio quando non ci sono tesi dopo aver filtrato
+     * @param context
+     */
+    private void listIsBlank(Context context){
+        if(tesiList.isEmpty()){
+            Toast toast = Toast.makeText(context, "Nessun risultato", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0); // Imposta il Toast in alto
+            toast.show();
+        }
+    }
 
 
 }

@@ -18,13 +18,13 @@ public class Vincolo implements Serializable {
     private Long id_vincolo;
 
     @ColumnInfo(name = "tempistiche")
-    private String tempistiche;
+    private int tempistiche;
 
     @ColumnInfo(name = "media_voti")
     private int media_voti;
 
     @ColumnInfo(name = "esami_mancanti_necessari")
-    private String esami_mancanti_necessari;
+    private int esami_mancanti_necessari;
 
     @ColumnInfo(name = "skill")
     private String skill;
@@ -39,11 +39,11 @@ public class Vincolo implements Serializable {
         this.id_vincolo = idVincolo;
     }
 
-    public String getTempistiche() {
+    public int getTempistiche() {
         return tempistiche;
     }
 
-    public void setTempistiche(String tempisticheTesi) {
+    public void setTempistiche(int tempisticheTesi) {
         this.tempistiche = tempisticheTesi;
     }
 
@@ -55,11 +55,11 @@ public class Vincolo implements Serializable {
         this.media_voti = mediaVoti;
     }
 
-    public String getEsami_mancanti_necessari() {
+    public int getEsami_mancanti_necessari() {
         return esami_mancanti_necessari;
     }
 
-    public void setEsami_mancanti_necessari(String esamiMancanti) {
+    public void setEsami_mancanti_necessari(int esamiMancanti) {
         this.esami_mancanti_necessari = esamiMancanti;
     }
 

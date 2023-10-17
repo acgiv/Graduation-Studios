@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.ListaTesiProfessoreAdapter;
@@ -135,45 +136,41 @@ public class ListaTesiProfessoreFragment extends Fragment {
     private Task<ArrayList<Tesi>> loadTesiData(ArrayList<Long> idTesiList) {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
 
-        //Crea una query Firestore per prendere documenti Tesi basati su idTesiList
-        CollectionReference tesiCollection = FirebaseFirestore.getInstance().collection("Tesi");
+        // Create a Firestore query to fetch Tesi documents with matching IDs
+        Query query = FirebaseFirestore.getInstance()
+                .collection("Tesi")
+                .whereIn("id_tesi", idTesiList);
 
-        //Crea una lista di task per prendere documenti Tesi
-        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
-        for(Long idTesi : idTesiList) {
-            Log.d("Id Tese123i", "Id321 Tesi" + idTesi);
-            tasks.add(tesiCollection.document(String.valueOf(idTesi)).get());
-        }
+        return query.get().continueWith(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Tesi tesi = new Tesi();
+                    tesi.setId_tesi((Long) document.get("id_tesi"));
+                    tesi.setId_vincolo((Long) document.get("id_vincolo"));
 
-        //Unisce tutte le task in una singola task
-        return Tasks.whenAllSuccess(tasks).continueWith(task -> {
-            if(task.isSuccessful()) {
-                List<Object> results = task.getResult();
-                Log.d("Id Tese323i", "tesy " + results.toString());
+                    // Converto da Firebase timestamp a SQL timestamp
+                    com.google.firebase.Timestamp firebaseTimestamp = (com.google.firebase.Timestamp) document.get("data_pubblicazione");
+                    Date javaDate = firebaseTimestamp.toDate();
+                    java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(javaDate.getTime());
+                    tesi.setData_pubblicazione(sqlTimestamp);
 
-                for(Object result : results) {
-                    if(result instanceof DocumentSnapshot document) {
-                        //Crea un oggeto Tesi dalla data Firestore
-                        Tesi tesi = new Tesi();
-                        tesi.setId_tesi((Long) document.get("id_tesi"));
-                        tesi.setId_vincolo((Long) document.get("id_vincolo"));
+                    tesi.setCiclo_cdl((String) document.get("ciclo_cdl"));
+                    tesi.setAbstract_tesi((String) document.get("abstract_tesi"));
+                    tesi.setTitolo((String) document.get("titolo"));
+                    tesi.setTipologia((String) document.get("tipologia"));
 
-                        //Codice che serve per convertire la data da Firebase a SQL
-                        com.google.firebase.Timestamp firebaseTimestamp = (com.google.firebase.Timestamp) document.get("data_pubblicazione");
-                        Date javaDate = firebaseTimestamp.toDate();
-                        java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(javaDate.getTime());
-                        tesi.setData_pubblicazione(sqlTimestamp);
+                    tesiList.add(tesi);
+                }
 
-                        tesi.setCiclo_cdl((String) document.get("ciclo_cdl"));
-                        tesi.setAbstract_tesi((String) document.get("abstract_tesi"));
-                        tesi.setTitolo((String) document.get("titolo"));
-                        tesi.setTipologia((String) document.get("tipologia"));
-
-                        tesiList.add(tesi);
-                    }
+                // Aggiorna l'adapter con i nuovi dati
+                if (adapter != null) {
+                    adapter.clear();
+                    adapter.addAll(tesiList);
+                    adapter.notifyDataSetChanged();
                 }
             }
             return tesiList;
         });
     }
+
 }

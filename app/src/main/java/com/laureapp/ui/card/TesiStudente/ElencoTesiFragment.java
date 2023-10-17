@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -17,13 +17,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.SearchView;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.ElencoTesiAdapter;
+import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Tesi;
+import com.laureapp.ui.roomdb.entity.TesiProfessore;
+import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
+import com.laureapp.ui.roomdb.viewModel.TesiProfessoreModelView;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ElencoTesiFragment extends Fragment {
 
@@ -33,21 +41,17 @@ public class ElencoTesiFragment extends Fragment {
     private String titoloTesiCercata = "";
 
     private AlertDialog filterDialog;
+    ArrayList<Tesi> tesiList = new ArrayList<>();
+
+    ArrayList<Long> idTesis = new ArrayList<>();
+    final ArrayList<Long> idTesiProfessoreList = new ArrayList<>();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_elencotesi, container, false);
 
-        Button filterButton = rootView.findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(view1 -> {
-            rootView.setAlpha(0.1f); // Imposta l'opacità desiderata (0.0-1.0)
-            showFilterDialog(rootView);
-        });
-
-        // Nascondi il layout di filtraggio all'inizio
-        return rootView;
+        return inflater.inflate(R.layout.fragment_elencotesi, container, false);
 
 
     }
@@ -59,13 +63,18 @@ public class ElencoTesiFragment extends Fragment {
         SearchView searchView = view.findViewById(R.id.searchTesiView);
         listView = view.findViewById(R.id.listClassificaTesiView);
 
-
+        //Definisco il bottone filtra
+        Button filterButton = view.findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(view1 -> {
+            view.setAlpha(0.1f); // Imposta l'opacità desiderata (0.0-1.0)
+            showFilterDialog(view,tesiList); //quando viene cliccato il pulsante filtra si apre il dialog
+        });
 
 
 
         loadAllTesiData().addOnCompleteListener(tesiTask -> {
             if (tesiTask.isSuccessful()) {
-                ArrayList<Tesi> tesiList = tesiTask.getResult();
+                tesiList = tesiTask.getResult();
                 adapter = new ElencoTesiAdapter(getContext(), tesiList);
                 listView.setAdapter(adapter);
             } else {
@@ -182,33 +191,113 @@ public class ElencoTesiFragment extends Fragment {
                 });
     }
 
-    public void showFilterDialog(View rootView) {
+    public void showFilterDialog(View rootView, ArrayList<Tesi> tesiList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_popup_filtra_tesi, null);
         builder.setView(view);
 
+        /**
+         * Definisco tutti gli input text
+         */
+
+        EditText editTextCognome = view.findViewById(R.id.cognomeRelatore);
+        EditText editTextTipologia = view.findViewById(R.id.tipologia);
+        EditText editTextCiclocdl = view.findViewById(R.id.ciclocdl);
+        EditText editTextMedia = view.findViewById(R.id.media);
+        EditText editTextEsami = view.findViewById(R.id.numeroEsamiMancanti);
 
 
-        Button annullaButton = view.findViewById(R.id.annullaFiltra); // Find the "Annulla" button by its id
+        /**
+         * Gestione del bottone conferma
+         */
+        Button confermaButton = view.findViewById(R.id.avviaRicerca);
+        confermaButton.setOnClickListener(v -> {
+            //prendo i valori degli editext
+            String cognome = editTextCognome.getText().toString();
+            String tipologia = editTextTipologia.getText().toString();
+            String ciclocdl = editTextCiclocdl.getText().toString();
+            String media = editTextMedia.getText().toString();
+            String esami = editTextEsami.getText().toString();
 
-        annullaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterDialog.dismiss();
-            }
+            getTesiIds(); //chiamo il metodo per ottenere gli id delle tesi
+            loadIdTesiProfessoreData();
+
+
         });
 
-        filterDialog = builder.create();
-        filterDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                rootView.setAlpha(1); //reimposto l'opacità di default
+        /**
+         * Gestione del bottone annulla
+         */
+        Button annullaButton = view.findViewById(R.id.annullaFiltra);
+        annullaButton.setOnClickListener(v -> filterDialog.dismiss());
 
-            }
+        filterDialog = builder.create(); //creo il dialog
+
+        /**
+         * Gestione del metodo on dismiss quando si clicca fuori o si clicca annulla
+         */
+        filterDialog.setOnDismissListener(dialog -> {
+            rootView.setAlpha(1); //reimpose l'opacità di default
+
         });
 
-
+        //mostro il filter dialog
         filterDialog.show();
     }
+
+
+    /**
+     * Metodo per ottenere gli id delle tesi dalla lista delle tesi
+     * @return id delle tesi
+     */
+    private ArrayList<Long> getTesiIds() {
+        for (Tesi tesi : tesiList) {
+            Long tesiId = tesi.getId_tesi();
+            idTesis.add(tesiId);
+        }
+        return idTesis;
+
+    }
+
+    /**
+     * Questo metodo mi permette di caricare da firestore gli id delle tesi dando come parametro l'id dello studente
+     *
+     *
+     * @return una lista di tipo Long contenente gli id delle tesi associate allo studente
+     */
+    private Task<ArrayList<Long>> loadIdTesiProfessoreData() {
+        final ArrayList<Task<QuerySnapshot>> queryTasks = new ArrayList<>();
+        final ArrayList<Long> idTesiProfessoreList = new ArrayList<>();
+
+        // Itera su ciascun ID nella lista
+        for (Long id_tesi : idTesis) {
+            Log.d("jek1", String.valueOf(id_tesi));
+            Task<QuerySnapshot> queryTask = FirebaseFirestore.getInstance()
+                    .collection("TesiProfessore")
+                    .whereEqualTo("id_tesi", id_tesi)
+                    .get();
+            queryTasks.add(queryTask);
+        }
+
+        return Tasks.whenAllSuccess(queryTasks)
+                .continueWith(task -> {
+                    for (Task<QuerySnapshot> queryResultTask : queryTasks) {
+                        if (queryResultTask.isSuccessful()) {
+                            QuerySnapshot querySnapshot = queryResultTask.getResult();
+                            for (QueryDocumentSnapshot doc : querySnapshot) {
+                                Long data = doc.getLong("id_tesi");
+                                if (data != null) {
+                                    idTesiProfessoreList.add(data);
+                                    Log.d("jek", String.valueOf(idTesiProfessoreList));
+
+                                }
+                            }
+                        }
+                    }
+                    return idTesiProfessoreList;
+                });
+    }
+
+
+
 }

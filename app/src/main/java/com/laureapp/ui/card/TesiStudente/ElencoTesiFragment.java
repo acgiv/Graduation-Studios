@@ -3,6 +3,7 @@ package com.laureapp.ui.card.TesiStudente;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,12 +20,14 @@ import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.SearchView;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.ElencoTesiAdapter;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.entity.Vincolo;
 import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
@@ -47,6 +50,11 @@ public class ElencoTesiFragment extends Fragment {
 
     ArrayList<Long> idTesiList = new ArrayList<>();
 
+    ArrayList<Vincolo> vincoliList = new ArrayList<>();
+
+    ArrayList<Long> idVincoliList = new ArrayList<>();
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,6 +75,7 @@ public class ElencoTesiFragment extends Fragment {
         //ottengo la lista dei professori che mi servirà nel filtra
         ProfessoreModelView professoreModelView = new ProfessoreModelView(context);
         professoriList = professoreModelView.getAllProfessore();
+
 
         SearchView searchView = view.findViewById(R.id.searchTesiView);
         listView = view.findViewById(R.id.listClassificaTesiView);
@@ -213,7 +222,7 @@ public class ElencoTesiFragment extends Fragment {
         EditText editTextCiclocdl = view.findViewById(R.id.ciclocdl);
         EditText editTextMedia = view.findViewById(R.id.media);
         EditText editTextEsami = view.findViewById(R.id.numeroEsamiMancanti);
-
+        EditText editTextTempistiche = view.findViewById(R.id.tempiticheTesi);
 
         /**
          * Gestione del bottone conferma
@@ -226,7 +235,9 @@ public class ElencoTesiFragment extends Fragment {
             String ciclocdl = editTextCiclocdl.getText().toString();
             String media = editTextMedia.getText().toString();
             String esami = editTextEsami.getText().toString();
+            String tempistiche = editTextTempistiche.getText().toString();
 
+            //filtro in base al cognome del relatore
            Long id_utente =  getIdUtenteByCognome(cognome);
            if(id_utente != null) {
 
@@ -242,17 +253,20 @@ public class ElencoTesiFragment extends Fragment {
                    }
                });
 
-
-
-           }else{
-               filterDialog.dismiss();
-               Toast toast = Toast.makeText(context, "Nessun risultato", Toast.LENGTH_SHORT);
-               toast.setGravity(Gravity.TOP, 0, 0); // Imposta il Toast in alto
-               toast.show();
            }
+           //filtro in base alla tipologia e/o al ciclo di laurea
+            filterTesiByTipologiaCdl(tipologia,ciclocdl);
 
-           Log.d("cogn3", String.valueOf(id_utente));
+            getIdVincoliList();
 
+
+            Log.d("cogn7", String.valueOf(idVincoliList));
+
+
+
+
+           //chiamo questo metodo se non ci sono risultati
+           listIsBlank(context);
         });
 
         /**
@@ -388,6 +402,118 @@ public class ElencoTesiFragment extends Fragment {
                 });
     }
 
+    /**
+     * Questo metodo mi consente di filtrare le tesi in base alla tipologia e al cicloCdl
+     * poiché questi due campi fanno parte della entity Tesi,posso lavorare con l'array tesiList
+     * senza utilizzare firestore
+     *
+     * @param tipologia
+     * @param cicloCdl
+     */
+    private void filterTesiByTipologiaCdl(String tipologia, String cicloCdl) {
+        ArrayList<Tesi> filteredTesiList = new ArrayList<>();
 
+        for (Tesi tesi : tesiList) {
+            if (TextUtils.isEmpty(tipologia) && TextUtils.isEmpty(cicloCdl)) {
+                // Se entrambi i campi di filtro sono vuoti, aggiungi tutte le tesi
+                filteredTesiList.add(tesi);
+            } else if (TextUtils.isEmpty(tipologia) && !TextUtils.isEmpty(cicloCdl)) {
+                // Se il campo tipologia è vuoto ma c'è un filtro per il cicloCdl
+                if (tesi.getCiclo_cdl().equals(cicloCdl)) {
+                    filteredTesiList.add(tesi);
+                }
+            } else if (!TextUtils.isEmpty(tipologia) && TextUtils.isEmpty(cicloCdl)) {
+                // Se il campo cicloCdl è vuoto ma c'è un filtro per la tipologia
+                if (tesi.getTipologia().equals(tipologia)) {
+                    filteredTesiList.add(tesi);
+                }
+            } else {
+                // Se ci sono filtri per entrambi i campi
+                if (tesi.getCiclo_cdl().equals(cicloCdl) && tesi.getTipologia().equals(tipologia)) {
+                    filteredTesiList.add(tesi);
+                }
+            }
+        }
+        //chiudo il filtro dopo la ricerca
+        if (filterDialog != null && filterDialog.isShowing()) {
+            filterDialog.dismiss();
+        }
+        // aggiorno  l'adapter con la lista filtrata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(filteredTesiList);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Questo metodo serve per far comparire un messaggio quando non ci sono tesi dopo aver filtrato
+     * @param context
+     */
+    private void listIsBlank(Context context){
+        if(tesiList.isEmpty()){
+            Toast toast = Toast.makeText(context, "Nessun risultato", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0); // Imposta il Toast in alto
+            toast.show();
+        }
+    }
+
+    /**
+     * Metodo utilizzato per ottenere gli id dei vincoli legati alle tesi
+     * @return lista di id vincoli
+     */
+    private ArrayList<Long> getIdVincoliList(){
+
+        for(Tesi tesi : tesiList){
+            idVincoliList.add(tesi.getId_vincolo());
+        }
+        return idVincoliList;
+    }
+
+    private Task<ArrayList<Vincolo>> loadVincoliData() {
+
+        return FirebaseFirestore.getInstance()
+                .collection("Vincolo")
+                .get()
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Vincolo vincolo = new Vincolo();
+                            vincolo.setId_vincolo((Long) document.get("id_vincolo"));
+                            vincolo.setEsami_mancanti_necessari((int) document.get("esami_mancanti_necessari"));
+                            vincolo.setSkill((String) document.get("skill"));
+                            vincolo.setTempistiche((int) document.get("tempistiche"));
+                            vincolo.setMedia_voti((int) document.get("media"));
+
+                            vincoliList.add(vincolo);
+                        }
+                    }
+                    return vincoliList;
+                });
+    }
+
+    private Task<ArrayList<Vincolo>> loadVincoloData() {
+        final ArrayList<Vincolo> vincoliList = new ArrayList<>();
+
+        // Create a Firestore query to fetch Tesi documents with matching IDs
+        Query query = FirebaseFirestore.getInstance()
+                .collection("Vincolo");
+
+        return query.get().continueWith(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Vincolo vincolo = new Vincolo();
+                    vincolo.setId_vincolo((Long) document.get("id_vincolo"));
+                    vincolo.setEsami_mancanti_necessari((int) document.get("esami_mancanti_necessari"));
+                    vincolo.setSkill((String) document.get("skill"));
+                    vincolo.setTempistiche((int) document.get("tempistiche"));
+                    vincolo.setMedia_voti((int) document.get("media"));
+
+                    vincoliList.add(vincolo);
+                }
+            }
+            return vincoliList;
+        });
+    }
 
 }

@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="60dp">
+        android:paddingTop="40dp">
 
         <GridLayout
             android:id="@+id/grigliaDati"
@@ -32,12 +32,10 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewDettagliTesi"
                 android:layout_width="375dp"
-                android:layout_height="220dp"
-                android:layout_marginTop="100dp"
+                android:layout_height="400dp"
+                android:layout_marginTop="80dp"
                 android:layout_row="0"
-                android:layout_rowWeight="1"
                 android:layout_column="0"
-                android:layout_columnWeight="1"
                 android:layout_gravity="center"
                 android:layout_margin="12dp"
                 app:cardElevation="8dp"
@@ -281,6 +279,219 @@
 
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutVincoli"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="140dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl">
+
+
+                        <TextView
+                            android:id="@+id/TextViewVincoli"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Vincoli Tesi "
+                            android:textColor="@color/color_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/line6"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutTempistiche"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="16dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli">
+
+
+                        <TextView
+                            android:id="@+id/TextViewTempistiche"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tempistiche (in Mesi):"
+                            android:textColor="@color/color_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <TextView
+                            android:id="@+id/insertTextViewTempistiche"
+                            android:layout_width="246dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/line7"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutMedia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="16dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche">
+
+
+                        <TextView
+                            android:id="@+id/TextViewMedia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Media:"
+                            android:textColor="@color/color_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <TextView
+                            android:id="@+id/insertTextViewMedia"
+                            android:layout_width="246dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/line8"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutEsamiMancanti"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="16dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
+
+
+                        <TextView
+                            android:id="@+id/TextViewEsamiMancanti"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Esami Mancanti:"
+                            android:textColor="@color/color_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <TextView
+                            android:id="@+id/insertTextViewEsamiMancanti"
+                            android:layout_width="246dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/line9"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutSkill"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="16dp"
+                        android:orientation="horizontal"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
+
+
+                        <TextView
+                            android:id="@+id/TextViewSkill"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Capacità e Skill:"
+                            android:textColor="@color/color_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                        <TextView
+                            android:id="@+id/insertTextViewSkill"
+                            android:layout_width="246dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/line10"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+
                     <View
                         android:id="@+id/line5"
                         android:layout_width="match_parent"
@@ -289,6 +500,15 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl" />
+
+                    <Button
+                        android:id="@+id/richiediTesi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Richiedi Tesi"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
                 </FrameLayout>

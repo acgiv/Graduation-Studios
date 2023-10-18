@@ -52,7 +52,6 @@ public class ElencoTesiFragment extends Fragment {
 
     ArrayList<Vincolo> vincoliList = new ArrayList<>();
 
-    ArrayList<Long> idVincoliList = new ArrayList<>();
     Long media;
     Long esami;
     Long tempistiche;
@@ -105,7 +104,6 @@ public class ElencoTesiFragment extends Fragment {
         loadVincoloData().addOnCompleteListener(taskVincolo->{
             if(taskVincolo.isSuccessful()){
                 vincoliList = taskVincolo.getResult();
-                Log.d("cogn8",vincoliList.toString());
             }else{
                 Log.e("vincolo Firestore Error", "Error getting vincolo data", taskVincolo.getException());
 
@@ -482,7 +480,11 @@ public class ElencoTesiFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Questo metodo consente di ottenere i dati dei vincoli delle tesi da firestore e riempire la entity Vincolo
+     *
+     * @return entity Vincolo
+     */
     private Task<ArrayList<Vincolo>> loadVincoloData() {
         final ArrayList<Vincolo> vincoliList = new ArrayList<>();
 

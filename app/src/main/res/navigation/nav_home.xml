@@ -38,6 +38,11 @@
             app:destination="@id/segnStudentiFragment" />
 
 
+        <!-- Home to tesi professore fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_tesiProfessoreFragment"
+            app:destination="@id/tesiProfessoreFragment" />
+
     </fragment>
 
 
@@ -188,6 +193,27 @@
         android:name="com.laureapp.ui.card.TesiStudente.DettagliTesiStudenteFragment"
         android:label="Dettaglio Tesi"
         tools:layout="@layout/fragment_dettagli_tesi_studente">
+    </fragment>
+
+    <!--Fragment Tesi Professore -->
+
+    <fragment
+        android:id="@+id/tesiProfessoreFragment"
+        android:name="com.laureapp.ui.card.TesiProfessore.ListaTesiProfessoreFragment"
+        android:label="Lista Tesi"
+        tools:layout="@layout/fragment_lista_tesi_professore">
+        <action
+            android:id="@+id/action_tesiProfessoreFragment_to_tesiTabProfessoreFragment"
+            app:destination="@id/tesiTabProfessoreFragment" />
+    </fragment>
+
+    <!--Fragment Tab Tesi Professore -->
+
+    <fragment
+        android:id="@+id/tesiTabProfessoreFragment"
+        android:name="com.laureapp.ui.card.TesiProfessore.TesiTabProfessoreFragment"
+        android:label="Tesi"
+        tools:layout="@layout/fragment_tab_tesi_professore" >
     </fragment>
 
 </navigation>

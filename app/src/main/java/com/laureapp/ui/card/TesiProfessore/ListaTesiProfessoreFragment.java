@@ -1,17 +1,18 @@
-package com.laureapp.ui.card.TesiStudente;
+package com.laureapp.ui.card.TesiProfessore;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -21,82 +22,76 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
-import com.laureapp.ui.card.Adapter.LeMieTesiAdapter;
+import com.laureapp.ui.card.Adapter.ListaTesiProfessoreAdapter;
 import com.laureapp.ui.roomdb.entity.Tesi;
-import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
+import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LeMieTesiFragment extends Fragment {
-    Context context;
+public class ListaTesiProfessoreFragment extends Fragment {
 
-    Long id_utente;
-    Long id_studente;
+    Context context;
     String email;
+    Long id_utente;
+    Long id_professore;
     private ListView listView;
-    private LeMieTesiAdapter adapter;
-    StudenteModelView studenteView = new StudenteModelView(context);
+    private ListaTesiProfessoreAdapter adapter;
+    ProfessoreModelView professoreView = new ProfessoreModelView(context);
 
     ArrayList<Long> idTesiList = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
-        return inflater.inflate(R.layout.fragment_lemietesi, container, false);
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_lista_tesi_professore, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
-        email = getEmailFromSharedPreferences(); //chiamata al metodo per ottenere la mail
-
+        email = getEmailFromSharedPreferences();
         if (email != null) { // se la mail non è nulla
 
-            UtenteModelView utenteView = new UtenteModelView(context); // Inizializza utenteView con un'istanza di UtenteModelView
+            UtenteModelView utenteView =  new UtenteModelView(context); //inizializza utenteView con un'istanza di UtenteModelView
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
-            id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
+            id_professore = professoreView.findProfessore(id_utente); //ottengo l'id del professore corrispondente all'id dell'utente
 
+            Log.d("scasca", String.valueOf(id_professore));
+            Log.d("scuscu", String.valueOf(id_utente));
 
-            //carico l'elenco degli id delle tesi appartenenti allo studente
-            loadIdTesiData(id_studente).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) { //se il task è completato con successo
+            //carico l'elenco degli id delle tesi collegate con il professore
+            loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
+                if(task.isSuccessful()) { //se il task è completato con successo
                     idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
                     Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
-                }else {
-                    Log.e("Firestore Error", "Error getting data", task.getException());
-                }
 
-                    loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> { //chiamo il metodo per ottenere le tesi in base alle id tesi ottenute
-                        if (tesiTask.isSuccessful()) {
+                    } else {
+                    Log.e("Firestore Error","Error getting data", task.getException());
+                    }
+
+                    loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> { //Chiamo il metodo per ottenere le tesi in base alle id tesi ottenute
+                        if(tesiTask.isSuccessful()) {
                             ArrayList<Tesi> tesiList = tesiTask.getResult();
-                            Log.d(" Tesi", "Id Tesi " + tesiList.toString());
+                            Log.d("Tesi", "Id Tesi " + tesiList.toString());
 
-
-                            //mostro sulla listview tutte le tesi dello studente
-                            listView = view.findViewById(R.id.listTesiView);
-                            adapter = new LeMieTesiAdapter(getContext(), tesiList);
+                            //Mostro sulla listview tutte le tesi dello studente associato al professore
+                            listView = view.findViewById(R.id.listTesiProfessoreView);
+                            adapter = new ListaTesiProfessoreAdapter(getContext(), tesiList);
                             listView.setAdapter(adapter);
                         } else {
                             Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
                         }
                     });
 
-            });
+                });
 
-        } else {
-            Log.d("Email salvata:", "Non trovata");
+            } else {
+            Log.d("Email salvata: ", "Non trovata");
+            }
         }
 
-    }
-
-    /**
-     * Si utilizza questo metodo per prendere le preferenze salvate nel metodo presente in HomeFragment
-     * Esso prende la cartella "preferenze" e ne ricava la mail o l'oggetto che ci serve.
-     * @return
-     */
     private String getEmailFromSharedPreferences() {
         if (context != null) {
             SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
@@ -106,17 +101,18 @@ public class LeMieTesiFragment extends Fragment {
     }
 
     /**
-     * Questo metodo mi permette di caricare da firestore gli id delle tesi dando come parametro l'id dello studente
+     * Questo metodo mi permette di caricare da firestore gli id delle tesi dando come parametro l'id del professore
      *
-     * @param id_studente
+     * @param id_professore
      * @return una lista di tipo Long contenente gli id delle tesi associate allo studente
      */
-    private Task<ArrayList<Long>> loadIdTesiData(Long id_studente) {
+
+    private Task<ArrayList<Long>> loadIdTesiDataByProfessoreId(Long id_professore) {
         final ArrayList<Long> idTesiList = new ArrayList<>();
 
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi")
-                .whereEqualTo("id_studente", id_studente)
+                .collection("TesiProfessore")
+                .whereEqualTo("id_professore", id_professore)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful()) {
@@ -136,6 +132,7 @@ public class LeMieTesiFragment extends Fragment {
      * @param idTesiList
      * @return una lista di tipo Tesi contenente le informazioni delle tesi
      */
+
     private Task<ArrayList<Tesi>> loadTesiData(ArrayList<Long> idTesiList) {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
 
@@ -175,8 +172,5 @@ public class LeMieTesiFragment extends Fragment {
             return tesiList;
         });
     }
-
-
-
 
 }

@@ -20,12 +20,14 @@ import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.SearchView;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.ElencoTesiAdapter;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.entity.Vincolo;
 import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
@@ -48,6 +50,11 @@ public class ElencoTesiFragment extends Fragment {
 
     ArrayList<Long> idTesiList = new ArrayList<>();
 
+    ArrayList<Vincolo> vincoliList = new ArrayList<>();
+
+    ArrayList<Long> idVincoliList = new ArrayList<>();
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +75,7 @@ public class ElencoTesiFragment extends Fragment {
         //ottengo la lista dei professori che mi servirà nel filtra
         ProfessoreModelView professoreModelView = new ProfessoreModelView(context);
         professoriList = professoreModelView.getAllProfessore();
+
 
         SearchView searchView = view.findViewById(R.id.searchTesiView);
         listView = view.findViewById(R.id.listClassificaTesiView);
@@ -247,7 +255,13 @@ public class ElencoTesiFragment extends Fragment {
 
            }
            //filtro in base alla tipologia e/o al ciclo di laurea
-           filterTesiByTipologiaCdl(tipologia,ciclocdl);
+            filterTesiByTipologiaCdl(tipologia,ciclocdl);
+
+            getIdVincoliList();
+
+
+            Log.d("cogn7", String.valueOf(idVincoliList));
+
 
 
 
@@ -444,5 +458,62 @@ public class ElencoTesiFragment extends Fragment {
         }
     }
 
+    /**
+     * Metodo utilizzato per ottenere gli id dei vincoli legati alle tesi
+     * @return lista di id vincoli
+     */
+    private ArrayList<Long> getIdVincoliList(){
+
+        for(Tesi tesi : tesiList){
+            idVincoliList.add(tesi.getId_vincolo());
+        }
+        return idVincoliList;
+    }
+
+    private Task<ArrayList<Vincolo>> loadVincoliData() {
+
+        return FirebaseFirestore.getInstance()
+                .collection("Vincolo")
+                .get()
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Vincolo vincolo = new Vincolo();
+                            vincolo.setId_vincolo((Long) document.get("id_vincolo"));
+                            vincolo.setEsami_mancanti_necessari((int) document.get("esami_mancanti_necessari"));
+                            vincolo.setSkill((String) document.get("skill"));
+                            vincolo.setTempistiche((int) document.get("tempistiche"));
+                            vincolo.setMedia_voti((int) document.get("media"));
+
+                            vincoliList.add(vincolo);
+                        }
+                    }
+                    return vincoliList;
+                });
+    }
+
+    private Task<ArrayList<Vincolo>> loadVincoloData() {
+        final ArrayList<Vincolo> vincoliList = new ArrayList<>();
+
+        // Create a Firestore query to fetch Tesi documents with matching IDs
+        Query query = FirebaseFirestore.getInstance()
+                .collection("Vincolo");
+
+        return query.get().continueWith(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Vincolo vincolo = new Vincolo();
+                    vincolo.setId_vincolo((Long) document.get("id_vincolo"));
+                    vincolo.setEsami_mancanti_necessari((int) document.get("esami_mancanti_necessari"));
+                    vincolo.setSkill((String) document.get("skill"));
+                    vincolo.setTempistiche((int) document.get("tempistiche"));
+                    vincolo.setMedia_voti((int) document.get("media"));
+
+                    vincoliList.add(vincolo);
+                }
+            }
+            return vincoliList;
+        });
+    }
 
 }

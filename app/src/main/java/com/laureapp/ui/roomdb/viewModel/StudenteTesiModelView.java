@@ -41,8 +41,8 @@ public class StudenteTesiModelView {
         return studenteTesiRepository.getIdTesiFromIdStudente(id);
     }
 
-    public Long findIdTesiByIdTesi(Long idStudente){
-        return studenteTesiRepository.findIdTesiByIdTesi(idStudente);
+    public Long findIdTesiByIdStudente(Long idStudente){
+        return studenteTesiRepository.findIdTesiByIdStudente(idStudente);
     }
 
 

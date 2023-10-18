@@ -28,10 +28,10 @@ public class StudenteTesiRepository {
     public void updateStudenteTesi(StudenteTesi studenteTesi){
         executor.execute(() -> roomDbSqlLite.studenteTesiDao().update(studenteTesi));
     }
-    public Long findIdTesiByIdTesi(Long idStudente){
+    public Long findIdTesiByIdStudente(Long idStudente){
         CompletableFuture<Long> future = new CompletableFuture<>();
         executor.execute(() -> {
-            Long id = roomDbSqlLite.studenteTesiDao().findIdTesiByIdTesi(idStudente);
+            Long id = roomDbSqlLite.studenteTesiDao().findIdTesiByIdStudente(idStudente);
             future.complete(id);
         });
         try {
@@ -120,4 +120,6 @@ public class StudenteTesiRepository {
             return -1L;
         }
     }
+
+
 }

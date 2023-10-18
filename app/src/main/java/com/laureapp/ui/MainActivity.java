@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             int id2 = item1.getItemId();
             NavController navController2 = Navigation.findNavController(this, R.id.nav_host_fragment_main);
             if (id2 == R.id.itemProfilo) {
-                navController2.navigate(R.id.action_fragment_home_to_profilo, bundle);
+                navController2.navigate(R.id.action_to_profilo, bundle);
             }
             if (id2 == R.id.itemHome) {
                 navController2.navigate(R.id.fragment_home, bundle);
@@ -111,20 +111,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createAppBar() {
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home, R.id.profilo_studente)
-                    .setOpenableLayout(drawerLayout)
-                    .build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home)
+                .setOpenableLayout(drawerLayout)
+                .build();
+
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
 
-
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+    }
 
 
 }

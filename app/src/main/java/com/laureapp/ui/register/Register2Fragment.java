@@ -209,7 +209,7 @@ public class Register2Fragment extends Fragment {
                 studente.setId_utente(ut.getId_utente());
                 studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
                 studente.setEsami_mancanti(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
-
+                studente.setMedia((Integer.parseInt(Objects.requireNonNull(binding.mediaRegister.getText()).toString())));
                 StudenteModelView st_db = new StudenteModelView(context);
                 st_db.insertStudente(studente);
                 firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
@@ -289,80 +289,32 @@ public class Register2Fragment extends Fragment {
         ProfessoreModelView pr = new ProfessoreModelView(context);
         Log.d("fix_error","sono qui "+ getHintText(component));
         if(!is_empty_string(component, getInputText(component),  hint)) {
-            switch (hint){
+            switch (hint) {
                 case "Matricola":
-                    if (!ControlInput.is_correct_matricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) {
-                        String error_message = getString(R.string.errore_matricola).replace("{campo}", getString(R.string.matricola));
-                        ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                    } else {
-                        Long presentestud = st.findStudenteMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) ;
-                        Long presenteprof = pr.findProfessoreMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) ;
-                        if (presentestud == null && presenteprof == null) {
-                            ControlInput.set_error(binding.matricolaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        }else{
-                            String error_message = getString(R.string.errore_matricola_duplicate);
-                            ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                        }
-                    }
-                    break;
+                    return ControlInput.is_correct_matricola(binding.matricolaRegister, binding.matricolaInput, context, ruolo);
                 case "Media":
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                        String media = Objects.requireNonNull(binding.mediaRegister.getText()).toString();
-                        if (StringUtils.isNumeric(media) && (Integer.parseInt(media)) >= 0 && Integer.parseInt(media) <= 30) {
-                            ControlInput.set_error(binding.mediaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        } else {
-                            String error_message = getString(R.string.errore_media).replace("{campo}", getString(R.string.media));
-                            ControlInput.set_error(binding.mediaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
-                        }
-                    }else{
+                        return ControlInput.is_correct_media(binding.mediaRegister, binding.mediaInput, context);
+                    } else {
                         return true;
                     }
-                    break;
                 case "Esami mancanti":
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                        String esami = Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString();
-                        if (StringUtils.isNumeric(esami) && (Integer.parseInt(esami)) >= 0 && Integer.parseInt(esami) <= 40) {
-                            ControlInput.set_error(binding.esamiMancantiInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        } else {
-                            String error_message = getString(R.string.errore_media).replace("{campo}", getString(R.string.media)).replace("30", "40");
-                            ControlInput.set_error(binding.esamiMancantiInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
-                        }
-                    }else{
-                        return true;
-                    }
-                    break;
-                case "Facoltà":
-                    String facolta_text = Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString();
-                    boolean isFacoltaTextEqual = Arrays.stream(facolta)
-                            .anyMatch(s -> StringUtils.equals(s, facolta_text));
-                    if (isFacoltaTextEqual) {
-                        ControlInput.set_error(binding.facoltaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                        return true;
+                        return ControlInput.is_correct_esami_mancanti(binding.esamiMancantiRegister, binding.esamiMancantiInput, context);
                     } else {
-                        String error_message = getString(R.string.errore_scelta);
-                        ControlInput.set_error(binding.facoltaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
+                        return true;
                     }
-                    break;
+                case "Facoltà":
+                    return ControlInput.is_correct_facolta(binding.filledExposedDropdown, binding.facoltaInput, context, facolta);
                 case "Corso di Laurea":
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                        String corso_text = Objects.requireNonNull(binding.dropdownCorso.getText()).toString();
-                        boolean iscorsiTextEqual = Arrays.stream(corsi)
-                                .anyMatch(s -> StringUtils.equals(s, corso_text));
-                        if (iscorsiTextEqual) {
-                            ControlInput.set_error(binding.corsoInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        } else {
-                            String error_message = getString(R.string.errore_scelta);
-                            ControlInput.set_error(binding.corsoInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
-                        }
-                    }else{
+                        return ControlInput. is_correct_corso_di_laurea(binding.dropdownCorso, binding.corsoprofessoreInput, context, corsi);
+                    } else {
                         ControlInput.set_error(binding.corsoprofessoreInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                         return true;
                     }
-                    break;
+                default:
+                    return true;
             }
         }
         return result_error;

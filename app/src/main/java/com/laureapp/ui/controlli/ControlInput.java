@@ -1,7 +1,5 @@
 package com.laureapp.ui.controlli;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -13,8 +11,12 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.laureapp.R;
+import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,11 +24,16 @@ import org.apache.commons.lang3.StringUtils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ControlInput {
+
+    private static final int error_color = com.google.android.material.R.color.design_default_color_error;
+
     //controllo del formato dell'email
     public static boolean  isValidEmailFormat(String email) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
@@ -248,4 +255,76 @@ public class ControlInput {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    public static boolean is_correct_matricola(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context, String ruolo){
+        StudenteModelView st = new StudenteModelView(context);
+        ProfessoreModelView pr = new ProfessoreModelView(context);
+        if (!ControlInput.is_correct_matricola(Objects.requireNonNull(inputEditText.getText()).toString())) {
+            String error_message = context.getString(R.string.errore_matricola).replace("{campo}", "Matricola");
+            ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, context.getResources());
+            return false;
+        } else {
+            Long presentestud = st.findStudenteMatricola(Long.valueOf(Objects.requireNonNull(inputEditText.getText()).toString())) ;
+            Long presenteprof = pr.findProfessoreMatricola(Long.valueOf(Objects.requireNonNull(inputEditText.getText()).toString())) ;
+            if (presentestud == null && presenteprof == null) {
+                ControlInput.set_error(inputLayout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, context.getResources());
+                return true;
+            }else{
+                String error_message = "Esiste uno {campo} assosciato a questa matricola".replace("{campo}", ruolo);
+                ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, context.getResources());
+                return false;
+            }
+        }
+    }
+
+    public static boolean is_correct_media(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context){
+        String media = Objects.requireNonNull(inputEditText.getText()).toString();
+        if (StringUtils.isNumeric(media) && (Integer.parseInt(media)) >= 18 && Integer.parseInt(media) <= 30) {
+            ControlInput.set_error(inputLayout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, context.getResources());
+            return true;
+        } else {
+            String error_message = context.getString(R.string.errore_media).replace("{campo}", context.getString(R.string.media));
+            ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, context.getResources());
+            return false;
+        }
+    }
+
+    public static boolean is_correct_esami_mancanti(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context){
+        String esami = Objects.requireNonNull(inputEditText.getText()).toString();
+        if (StringUtils.isNumeric(esami) && (Integer.parseInt(esami)) >= 0 && Integer.parseInt(esami) <= 40) {
+            ControlInput.set_error(inputLayout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, context.getResources());
+            return true;
+        } else {
+            String error_message = context.getString(R.string.errore_media).replace("{campo}", context.getString(R.string.media)).replace("30", "40");
+            ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, context.getResources());
+            return false;
+        }
+    }
+
+    public static boolean is_correct_facolta(MaterialAutoCompleteTextView inputEditText, TextInputLayout inputLayout, Context context, String[] facolta){
+        String facolta_text = Objects.requireNonNull(inputEditText.getText()).toString();
+        boolean isFacoltaTextEqual = Arrays.stream(facolta)
+                .anyMatch(s -> StringUtils.equals(s, facolta_text));
+        if (isFacoltaTextEqual) {
+            ControlInput.set_error(inputLayout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, context.getResources());
+            return true;
+        } else {
+            String error_message = context.getString(R.string.errore_scelta);
+            ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, context.getResources());
+            return false;
+        }
+    }
+
+    public static boolean is_correct_corso_di_laurea(MaterialAutoCompleteTextView inputEditText, TextInputLayout inputLayout, Context context, String[] corsi){
+        String corso_text = Objects.requireNonNull(inputEditText.getText()).toString();
+        boolean iscorsiTextEqual = Arrays.stream(corsi)
+                .anyMatch(s -> StringUtils.equals(s, corso_text));
+        if (iscorsiTextEqual) {
+            ControlInput.set_error(inputLayout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, context.getResources());
+            return true;
+        } else {
+            String error_message = context.getString(R.string.errore_scelta);
+            ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, context.getResources());
+            return false;
+        }
+    }
 }

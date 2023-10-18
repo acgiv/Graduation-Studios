@@ -99,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:importantForAutofill="no"
-                android:inputType="number"
+                android:inputType="text"
                 tools:ignore="VisualLintTextFieldSize" />
 
         </LinearLayout>
@@ -154,6 +154,30 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:text="Tempistiche (mesi)"
+                android:labelFor="@+id/TempisticheTesi"
+                android:layout_marginEnd="8sp"
+                android:gravity="center" />
+
+            <EditText
+                android:id="@+id/tempiticheTesi"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                tools:ignore="VisualLintTextFieldSize" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

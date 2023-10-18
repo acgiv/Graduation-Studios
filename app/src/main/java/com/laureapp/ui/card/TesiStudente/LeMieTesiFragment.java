@@ -60,30 +60,34 @@ public class LeMieTesiFragment extends Fragment {
             id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
 
 
-            //carico l'elenco degli id delle tesi appartenenti allo studente
+// Carico l'elenco degli id delle tesi appartenenti allo studente
             loadIdTesiData(id_studente).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) { //se il task è completato con successo
-                    idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
+                if (task.isSuccessful()) {
+                    idTesiList = task.getResult(); // Assegno gli id delle tesi a una lista di tipo Long
                     Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
-                }else {
+
+                    // Verifica se idTesiList è null o vuoto
+                    if (idTesiList != null && !idTesiList.isEmpty()) {
+                        loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> {
+                            if (tesiTask.isSuccessful()) {
+                                ArrayList<Tesi> tesiList = tesiTask.getResult();
+                                Log.d("Tesi", "Id Tesi " + tesiList.toString());
+
+                                // Mostro sulla listview tutte le tesi dello studente
+                                listView = view.findViewById(R.id.listTesiView);
+                                adapter = new LeMieTesiAdapter(getContext(), tesiList);
+                                listView.setAdapter(adapter);
+                            } else {
+                                Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
+                            }
+                        });
+                    } else {
+
+                        Log.d("Tesi", "Id Tesi è null o vuoto");
+                    }
+                } else {
                     Log.e("Firestore Error", "Error getting data", task.getException());
                 }
-
-                    loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> { //chiamo il metodo per ottenere le tesi in base alle id tesi ottenute
-                        if (tesiTask.isSuccessful()) {
-                            ArrayList<Tesi> tesiList = tesiTask.getResult();
-                            Log.d(" Tesi", "Id Tesi " + tesiList.toString());
-
-
-                            //mostro sulla listview tutte le tesi dello studente
-                            listView = view.findViewById(R.id.listTesiView);
-                            adapter = new LeMieTesiAdapter(getContext(), tesiList);
-                            listView.setAdapter(adapter);
-                        } else {
-                            Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
-                        }
-                    });
-
             });
 
         } else {

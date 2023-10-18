@@ -53,7 +53,9 @@ public class ElencoTesiFragment extends Fragment {
     ArrayList<Vincolo> vincoliList = new ArrayList<>();
 
     ArrayList<Long> idVincoliList = new ArrayList<>();
-
+    Long media;
+    Long esami;
+    Long tempistiche;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,7 +90,7 @@ public class ElencoTesiFragment extends Fragment {
         });
 
 
-
+        //carico i dati delle tesi
         loadAllTesiData().addOnCompleteListener(tesiTask -> {
             if (tesiTask.isSuccessful()) {
                 tesiList = tesiTask.getResult();
@@ -96,6 +98,17 @@ public class ElencoTesiFragment extends Fragment {
                 listView.setAdapter(adapter);
             } else {
                 Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
+            }
+        });
+
+        //carico i dati dei vincoli
+        loadVincoloData().addOnCompleteListener(taskVincolo->{
+            if(taskVincolo.isSuccessful()){
+                vincoliList = taskVincolo.getResult();
+                Log.d("cogn8",vincoliList.toString());
+            }else{
+                Log.e("vincolo Firestore Error", "Error getting vincolo data", taskVincolo.getException());
+
             }
         });
 
@@ -233,9 +246,25 @@ public class ElencoTesiFragment extends Fragment {
             String cognome = editTextCognome.getText().toString();
             String tipologia = editTextTipologia.getText().toString();
             String ciclocdl = editTextCiclocdl.getText().toString();
-            String media = editTextMedia.getText().toString();
-            String esami = editTextEsami.getText().toString();
-            String tempistiche = editTextTempistiche.getText().toString();
+            String mediaString = editTextMedia.getText().toString();
+            String esamiString = editTextEsami.getText().toString();
+            String tempisticheString = editTextTempistiche.getText().toString();
+
+            //converto in long da string
+            if(!mediaString.isEmpty() ){
+                 media = Long.parseLong(mediaString);
+
+            }
+            if(!esamiString.isEmpty()){
+                 esami = Long.parseLong(esamiString);
+
+            }
+            if(!tempisticheString.isEmpty()){
+                 tempistiche = Long.parseLong(tempisticheString);
+
+            }
+
+
 
             //filtro in base al cognome del relatore
            Long id_utente =  getIdUtenteByCognome(cognome);
@@ -257,13 +286,8 @@ public class ElencoTesiFragment extends Fragment {
            //filtro in base alla tipologia e/o al ciclo di laurea
             filterTesiByTipologiaCdl(tipologia,ciclocdl);
 
-            getIdVincoliList();
-
-
-            Log.d("cogn7", String.valueOf(idVincoliList));
-
-
-
+           //filtro in base alla media - esami - tempistiche
+            filterTesiByMediaEsTempistiche(media,esami,tempistiche);
 
            //chiamo questo metodo se non ci sono risultati
            listIsBlank(context);
@@ -458,39 +482,6 @@ public class ElencoTesiFragment extends Fragment {
         }
     }
 
-    /**
-     * Metodo utilizzato per ottenere gli id dei vincoli legati alle tesi
-     * @return lista di id vincoli
-     */
-    private ArrayList<Long> getIdVincoliList(){
-
-        for(Tesi tesi : tesiList){
-            idVincoliList.add(tesi.getId_vincolo());
-        }
-        return idVincoliList;
-    }
-
-    private Task<ArrayList<Vincolo>> loadVincoliData() {
-
-        return FirebaseFirestore.getInstance()
-                .collection("Vincolo")
-                .get()
-                .continueWith(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Vincolo vincolo = new Vincolo();
-                            vincolo.setId_vincolo((Long) document.get("id_vincolo"));
-                            vincolo.setEsami_mancanti_necessari((int) document.get("esami_mancanti_necessari"));
-                            vincolo.setSkill((String) document.get("skill"));
-                            vincolo.setTempistiche((int) document.get("tempistiche"));
-                            vincolo.setMedia_voti((int) document.get("media"));
-
-                            vincoliList.add(vincolo);
-                        }
-                    }
-                    return vincoliList;
-                });
-    }
 
     private Task<ArrayList<Vincolo>> loadVincoloData() {
         final ArrayList<Vincolo> vincoliList = new ArrayList<>();
@@ -504,10 +495,10 @@ public class ElencoTesiFragment extends Fragment {
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Vincolo vincolo = new Vincolo();
                     vincolo.setId_vincolo((Long) document.get("id_vincolo"));
-                    vincolo.setEsami_mancanti_necessari((int) document.get("esami_mancanti_necessari"));
+                    vincolo.setEsami_mancanti_necessari((Long) document.get("esami_mancanti_necessari"));
                     vincolo.setSkill((String) document.get("skill"));
-                    vincolo.setTempistiche((int) document.get("tempistiche"));
-                    vincolo.setMedia_voti((int) document.get("media"));
+                    vincolo.setTempistiche((Long) document.get("tempistiche"));
+                    vincolo.setMedia_voti((Long) document.get("media_voti"));
 
                     vincoliList.add(vincolo);
                 }
@@ -515,5 +506,45 @@ public class ElencoTesiFragment extends Fragment {
             return vincoliList;
         });
     }
+
+    private void filterTesiByMediaEsTempistiche(Long media, Long numero_esami_mancanti, Long tempistiche) {
+        ArrayList<Tesi> filteredTesiList = new ArrayList<>();
+
+        for (Tesi tesi : tesiList) {
+            Long id_vincolo = tesi.getId_vincolo();
+
+            // Cerca il vincolo corrispondente nell'elenco dei vincoli
+            Vincolo vincolo = findVincoloById(id_vincolo);
+            Log.d("cogn9", String.valueOf(vincolo));
+            Log.d("cogn10",String.valueOf(vincolo.getId_vincolo()));
+            if (vincolo != null) {
+                // Ora puoi applicare i filtri sui campi di vincolo
+                if ((media == null || vincolo.getMedia_voti() <= media)
+                        && (numero_esami_mancanti == null || vincolo.getEsami_mancanti_necessari() <= numero_esami_mancanti)
+                        && (tempistiche == null || vincolo.getTempistiche() <= tempistiche)) {
+                    filteredTesiList.add(tesi);
+                }
+            }
+        }
+
+        // Ora puoi aggiornare l'adapter con la lista filtrata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(filteredTesiList);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+
+
+    private Vincolo findVincoloById(Long id) {
+        for (Vincolo vincolo : vincoliList) {
+            if (vincolo.getId_vincolo().equals(id)) {
+                return vincolo;
+            }
+        }
+        return null; // Restituisci null se non viene trovato alcun vincolo corrispondente
+    }
+
 
 }

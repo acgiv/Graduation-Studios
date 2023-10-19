@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -236,6 +237,16 @@ public class ElencoTesiFragment extends Fragment {
         EditText editTextTempistiche = view.findViewById(R.id.tempiticheTesi);
 
         /**
+         * Definisco gli spinner per prendere il valore selezionato dall'utente
+         */
+        Spinner corsoSpinner = view.findViewById(R.id.corso_filtro);
+
+
+        Spinner ordinaperSpinner = view.findViewById(R.id.ordinaper);
+
+
+
+        /**
          * Gestione del bottone conferma
          */
         Button confermaButton = view.findViewById(R.id.avviaRicerca);
@@ -247,6 +258,12 @@ public class ElencoTesiFragment extends Fragment {
             String mediaString = editTextMedia.getText().toString();
             String esamiString = editTextEsami.getText().toString();
             String tempisticheString = editTextTempistiche.getText().toString();
+
+            //prendo i valori dagli spinner
+            String selectedCorso = corsoSpinner.getSelectedItem().toString();
+            String selectedOrdinaper = ordinaperSpinner.getSelectedItem().toString();
+
+
 
             //converto in long da string
             if(!mediaString.isEmpty() ){

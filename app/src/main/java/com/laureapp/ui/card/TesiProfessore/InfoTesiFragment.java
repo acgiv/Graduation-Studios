@@ -26,12 +26,9 @@ import java.util.StringJoiner;
 
 public class InfoTesiFragment extends Fragment {
 
-    FragmentInfoTesiProfessoreBinding binding;
-    Bundle args;
-    TesiModelView t_view;
-    Context context;
     Tesi tesi;
 
+    String titolo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,36 +36,27 @@ public class InfoTesiFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        context = requireContext();
-        //t_view = new TesiModelView(context);
-        Log.d("Tesi passata", String.valueOf(getArguments()));
-        args = getArguments();
-        if(args != null) {
-            tesi = args.getSerializable("Tesi",Tesi.class);
-        }
-
-        binding = FragmentInfoTesiProfessoreBinding.inflate(inflater, container, false);
-        return binding.getRoot();
+        return inflater.inflate(R.layout.fragment_info_tesi_professore, container, false);
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("qualcosa","qualcosa");
-        //Bundle args = getArguments();
-        //Log.d("Parametri", String.valueOf(args));
+        Bundle args = getArguments();
+        TextView titoloTesiProfessoreTextView = view.findViewById(R.id.insertTitoloTesiProfesore);
+        Log.d("ciao", String.valueOf(args));
 
-        /*binding.inserisciTitolo.setText(tesi.getTitolo());
-        binding.inserisciTipologia.setText(tesi.getTipologia());
-        binding.inserisciDataPubblicazione.setText(String.valueOf(tesi.getData_pubblicazione())); //Converto la data in Stringa con il casting
-        binding.inserisciCicloCdl.setText(tesi.getCiclo_cdl());
-        binding.inserisciAbstract.setText(tesi.getAbstract_tesi());*/
+        if (args != null) { //se non sono null
 
-        /*TextView text = view.findViewById(R.id.inserisciTitolo);
-        text.setText("DCNHASKC");*/ //alternativa del binding
+            tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
+            titolo = tesi.getTitolo();
 
+            titoloTesiProfessoreTextView.setText(titolo);
+            Log.d("ciao",titolo);
+        }
 
     }
 

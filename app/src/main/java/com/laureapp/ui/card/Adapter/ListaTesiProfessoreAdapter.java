@@ -31,15 +31,14 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItemView = convertView;
-        Bundle args = new Bundle();
 
         if (listItemView == null) {
-            listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_studente, parent, false);
+            listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_professore, parent, false);
         }
 
         final Tesi currentTesi = mTesiList.get(position);
 
-        TextView titleTextView = listItemView.findViewById(R.id.titoloTesi);
+        TextView titleTextView = listItemView.findViewById(R.id.titoloTesiProfessore);
 
         if (currentTesi != null) {
             String titolo = currentTesi.getTitolo();
@@ -53,8 +52,8 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
 
         //Qui gestisco quando l'utnte clicca una tesi
         listItemView.setOnClickListener(v -> {
+            Bundle args = new Bundle();
             args.putSerializable("Tesi",currentTesi);
-            Log.d("ciao", String.valueOf(args));
             Navigation.findNavController(v).navigate(R.id.action_tesiProfessoreFragment_to_tesiTabProfessoreFragment,args);
 
         });

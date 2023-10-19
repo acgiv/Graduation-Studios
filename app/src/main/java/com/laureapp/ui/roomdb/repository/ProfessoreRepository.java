@@ -54,6 +54,19 @@ public class ProfessoreRepository {
         }
     }
 
+    public Long findProfessore(Long id_utente) {
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.professoreDao().findProfessore(id_utente);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
 
 
     public Professore findAllById(String uid) {

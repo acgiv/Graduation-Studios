@@ -66,7 +66,7 @@
 
     <string-array name="Dipartimento">
         <item>Matematica</item>
-        <item>Informazica</item>
+        <item>Informatica</item>
         <item>Farmacia</item>
     </string-array>
 
@@ -76,6 +76,14 @@
         <item>Completato</item>
     </string-array>
     <string-array name="Corsi">
+        <item>Itps</item>
+        <item>Matematica</item>
+        <item>Informatica</item>
+    </string-array>
+
+    <string-array name="OrdinaPer">
+        <item>Visualizzazioni</item>
+        <item>Vedi</item>
         <item>Itps</item>
         <item>Matematica</item>
         <item>Informatica</item>
@@ -131,6 +139,7 @@
     <string name="error_scadenza_inizio">Data scadenza precedente alla data inizio.</string>
     <string name="error_inizio_scadenza">Data inizio successiva alla scadenza</string>
     <string name="errore_email_esistente">Esiste già un utente asscociato a questa email.</string>
+    <string name="ElencoTesi">Elenco Tesi</string>
 
     <style name="CalendarDateText">
         <item name="android:textSize">18sp</item>

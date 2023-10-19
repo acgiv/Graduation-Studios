@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +24,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
@@ -34,21 +38,17 @@ import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
-import com.laureapp.ui.roomdb.entity.TaskTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.TesiProfessore;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.repository.StudenteRepository;
 import com.laureapp.ui.roomdb.repository.UtenteRepository;
-import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
-import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
@@ -68,9 +68,11 @@ public class TesistiFragment extends Fragment {
 
     StudentAdapter adapter;
     Utente utente;
+    Studente studente;
 
     private List<StudenteWithUtente> studentList = new ArrayList<>();
     private List<StudenteWithUtente> filteredStudentList = new ArrayList<>();
+    private String tesistaCercato = "";
 
 
 
@@ -114,13 +116,13 @@ public class TesistiFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                // Handle search query submission (if needed)
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Quando il testo cambia, applica il filtro
-                adapter.getFilter().filter(newText);
+                loadSearchedStudenti(newText);
                 return true;
             }
         });
@@ -282,10 +284,10 @@ public class TesistiFragment extends Fragment {
                 .collection("StudenteTesi")
                 .whereEqualTo("id_studente", id_studente)
                 .get()
-                .continueWith(studenteTesiTask -> {
-                    if (studenteTesiTask.isSuccessful() && !studenteTesiTask.getResult().isEmpty()) {
+                .continueWith(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         List<Long> studenteIds = new ArrayList<>();
-                        for (QueryDocumentSnapshot studenteTesiDoc : studenteTesiTask.getResult()) {
+                        for (QueryDocumentSnapshot studenteTesiDoc : task.getResult()) {
                             studenteIds.add(studenteTesiDoc.getLong("id_studente"));
                         }
                         return studenteIds;
@@ -296,37 +298,28 @@ public class TesistiFragment extends Fragment {
                 .continueWithTask(studenteIdsTask -> {
                     List<Long> studenteIds = studenteIdsTask.getResult();
 
-                    // Ora ottieni le informazioni degli studenti e degli utenti corrispondenti
+                    // Ottieni le informazioni degli studenti e degli utenti corrispondenti
                     List<Task<StudenteWithUtente>> tasks = new ArrayList<>();
                     for (Long studenteId : studenteIds) {
                         Task<StudenteWithUtente> task = getStudenteWithUtente(studenteId);
                         tasks.add(task);
                     }
 
-                    return Tasks.whenAll(tasks)
-                            .continueWith(taskList -> {
-                                if (taskList.isSuccessful()) {
-                                    List<StudenteWithUtente> studenti = new ArrayList<>();
-                                    for (Task<StudenteWithUtente> task : tasks) {
-                                        if (task.isSuccessful()) {
-                                            StudenteWithUtente studenteWithUtente = task.getResult();
-                                            studenti.add(studenteWithUtente);
-                                        }
-                                    }
-                                    return studenti;
-                                } else {
-                                    // Gestire l'errore se necessario
-                                    Exception exception = taskList.getException();
-                                    if (exception != null) {
-                                        // Gestire l'eccezione
-                                    }
-                                    return new ArrayList<>(); // O un altro valore di fallback
-                                }
-                            });
+                    return Tasks.whenAllSuccess(tasks).continueWith(resultTask -> {
+                        // Otteniamo una lista di StudenteWithUtente
+                        List<StudenteWithUtente> studentiWithUtenti = new ArrayList<>();
+                        for (Object studenteWithUtenteTask : resultTask.getResult()) {
+                            studentiWithUtenti.add((StudenteWithUtente) studenteWithUtenteTask);
+                        }
+                        return studentiWithUtenti;
+                    });
+
 
 
                 });
     }
+
+
 
 
 
@@ -459,22 +452,104 @@ public class TesistiFragment extends Fragment {
 
 
     private Task<Studente> loadStudenteById(Long studenteId) {
+        TaskCompletionSource<Studente> tcs = new TaskCompletionSource<>();
+
         // Implementa la logica per caricare uno studente per id da dove sono conservati i dati (database, API, ecc.)
-        // Restituisci il risultato come un Task
         // Ad esempio:
         StudenteRepository stRep = new StudenteRepository(context);
         Studente studente = stRep.findAllById(studenteId);
-        return Tasks.forResult(studente);
+
+        // Completa la task con il risultato
+        tcs.setResult(studente);
+
+        return tcs.getTask();
     }
 
+
     private Task<Utente> loadUtenteByStudente(Studente studente) {
+        TaskCompletionSource<Utente> tcs = new TaskCompletionSource<>();
+
         // Implementa la logica per caricare l'utente associato a uno studente da dove sono conservati i dati
-        // Restituisci il risultato come un Task
         // Ad esempio:
         UtenteRepository utRep = new UtenteRepository(context);
         Utente utente = utRep.findAllById(studente.getId_utente());
-        return Tasks.forResult(utente);
+
+        // Completa la task con il risultato
+        tcs.setResult(utente);
+
+        return tcs.getTask();
     }
+
+
+
+
+    private void loadSearchedStudenti(String searchText) {
+        FirebaseFirestore.getInstance()
+                .collection("Utenti/Studenti/Studenti")
+                .orderBy("nome") // Ordina i risultati in base al nome
+                .startAt(searchText)
+                .endAt(searchText + "\uf8ff")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<CompletableFuture<StudenteWithUtente>> futures = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot studenteDoc : queryDocumentSnapshots) {
+                        Studente studente = new Studente();
+                        studente.setId_utente(studenteDoc.getLong("id_utente"));
+                        studente.setId_studente(studenteDoc.getLong("id_studente"));
+                        studente.setMatricola(studenteDoc.getLong("matricola"));
+                        studente.setEsami_mancanti(Math.toIntExact(studenteDoc.getLong("esami_mancanti")));
+                        studente.setMedia(Math.toIntExact(studenteDoc.getLong("media")));
+
+                        CompletableFuture<Utente> utenteFuture = loadUtenteByStudenteSearched(studente);
+                        CompletableFuture<StudenteWithUtente> studenteWithUtenteFuture = utenteFuture.thenApply(utente -> new StudenteWithUtente(studente, utente));
+                        futures.add(studenteWithUtenteFuture);
+                    }
+
+                    // Attendere che tutti i CompletableFuture siano completati
+                    CompletableFuture<Void> allOf = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+
+                    allOf.thenAccept(result -> {
+                        // Tutti i CompletableFuture sono completati
+                        StudenteWithUtente studentListChanged = (StudenteWithUtente) futures.stream()
+                                .map(CompletableFuture::join) // Estrai i risultati dai CompletableFuture
+                                .collect(Collectors.toList());
+
+                        // Aggiorna l'adapter con i nuovi dati
+                        studentList.add(studentListChanged);
+                        adapter.notifyDataSetChanged();
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    // Gestisci eventuali errori qui
+                });
+    }
+
+    private CompletableFuture<Utente> loadUtenteByStudenteSearched(Studente studente) {
+        CompletableFuture<Utente> future = new CompletableFuture<>();
+
+        FirebaseFirestore.getInstance()
+                .collection("Utenti")
+                .document(studente.getId_utente().toString())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    // Dati utente caricati con successo
+                    Utente utente = new Utente();
+                    utente.setId_utente(documentSnapshot.getLong("id_utente"));
+                    utente.setNome(documentSnapshot.getString("nome"));
+                    utente.setCognome(documentSnapshot.getString("email"));
+                    future.complete(utente); // Completa il CompletableFuture con l'utente
+                })
+                .addOnFailureListener(e -> {
+                    // Gestisci eventuali errori qui
+                    future.completeExceptionally(e); // Completa il CompletableFuture con un'eccezione
+                });
+
+        return future;
+    }
+
+
+
 
 
 

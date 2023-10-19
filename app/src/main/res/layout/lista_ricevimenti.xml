@@ -1,88 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="16dp">
 
-    <!-- Prima colonna -->
-    <LinearLayout
+    <!-- Linea guida orizzontale per la posizione della linea separatrice sinistra -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="121dp" />
 
-        <!-- Contenuto della prima colonna -->
-        <TextView
-            android:id="@+id/ricevimentiTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|center_vertical|start"
-            android:layout_marginTop="0dp"
-            android:text="@string/ricevimento_1"
-            android:textColor="#000000"
-            android:textSize="18sp" />
-    </LinearLayout>
+    <!-- Linea guida orizzontale per la posizione della linea separatrice destra -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="252dp" />
 
-    <!-- Separatore -->
+
+    <!-- Prima colonna -->
+    <TextView
+        android:id="@+id/ricevimentiTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ricevimento_1"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintWidth_max="150dp"
+        app:layout_constrainedWidth="true" />
+
+    <!-- Separatore sinistro -->
     <View
+        android:id="@+id/separatore1"
         android:layout_width="2dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="#CCCCCC"
-        android:layout_marginStart="10dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintStart_toEndOf="@+id/ricevimentiTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
 
     <!-- Seconda colonna -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <!-- Contenuto della seconda colonna -->
-        <TextView
-            android:id="@+id/argomentoRicevimentoTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|center_vertical|start"
-            android:text="@string/argomento"
-            android:textColor="#000000"
-            android:layout_marginStart="15dp"
-            android:textSize="18sp" />
-    </LinearLayout>
-
-    <!-- Separatore -->
-    <View
-        android:layout_width="2dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="15dp"
-        android:background="#CCCCCC" />
+    <!-- Separatore destro -->
 
     <!-- Terza colonna -->
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/argomentoRicevimentoTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginStart="8dp"
+        android:text="@string/argomento"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintWidth_max="150dp"
+        app:layout_constrainedWidth="true" />
 
-                <!-- Contenuto della terza colonna -->
-                <TextView
-                android:id="@+id/dataRicevimentoTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/data_ricevimento"
-                android:textSize="18sp"
-                android:layout_marginStart="15dp"
-                android:layout_gravity="start|center_vertical"
-                android:textColor="#000000" />
 
-    </LinearLayout>
+    <View
+        android:id="@+id/separatore2"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="#CCCCCC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dataRicevimentoTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/data_ricevimento"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        app:layout_constraintStart_toEndOf="@+id/guidelineRight"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_max="150dp"
+        app:layout_constrainedWidth="true" />
+
+
 
     <!-- Icona "delete" -->
-    <ImageView
-        android:id="@+id/delete_task_ImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="10dp"
-        android:src="@drawable/baseline_delete_forever_24"
-        android:contentDescription="@string/delete_icon"/>
+    <ImageButton
+        android:id="@+id/delete_ricevimento_ImageButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/baseline_delete_forever_48"
+        android:contentDescription="@string/delete_icon"
+        app:layout_constraintStart_toEndOf="@+id/dataRicevimentoTextView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -326,57 +326,6 @@
 
                         </LinearLayout>
 
-                        <View
-                            android:id="@+id/line4"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCorsi"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <LinearLayout
-                            android:id="@+id/linearLayoutCorsi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/guideline2"
-                            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutCorsi">
-
-                            <TextView
-                                android:id="@+id/TextCorsi"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Corso: "
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-                            <TextView
-                                android:id="@+id/InsertCorso"
-                                android:layout_width="281dp"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/line5"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutFacolta"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
 
                         <LinearLayout
                             android:id="@+id/linearLayoutFacolta"
@@ -389,7 +338,7 @@
                             android:paddingBottom="2dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCorsi">
+                            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutCorsi">
 
                             <TextView
                                 android:id="@+id/TextFacoltà"
@@ -412,13 +361,65 @@
                         </LinearLayout>
 
                         <View
-                            android:id="@+id/line6"
+                            android:id="@+id/line5"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@android:color/darker_gray"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMatricola"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutFacolta"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
+
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutCorsi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutFacolta">
+
+                            <TextView
+                                android:id="@+id/TextCorsi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Corso: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/InsertCorso"
+                                android:layout_width="286dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/modificaCorsi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                android:src="@drawable/edit_icon" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCorsi"
+                            />
 
                         <LinearLayout
                             android:id="@+id/linearLayoutMatricola"
@@ -429,9 +430,9 @@
                             android:orientation="horizontal"
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutFacolta">
+                            app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCorsi">
 
                             <TextView
                                 android:id="@+id/TextMatricola"
@@ -461,102 +462,112 @@
                         </LinearLayout>
 
                         <View
-                            android:id="@+id/line8"
+                            android:id="@+id/line6"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@android:color/darker_gray"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMedia"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMatricola"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutMedia"
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/linearLayoutContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/linearLayoutMatricola">
 
-                            <TextView
-                                android:id="@+id/EsamiMedia"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:id="@+id/linearLayoutMedia"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Media: "
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
 
-                            <TextView
-                                android:id="@+id/InsertMedia"
-                                android:layout_width="283dp"
+                                <TextView
+                                    android:id="@+id/EsamiMedia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Media: "
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/InsertMedia"
+                                    android:layout_width="283dp"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <ImageView
+                                    android:id="@+id/modificaMedia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:contentDescription="Edit Name Icon"
+                                    android:src="@drawable/edit_icon" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line7"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMedia"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutEsamiMancati"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
 
-                            <ImageView
-                                android:id="@+id/modificaMedia"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="Edit Name Icon"
-                                android:src="@drawable/edit_icon" />
+                                <TextView
+                                    android:id="@+id/TextEsamiMancanti"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Esami Mancanti: "
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/InsertEsamiMancanti"
+                                    android:layout_width="214dp"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <View
-                            android:id="@+id/line7"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMedia"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                                <ImageView
+                                    android:id="@+id/modificaEsamiMancanti"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:contentDescription="Edit Name Icon"
+                                    android:src="@drawable/edit_icon" />
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutEsamiMancati"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
-
-                            <TextView
-                                android:id="@+id/TextEsamiMancanti"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Esami Mancanti: "
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-                            <TextView
-                                android:id="@+id/InsertEsamiMancanti"
-                                android:layout_width="214dp"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-                            <ImageView
-                                android:id="@+id/modificaEsamiMancanti"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="Edit Name Icon"
-                                android:src="@drawable/edit_icon" />
-
-                        </LinearLayout>
+                            </LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guideline2"

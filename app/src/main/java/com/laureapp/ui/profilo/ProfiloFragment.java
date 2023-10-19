@@ -30,9 +30,11 @@ import com.laureapp.databinding.FragmentProfiloBinding;
 
 import com.laureapp.ui.controlli.ControlInput;
 
+import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
 
+import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
@@ -56,9 +58,11 @@ public class ProfiloFragment extends Fragment {
     private String email;
     UtenteModelView ut_view;
     StudenteModelView st_view;
+    ProfessoreModelView pr_view;
     private String ruolo;
     private FirebaseUser user;
     private Studente studente;
+    private Professore professore;
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
 
 
@@ -74,6 +78,7 @@ public class ProfiloFragment extends Fragment {
         context = requireContext();
         ut_view = new UtenteModelView(context);
         st_view = new StudenteModelView(context);
+        pr_view = new ProfessoreModelView(context);
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
@@ -86,6 +91,8 @@ public class ProfiloFragment extends Fragment {
         Log.d("utente", String.valueOf(utente));
         if (StringUtils.equals(ruolo, getString(R.string.studente))) {
             studente = st_view.findAllById(st_view.findStudente(utente.getId_utente()));
+        }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
+            professore = pr_view.findAllById(pr_view.findPorfessore(utente.getId_utente()));
         }
         binding = FragmentProfiloBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -96,7 +103,14 @@ public class ProfiloFragment extends Fragment {
         Log.d("utente", String.valueOf(utente));
         if (StringUtils.equals(ruolo, getString(R.string.professore))) {
             binding.textViewCorsi.setText("Corsi di lauera");
+            binding.linearLayoutContainer.setVisibility(View.GONE);
+            binding.modificaCorsi.setVisibility(View.VISIBLE);
+            binding.InsertMatricola.setText(String.valueOf(professore.getMatricola()));
+            binding.InsertFacolta.setText(utente.getFacolta());
+            binding.InsertCorso.setText(utente.getNome_cdl());
         }else{
+            binding.modificaCorsi.setVisibility(View.GONE);
+            binding.linearLayoutContainer.setVisibility(View.VISIBLE);
             binding.InsertCorso.setText(utente.getNome_cdl());
             binding.InsertFacolta.setText(utente.getFacolta());
             binding.InsertMatricola.setText(String.valueOf(studente.getMatricola()));
@@ -110,10 +124,6 @@ public class ProfiloFragment extends Fragment {
 
         binding.modificaNome.setOnClickListener(view1 -> {
             set_view();
-            binding.Textnuovo.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.TextVecchio.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.componentInputNuovo.setPasswordVisibilityToggleEnabled(false);
-            binding.componentInputVecchio.setPasswordVisibilityToggleEnabled(false);
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputVecchio.setHint("Nome Attuale");
@@ -123,8 +133,6 @@ public class ProfiloFragment extends Fragment {
 
         binding.modificaCognome.setOnClickListener(view1 -> {
             set_view();
-            binding.Textnuovo.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.TextVecchio.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputVecchio.setHint("Cognome attuale");
@@ -143,13 +151,15 @@ public class ProfiloFragment extends Fragment {
 
         binding.modificaMatricola.setOnClickListener(v -> {
             set_view();
-            binding.Textnuovo.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.TextVecchio.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputVecchio.setHint("Matricola attuale");
             binding.componentInputNuovo.setHint("Nuova Matricola");
-            confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
+            if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+                confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
+            }else{
+                confirm_modifiche("Matricola", String.valueOf(professore.getMatricola()));
+            }
         });
 
         binding.modificaMedia.setOnClickListener(v -> {
@@ -165,8 +175,6 @@ public class ProfiloFragment extends Fragment {
 
         binding.modificaEsamiMancanti.setOnClickListener(v -> {
             set_view();
-            binding.Textnuovo.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.TextVecchio.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputVecchio.setHint("Esami Mancanti attualu");
@@ -210,9 +218,7 @@ public class ProfiloFragment extends Fragment {
                     }
                     case "Password" -> {
                         if (ControlInput.is_correct_password(binding.Textnuovo, binding.componentInputNuovo,context)){
-                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                             if (control_attuale && control_nuovo) {
-                                ControlInput.set_error(binding.componentInputNuovo, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                                 utente.setPassword(ControlInput.hashWith256(Objects.requireNonNull(binding.Textnuovo.getText()).toString()));
                                 ut_view.updateUtente(utente);
                                 updatePasswordAutentication();
@@ -222,21 +228,49 @@ public class ProfiloFragment extends Fragment {
                         }
                     }
                     case "Matricola" ->{
-                        control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text,
-                                campo, message, Objects.requireNonNull(binding.componentInputNuovo));
-                        if (control_nuovo) {
-                            if (ControlInput.is_correct_matricola(binding.Textnuovo, binding.componentInputNuovo, context, ruolo)){
-                                studente.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
+                        if (ControlInput.is_correct_matricola(binding.Textnuovo, binding.componentInputNuovo, context, ruolo)) {
+                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+                            if (control_attuale && control_nuovo){
+                                if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+                                    confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
+                                    studente.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
+                                    st_view.updateStudente(studente);
+                                    changeComponentFirestore("matricola","Utenti/Studenti/Studenti" ,String.valueOf(studente.getMatricola()));
+                                }else{
+                                    confirm_modifiche("Matricola", String.valueOf(professore.getMatricola()));
+                                    professore.setMatricola((binding.Textnuovo.getText().toString()));
+                                    changeComponentFirestore("matricola","Utenti/Professori/Professori" ,professore.getMatricola());
+                                }
+
+                                binding.InsertMatricola.setText(binding.Textnuovo.getText().toString());
+
                                 close_card_modifica();
                             }
                         }
                     }
-                    case "Media" ->{
-                        control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text,
-                                campo, message, Objects.requireNonNull(binding.componentInputNuovo));
-                        if (control_nuovo) {
-
+                    case "Media" -> {
+                        if (ControlInput.is_correct_media(binding.Textnuovo, binding.componentInputNuovo, context)) {
+                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+                            if (control_attuale && control_nuovo) {
+                                studente.setMedia(Integer.parseInt(binding.Textnuovo.getText().toString()));
+                                st_view.updateStudente(studente);
+                                binding.InsertMedia.setText(binding.Textnuovo.getText().toString());
+                                changeComponentFirestore("media", "Utenti/Studenti/Studenti", String.valueOf(studente.getMedia()));
+                                close_card_modifica();
+                            }
                         }
+                    }
+                        case "Esami Mancanti" ->{
+                            if (ControlInput.is_correct_esami_mancanti(binding.Textnuovo, binding.componentInputNuovo, context)) {
+                                ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height_error_email);
+                                if (control_attuale && control_nuovo){
+                                    studente.setEsami_mancanti(Integer.parseInt(binding.Textnuovo.getText().toString()));
+                                    st_view.updateStudente(studente);
+                                    binding.InsertEsamiMancanti.setText(binding.Textnuovo.getText().toString());
+                                    changeComponentFirestore("esami_mancanti","Utenti/Studenti/Studenti" ,String.valueOf(studente.getEsami_mancanti()));
+                                    close_card_modifica();
+                                }
+                            }
                     }
 
                 }
@@ -270,7 +304,7 @@ public class ProfiloFragment extends Fragment {
     private boolean is_control_campo_attuale(String type, String campo) {
 
             switch (type) {
-                case "Nome", "Cognome", "Media", "Matricola", "EsamiMancanti" -> {
+                case "Nome", "Cognome", "Media", "Matricola", "Esami Mancanti" -> {
                     return is_equal_campi("VECCHIO", Objects.requireNonNull(binding.TextVecchio.getText()).toString(),
                             campo, "Il ".concat(type).concat(" non coincide."),
                             Objects.requireNonNull(binding.componentInputVecchio));
@@ -325,6 +359,7 @@ public class ProfiloFragment extends Fragment {
     private void changeComponentFirestore(String key_component,String path,  String component) {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        assert currentUser != null;
         if (!StringUtils.isEmpty(currentUser.getUid())) {
             // Crea un oggetto con i dati da aggiornare nel documento
             Map<String, Object> updateData = new HashMap<>();

@@ -281,7 +281,7 @@ public class ControlInput {
             return true;
         } else {
             String error_message = context.getString(R.string.errore_media).replace("{campo}", context.getString(R.string.media));
-            ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email);
+            ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_media);
             return false;
         }
     }

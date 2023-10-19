@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/linearLayoutMediaVoto"
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -200,9 +200,9 @@
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayoutMediaVoto"
-        app:layout_constraintStart_toStartOf="@+id/linearLayoutMediaVoto"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutMediaVoto">
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_ruolo_register"

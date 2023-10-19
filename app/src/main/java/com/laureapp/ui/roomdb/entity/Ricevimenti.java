@@ -25,13 +25,13 @@ public class Ricevimenti implements Serializable {
     private Long id_ricevimento;
 
     @ColumnInfo(name="id_task")
-    private String id_task;
+    private Long id_task;
 
     @ColumnInfo(name="argomento")
     private String argomento;
 
     @ColumnInfo(name="data_ricevimento")
-    private Timestamp data_ricevimento;
+    private Date data_ricevimento;
 
     //Getter e setter
     public Long getId_ricevimento() {
@@ -42,11 +42,11 @@ public class Ricevimenti implements Serializable {
         this.id_ricevimento = idRicevimento;
     }
 
-    public String getId_task() {
+    public Long getId_task() {
         return id_task;
     }
 
-    public void setId_task(String idTask) {
+    public void setId_task(Long idTask) {
         this.id_task = idTask;
     }
 
@@ -58,11 +58,11 @@ public class Ricevimenti implements Serializable {
         this.argomento = argomento_ricevimento;
     }
 
-    public Timestamp getData_ricevimento() {
+    public Date getData_ricevimento() {
         return data_ricevimento;
     }
 
-    public void setData_ricevimento(Timestamp dataRicevimento) {
+    public void setData_ricevimento(Date dataRicevimento) {
         this.data_ricevimento = dataRicevimento;
     }
 

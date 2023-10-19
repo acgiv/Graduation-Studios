@@ -35,7 +35,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentDettagliTaskBinding;
-import com.laureapp.ui.roomdb.entity.TaskTesi;
+import com.laureapp.ui.roomdb.entity.TaskStudente;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -54,13 +54,13 @@ public class DettagliTaskFragment extends Fragment {
 
     private NavController mNav;
     private AutoCompleteTextView autoCompleteTextView;
-    FragmentDettagliTaskBinding binding;
-    FirebaseFirestore db;
-    Bundle args;
-    TaskTesi taskTesi;
-    Context context;
-    Button startDateButton;
-    Button dueDateButton;
+    private FragmentDettagliTaskBinding binding;
+    private FirebaseFirestore db;
+    private Bundle args;
+    private TaskStudente taskStudente;
+    private Context context;
+    private Button startDateButton;
+    private Button dueDateButton;
 
     private final HashMap<String, Object> elem_text = new HashMap<>();
 
@@ -75,7 +75,7 @@ public class DettagliTaskFragment extends Fragment {
         args = getArguments();
         if(args != null) {
 
-            taskTesi = args.getSerializable("SelectedTask", TaskTesi.class);
+            taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
             //Carico i dati delle task in base all'utente loggato
         }
 
@@ -116,13 +116,13 @@ public class DettagliTaskFragment extends Fragment {
 
 
         //Setto i valori della task cliccata
-        titoloTask.setText(taskTesi.getTitolo());
+        titoloTask.setText(taskStudente.getTitolo());
 
         //Setto i valori del dropdown dello stato task
-        autoCompleteTextView.setText(taskTesi.getStato());
-        Log.d("statoTask", taskTesi.getStato());
+        autoCompleteTextView.setText(taskStudente.getStato());
+        Log.d("statoTask", taskStudente.getStato());
 
-        Date dataScadenza = taskTesi.getData_scadenza();
+        Date dataScadenza = taskStudente.getData_scadenza();
         if (dataScadenza != null) {
             LocalDate localDate = dataScadenza.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             String formattedDate = localDate.toString(); // Formatta la data come preferisci
@@ -132,7 +132,7 @@ public class DettagliTaskFragment extends Fragment {
             dueDateButton.setText("Data non disponibile");
         }
 
-        Date dataInizio = taskTesi.getData_inizio();
+        Date dataInizio = taskStudente.getData_inizio();
         if (dataInizio != null) {
             LocalDate localDateInizio = dataInizio.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             String formattedDateInizio = localDateInizio.toString(); // Formatta la data come preferisci
@@ -198,7 +198,8 @@ public class DettagliTaskFragment extends Fragment {
 
         //Click sul tasto dei ricevimenti
         ricevimentiButton.setOnClickListener(view1 -> {
-            mNav.navigate(R.id.action_dettagli_task_to_ricevimenti_fragment);
+            args.putSerializable("Task", taskStudente);
+            mNav.navigate(R.id.action_dettagli_task_to_ricevimenti_fragment,args);
             Log.d("Click ricevimenti","cliccato ricevimenti");
         });
 
@@ -367,7 +368,6 @@ public class DettagliTaskFragment extends Fragment {
 
 
     // Questo metodo viene chiamato quando l'utente vuole salvare le modifiche
-    // Questo metodo viene chiamato quando l'utente vuole salvare le modifiche
     private void modificaDatiTask() {
         // Esegui il recupero dei dati inseriti dall'utente
         String nuovoTitolo = binding.titoloTaskBar.getText().toString();
@@ -379,19 +379,19 @@ public class DettagliTaskFragment extends Fragment {
             // Se il titolo è vuoto, mostra un messaggio di errore
             showToast(context, "Il titolo non può essere vuoto");
         } else {
-            // Aggiorna gli oggetti TaskTesi con i nuovi dati
-            taskTesi.setTitolo(nuovoTitolo);
-            taskTesi.setStato(nuovoStato);
+            // Aggiorna gli oggetti taskStudente con i nuovi dati
+            taskStudente.setTitolo(nuovoTitolo);
+            taskStudente.setStato(nuovoStato);
 
             try {
-                taskTesi.setData_inizio(stringToTimestamp(nuovaDataInizio));
-                taskTesi.setData_scadenza(stringToTimestamp(nuovaDataScadenza));
+                taskStudente.setData_inizio(stringToTimestamp(nuovaDataInizio));
+                taskStudente.setData_scadenza(stringToTimestamp(nuovaDataScadenza));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             // Salva i dati nel database
-            salvaDatiTaskTesi(taskTesi);
+            salvaDatiTaskStudente(taskStudente);
 
             // Puoi anche aggiungere un messaggio di successo o altre azioni qui.
             showToast(context, "Modifiche effettuate con successo");
@@ -400,12 +400,12 @@ public class DettagliTaskFragment extends Fragment {
     }
 
 
-    private void salvaDatiTaskTesi(TaskTesi taskTesi) {
+    private void salvaDatiTaskStudente(TaskStudente taskStudente) {
         // Ottieni un riferimento alla collezione "Task" nel tuo database Firestore
-        CollectionReference taskRef = db.collection("Task");
+        CollectionReference taskRef = db.collection("TaskStudente");
 
         // Recupera un riferimento al documento in base all'ID della task
-        Long taskId = taskTesi.getId_task(); // Assumi che TaskTesi abbia un campo "id_task" per identificare la task
+        Long taskId = taskStudente.getId_task(); // Assumi che taskStudente abbia un campo "id_task" per identificare la task
         Query query = taskRef.whereEqualTo("id_task", taskId);
 
         query.get().addOnCompleteListener(task -> {
@@ -416,13 +416,13 @@ public class DettagliTaskFragment extends Fragment {
 
                     // Crea un oggetto con i dati da salvare
                     Map<String, Object> datiTask = new HashMap<>();
-                    datiTask.put("titolo", taskTesi.getTitolo());
-                    datiTask.put("stato", taskTesi.getStato());
-                    datiTask.put("data_inizio", taskTesi.getData_inizio());
-                    datiTask.put("data_scadenza", taskTesi.getData_scadenza());
+                    datiTask.put("titolo", taskStudente.getTitolo());
+                    datiTask.put("stato", taskStudente.getStato());
+                    datiTask.put("data_inizio", taskStudente.getData_inizio());
+                    datiTask.put("data_scadenza", taskStudente.getData_scadenza());
 
                     // Esegui l'operazione di aggiornamento del documento
-                    db.collection("Task").document(documentId)
+                    db.collection("TaskStudente").document(documentId)
                             .update(datiTask)
                             .addOnSuccessListener(aVoid -> {
                                 // Aggiornamento avvenuto con successo

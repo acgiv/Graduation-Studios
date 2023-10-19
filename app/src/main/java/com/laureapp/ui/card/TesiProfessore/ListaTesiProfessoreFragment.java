@@ -52,39 +52,44 @@ public class ListaTesiProfessoreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
         email = getEmailFromSharedPreferences();
+
         if (email != null) { // se la mail non è nulla
 
             UtenteModelView utenteView =  new UtenteModelView(context); //inizializza utenteView con un'istanza di UtenteModelView
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
             id_professore = professoreView.findProfessore(id_utente); //ottengo l'id del professore corrispondente all'id dell'utente
 
-            Log.d("scasca", String.valueOf(id_professore));
-            Log.d("scuscu", String.valueOf(id_utente));
+            Log.d("prof", String.valueOf(id_professore));
+            Log.d("ut", String.valueOf(id_utente));
 
-            //carico l'elenco degli id delle tesi collegate con il professore
+            //Carico l'elenco degli id delle tesi collegate con il professore
             loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
                 if(task.isSuccessful()) { //se il task è completato con successo
                     idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
                     Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
 
+                    //Verifica se idTesiList è null o vuoto
+                    if (idTesiList != null && !idTesiList.isEmpty()) {
+                        loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> { //Chiamo il metodo per ottenere le tesi in base alle id tesi ottenute
+                            if(tesiTask.isSuccessful()) {
+                                ArrayList<Tesi> tesiList = tesiTask.getResult();
+                                Log.d("Tesi", "Id Tesi " + tesiList.toString());
+
+                                //Mostro sulla listview tutte le tesi dello studente associato al professore
+                                listView = view.findViewById(R.id.listTesiProfessoreView);
+                                adapter = new ListaTesiProfessoreAdapter(getContext(), tesiList);
+                                listView.setAdapter(adapter);
+                            } else {
+                                Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
+                            }
+                        });
+
+                    }
+
+
                     } else {
                     Log.e("Firestore Error","Error getting data", task.getException());
                     }
-
-                    loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> { //Chiamo il metodo per ottenere le tesi in base alle id tesi ottenute
-                        if(tesiTask.isSuccessful()) {
-                            ArrayList<Tesi> tesiList = tesiTask.getResult();
-                            Log.d("Tesi", "Id Tesi " + tesiList.toString());
-
-                            //Mostro sulla listview tutte le tesi dello studente associato al professore
-                            listView = view.findViewById(R.id.listTesiProfessoreView);
-                            adapter = new ListaTesiProfessoreAdapter(getContext(), tesiList);
-                            listView.setAdapter(adapter);
-                        } else {
-                            Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
-                        }
-                    });
-
                 });
 
             } else {

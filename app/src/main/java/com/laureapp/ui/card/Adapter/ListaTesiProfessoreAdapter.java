@@ -2,12 +2,14 @@ package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.laureapp.R;
@@ -31,12 +33,12 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
         View listItemView = convertView;
 
         if (listItemView == null) {
-            listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_studente, parent, false);
+            listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_professore, parent, false);
         }
 
         final Tesi currentTesi = mTesiList.get(position);
 
-        TextView titleTextView = listItemView.findViewById(R.id.titoloTesi);
+        TextView titleTextView = listItemView.findViewById(R.id.titoloTesiProfessore);
 
         if (currentTesi != null) {
             String titolo = currentTesi.getTitolo();

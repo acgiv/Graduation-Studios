@@ -4,19 +4,17 @@ import static com.google.android.material.textfield.TextInputLayout.END_ICON_PAS
 
 import android.content.Context;
 
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
+
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 
@@ -143,17 +141,6 @@ public class ProfiloFragment extends Fragment {
             confirm_modifiche("Password", utente.getPassword());
         });
 
-        binding.modificaFacolta.setOnClickListener(v -> {
-            set_view();
-            binding.Textnuovo.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.TextVecchio.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
-            binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
-            binding.componentInputVecchio.setHint("Facoltà attuale");
-            binding.componentInputNuovo.setHint("Nuova Facoltà");
-            confirm_modifiche("Facoltà", utente.getFacolta());
-        });
-
         binding.modificaMatricola.setOnClickListener(v -> {
             set_view();
             binding.Textnuovo.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
@@ -192,60 +179,52 @@ public class ProfiloFragment extends Fragment {
 
         binding.buttonRegister.setOnClickListener(view -> {
 
-            if (!is_empty_string(binding.Textnuovo, binding.componentInputNuovo, Objects.requireNonNull(binding.componentInputNuovo.getHint()).toString())) {
-                boolean control;
+            if (!ControlInput.is_empty_string(binding.Textnuovo, binding.componentInputNuovo, Objects.requireNonNull(binding.componentInputNuovo.getHint()).toString(),context)
+            || !ControlInput.is_empty_string(binding.TextVecchio, binding.componentInputVecchio, Objects.requireNonNull(binding.componentInputVecchio.getHint()).toString(),context)) {
+                boolean control_nuovo;
+                boolean control_attuale;
                 String campo_nuovo_text = Objects.requireNonNull(binding.Textnuovo.getText()).toString();
                 String message = "Il ".concat(type).concat(" coincide con il").concat(" precedente!");
+                control_attuale =  is_control_campo_attuale(type, campo);
+                control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text, campo, message, Objects.requireNonNull(binding.componentInputNuovo));
                 switch (type) {
                     case "Nome", "Cognome" -> {
-
-                        control = is_equal_campi("NUOVO", campo_nuovo_text,
-                                campo, message, Objects.requireNonNull(binding.componentInputNuovo));
-                        if (control) {
-                            if (!StringUtils.isAlpha(campo_nuovo_text)) {
-                                String error_message = getString(R.string.errore_stringa).replace("{campo}", type);
-                                ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                            } else {
-                                ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                                if (StringUtils.equals(type, "Nome")) {
+                        if (ControlInput.is_correct_nome_cognome(binding.Textnuovo, binding.componentInputNuovo, context)) {
+                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+                                if (StringUtils.equals(type, "Nome") && (control_attuale && control_nuovo) ) {
                                     utente.setNome(campo_nuovo_text);
                                     ut_view.updateUtente(utente);
                                     binding.InsertNome.setText(utente.getNome());
-                                    changeComponentFirestore("nome", utente.getNome());
+                                    changeComponentFirestore("nome", "Utenti", utente.getNome());
                                     close_card_modifica();
-                                } else if (StringUtils.equals(type, "Cognome")) {
+
+                                } else if (StringUtils.equals(type, "Cognome")&& (control_attuale && control_nuovo)) {
                                     utente.setCognome(campo_nuovo_text);
                                     ut_view.updateUtente(utente);
                                     binding.InsertCongnome.setText(utente.getCognome());
-                                    changeComponentFirestore("cognome", utente.getCognome());
+                                    changeComponentFirestore("cognome", "Utenti", utente.getCognome());
                                     close_card_modifica();
                                 }
-                            }
+
                         }
                     }
                     case "Password" -> {
-                        control = is_equal_campi("NUOVO", ControlInput.hashWith256(Objects.requireNonNull(binding.Textnuovo.getText()).toString()),
-                                utente.getPassword(), "La Password coincide con la password precedente.",
-                                Objects.requireNonNull(binding.componentInputNuovo));
-                        if (control) {
-                            if (!ControlInput.isPasswordSafe(Objects.requireNonNull(binding.Textnuovo.getText()).toString())) {
-                                String error_message = getString(R.string.password_not_safe_error);
-                                ControlInput.set_error(binding.componentInputNuovo, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                            } else {
-                                ControlInput.set_error(binding.componentInputNuovo, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                        if (ControlInput.is_correct_password(binding.Textnuovo, binding.componentInputNuovo,context)){
+                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+                            if (control_attuale && control_nuovo) {
+                                ControlInput.set_error(binding.componentInputNuovo, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                                 utente.setPassword(ControlInput.hashWith256(Objects.requireNonNull(binding.Textnuovo.getText()).toString()));
                                 ut_view.updateUtente(utente);
                                 updatePasswordAutentication();
-                                changeComponentFirestore("password", utente.getPassword());
+                                changeComponentFirestore("password","Utenti" ,utente.getPassword());
                                 close_card_modifica();
-
                             }
                         }
                     }
                     case "Matricola" ->{
-                        control = is_equal_campi("NUOVO", campo_nuovo_text,
+                        control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text,
                                 campo, message, Objects.requireNonNull(binding.componentInputNuovo));
-                        if (control) {
+                        if (control_nuovo) {
                             if (ControlInput.is_correct_matricola(binding.Textnuovo, binding.componentInputNuovo, context, ruolo)){
                                 studente.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
                                 close_card_modifica();
@@ -253,9 +232,9 @@ public class ProfiloFragment extends Fragment {
                         }
                     }
                     case "Media" ->{
-                        control = is_equal_campi("NUOVO", campo_nuovo_text,
+                        control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text,
                                 campo, message, Objects.requireNonNull(binding.componentInputNuovo));
-                        if (control) {
+                        if (control_nuovo) {
 
                         }
                     }
@@ -263,42 +242,46 @@ public class ProfiloFragment extends Fragment {
                 }
 
             }
-            if (!is_empty_string(binding.TextVecchio, binding.componentInputVecchio, Objects.requireNonNull(binding.componentInputVecchio.getHint()).toString())) {
-                Log.d("type", type);
-                switch (type) {
 
-                    case "Nome", "Cognome", "Media", "Matricola", "Facoltà", "EsamiMancanti" ->
-                            is_equal_campi("VECCHIO", Objects.requireNonNull(binding.TextVecchio.getText()).toString(),
-                                    campo, "Il ".concat(type).concat(" non coincide."),
-                                    Objects.requireNonNull(binding.componentInputVecchio));
-                    case "Password" ->
-                            is_equal_campi("VECCHIO", ControlInput.hashWith256(Objects.requireNonNull(binding.TextVecchio.getText()).toString()),
-                                    campo, "La password non coincide.",
-                                    Objects.requireNonNull(binding.componentInputVecchio));
-                }
-            }
         });
     }
 
     private boolean is_equal_campi(String tipo_controllo, String campo1, String campo2, String error_message, TextInputLayout layout) {
         if (StringUtils.equals(tipo_controllo, "VECCHIO")) {
             if (!StringUtils.equals(campo1, campo2)) {
-                ControlInput.set_error(layout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+                ControlInput.set_error(layout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error);
             } else {
-                ControlInput.set_error(layout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                ControlInput.set_error(layout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                 return true;
             }
         } else if (StringUtils.equals(tipo_controllo, "NUOVO")) {
             if (StringUtils.equals(campo1, campo2)) {
                 Log.d("campo", campo1);
                 Log.d("campo2", campo2);
-                ControlInput.set_error(layout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+                ControlInput.set_error(layout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error);
             } else {
-                ControlInput.set_error(layout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                ControlInput.set_error(layout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean is_control_campo_attuale(String type, String campo) {
+
+            switch (type) {
+                case "Nome", "Cognome", "Media", "Matricola", "EsamiMancanti" -> {
+                    return is_equal_campi("VECCHIO", Objects.requireNonNull(binding.TextVecchio.getText()).toString(),
+                            campo, "Il ".concat(type).concat(" non coincide."),
+                            Objects.requireNonNull(binding.componentInputVecchio));
+                }
+                case "Password" -> {
+                    return is_equal_campi("VECCHIO", ControlInput.hashWith256(Objects.requireNonNull(binding.TextVecchio.getText()).toString()),
+                            campo, "La password non coincide.",
+                            Objects.requireNonNull(binding.componentInputVecchio));
+                }
+            }
+            return false;
     }
 
     private void set_view() {
@@ -316,20 +299,11 @@ public class ProfiloFragment extends Fragment {
         binding.modificaCampo.setVisibility(View.GONE);
         binding.Textnuovo.setText("");
         binding.TextVecchio.setText("");
-        ControlInput.set_error(Objects.requireNonNull(binding.componentInputVecchio), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-        ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+        ControlInput.set_error(Objects.requireNonNull(binding.componentInputVecchio), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+        ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
     }
 
-    private Boolean is_empty_string(TextInputEditText editText, TextInputLayout layout_input, String campo_error) {
-        boolean result = false;
-        if (StringUtils.isEmpty(Objects.requireNonNull(editText.getText()).toString())) {
-            String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", campo_error);
-            ControlInput.set_error(layout_input, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-            editText.requestFocus();
-            result = true;
-        }
-        return result;
-    }
+
 
     private void updatePasswordAutentication(){
         user.updatePassword(utente.getPassword())
@@ -348,16 +322,15 @@ public class ProfiloFragment extends Fragment {
         close_card_modifica();
     }
 
-    private void changeComponentFirestore(String key_component, String component) {
+    private void changeComponentFirestore(String key_component,String path,  String component) {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        Log.d("UID USER", String.valueOf(currentUser.getUid()));
         if (!StringUtils.isEmpty(currentUser.getUid())) {
             // Crea un oggetto con i dati da aggiornare nel documento
             Map<String, Object> updateData = new HashMap<>();
             updateData.put(key_component, component); // "nome" è il nome del campo da aggiornare
             // Esegui l'aggiornamento nel documento
-            firestoreDB.collection("Utenti")
+            firestoreDB.collection(path)
                     .document(currentUser.getUid())
                     .update(updateData) // Aggiorna il campo "nome" con il nuovo nome
                     .addOnSuccessListener(aVoid -> {
@@ -372,7 +345,6 @@ public class ProfiloFragment extends Fragment {
             // Gestisci il caso in cui l'ID utente non sia valido o vuoto
             Log.e("USER_ERROR", "ERRORE UTENTE NON VALIDO");
         }
-
     }
 
 }

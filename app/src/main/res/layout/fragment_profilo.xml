@@ -409,13 +409,6 @@
                                 android:textSize="16sp"
                                 app:layout_constraintEnd_toEndOf="parent" />
 
-                            <ImageView
-                                android:id="@+id/modificaFacolta"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="Edit Name Icon"
-                                android:src="@drawable/edit_icon" />
-
                         </LinearLayout>
 
                         <View
@@ -444,7 +437,7 @@
                                 android:id="@+id/TextMatricola"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Matricola:"
+                                android:text="Matricola: "
                                 android:textColor="@color/color_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
@@ -493,7 +486,7 @@
                                 android:id="@+id/EsamiMedia"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Media:"
+                                android:text="Media: "
                                 android:textColor="@color/color_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
@@ -542,7 +535,7 @@
                                 android:id="@+id/TextEsamiMancanti"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Esami Mancanti:"
+                                android:text="Esami Mancanti: "
                                 android:textColor="@color/color_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"

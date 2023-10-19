@@ -230,9 +230,6 @@ public class Register2Fragment extends Fragment {
         return ut.getId_utente();
     }
 
-
-
-
     private void inizializzate_binding_text(){
         elem_text.put("matricola", binding.matricolaRegister);
         elem_text.put("Dipartimento", binding.filledExposedDropdown);
@@ -283,41 +280,43 @@ public class Register2Fragment extends Fragment {
     }
 
     private  boolean is_correct_form(Object component) {
-        boolean result_error = false;
         String hint = getHintText(component);
-        StudenteModelView st = new StudenteModelView(context);
-        ProfessoreModelView pr = new ProfessoreModelView(context);
-        Log.d("fix_error","sono qui "+ getHintText(component));
-        if(!is_empty_string(component, getInputText(component),  hint)) {
+        if(!ControlInput.is_empty_string(component, getInputText(component),  hint, context)) {
             switch (hint) {
-                case "Matricola":
+                case "Matricola" -> {
                     return ControlInput.is_correct_matricola(binding.matricolaRegister, binding.matricolaInput, context, ruolo);
-                case "Media":
+                }
+                case "Media" -> {
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
                         return ControlInput.is_correct_media(binding.mediaRegister, binding.mediaInput, context);
                     } else {
                         return true;
                     }
-                case "Esami mancanti":
+                }
+                case "Esami mancanti" -> {
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
                         return ControlInput.is_correct_esami_mancanti(binding.esamiMancantiRegister, binding.esamiMancantiInput, context);
                     } else {
                         return true;
                     }
-                case "Facoltà":
+                }
+                case "Facoltà" -> {
                     return ControlInput.is_correct_facolta(binding.filledExposedDropdown, binding.facoltaInput, context, facolta);
-                case "Corso di Laurea":
+                }
+                case "Corso di Laurea" -> {
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                        return ControlInput. is_correct_corso_di_laurea(binding.dropdownCorso, binding.corsoprofessoreInput, context, corsi);
+                        return ControlInput.is_correct_corso_di_laurea(binding.dropdownCorso, binding.corsoInput, context, corsi);
                     } else {
-                        ControlInput.set_error(binding.corsoprofessoreInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                        ControlInput.set_error( binding.corsoInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                         return true;
                     }
-                default:
-                    return true;
+                }
+                default -> {
+                    return false;
+                }
             }
         }
-        return result_error;
+        return false;
     }
 
     private String getHintText(Object component) {
@@ -333,26 +332,29 @@ public class Register2Fragment extends Fragment {
     }
 
     private TextInputLayout getInputText(Object component){
-        switch (getHintText(component)){
-            case "Matricola":
+        switch (getHintText(component)) {
+            case "Matricola" -> {
                 return binding.matricolaInput;
-            case "Media":
+            }
+            case "Media" -> {
                 return binding.mediaInput;
-            case "Esami mancanti":
+            }
+            case "Esami mancanti" -> {
                 return binding.esamiMancantiInput;
-            case "Facoltà":
+            }
+            case "Facoltà" -> {
                 return binding.facoltaInput;
-            case "Corso di Laurea":
-                if (StringUtils.equals(ruolo, "Studente")){
-                    return  binding.corsoInput;
-                }else{
+            }
+            case "Corso di Laurea" -> {
+                if (StringUtils.equals(ruolo, "Studente")) {
+                    return binding.corsoInput;
+                } else {
                     return binding.corsoprofessoreInput;
                 }
+            }
         }
         return null;
     }
-
-
 
 
     /**
@@ -380,6 +382,7 @@ public class Register2Fragment extends Fragment {
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             // Nessuna azione richiesta prima della modifica del testo.
 
+
         }
 
         /**
@@ -392,8 +395,9 @@ public class Register2Fragment extends Fragment {
          */
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (component != null)
+            if (component != null){
                 is_correct_form(component);
+            }
         }
 
         /**
@@ -414,7 +418,6 @@ public class Register2Fragment extends Fragment {
                 String inputText = binding.dropdownprofessoreCorso.getText().toString();
 
                 String[] enteredCourses = StringUtils.deleteWhitespace(inputText).split(",");
-                Log.d ("corsi", String.valueOf(enteredCourses.toString()));
                 if( !insertedCourses.contains(String.valueOf(enteredCourses[enteredCourses.length-1]))){
                     validCourses.add(enteredCourses[enteredCourses.length-1]);
                 }else{
@@ -438,32 +441,5 @@ public class Register2Fragment extends Fragment {
             this.component = component;
         }
 
-        // Aggiungi anche un listener di testo modificato per gestire l'input dell'utente
-
-
     }
-
-
-
-    private Boolean is_empty_string(Object component, TextInputLayout layout_input, String campo_error){
-        String text = null;
-        String error_message;
-        if (component instanceof TextInputEditText){
-            text= Objects.requireNonNull(((TextInputEditText) component).getText()).toString();
-        }else if (component instanceof MaterialAutoCompleteTextView) {
-            text= Objects.requireNonNull(((MaterialAutoCompleteTextView) component).getText()).toString();
-        }else if (component instanceof MultiAutoCompleteTextView) {
-            text= Objects.requireNonNull(((MultiAutoCompleteTextView) component).getText()).toString();
-        }
-        if(StringUtils.isEmpty(text)){
-            error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", campo_error);
-            ControlInput.set_error(layout_input, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-            if (component instanceof View) {
-                ((View) component).requestFocus();
-            }
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -1,27 +1,38 @@
 package com.laureapp.ui.card.TesiStudente;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.R;
+import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Tesi;
+import com.laureapp.ui.roomdb.entity.Vincolo;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -37,7 +48,20 @@ public class DettagliTesiStudenteFragment extends Fragment {
     Date dataPubblicazione;
     String tipologia;
     String cicloCdl;
+    Vincolo vincolo;
 
+    Long id_vincolo;
+    Long id_tesi;
+    Long id_utente;
+    Long id_studente;
+
+    Context context;
+    String email;
+
+    Long media;
+    Long esamiMancanti;
+
+    StudenteModelView studenteView = new StudenteModelView(context);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,18 +85,26 @@ public class DettagliTesiStudenteFragment extends Fragment {
         TextView dataTextView = view.findViewById(R.id.insertTextViewDataPubblicazione);
         TextView ciclocdlTextView = view.findViewById(R.id.insertTextViewCicloCDL);
 
+        TextView tempisticheTextView = view.findViewById(R.id.insertTextViewTempistiche);
+        TextView mediaTextView = view.findViewById(R.id.insertTextViewMedia);
+        TextView esamiTextView = view.findViewById(R.id.insertTextViewEsamiMancanti);
+        TextView skillTextView = view.findViewById(R.id.insertTextViewSkill);
+
+
         if (args != null) { //se non sono null
 
-             tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
+            tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
             if (tesi != null) {
-                 titolo = tesi.getTitolo();
-                 descrizione = tesi.getAbstract_tesi();
-                 tipologia = tesi.getTipologia();
-                 dataPubblicazione = tesi.getData_pubblicazione();
-                 cicloCdl = tesi.getCiclo_cdl();
-                 titoloTextView.setText(titolo);
-                 abstractTextView.setText(descrizione);
-                 tipologiaTextView.setText(tipologia);
+                titolo = tesi.getTitolo();
+                descrizione = tesi.getAbstract_tesi();
+                tipologia = tesi.getTipologia();
+                dataPubblicazione = tesi.getData_pubblicazione();
+                cicloCdl = tesi.getCiclo_cdl();
+                id_vincolo = tesi.getId_vincolo();
+                id_tesi = tesi.getId_tesi();
+                titoloTextView.setText(titolo);
+                abstractTextView.setText(descrizione);
+                tipologiaTextView.setText(tipologia);
                 // formatto la data per convertirla da sql a java.date
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                 String formattedDate = dateFormat.format(dataPubblicazione);
@@ -80,8 +112,137 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                 ciclocdlTextView.setText(cicloCdl);
 
+                loadVincoloData(id_vincolo).addOnCompleteListener(taskVincolo -> {
+                    if (taskVincolo.isSuccessful()) {
+                        vincolo = taskVincolo.getResult();
+                        media = vincolo.getMedia_voti();
+                        esamiMancanti = vincolo.getEsami_mancanti_necessari();
+
+                        tempisticheTextView.setText(vincolo.getTempistiche().toString());
+                        esamiTextView.setText(esamiMancanti.toString());
+                        mediaTextView.setText(media.toString());
+                        skillTextView.setText(vincolo.getSkill());
+
+                        //chiamo il metodo che verifica se lo studente rispetti i vincoli per richiedere la tesi
+                        StudenteMatchesVincoli(view,media,esamiMancanti);
+
+                    } else {
+                        Log.e("vincolo Firestore Error", "Error getting vincolo data", taskVincolo.getException());
+
+                    }
+                });
+
+                StudenteHasATesi(id_tesi,view);
 
             }
         }
     }
+
+    /**
+     * Questo metodo consente di ottenere i dati dei vincoli delle tesi da firestore e riempire la entity Vincolo
+     *
+     * @param id_vincolo id del vincolo legata alla tesi
+     * @return entity Vincolo
+     */
+    private Task<Vincolo> loadVincoloData(Long id_vincolo) {
+        final Vincolo vincolo = new Vincolo();
+
+
+        // Create a Firestore query to fetch Tesi documents with matching IDs
+        Query query = FirebaseFirestore.getInstance()
+                .collection("Vincolo")
+                .whereEqualTo("id_vincolo", id_vincolo);
+        return query.get().continueWith(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    vincolo.setId_vincolo((Long) document.get("id_vincolo"));
+                    vincolo.setEsami_mancanti_necessari((Long) document.get("esami_mancanti_necessari"));
+                    vincolo.setSkill((String) document.get("skill"));
+                    vincolo.setTempistiche((Long) document.get("tempistiche"));
+                    vincolo.setMedia_voti((Long) document.get("media_voti"));
+
+                }
+            }
+            return vincolo;
+        });
+    }
+
+    /**
+     * Si utilizza questo metodo per prendere le preferenze salvate nel metodo presente in HomeFragment
+     * Esso prende la cartella "preferenze" e ne ricava la mail o l'oggetto che ci serve.
+     * @return
+     */
+    private String getEmailFromSharedPreferences(Context context) {
+        if (context != null) {
+            SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
+            return preferences.getString("email", null);
+        }
+        return null;
+    }
+
+    private void StudenteHasATesi(Long id_tesi, View view) {
+        context = getContext();
+        email = getEmailFromSharedPreferences(context); // Chiamata al metodo per ottenere la mail
+
+        UtenteModelView utenteView = new UtenteModelView(context);
+        id_utente = utenteView.getIdUtente(email);
+        id_studente = studenteView.findStudente(id_utente);
+
+        if (email != null && id_utente != null && id_studente != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference studenteTesiRef = db.collection("StudenteTesi");
+
+            // Crea una clausola composta con and tra le condizioni
+            Query query = studenteTesiRef
+                    .whereEqualTo("id_studente", id_studente)
+                    .whereEqualTo("id_tesi", id_tesi);
+
+            query.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        // Ci sono occorrenze
+                        Button filterButton = view.findViewById(R.id.richiediTesi);
+                        filterButton.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    Log.e("Firestore Error", "Error querying StudenteTesi collection", task.getException());
+                }
+            });
+        }else{ //se i tre valori sono null e quindi sono ospite nascondo il bottone
+            Button filterButton = view.findViewById(R.id.richiediTesi);
+            filterButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void StudenteMatchesVincoli(View view,Long media,Long esamiMancanti) {
+        List<Studente> studenti;
+        context = getContext();
+        email = getEmailFromSharedPreferences(context); // Chiamata al metodo per ottenere la mail
+
+        UtenteModelView utenteView = new UtenteModelView(context);
+        id_utente = utenteView.getIdUtente(email);
+        id_studente = studenteView.findStudente(id_utente);
+        studenti = studenteView.getAllStudente();
+
+
+
+        for (Studente studente : studenti) {
+            if (studente.getId_studente() == id_studente) {
+
+                Long mediaStudente = (long) studente.getMedia();
+                Long esamiStudente = (long) studente.getEsami_mancanti();
+                if(mediaStudente < media && esamiStudente > esamiMancanti ){
+                    Button richiediTesiButton = view.findViewById(R.id.richiediTesi);
+                    richiediTesiButton.setOnClickListener(view1 -> {
+                        Toast toast = Toast.makeText(context, "Impossibile richiede la tesi. Non soddisfi tutti i vincoli", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.TOP, 0, 0); // Imposta il Toast in alto
+                        toast.show();
+
+                    });
+                }
+            }
+        }
+    }
+
 }

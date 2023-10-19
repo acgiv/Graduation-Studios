@@ -19,32 +19,36 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:gravity="center"
+            android:layout_marginTop="-3dp"
             android:text="@string/intestazione_colonna_ricevimento"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
+
 
         <!-- Intestazione "Argomento" -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_weight="1"
-            android:gravity="center"
             android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:gravity="top|center"
+            android:layout_marginTop="9dp"
             android:text="@string/intestazione_colonna_argomento"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Intestazione "Data" -->
+        <!--Intestazione Data -->
         <TextView
             android:layout_width="71dp"
             android:layout_height="48dp"
+            android:layout_marginTop="-2dp"
             android:layout_marginRight="70dp"
             android:gravity="center"
             android:text="@string/intestazione_colonna_data"
             android:textColor="#FFFFFF"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
 

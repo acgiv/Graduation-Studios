@@ -115,7 +115,7 @@ public class TaskStudenteFragment extends Fragment {
         mNav = Navigation.findNavController(view);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
 
-        adapter = new TaskStudenteAdapter(context, taskList,mNav);
+        adapter = new TaskStudenteAdapter(context, taskList,mNav, args);
 
         loadStudentForUserId(utente.getId_utente());
 

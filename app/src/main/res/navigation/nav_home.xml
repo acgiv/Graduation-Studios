@@ -5,6 +5,13 @@
     android:id="@+id/nav_home"
     app:startDestination="@id/fragment_home">
 
+    <!--Fragment delle impostazioni -->
+    <fragment
+        android:id="@+id/fragment_impostazioni"
+        android:name="com.laureapp.ui.ImpostazioniFragment"
+        android:label="Laureapp"
+        tools:layout="@layout/fragment_home"/>
+
     <!--Fragment della home -->
     <fragment
         android:id="@+id/fragment_home"
@@ -41,9 +48,36 @@
         <action
             android:id="@+id/action_fragment_home_to_tesiProfessoreFragment"
             app:destination="@id/tesiProfessoreFragment" />
+        <!--Home to task studente fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_taskStudenteFragment"
+            app:destination="@id/task_studente_fragment" />
+        <!--Home to impostazioni fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_impostazioniFragment"
+            app:destination="@id/fragment_impostazioni" />
 
     </fragment>
 
+
+    <!--Fragment delle task dello studente -->
+    <fragment
+        android:id="@+id/task_studente_fragment"
+        android:name="com.laureapp.ui.card.Task.TaskHomeStudenteFragment"
+        android:label="TaskStudente"
+        tools:layout="@layout/fragment_task">
+        <action
+            android:id="@+id/action_fragment_taskStudenteFragment_to_dettagli_task"
+            app:destination="@id/dettagliTaskStudenteFragment" />
+    </fragment>
+
+    <!--Fragment dettagli task studente -->
+    <fragment
+        android:id="@+id/dettagliTaskStudenteFragment"
+        android:name="com.laureapp.ui.card.Task.DettagliTaskHomeStudenteFragment"
+        android:label="Task"
+        tools:layout="@layout/fragment_dettagli_task_home">
+    </fragment>
 
     <!--Fragment dei social -->
     <fragment
@@ -133,7 +167,7 @@
         tools:layout="@layout/fragment_task">
     </fragment>
 
-    <!--Fragment task studente -->
+    <!--Fragment task studente in  -->
     <fragment
         android:id="@+id/taskStudenteFragment"
         android:name="com.laureapp.ui.card.Task.TaskStudenteFragment"
@@ -143,6 +177,8 @@
             android:id="@+id/action_task_to_dettagli_task"
             app:destination="@id/dettagliTaskFragment" />
     </fragment>
+
+
 
     <!--Fragment dettagli task -->
     <fragment

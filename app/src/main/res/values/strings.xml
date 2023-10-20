@@ -63,12 +63,17 @@
     <string name="media">Media</string>
     <string name="esami_mancanti">Esami mancanti</string>
     <string name="corsi">Corso di Laurea</string>
+    <string name="impostaLingua">Seleziona lingua</string>
+    <string name="italiano">Italiano</string>
+    <string name="inglese">Inglese</string>
 
     <string-array name="Dipartimento">
         <item>Matematica</item>
         <item>Informatica</item>
         <item>Farmacia</item>
     </string-array>
+
+
 
     <string-array name="StatoTask">
         <item>Non iniziato</item>

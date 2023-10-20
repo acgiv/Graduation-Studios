@@ -1,7 +1,8 @@
 package com.laureapp.ui.card.Adapter;
 
 
-import static com.laureapp.ui.card.Task.TaskTesiFragment.deleteTask;
+
+import static com.laureapp.ui.card.Task.TaskStudenteFragment.deleteTask;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,31 +10,34 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 
 import com.laureapp.R;
-import com.laureapp.ui.roomdb.entity.TaskTesi;
+import com.laureapp.ui.roomdb.entity.TaskStudente;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
-/**
- * Questo adapter fornisce l'accesso ai data Item. In questo caso,
- * ai ListItem della ListView e si occupare di settare graficamente
- * gli elementi della lista
- */
-public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
+public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
+
     private final LayoutInflater inflater;
-    private final List<TaskTesi> taskList;
+    private final List<TaskStudente> taskList;
     private NavController mNav;
     private Context context;
+    String ruolo;
+    Bundle args;
 
 
 
@@ -41,13 +45,13 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
      * @param context  si riferisce al contesto in cui viene utilizzato
      * @param taskList corrisponde alla lista di task da passare
      */
-    public TaskTesiAdapter(Context context, List<TaskTesi> taskList, NavController navController) {
-        super(context, 0, taskList);
+    public TaskStudenteAdapter(Context context, List<TaskStudente> taskList, NavController navController, Bundle args) {
+        super(context,0,taskList);
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.taskList = taskList;
         this.mNav = navController;  // Inizializza il NavController
-
+        this.args = args;
     }
 
 
@@ -59,7 +63,6 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
      * @return la view con la lista aggiornata
      */
     @NonNull
-    @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View itemView = convertView;
         if (itemView == null) {
@@ -71,30 +74,60 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
 
         TextView taskTextView = itemView.findViewById(R.id.taskTextView);
         ImageButton deleteTaskImageButton = itemView.findViewById(R.id.delete_task_ImageButton);
+        ImageView redDot = itemView.findViewById(R.id.red_status_dot);
+        ImageView orangeDot = itemView.findViewById(R.id.orange_status_dot);
+        ImageView greenDot = itemView.findViewById(R.id.green_status_dot);
 
-        TaskTesi task = getItem(position);
+
+        TaskStudente task = getItem(position);
+
 
         if (task != null) {
             taskTextView.setText(task.getTitolo());
 
-            deleteTaskImageButton.setOnClickListener(view -> {
-                //Titolo della task
-                String titolo = task.getTitolo();
-                showConfirmationDialog(titolo, position);
-            });
+            if(Objects.equals(task.getStato(), "Non iniziato")){
+                redDot.setVisibility(View.VISIBLE);
+                orangeDot.setVisibility(View.GONE);
+                greenDot.setVisibility(View.GONE);
+            } else if (Objects.equals(task.getStato(), "In corso")) {
+                redDot.setVisibility(View.GONE);
+                orangeDot.setVisibility(View.VISIBLE);
+                greenDot.setVisibility(View.GONE);
+            } else if (Objects.equals(task.getStato(), "Completato")) {
+                redDot.setVisibility(View.GONE);
+                orangeDot.setVisibility(View.GONE);
+                greenDot.setVisibility(View.VISIBLE);
+            }
+
+            if(StringUtils.equals("Studente", args.getString("ruolo"))){
+                Log.d("Task_studente_studente", "Cliccato la task");
+                deleteTaskImageButton.setVisibility(View.GONE);
+            }else if(StringUtils.equals("Professore", args.getString("ruolo"))){
+                deleteTaskImageButton.setOnClickListener(view -> {
+                    //Titolo della task
+                    String titolo = task.getTitolo();
+                    showConfirmationDialog(titolo, position);
+                });
+            }
+
+
 
 
         }
         // Gestisci il clic sull'elemento della lista
         itemView.setOnClickListener(v -> {
-            TaskTesi selectedTask = getItem(position);
+            TaskStudente selectedTask = getItem(position);
 
             if (selectedTask != null) {
-                Bundle args = new Bundle();
                 args.putSerializable("SelectedTask", selectedTask);
 
-                // Utilizza la NavHostController per navigare al dettaglio del task
-                mNav.navigate(R.id.action_task_to_dettagli_task, args);
+                if(StringUtils.equals("Studente", args.getString("ruolo"))){
+                    mNav.navigate(R.id.action_fragment_taskStudenteFragment_to_dettagli_task, args);
+
+                }else if(StringUtils.equals("Professore", args.getString("ruolo"))) {
+                    // Utilizza la NavHostController per navigare al dettaglio del task
+                    mNav.navigate(R.id.action_task_to_dettagli_task, args);
+                }
             }
         });
 
@@ -137,6 +170,3 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
 
 
 }
-
-
-

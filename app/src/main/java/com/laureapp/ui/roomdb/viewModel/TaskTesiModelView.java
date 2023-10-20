@@ -23,7 +23,7 @@ public class TaskTesiModelView {
         taskTesiRepository.updateTaskTesi(taskTesi);
     }
 
-    public boolean deleteTaskTesi(long id){
+    public boolean deleteTaskTesi(Long id){
         return taskTesiRepository.deleteTaskTesi(id);
     }
 

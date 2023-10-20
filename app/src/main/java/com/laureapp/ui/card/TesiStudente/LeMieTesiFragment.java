@@ -36,6 +36,8 @@ public class LeMieTesiFragment extends Fragment {
     Long id_utente;
     Long id_studente;
     String email;
+
+    Long visualizzazioni;
     private ListView listView;
     private LeMieTesiAdapter adapter;
     StudenteModelView studenteView = new StudenteModelView(context);
@@ -60,7 +62,7 @@ public class LeMieTesiFragment extends Fragment {
             id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
 
 
-// Carico l'elenco degli id delle tesi appartenenti allo studente
+            // Carico l'elenco degli id delle tesi appartenenti allo studente
             loadIdTesiData(id_studente).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     idTesiList = task.getResult(); // Assegno gli id delle tesi a una lista di tipo Long
@@ -166,6 +168,7 @@ public class LeMieTesiFragment extends Fragment {
                     tesi.setTitolo((String) document.get("titolo"));
                     tesi.setTipologia((String) document.get("tipologia"));
 
+                    tesi.setVisualizzazioni((Long) document.get("visualizzazioni"));
                     tesiList.add(tesi);
                 }
 

@@ -63,12 +63,17 @@
     <string name="media">Media</string>
     <string name="esami_mancanti">Esami mancanti</string>
     <string name="corsi">Corso di Laurea</string>
+    <string name="impostaLingua">Seleziona lingua</string>
+    <string name="italiano">Italiano</string>
+    <string name="inglese">Inglese</string>
 
     <string-array name="Dipartimento">
         <item>Matematica</item>
-        <item>Informazica</item>
+        <item>Informatica</item>
         <item>Farmacia</item>
     </string-array>
+
+
 
     <string-array name="StatoTask">
         <item>Non iniziato</item>
@@ -79,6 +84,13 @@
         <item>Itps</item>
         <item>Matematica</item>
         <item>Informatica</item>
+    </string-array>
+
+    <string-array name="OrdinaPer">
+        <item>Visualizzazioni</item>
+        <item>Media</item>
+        <item>Esami Mancanti</item>
+        <item>Tempistiche</item>
     </string-array>
 
     <string name="title_activity_loading_page">LoadingPageActivity</string>

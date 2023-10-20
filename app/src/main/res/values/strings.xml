@@ -83,10 +83,9 @@
 
     <string-array name="OrdinaPer">
         <item>Visualizzazioni</item>
-        <item>Vedi</item>
-        <item>Itps</item>
-        <item>Matematica</item>
-        <item>Informatica</item>
+        <item>Media</item>
+        <item>Esami Mancanti</item>
+        <item>Tempistiche</item>
     </string-array>
 
     <string name="title_activity_loading_page">LoadingPageActivity</string>

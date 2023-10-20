@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import com.laureapp.R;
@@ -71,7 +72,11 @@ public class HomeFragment extends Fragment {
         CardSocial =  view.findViewById(R.id.cardViewSocial);
         CardTesisti = view.findViewById(R.id.cardViewTesisti);
 
+        TextView taskTextView = view.findViewById(R.id.taskTextView);
 
+        if (StringUtils.equals("Professore", ruolo)) {
+            taskTextView.setText("Richieste");
+        }
 
         CardTesi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
@@ -88,7 +93,9 @@ public class HomeFragment extends Fragment {
             if(StringUtils.equals("Studente", ruolo)){
                 Log.d("Task", "cliccato Task studente");
             }else if(StringUtils.equals("Professore", ruolo)){
-                Log.d("Task", "cliccato Task Professore");
+
+                mNav.navigate(R.id.action_fragment_home_to_richiesteProfessoreFragment,args);
+
             }else {
                 Log.d("Task", "cliccato Task Ospite");
             }

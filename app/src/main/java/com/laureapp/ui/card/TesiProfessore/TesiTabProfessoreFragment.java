@@ -41,9 +41,8 @@ public class TesiTabProfessoreFragment extends Fragment {
         viewPagerAdapter = new TesiTabProfessoreAdapter((FragmentActivity) requireContext());
         viewPager2.setAdapter(viewPagerAdapter);
 
-        Log.d("qualcosa","qualcosa");
-        Bundle args = getArguments();
-        Log.d("skibida", String.valueOf(args));
+        /*Bundle args = getArguments();
+        Log.d("Argomenti", String.valueOf(args));*/
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -60,8 +59,7 @@ public class TesiTabProfessoreFragment extends Fragment {
 
             }
         });
-
-                viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);

@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ import androidx.navigation.NavController;
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.TaskStudente;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +36,8 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
     private final List<TaskStudente> taskList;
     private NavController mNav;
     private Context context;
+    String ruolo;
+    Bundle args;
 
 
 
@@ -40,13 +45,13 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
      * @param context  si riferisce al contesto in cui viene utilizzato
      * @param taskList corrisponde alla lista di task da passare
      */
-    public TaskStudenteAdapter(Context context, List<TaskStudente> taskList, NavController navController) {
+    public TaskStudenteAdapter(Context context, List<TaskStudente> taskList, NavController navController, Bundle args) {
         super(context,0,taskList);
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.taskList = taskList;
         this.mNav = navController;  // Inizializza il NavController
-
+        this.args = args;
     }
 
 
@@ -73,6 +78,7 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
         ImageView orangeDot = itemView.findViewById(R.id.orange_status_dot);
         ImageView greenDot = itemView.findViewById(R.id.green_status_dot);
 
+
         TaskStudente task = getItem(position);
 
 
@@ -93,11 +99,18 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
                 greenDot.setVisibility(View.VISIBLE);
             }
 
-            deleteTaskImageButton.setOnClickListener(view -> {
-                //Titolo della task
-                String titolo = task.getTitolo();
-                showConfirmationDialog(titolo, position);
-            });
+            if(StringUtils.equals("Studente", args.getString("ruolo"))){
+                Log.d("Task_studente_studente", "Cliccato la task");
+                deleteTaskImageButton.setVisibility(View.GONE);
+            }else if(StringUtils.equals("Professore", args.getString("ruolo"))){
+                deleteTaskImageButton.setOnClickListener(view -> {
+                    //Titolo della task
+                    String titolo = task.getTitolo();
+                    showConfirmationDialog(titolo, position);
+                });
+            }
+
+
 
 
         }
@@ -106,11 +119,15 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
             TaskStudente selectedTask = getItem(position);
 
             if (selectedTask != null) {
-                Bundle args = new Bundle();
                 args.putSerializable("SelectedTask", selectedTask);
 
-                // Utilizza la NavHostController per navigare al dettaglio del task
-                mNav.navigate(R.id.action_task_to_dettagli_task, args);
+                if(StringUtils.equals("Studente", args.getString("ruolo"))){
+                    mNav.navigate(R.id.action_fragment_taskStudenteFragment_to_dettagli_task, args);
+
+                }else if(StringUtils.equals("Professore", args.getString("ruolo"))) {
+                    // Utilizza la NavHostController per navigare al dettaglio del task
+                    mNav.navigate(R.id.action_task_to_dettagli_task, args);
+                }
             }
         });
 

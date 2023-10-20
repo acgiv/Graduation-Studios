@@ -1,6 +1,7 @@
 package com.laureapp.ui.card.TesiProfessore;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,13 +23,17 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.StringJoiner;
 
 public class InfoTesiFragment extends Fragment {
 
     Tesi tesi;
-
     String titolo;
+    String descrizione;
+    String tipologia;
+    Date dataPubblicazione;
+    String cicloCdl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,17 +50,41 @@ public class InfoTesiFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        //Prendo gli argomenti
         Bundle args = getArguments();
+
+        //Inizializzo
         TextView titoloTesiProfessoreTextView = view.findViewById(R.id.insertTitoloTesiProfesore);
-        Log.d("ciao", String.valueOf(args));
+        TextView tipologiaTesiProfessoreTextView = view.findViewById(R.id.insertTipologiaTesiProfessore);
+        TextView dataPubblicazioneProfessoreTextView = view.findViewById(R.id.insertDataPubblicazioneTesiProfessore);
+        TextView cicloCdlProfessoreTextView = view.findViewById(R.id.insertCicloCdlTesiProfessore);
+        TextView abstractProfessoreTextView = view.findViewById(R.id.insertAbstractTesiProfessore);
 
         if (args != null) { //se non sono null
 
             tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
-            titolo = tesi.getTitolo();
+            if (tesi != null) {
+                //Mi passo tutti i parametri di una tesi
+                titolo = tesi.getTitolo();
+                tipologia = tesi.getTipologia();
+                dataPubblicazione = tesi.getData_pubblicazione();
+                cicloCdl = tesi.getCiclo_cdl();
+                descrizione = tesi.getAbstract_tesi();
 
-            titoloTesiProfessoreTextView.setText(titolo);
-            Log.d("ciao",titolo);
+                //Setto
+                titoloTesiProfessoreTextView.setText(titolo);
+                tipologiaTesiProfessoreTextView.setText(tipologia);
+
+                //Formatto la data per convertirla da SQL a java.date
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                String formattedDate = dateFormat.format(dataPubblicazione);
+                dataPubblicazioneProfessoreTextView.setText(formattedDate);
+
+                cicloCdlProfessoreTextView.setText(cicloCdl);
+                abstractProfessoreTextView.setText(descrizione);
+
+            }
+
         }
 
     }

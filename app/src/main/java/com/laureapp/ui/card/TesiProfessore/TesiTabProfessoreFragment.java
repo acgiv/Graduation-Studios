@@ -39,9 +39,10 @@ public class TesiTabProfessoreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         savedInstanceState = getArguments();
-        viewPagerAdapter = new TesiTabProfessoreAdapter((FragmentActivity) requireContext(),savedInstanceState);
+        viewPagerAdapter = new TesiTabProfessoreAdapter((FragmentActivity) requireContext(),savedInstanceState); //Passo gli argomenti nei layout collegati
         viewPager2.setAdapter(viewPagerAdapter);
 
+        Bundle args = getArguments();
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -59,8 +60,7 @@ public class TesiTabProfessoreFragment extends Fragment {
 
             }
         });
-
-                viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);

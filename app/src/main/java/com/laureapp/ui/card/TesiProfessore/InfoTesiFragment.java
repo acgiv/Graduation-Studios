@@ -50,32 +50,30 @@ public class InfoTesiFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        //Prendo gli argomenti
         Bundle args = getArguments();
 
+        //Inizializzo
         TextView titoloTesiProfessoreTextView = view.findViewById(R.id.insertTitoloTesiProfesore);
         TextView tipologiaTesiProfessoreTextView = view.findViewById(R.id.insertTipologiaTesiProfessore);
         TextView dataPubblicazioneProfessoreTextView = view.findViewById(R.id.insertDataPubblicazioneTesiProfessore);
         TextView cicloCdlProfessoreTextView = view.findViewById(R.id.insertCicloCdlTesiProfessore);
         TextView abstractProfessoreTextView = view.findViewById(R.id.insertAbstractTesiProfessore);
 
-        Log.d("ValoriInfo", String.valueOf(args));
-
         if (args != null) { //se non sono null
 
             tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
             if (tesi != null) {
-                //mi passo tutti i parametri di una tesi
+                //Mi passo tutti i parametri di una tesi
                 titolo = tesi.getTitolo();
                 tipologia = tesi.getTipologia();
                 dataPubblicazione = tesi.getData_pubblicazione();
                 cicloCdl = tesi.getCiclo_cdl();
                 descrizione = tesi.getAbstract_tesi();
 
+                //Setto
                 titoloTesiProfessoreTextView.setText(titolo);
-                Log.d("Titolo",titolo);
                 tipologiaTesiProfessoreTextView.setText(tipologia);
-                Log.d("Tipologia",tipologia);
 
                 //Formatto la data per convertirla da SQL a java.date
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());

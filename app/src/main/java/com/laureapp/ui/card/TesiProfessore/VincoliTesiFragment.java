@@ -44,17 +44,23 @@ public class VincoliTesiFragment extends Fragment {
         TextView esamiMancantiProfessoreTextView = view.findViewById(R.id.insertEsamiMancantiTesiProfessore);
         TextView skillProfessoreTextView = view.findViewById(R.id.insertSkillTesiProfessore);
 
+        Log.d("ValoriVincoli", String.valueOf(args));
+
         if (args != null) { //Se non sono null
 
             tesi = (Tesi) args.getSerializable("Tesi"); //Prendo la tesi dagli args
 
             if(tesi != null) {
 
+                id_vincolo = tesi.getId_vincolo();
+
                 loadVincoloData(id_vincolo).addOnCompleteListener(taskVincolo -> {
                     if(taskVincolo.isSuccessful()) {
                         vincolo = taskVincolo.getResult();
                         media = vincolo.getMedia_voti();
                         esamiMancanti = vincolo.getEsami_mancanti_necessari();
+
+                        Log.d("Vincolo", String.valueOf(vincolo));
 
                         tempisticheProfessoreTextView.setText(vincolo.getTempistiche().toString());
                         mediaVotoProfessoreTextView.setText(media.toString());

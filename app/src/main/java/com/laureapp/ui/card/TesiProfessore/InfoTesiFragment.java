@@ -56,10 +56,10 @@ public class InfoTesiFragment extends Fragment {
         TextView titoloTesiProfessoreTextView = view.findViewById(R.id.insertTitoloTesiProfesore);
         TextView tipologiaTesiProfessoreTextView = view.findViewById(R.id.insertTipologiaTesiProfessore);
         TextView dataPubblicazioneProfessoreTextView = view.findViewById(R.id.insertDataPubblicazioneTesiProfessore);
-        TextView cicloCdlProfessoreTextView = view.findViewById(R.id.insertTextViewCicloCDL);
+        TextView cicloCdlProfessoreTextView = view.findViewById(R.id.insertCicloCdlTesiProfessore);
         TextView abstractProfessoreTextView = view.findViewById(R.id.insertAbstractTesiProfessore);
 
-        Log.d("Valori", String.valueOf(args));
+        Log.d("ValoriInfo", String.valueOf(args));
 
         if (args != null) { //se non sono null
 

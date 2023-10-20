@@ -38,12 +38,11 @@ public class TesiTabProfessoreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewPagerAdapter = new TesiTabProfessoreAdapter((FragmentActivity) requireContext());
+        savedInstanceState = getArguments();
+        viewPagerAdapter = new TesiTabProfessoreAdapter((FragmentActivity) requireContext(),savedInstanceState);
         viewPager2.setAdapter(viewPagerAdapter);
 
-        Log.d("qualcosa","qualcosa");
-        Bundle args = getArguments();
-        Log.d("skibida", String.valueOf(args));
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

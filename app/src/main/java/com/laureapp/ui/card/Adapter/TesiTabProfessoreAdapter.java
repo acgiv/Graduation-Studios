@@ -2,6 +2,7 @@ package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,14 +19,15 @@ public class TesiTabProfessoreAdapter extends FragmentStateAdapter {
     String email;
     Bundle args;
 
-    public TesiTabProfessoreAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public TesiTabProfessoreAdapter(@NonNull FragmentActivity fragmentActivity, Bundle savedInstanceState) {
         super(fragmentActivity);
+        this.args = savedInstanceState; // Imposta il bundle con gli argomenti
+
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        //Restituisci il fragment associato a ciascun tab
         switch (position) {
             case 0:
                 InfoTesiFragment infoTesiFragment = new InfoTesiFragment();

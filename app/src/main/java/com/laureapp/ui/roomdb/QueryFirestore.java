@@ -11,7 +11,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.entity.Professore;
+import com.laureapp.ui.roomdb.entity.Ricevimenti;
 import com.laureapp.ui.roomdb.entity.Studente;
+import com.laureapp.ui.roomdb.entity.TaskStudente;
 import com.laureapp.ui.roomdb.entity.TaskTesi;
 import com.laureapp.ui.roomdb.entity.Utente;
 
@@ -23,6 +25,8 @@ public class QueryFirestore {
     CollectionReference studentiRef = db.collection("Utenti/Studenti/Studenti");
     CollectionReference professoriRef = db.collection("Utenti/Professori/Professori");
     CollectionReference taskRef = db.collection("Task");
+    CollectionReference taskStudentRef = db.collection("TaskStudente");
+    CollectionReference ricevimentiRef = db.collection("Ricevimenti");
 
 
     public CompletableFuture<Long> trovaIdUtenteMax(Context context) {
@@ -122,6 +126,62 @@ public class QueryFirestore {
                         TaskTesi taskTesi = document.toObject(TaskTesi.class);
                         if (taskTesi != null) {
                             Long idMax = taskTesi.getId_task();
+                            future.complete(idMax);
+                        }
+                    } else {
+                        future.complete(0L); // Completa con 0L in caso di nessun studente
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Errore durante la ricerca dell'ID più grande degli studenti", e);
+                    ControlInput.showToast(context, "Errore durante la ricerca dell'ID più grande degli studenti");
+                    future.completeExceptionally(e); // Completa con l'eccezione in caso di errore
+                });
+
+        return future;
+    }
+
+    public CompletableFuture<Long> trovaIdTaskStudenteMax(Context context) {
+        CompletableFuture<Long> future = new CompletableFuture<>();
+
+        taskStudentRef
+                .orderBy("id_task", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                        TaskStudente taskStudente = document.toObject(TaskStudente.class);
+                        if (taskStudente != null) {
+                            Long idMax = taskStudente.getId_task();
+                            future.complete(idMax);
+                        }
+                    } else {
+                        future.complete(0L); // Completa con 0L in caso di nessun studente
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Errore durante la ricerca dell'ID più grande degli studenti", e);
+                    ControlInput.showToast(context, "Errore durante la ricerca dell'ID più grande degli studenti");
+                    future.completeExceptionally(e); // Completa con l'eccezione in caso di errore
+                });
+
+        return future;
+    }
+
+    public CompletableFuture<Long> trovaIdRicevimentiMax(Context context) {
+        CompletableFuture<Long> future = new CompletableFuture<>();
+
+        ricevimentiRef
+                .orderBy("id_ricevimento", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                        Ricevimenti ricevimenti = document.toObject(Ricevimenti.class);
+                        if (ricevimenti != null) {
+                            Long idMax = ricevimenti.getId_ricevimento();
                             future.complete(idMax);
                         }
                     } else {

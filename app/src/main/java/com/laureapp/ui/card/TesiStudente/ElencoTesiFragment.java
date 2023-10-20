@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.SearchView;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -32,6 +35,7 @@ import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +55,9 @@ public class ElencoTesiFragment extends Fragment {
     ArrayList<Long> idTesiList = new ArrayList<>();
 
     ArrayList<Vincolo> vincoliList = new ArrayList<>();
+
+    ArrayList<Long> idUtentiList = new ArrayList<>();
+    ArrayList<Long> idProfessoreList = new ArrayList<>();
 
     Long media;
     Long esami;
@@ -85,7 +92,7 @@ public class ElencoTesiFragment extends Fragment {
         Button filterButton = view.findViewById(R.id.filterButton);
         filterButton.setOnClickListener(view1 -> {
             view.setAlpha(0.1f); // Imposta l'opacità desiderata (0.0-1.0)
-            showFilterDialog(view,tesiList,utentiList); //quando viene cliccato il pulsante filtra si apre il dialog
+            showFilterDialog(view, tesiList, utentiList); //quando viene cliccato il pulsante filtra si apre il dialog
         });
 
 
@@ -101,10 +108,10 @@ public class ElencoTesiFragment extends Fragment {
         });
 
         //carico i dati dei vincoli
-        loadVincoloData().addOnCompleteListener(taskVincolo->{
-            if(taskVincolo.isSuccessful()){
+        loadVincoloData().addOnCompleteListener(taskVincolo -> {
+            if (taskVincolo.isSuccessful()) {
                 vincoliList = taskVincolo.getResult();
-            }else{
+            } else {
                 Log.e("vincolo Firestore Error", "Error getting vincolo data", taskVincolo.getException());
 
             }
@@ -132,12 +139,11 @@ public class ElencoTesiFragment extends Fragment {
         });
 
 
-
-
     }
 
     /**
      * Questo metodo serve per caricare la lista di tutte le tesi
+     *
      * @return la lista delle tesi
      */
     private Task<ArrayList<Tesi>> loadAllTesiData() {
@@ -163,6 +169,7 @@ public class ElencoTesiFragment extends Fragment {
                             tesi.setTitolo((String) document.get("titolo"));
                             tesi.setTipologia((String) document.get("tipologia"));
 
+                            tesi.setVisualizzazioni((Long) document.get("visualizzazioni"));
                             if (tesi != null) {
                                 tesiList.add(tesi);
                             }
@@ -175,6 +182,7 @@ public class ElencoTesiFragment extends Fragment {
     /**
      * Questo metodo serve per prendere ed aggiornare la lista delle tesi da firestore filtrandole
      * in base al testo di ricerca
+     *
      * @param searchText rappresenta il titolo della tesi da ricercare
      * @return la lista delle tesi filtrata
      */
@@ -219,6 +227,12 @@ public class ElencoTesiFragment extends Fragment {
                 });
     }
 
+    /**
+     * Questo metodo consente di visualizzare il popup filtra tesi e i relativi metodi per filtrare le stesse
+     * @param rootView vista principale
+     * @param tesiList lista delle tesi
+     * @param utentiList lista degli utenti
+     */
     public void showFilterDialog(View rootView, ArrayList<Tesi> tesiList, List<Utente> utentiList) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_popup_filtra_tesi, null);
@@ -236,6 +250,13 @@ public class ElencoTesiFragment extends Fragment {
         EditText editTextTempistiche = view.findViewById(R.id.tempiticheTesi);
 
         /**
+         * Definisco gli spinner per prendere il valore selezionato dall'utente
+         */
+        Spinner corsoSpinner = view.findViewById(R.id.corso_filtro);
+        Spinner ordinaperSpinner = view.findViewById(R.id.ordinaper);
+
+
+        /**
          * Gestione del bottone conferma
          */
         Button confermaButton = view.findViewById(R.id.avviaRicerca);
@@ -248,47 +269,86 @@ public class ElencoTesiFragment extends Fragment {
             String esamiString = editTextEsami.getText().toString();
             String tempisticheString = editTextTempistiche.getText().toString();
 
+            //prendo i valori dagli spinner
+            String selectedCorso = corsoSpinner.getSelectedItem().toString();
+            String selectedOrdinaper = ordinaperSpinner.getSelectedItem().toString();
+
+
             //converto in long da string
-            if(!mediaString.isEmpty() ){
-                 media = Long.parseLong(mediaString);
+            if (!mediaString.isEmpty()) {
+                media = Long.parseLong(mediaString);
 
             }
-            if(!esamiString.isEmpty()){
-                 esami = Long.parseLong(esamiString);
+            if (!esamiString.isEmpty()) {
+                esami = Long.parseLong(esamiString);
 
             }
-            if(!tempisticheString.isEmpty()){
-                 tempistiche = Long.parseLong(tempisticheString);
+            if (!tempisticheString.isEmpty()) {
+                tempistiche = Long.parseLong(tempisticheString);
 
             }
-
 
 
             //filtro in base al cognome del relatore
-           Long id_utente =  getIdUtenteByCognome(cognome);
-           if(id_utente != null) {
+            Long id_utente = getIdUtenteByCognome(cognome);
+            if (id_utente != null) {
 
-               Long id_professore = getIdProfessorebyIdUtente(id_utente);
+                Long id_professore = getIdProfessorebyIdUtente(id_utente);
                 //chiamo il metodo per caricare gli id  delle tesi in base all'id del professore
-               loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
-                   if (task.isSuccessful()) { //se il task è completato con successo
-                       idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
-                       loadTesiDataByCognomeRelatore(idTesiList);
-                       filterDialog.dismiss();
-                   } else {
-                       Log.e("Firestore Error", "Error getting data", task.getException());
-                   }
-               });
+                loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) { //se il task è completato con successo
+                        idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
+                        loadTesiDataByCognomeRelatore(idTesiList);
+                        filterDialog.dismiss();
+                    } else {
+                        Log.e("Firestore Error", "Error getting data", task.getException());
+                    }
+                });
 
-           }
-           //filtro in base alla tipologia e/o al ciclo di laurea
-            filterTesiByTipologiaCdl(tipologia,ciclocdl);
+            }
+            //filtro in base alla tipologia e/o al ciclo di laurea
+            filterTesiByTipologiaCdl(tipologia, ciclocdl);
 
-           //filtro in base alla media - esami - tempistiche
-            filterTesiByMediaEsTempistiche(media,esami,tempistiche);
+            //filtro in base alla media - esami - tempistiche
+            filterTesiByMediaEsTempistiche(media, esami, tempistiche);
 
-           //chiamo questo metodo se non ci sono risultati
-           listIsBlank(context);
+            //filtro in base al corso di laurea
+            idUtentiList = getIdUtenteByCorso(selectedCorso); //prendo tutti gli id degli utenti di un det. corso
+            idProfessoreList = getIdProfessoreListbyIdUtente(idUtentiList); //prendo tutti i professori corrispondenti a quel id utente
+            loadIdTesiDataByProfessoriList(idProfessoreList).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) { //se il task è completato con successo
+                    idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
+                    filterTesiByCDL(idTesiList); //filtro le tesi in base alla lista delle tesi associate al corso di laurea
+                    filterDialog.dismiss();
+                } else {
+                    Log.e("Firestore Error", "Error getting data", task.getException());
+                }
+            });
+
+            /**
+             * Definisco lo switch per ordinare in maniera ascendente o discentente
+             */
+            SwitchMaterial ordinamentoSwitch = view.findViewById(R.id.ordinamento);
+
+            boolean switchValue = ordinamentoSwitch.isChecked(); //controllo se il pulsante sia on o off
+
+            //ordino in base alle visualizzazioni
+            if (selectedOrdinaper.equals("Visualizzazioni")) {
+                orderTesiByVisualizzazioni(switchValue);
+            } else if (selectedOrdinaper.equals("Media")) {
+                orderTesiByMedia(switchValue);
+
+            } else if (selectedOrdinaper.equals("Esami Mancanti")) {
+                orderTesiByEsami(switchValue);
+
+            } else if (selectedOrdinaper.equals("Tempistiche")) {
+                orderTesiByTempistiche(switchValue);
+
+            }
+
+
+            //chiamo questo metodo se non ci sono risultati
+            listIsBlank(context);
         });
 
         /**
@@ -312,9 +372,9 @@ public class ElencoTesiFragment extends Fragment {
     }
 
 
-
     /**
      * Metodo per ottenere gli id degli utenti cercandoli in base al cognome
+     *
      * @return id delle tesi
      */
     private Long getIdUtenteByCognome(String cognome) {
@@ -332,22 +392,63 @@ public class ElencoTesiFragment extends Fragment {
     }
 
     /**
+     * Metodo per ottenere gli id degli utenti cercandoli in base al cognome
+     *
+     * @return id delle tesi
+     */
+    private ArrayList<Long> getIdUtenteByCorso(String corso) {
+
+        ArrayList<Long> idUtenti = new ArrayList<>();
+
+        for (Utente utente : utentiList) { //ciclo gli utenti
+
+            if (utente.getNome_cdl().equalsIgnoreCase(corso)) { //se il corso dell'utente corrisponde
+                idUtenti.add(utente.getId_utente());  //ritorno il suo id
+
+            }
+
+        }
+        return idUtenti;
+    }
+
+
+    /**
+     * Metodo per ottenere gli ID dei professori in base a una lista di ID utente
+     *
+     * @param idUtentiList Lista di ID utente
+     * @return Lista di ID dei professori
+     */
+    private ArrayList<Long> getIdProfessoreListbyIdUtente(ArrayList<Long> idUtentiList) {
+        ArrayList<Long> idProfessori = new ArrayList<>();
+
+        for (Long idUtente : idUtentiList) {
+            for (Professore professore : professoriList) {
+                if (professore.getId_utente().equals(idUtente)) {
+                    idProfessori.add(professore.getId_professore());
+                }
+            }
+        }
+
+        return idProfessori;
+    }
+
+    /**
      * Metodo per ottenre l'id del professore, qualora lo sia, in base all'id utente
+     *
      * @param id_utente
      * @return id del professore
      */
-    private Long getIdProfessorebyIdUtente(Long id_utente){
+    private Long getIdProfessorebyIdUtente(Long id_utente) {
         Long id_professore = null;
 
-        for(Professore professore : professoriList){
-            if(professore.getId_utente().equals(id_utente)){
+        for (Professore professore : professoriList) {
+            if (professore.getId_utente().equals(id_utente)) {
                 return id_professore = professore.getId_professore();
             }
         }
 
         return id_professore;
     }
-
 
     /**
      * Questo metodo mi permette di caricare da firestore gli id delle tesi dando come parametro l'id del professore
@@ -375,6 +476,37 @@ public class ElencoTesiFragment extends Fragment {
                 });
     }
 
+    private Task<ArrayList<Long>> loadIdTesiDataByProfessoriList(List<Long> idProfessoriList) {
+        final ArrayList<Long> idTesiList = new ArrayList<>();
+
+        if (idProfessoriList.isEmpty()) {
+            // Se la lista dei professori è vuota, restituisci una lista vuota
+            return Tasks.forResult(idTesiList);
+        }
+
+        return FirebaseFirestore.getInstance()
+                .collection("TesiProfessore")
+                .whereIn("id_professore", idProfessoriList)
+                .get()
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            Long data = doc.getLong("id_tesi");
+                            if (data != null) {
+                                idTesiList.add(data);
+                            }
+                        }
+                    }
+                    return idTesiList;
+                });
+    }
+
+    /**
+     * Questo metodo mi permette di caricare da firestore le tesi in base al cognome del relatore
+     *
+     * @param idTesiList lista di tutti gli id delle tesi
+     * @return una lista di tipo Tesi contenente tutte le tesi filtrate per cognome relatore
+     */
     private Task<ArrayList<Tesi>> loadTesiDataByCognomeRelatore(ArrayList<Long> idTesiList) {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
 
@@ -470,10 +602,11 @@ public class ElencoTesiFragment extends Fragment {
 
     /**
      * Questo metodo serve per far comparire un messaggio quando non ci sono tesi dopo aver filtrato
+     *
      * @param context
      */
-    private void listIsBlank(Context context){
-        if(tesiList.isEmpty()){
+    private void listIsBlank(Context context) {
+        if (tesiList.isEmpty()) {
             Toast toast = Toast.makeText(context, "Nessun risultato", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.TOP, 0, 0); // Imposta il Toast in alto
             toast.show();
@@ -509,27 +642,25 @@ public class ElencoTesiFragment extends Fragment {
         });
     }
 
-    private void filterTesiByMediaEsTempistiche(Long media, Long numero_esami_mancanti, Long tempistiche) {
+    /**
+     * Questo metodo mi consente di filtrare la lista tesiList in base al corso di laurea
+     * @param idTesiList
+     */
+    private void filterTesiByCDL(ArrayList<Long> idTesiList) {
         ArrayList<Tesi> filteredTesiList = new ArrayList<>();
 
         for (Tesi tesi : tesiList) {
-            Long id_vincolo = tesi.getId_vincolo();
-
-            // Cerca il vincolo corrispondente nell'elenco dei vincoli
-            Vincolo vincolo = findVincoloById(id_vincolo);
-            Log.d("cogn9", String.valueOf(vincolo));
-            Log.d("cogn10",String.valueOf(vincolo.getId_vincolo()));
-            if (vincolo != null) {
-                // Ora puoi applicare i filtri sui campi di vincolo
-                if ((media == null || vincolo.getMedia_voti() <= media)
-                        && (numero_esami_mancanti == null || vincolo.getEsami_mancanti_necessari() <= numero_esami_mancanti)
-                        && (tempistiche == null || vincolo.getTempistiche() <= tempistiche)) {
-                    filteredTesiList.add(tesi);
-                }
+            if (idTesiList.contains(tesi.getId_tesi())) {
+                // La tesi è presente nella lista di ID delle tesi
+                filteredTesiList.add(tesi);
             }
         }
 
-        // Ora puoi aggiornare l'adapter con la lista filtrata
+        if (filteredTesiList.isEmpty()) { //se la lista ritorna un valore vuoto chiamo il metodo che visualizza il toast Nesun risultato
+            listIsBlank(context);
+        }
+
+        //aggiorno l'adapter con la lista filtrata
         if (adapter != null) {
             adapter.clear();
             adapter.addAll(filteredTesiList);
@@ -537,8 +668,43 @@ public class ElencoTesiFragment extends Fragment {
         }
     }
 
+    /**
+     * Questo metodo mi consente di filtrare la lista tesiList in base alla media, al numero di esami mancanti e le tempistiche
+     * @param media
+     * @param numero_esami_mancanti
+     * @param tempistiche
+     */
+    private void filterTesiByMediaEsTempistiche(Long media, Long numero_esami_mancanti, Long tempistiche) {
+        ArrayList<Tesi> filteredTesiList = new ArrayList<>(); //lista che conterrà le tesi flitrate
 
+        for (Tesi tesi : tesiList) {
+            Long id_vincolo = tesi.getId_vincolo();
 
+            // Cerco il vincolo corrispondente nell'elenco dei vincoli
+            Vincolo vincolo = findVincoloById(id_vincolo);
+            if (vincolo != null) {
+                // Applico i filtri
+                if ((media == null || vincolo.getMedia_voti() <= media) // se la mediaè null oppure la media del vincolo <= della media passata come parametro
+                        && (numero_esami_mancanti == null || vincolo.getEsami_mancanti_necessari() <= numero_esami_mancanti) // se gli esami sono null oppure gli esami mancanti <= degli esami mancanti come parametro
+                        && (tempistiche == null || vincolo.getTempistiche() <= tempistiche)) { // se le tempistiche sono null oppure le tempistiche del vincolo <= delle tempistiche passate come parametro
+                    filteredTesiList.add(tesi);
+                }
+            }
+        }
+
+        //aggiorno l'adapter con la lista filtrata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(filteredTesiList);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Metodo utilizzato per ottenere l'id del vincolo
+     * @param id
+     * @return
+     */
     private Vincolo findVincoloById(Long id) {
         for (Vincolo vincolo : vincoliList) {
             if (vincolo.getId_vincolo().equals(id)) {
@@ -548,5 +714,145 @@ public class ElencoTesiFragment extends Fragment {
         return null; // Restituisci null se non viene trovato alcun vincolo corrispondente
     }
 
+    /**
+     * Metodo per Ordinare le tesi in base alle visualizzazioni in maniera ascendente o discendente
+     * @param ordinamentoAscendente valore del pulsante Ordinamento Ascendente
+     */
+    private void orderTesiByVisualizzazioni(boolean ordinamentoAscendente) {
+        ArrayList<Tesi> sortedTesiList = new ArrayList<>(tesiList); //lista che conterrà le tesi filtraate
+
+        // Ordina la lista in base al numero di visualizzazioni
+        Collections.sort(sortedTesiList, (tesi1, tesi2) -> { //uso il metodo sort del package Collections per confrontare la prima tesi con la seconda nel ciclo for
+            Long visualizzazioni1 = tesi1.getVisualizzazioni();
+            Long visualizzazioni2 = tesi2.getVisualizzazioni();
+
+            if (ordinamentoAscendente) {
+                return visualizzazioni1.compareTo(visualizzazioni2); // Ordine ascendente
+            } else {
+                return visualizzazioni2.compareTo(visualizzazioni1); // Ordine decrescente
+            }
+        });
+
+        // Aggiorna l'adapter con la lista ordinata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(sortedTesiList);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Metodo per Ordinare le tesi in base alla media in maniera ascendente o discendente
+     * @param ordinamentoAscendente valore del pulsante Ordinamento Ascendente
+     */
+    private void orderTesiByMedia(boolean ordinamentoAscendente) {
+
+        // Ordina la copia di vincoliList in base alla media dei voti
+        Collections.sort(vincoliList, (vincolo1, vincolo2) -> {
+            Long media1 = vincolo1.getMedia_voti();
+            Long media2 = vincolo2.getMedia_voti();
+            if (ordinamentoAscendente) {
+                return media1.compareTo(media2); // Ordine ascendente
+            } else {
+                return media2.compareTo(media1); // Ordine decrescente
+            }
+        });
+
+        // Ordina anche tesiList in base all'ordine di vincoliList
+        List<Tesi> tesiOrdinate = new ArrayList<>();
+        for (Vincolo vincolo : vincoliList) {
+            Long vincoloId = vincolo.getId_vincolo();
+            for (Tesi tesi : tesiList) {
+                if (tesi.getId_vincolo() == vincoloId) {
+                    tesiOrdinate.add(tesi);
+                    break;
+                }
+            }
+        }
+
+        // Aggiorna l'adapter con la lista ordinata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(tesiOrdinate);
+            adapter.notifyDataSetChanged();
+        }
+    }
+    /**
+     * Metodo per Ordinare le tesi in base agli esami mancanti in maniera ascendente o discendente
+     * @param ordinamentoAscendente valore del pulsante Ordinamento Ascendente
+     */
+    private void orderTesiByEsami(boolean ordinamentoAscendente) {
+
+        // Ordina la copia di vincoliList in base alla media dei voti
+        Collections.sort(vincoliList, (vincolo1, vincolo2) -> {
+            Long esamiMancanti1 = vincolo1.getEsami_mancanti_necessari();
+            Long esamiMancanti2 = vincolo2.getEsami_mancanti_necessari();
+            if (ordinamentoAscendente) {
+                return esamiMancanti1.compareTo(esamiMancanti2); // Ordine ascendente
+            } else {
+                return esamiMancanti2.compareTo(esamiMancanti1); // Ordine decrescente
+            }
+        });
+
+        // Ordina anche tesiList in base all'ordine di vincoliList
+        List<Tesi> tesiOrdinate = new ArrayList<>();
+        for (Vincolo vincolo : vincoliList) {
+            Long vincoloId = vincolo.getId_vincolo();
+            for (Tesi tesi : tesiList) {
+                if (tesi.getId_vincolo() == vincoloId) {
+                    tesiOrdinate.add(tesi);
+                    break;
+                }
+            }
+        }
+
+        // Aggiorna l'adapter con la lista ordinata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(tesiOrdinate);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Metodo per Ordinare le tesi in base alle tempistiche in maniera ascendente o discendente
+     * @param ordinamentoAscendente valore del pulsante Ordinamento Ascendente
+     */
+    private void orderTesiByTempistiche(boolean ordinamentoAscendente) {
+
+        // Ordina la copia di vincoliList in base alla media dei voti
+        Collections.sort(vincoliList, (vincolo1, vincolo2) -> {
+            Long tempistiche1 = vincolo1.getTempistiche();
+            Long tempistiche2 = vincolo2.getTempistiche();
+            if (ordinamentoAscendente) {
+                return tempistiche1.compareTo(tempistiche2); // Ordine ascendente
+            } else {
+                return tempistiche2.compareTo(tempistiche1); // Ordine decrescente
+            }
+        });
+
+        // Ordina anche tesiList in base all'ordine di vincoliList
+        List<Tesi> tesiOrdinate = new ArrayList<>();
+        for (Vincolo vincolo : vincoliList) {
+            Long vincoloId = vincolo.getId_vincolo();
+            for (Tesi tesi : tesiList) {
+                if (tesi.getId_vincolo() == vincoloId) {
+                    tesiOrdinate.add(tesi);
+                    break;
+                }
+            }
+        }
+
+        // Aggiorna l'adapter con la lista ordinata
+        if (adapter != null) {
+            adapter.clear();
+            adapter.addAll(tesiOrdinate);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+
+
 
 }
+

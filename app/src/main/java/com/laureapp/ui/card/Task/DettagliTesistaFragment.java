@@ -43,7 +43,7 @@ import java.util.Objects;
  */
 public class DettagliTesistaFragment extends Fragment {
 
-
+    
     Context context;
     private NavController mNav;
 

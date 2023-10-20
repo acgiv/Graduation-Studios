@@ -94,7 +94,7 @@
         tools:layout="@layout/fragment_dettagli_tesista">
         <action
             android:id="@+id/action_dettagli_tesista_to_task"
-            app:destination="@id/taskFragment" />
+            app:destination="@id/taskStudenteFragment" />
         <action
             android:id="@+id/action_dettagli_tesista_to_lista_tesisti"
             app:destination="@id/tesisti" />
@@ -125,10 +125,18 @@
             app:destination="@id/messaggiFragment" />
     </fragment>
 
-    <!--Fragment task -->
+    <!--Fragment task tesi -->
     <fragment
         android:id="@+id/taskFragment"
         android:name="com.laureapp.ui.card.Task.TaskTesiFragment"
+        android:label="Task"
+        tools:layout="@layout/fragment_task">
+    </fragment>
+
+    <!--Fragment task studente -->
+    <fragment
+        android:id="@+id/taskStudenteFragment"
+        android:name="com.laureapp.ui.card.Task.TaskStudenteFragment"
         android:label="Task"
         tools:layout="@layout/fragment_task">
         <action

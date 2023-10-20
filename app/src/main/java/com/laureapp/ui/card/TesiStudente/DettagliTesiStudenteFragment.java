@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -55,11 +56,13 @@ public class DettagliTesiStudenteFragment extends Fragment {
     Long id_utente;
     Long id_studente;
 
+    Long visualizzazioni;
     Context context;
     String email;
 
     Long media;
     Long esamiMancanti;
+
 
     StudenteModelView studenteView = new StudenteModelView(context);
 
@@ -95,6 +98,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
             tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
             if (tesi != null) {
+                //mi passo tutti i parametri di una Tesi
                 titolo = tesi.getTitolo();
                 descrizione = tesi.getAbstract_tesi();
                 tipologia = tesi.getTipologia();
@@ -102,6 +106,10 @@ public class DettagliTesiStudenteFragment extends Fragment {
                 cicloCdl = tesi.getCiclo_cdl();
                 id_vincolo = tesi.getId_vincolo();
                 id_tesi = tesi.getId_tesi();
+                visualizzazioni = tesi.getVisualizzazioni();
+
+                incrementaVisualizzazioni(titolo); //incremento le visualizzazioni della tesi che sto visualizzando
+
                 titoloTextView.setText(titolo);
                 abstractTextView.setText(descrizione);
                 tipologiaTextView.setText(tipologia);
@@ -180,6 +188,11 @@ public class DettagliTesiStudenteFragment extends Fragment {
         return null;
     }
 
+    /**
+     * Metodo utilizzato per nascondere il pulsante Richiedi Tesi qualora abbia già la tesi che si sta visualizzando
+     * @param id_tesi
+     * @param view
+     */
     private void StudenteHasATesi(Long id_tesi, View view) {
         context = getContext();
         email = getEmailFromSharedPreferences(context); // Chiamata al metodo per ottenere la mail
@@ -215,6 +228,12 @@ public class DettagliTesiStudenteFragment extends Fragment {
         }
     }
 
+    /**
+     * Metodo utilizzato per verificare se lo studente rispetti i vincoli in modo tale da poter richiedere la tesi
+     * @param view
+     * @param media
+     * @param esamiMancanti
+     */
     private void StudenteMatchesVincoli(View view,Long media,Long esamiMancanti) {
         List<Studente> studenti;
         context = getContext();
@@ -244,5 +263,47 @@ public class DettagliTesiStudenteFragment extends Fragment {
             }
         }
     }
+
+    /**
+     * Metodo utilizzato per incrementare le visualizzazioni di una tesi. Quando si visualizza nel dettaglio una tesi il valore viene incrementato di uno al fine di
+     * stilare una classifica.
+     * @param titoloTesi
+     */
+    private void incrementaVisualizzazioni(String titoloTesi) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference tesiRef = db.collection("Tesi");
+
+        Query query = tesiRef.whereEqualTo("titolo", titoloTesi);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    // Ottieni il documento corrispondente (potrebbe esserci più di uno, ma ne usiamo il primo)
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+
+                    // Estrai l'ID del documento
+                    String documentId = documentSnapshot.getId();
+
+                    // Incrementa le visualizzazioni utilizzando l'ID del documento
+                    tesiRef
+                            .document(documentId)
+                            .update("visualizzazioni", visualizzazioni + 1)
+                            .addOnSuccessListener(aVoid -> {
+                                // L'incremento è riuscito, puoi fare qualcosa in caso di successo
+                                visualizzazioni++; // Aggiorna anche il valore locale
+                                // Puoi anche aggiornare la visualizzazione nell'UI, se necessario
+                            })
+                            .addOnFailureListener(e -> {
+                                // Si è verificato un errore durante l'incremento
+                                Log.e("Firestore Error", "Error incrementing visualizzazioni", e);
+                            });
+                }
+            } else {
+                Log.e("Firestore Error", "Error querying Tesi collection", task.getException());
+            }
+        });
+    }
+
 
 }

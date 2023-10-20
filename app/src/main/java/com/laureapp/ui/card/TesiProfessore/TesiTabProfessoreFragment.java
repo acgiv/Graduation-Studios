@@ -42,8 +42,8 @@ public class TesiTabProfessoreFragment extends Fragment {
         viewPagerAdapter = new TesiTabProfessoreAdapter((FragmentActivity) requireContext(),savedInstanceState);
         viewPager2.setAdapter(viewPagerAdapter);
 
-        /*Bundle args = getArguments();
-        Log.d("Argomenti", String.valueOf(args));*/
+        Bundle args = getArguments();
+        Log.d("Argomenti", String.valueOf(args));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

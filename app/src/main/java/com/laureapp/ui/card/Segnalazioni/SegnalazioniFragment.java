@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.room.Room;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,11 +40,13 @@ import android.app.AlertDialog;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.SegnalazioniAdapter;
 import com.laureapp.ui.roomdb.QueryFirestore;
+import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Segnalazione;
 import com.laureapp.ui.roomdb.repository.SegnalazioneRepository;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteTesiModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+import com.laureapp.ui.roomdb.dao.SegnalazioneDao;
 
 public class SegnalazioniFragment extends Fragment {
 
@@ -86,7 +89,8 @@ public class SegnalazioniFragment extends Fragment {
             Log.d("Segn ruolo ", ruolo);
         }
 
-        View rootView = inflater.inflate(R.layout.fragment_segnalazioni_studente, container, false);;
+
+    View rootView = inflater.inflate(R.layout.fragment_segnalazioni_studente, container, false);;
 
         email = getEmailFromSharedPreferences(context);
         Log.d("segnM", email);
@@ -99,16 +103,15 @@ public class SegnalazioniFragment extends Fragment {
 
 
             //Ricerca Tesi
-            db.collection("Segnalazioni")
+            db.collection("StudenteTesi")
                     .whereEqualTo("id_studente", id_studente)
                     .get()
                     .addOnCompleteListener(task -> {
                         if(task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Ottieni il valore id_tesi dal documento
-                                String idTesi = document.getString("id_tesi");
+                                idTesiDesiderata = document.getLong("id_tesi");
                                 // Ottieni l'ID della tesi desiderata
-                                idTesiDesiderata = Long.parseLong(idTesi);
                                 Log.d("tesiStudente", String.valueOf(idTesiDesiderata));
                             }
                         }else {
@@ -132,7 +135,7 @@ public class SegnalazioniFragment extends Fragment {
                 });
 
         // Ottieni il riferimento alla ListView
-        ListView listView = rootView.findViewById(R.id.segn_list_view);
+        //ListView listView = rootView.findViewById(R.id.segn_list_view);
 
         // Crea un'istanza del repository delle segnalazioni
         SegnalazioneRepository segnalazioneRepository = new SegnalazioneRepository(requireContext());
@@ -140,23 +143,40 @@ public class SegnalazioniFragment extends Fragment {
         // Ottieni le segnalazioni per la tesi desiderata dal repository
         segnalazioniList = segnalazioneRepository.findSegnalazioniByTesiId(idTesiDesiderata);
 
+        //Recupera i dati dalla collezione "Segnalazioni"
+        segnalazioniRef.get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        for(QueryDocumentSnapshot document : task.getResult()){
+                            Segnalazione segnalazione = document.toObject(Segnalazione.class);
+                            segnalazioniList.add(segnalazione);
+                        }
 
-        // Crea l'adapter personalizzato e imposta sulla ListView
-        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList);
-        // Collega l'adapter alla ListView
-        listView.setAdapter(adapter);
+                        // Ottieni il riferimento alla ListView
+                        ListView listView = rootView.findViewById(R.id.segn_list_view);
+                        // Crea l'adapter personalizzato e imposta sulla ListView
+                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList);
+                        // Collega l'adapter alla ListView
+                        listView.setAdapter(adapter);
 
-        // Imposta un listener per gli elementi della ListView
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Ottieni il NavController dalla tua Activity principale
-                NavController navController = NavHostFragment.findNavController(SegnalazioniFragment.this);
+                        // Imposta un listener per gli elementi della ListView
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                // Ottieni il NavController dalla tua Activity principale
+                                NavController navController = NavHostFragment.findNavController(SegnalazioniFragment.this);
 
-                // Esegui la navigazione verso DiscussioneFragment
-                navController.navigate(R.id.action_segnalazioniFragment_to_discussioneFragment);
-            }
-        });
+                                // Esegui la navigazione verso DiscussioneFragment
+                                navController.navigate(R.id.action_segnalazioniFragment_to_discussioneFragment);
+                            }
+                        });
+
+                    }else {
+                        Log.d(TAG, "Error getting documents: " + task.getException().getMessage());
+                    }
+                });
+
+
 
         //Bottone nuova segnalazione
         ImageButton btnNS = rootView.findViewById(R.id.add_segn_ImageButton);
@@ -186,6 +206,8 @@ public class SegnalazioniFragment extends Fragment {
 
         EditText editTextTitolo = view.findViewById(R.id.titolo_register);
         EditText editTextRichiesta = view.findViewById(R.id.richiesta_register);
+
+        Log.d("btnNS","Bottone nuova segnalazione");
 
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -237,6 +259,7 @@ public class SegnalazioniFragment extends Fragment {
         queryFirestore.trovaIdSegnMax(context)
                         .thenAccept(idMax -> {
                             idMax = idMax + 1L;
+                            Log.d("idMax", String.valueOf(idMax));
                             segnMap.put("id_segn", idMax);
                             segnMap.put("id_tesi", id_tesi);
                             segnMap.put("Titolo", titolo);
@@ -244,30 +267,13 @@ public class SegnalazioniFragment extends Fragment {
 
                             // Supponendo che 'taskRef' sia un oggetto valido di tipo CollectionReference
                             Long finalIdMax = idMax;
+                            Log.d("finalIdMax", String.valueOf(finalIdMax));
                             segnRef.document().set(segnMap).addOnSuccessListener(
                                     aVoid -> addSegnToList(finalIdMax, titolo, richiesta, id_tesi)
                             ).addOnFailureListener(e -> {
                                 // Gestisci l'errore
                             });
                         });
-/*
-        // Aggiungi i dati nella collezione "Segnalazioni"
-        db.collection("Segnalazioni")
-                .add(segnMap)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("FBSegn", "Dati aggiunti con successo");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("FBSegn", "Errore durante l'aggiunta dei dati: "+ e);
-                    }
-                });
-
- */
 
     }
 
@@ -311,6 +317,30 @@ public class SegnalazioniFragment extends Fragment {
     }
 
 
+    public void uptadeSQLiteFirestore () {
+        // Inizializza il database
+        RoomDbSqlLite myDatabase = Room.databaseBuilder(context, RoomDbSqlLite.class, "Graduation_Studio_V2").build();
+        SegnalazioneDao segnalazioneDao = myDatabase.segnalazioneDao();
+        // Recupera i dati dalla collezione "Segnalazioni" su Firestore
+        db.collection("Segnalazioni").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Recupera i valori da Firestore
+                    String titolo = document.getString("Titolo");
+                    String richiesta = document.getString("Richiesta");
+                    Long idTesi = document.getLong("id_tesi");
+                    Long idSegnalazioni = document.getLong("id_segn");
 
+                    // Crea un oggetto Segnalazione con i valori recuperati
+                    Segnalazione segnalazione = new Segnalazione(idSegnalazioni,idTesi,titolo,richiesta);
 
+                    // Aggiungi l'oggetto Segnalazione al database SQLite utilizzando il DAO appropriato
+                    segnalazioneDao.insert(segnalazione);// Assicurati di adattare questo all'implementazione del tuo DAO
+                }
+            } else {
+                Log.d(TAG, "Error getting documents: " + task.getException().getMessage());
+            }
+        });
+
+    }
 }

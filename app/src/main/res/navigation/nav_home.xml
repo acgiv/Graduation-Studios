@@ -39,10 +39,11 @@
             android:id="@+id/action_fragment_home_to_tesisti"
             app:destination="@id/tesisti" />
 
-        <!-- Home to messaggi fragment -->
+        <!-- Home to segnalazioni fragment -->
         <action
-            android:id="@+id/action_fragment_home_to_messaggiFragment"
-            app:destination="@id/messaggiFragment" />
+            android:id="@+id/action_fragment_home_to_segnStudentiFragment"
+            app:destination="@id/segnStudentiFragment" />
+
 
         <!-- Home to tesi professore fragment -->
         <action
@@ -118,6 +119,9 @@
         <action
             android:id="@+id/action_fragment_tesisti_to_dettagli_tesista"
             app:destination="@id/dettagli_tesista" />
+        <action
+            android:id="@+id/action_tesisti_to_segnFragment"
+            app:destination="@id/segnFragment" />
     </fragment>
 
     <!--Fragment dettagli tesista -->
@@ -134,29 +138,57 @@
             app:destination="@id/tesisti" />
     </fragment>
 
-    <!--Fragment messaggi -->
+    <!--Fragment segnalazioni-->
     <fragment
-        android:id="@+id/messaggiFragment"
-        android:name="com.laureapp.ui.home.MessaggiFragment"
-        android:label="Messaggi"
-        tools:layout="@layout/fragment_messaggi">
+        android:id="@+id/segnStudentiFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
+        android:label="Lista Segnalazioni"
+        tools:layout="@layout/fragment_segnalazioni_studente">
         <action
-            android:id="@+id/action_messaggiFragment_to_discussioneFragment"
+            android:id="@+id/action_segnalazioniFragment_to_discussioneFragment"
             app:destination="@id/discussioneFragment" />
         <action
-            android:id="@+id/action_messaggiFragment_to_fragment_home"
+            android:id="@+id/action_segnalazioniFragment_to_fragment_home"
             app:destination="@id/fragment_home" />
+        <action
+            android:id="@+id/action_segnStudentiFragment_to_newSegnalazioni"
+            app:destination="@id/newSegnalazione" />
     </fragment>
+
+    <fragment
+        android:id="@+id/segnFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
+        android:label="Lista Segnalazioni"
+        tools:layout="@layout/fragment_segnalazioni">
+        <action
+            android:id="@+id/action_segnalazioniFragment_to_discussioneFragment"
+            app:destination="@id/discussioneFragment" />
+        <action
+            android:id="@+id/action_segnFragment_to_tesisti"
+            app:destination="@id/tesisti" />
+    </fragment>
+
 
     <!--Fragment discussione -->
     <fragment
         android:id="@+id/discussioneFragment"
-        android:name="com.laureapp.ui.home.DiscussioneFragment"
-        android:label="Discussione"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
+        android:label="Dettagni Segnalazione"
         tools:layout="@layout/fragment_discussione">
         <action
-            android:id="@+id/action_discussioneFragment_to_messaggiFragment"
-            app:destination="@id/messaggiFragment" />
+            android:id="@+id/action_discussioneFragment_to_segnalazioneFragment"
+            app:destination="@id/segnStudentiFragment" />
+    </fragment>
+
+    <!--Fragment Nuova Segnalazione-->
+    <fragment
+        android:id="@+id/newSegnalazione"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
+        android:label="Nuova Segnalazione"
+        tools:layout="@layout/add_segn_popup" >
+        <action
+            android:id="@+id/action_newSegnFragment_to_segnStudentiFragment"
+            app:destination="@id/segnStudentiFragment" />
     </fragment>
 
     <!--Fragment task tesi -->

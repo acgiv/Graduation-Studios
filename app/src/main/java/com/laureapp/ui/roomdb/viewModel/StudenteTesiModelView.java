@@ -41,5 +41,10 @@ public class StudenteTesiModelView {
         return studenteTesiRepository.getIdTesiFromIdStudente(id);
     }
 
+    public Long findIdTesiByIdStudente(Long idStudente){
+        return studenteTesiRepository.findIdTesiByIdStudente(idStudente);
+    }
+
+
 
 }

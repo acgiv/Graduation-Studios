@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
-            args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
 
         }
 
@@ -99,7 +98,7 @@ public class HomeFragment extends Fragment {
         CardTesisti.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Tesisti", "cliccato Tesisti Professore");
-                mNav.navigate(R.id.action_fragment_home_to_tesisti);
+                mNav.navigate(R.id.action_fragment_home_to_tesisti, args);
             }else {
                 Log.d("Tesisti", "cliccato Tesisti Ospite");
                 mNav.navigate(R.id.action_fragment_home_to_tesisti);

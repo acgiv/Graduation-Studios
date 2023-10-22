@@ -155,7 +155,7 @@ public class SegnalazioniFragment extends Fragment {
                         // Ottieni il riferimento alla ListView
                         ListView listView = rootView.findViewById(R.id.segn_list_view);
                         // Crea l'adapter personalizzato e imposta sulla ListView
-                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList);
+                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList,args);
                         // Collega l'adapter alla ListView
                         listView.setAdapter(adapter);
 

@@ -71,7 +71,6 @@ public class TesistiFragment extends Fragment {
     Studente studente;
 
     private List<StudenteWithUtente> studentList = new ArrayList<>();
-    private List<StudenteWithUtente> filteredStudentList = new ArrayList<>();
     private String tesistaCercato = "";
 
 
@@ -86,9 +85,10 @@ public class TesistiFragment extends Fragment {
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            utente = Objects.requireNonNull(args.getSerializable("Utente", Utente.class));
+            utente = args.getSerializable("Utente", Utente.class);
             loadProfessorForUserId(utente.getId_utente());
         }
+
         mAuth = FirebaseAuth.getInstance();
 
     }
@@ -100,7 +100,7 @@ public class TesistiFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
         searchView = view.findViewById(R.id.searchTesistiView);
         listView = view.findViewById(R.id.listView);
-        adapter = new StudentAdapter(context, studentList,filteredStudentList);
+        adapter = new StudentAdapter(context, studentList);
 
         return view;
     }
@@ -129,6 +129,7 @@ public class TesistiFragment extends Fragment {
 
 
         listView.setAdapter(adapter);
+
 
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             // Recupera l'utente selezionato dalla lista
@@ -282,7 +283,6 @@ public class TesistiFragment extends Fragment {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
                 .collection("StudenteTesi")
-                .whereEqualTo("id_studente", id_studente)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -290,6 +290,7 @@ public class TesistiFragment extends Fragment {
                         for (QueryDocumentSnapshot studenteTesiDoc : task.getResult()) {
                             studenteIds.add(studenteTesiDoc.getLong("id_studente"));
                         }
+                        Log.d("IDSTUDENTI", studenteIds.toString());
                         return studenteIds;
                     } else {
                         throw new NoSuchElementException("Nessun risultato trovato con questo id_studente in StudenteTesi: " + id_studente);
@@ -304,6 +305,8 @@ public class TesistiFragment extends Fragment {
                         Task<StudenteWithUtente> task = getStudenteWithUtente(studenteId);
                         tasks.add(task);
                     }
+                    Log.d("COSAEQUI", tasks.toString());
+
 
                     return Tasks.whenAllSuccess(tasks).continueWith(resultTask -> {
                         // Otteniamo una lista di StudenteWithUtente
@@ -311,6 +314,7 @@ public class TesistiFragment extends Fragment {
                         for (Object studenteWithUtenteTask : resultTask.getResult()) {
                             studentiWithUtenti.add((StudenteWithUtente) studenteWithUtenteTask);
                         }
+                        Log.d("MOMOMOM", studentiWithUtenti.toString());
                         return studentiWithUtenti;
                     });
 
@@ -426,6 +430,7 @@ public class TesistiFragment extends Fragment {
             }
         }
         adapter.notifyDataSetChanged();
+        Log.d("LISTA_TESISTI_VERA", studentList.toString());
     }
 
 
@@ -528,6 +533,8 @@ public class TesistiFragment extends Fragment {
     private CompletableFuture<Utente> loadUtenteByStudenteSearched(Studente studente) {
         CompletableFuture<Utente> future = new CompletableFuture<>();
 
+        // Gestisci eventuali errori qui
+        // Completa il CompletableFuture con un'eccezione
         FirebaseFirestore.getInstance()
                 .collection("Utenti")
                 .document(studente.getId_utente().toString())
@@ -540,10 +547,7 @@ public class TesistiFragment extends Fragment {
                     utente.setCognome(documentSnapshot.getString("email"));
                     future.complete(utente); // Completa il CompletableFuture con l'utente
                 })
-                .addOnFailureListener(e -> {
-                    // Gestisci eventuali errori qui
-                    future.completeExceptionally(e); // Completa il CompletableFuture con un'eccezione
-                });
+                .addOnFailureListener(future::completeExceptionally);
 
         return future;
     }

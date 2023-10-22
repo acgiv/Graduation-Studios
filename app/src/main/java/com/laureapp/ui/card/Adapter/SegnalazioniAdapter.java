@@ -2,6 +2,7 @@ package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.laureapp.R;
 import com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment;
 import com.laureapp.ui.roomdb.entity.Segnalazione;
+import com.laureapp.ui.roomdb.entity.TaskStudente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +30,18 @@ import java.util.List;
 
 public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
 
-    public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioni) {
+    private final LayoutInflater inflater;
+    Context context;
+    private final List<Segnalazione> segnalazioni;
+    Bundle args;
+
+
+    public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioni, Bundle args) {
         super(context, 0, segnalazioni);
+        inflater = LayoutInflater.from(context);
+        this.context = context;
+        this.segnalazioni = segnalazioni;
+        this.args = args;
     }
 
     @Override

@@ -52,8 +52,6 @@ public class RegisterFragment extends Fragment {
     private Context context;
     private final CustomTextWatcher textWatcher = new CustomTextWatcher();
     private final HashMap<String,TextInputEditText> elem_text = new HashMap<>();
-    private final int error_color = com.google.android.material.R.color.design_default_color_error;
-    private FirebaseAuth mAuth;
     private Bundle bundle;
 
     /**
@@ -67,7 +65,6 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
 
         // Esegui qui eventuali operazioni di setup e inizializzazione
     }

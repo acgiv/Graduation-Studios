@@ -59,7 +59,13 @@
         android:id="@+id/profilo_studente"
         android:name="com.laureapp.ui.profilo.ProfiloFragment"
         android:label="Profilo"
-        tools:layout="@layout/fragment_profilo"/>
+        tools:layout="@layout/fragment_profilo">
+
+        <action
+            android:id="@+id/action_to_profilo"
+            app:destination="@id/profilo_studente" />
+
+    </fragment>
 
     <!--Fragment tesi studente -->
     <fragment

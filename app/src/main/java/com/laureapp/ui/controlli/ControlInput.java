@@ -351,7 +351,7 @@ public class ControlInput {
             ControlInput.set_error(inputLayout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error);
             return false;
         } else {
-            ControlInput.set_error(inputLayout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height_error);
+            ControlInput.set_error(inputLayout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
             return true;
         }
     }

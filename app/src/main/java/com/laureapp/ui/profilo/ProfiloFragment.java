@@ -5,10 +5,16 @@ import static com.google.android.material.textfield.TextInputLayout.END_ICON_PAS
 import android.content.Context;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import java.util.Arrays;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.MultiAutoCompleteTextView;
 
 
 import androidx.annotation.NonNull;
@@ -16,9 +22,7 @@ import androidx.annotation.Nullable;
 
 
 import androidx.fragment.app.Fragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,11 +42,16 @@ import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,16 +63,24 @@ public class ProfiloFragment extends Fragment {
     FragmentProfiloBinding binding;
     Bundle args;
     Context context;
-    private Utente utente;
-    private String email;
+
     UtenteModelView ut_view;
     StudenteModelView st_view;
     ProfessoreModelView pr_view;
-    private String ruolo;
     private FirebaseUser user;
+    private ProfiloFragment.CustomTextWatcher textWatcher;
+    private final HashMap<String, Object> elem_text = new HashMap<>();
+    private String ruolo;
+    private String email;
     private Studente studente;
+    private Utente utente;
     private Professore professore;
+    private String[] corsi;
+    private  ArrayList<String> validCourses;
+    private final Set<String> insertedCourses = new HashSet<>();
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
+    private boolean mod_corso = false;
+    private boolean annulla_corso = false;
 
 
     @Override
@@ -75,26 +92,31 @@ public class ProfiloFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        binding = FragmentProfiloBinding.inflate(inflater, container, false);
         context = requireContext();
-        ut_view = new UtenteModelView(context);
-        st_view = new StudenteModelView(context);
-        pr_view = new ProfessoreModelView(context);
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
             email = args.getString("email");
         }
         user  = FirebaseAuth.getInstance().getCurrentUser();
-        Log.d("email", String.valueOf(utente));
-
+        ut_view = new UtenteModelView(context);
         utente = ut_view.findAllById(ut_view.getIdUtente(email));
-        Log.d("utente", String.valueOf(utente));
+
+        st_view = new StudenteModelView(context);
+        pr_view = new ProfessoreModelView(context);
+
         if (StringUtils.equals(ruolo, getString(R.string.studente))) {
             studente = st_view.findAllById(st_view.findStudente(utente.getId_utente()));
         }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
+            corsi = getResources().getStringArray(R.array.Corsi);
             professore = pr_view.findAllById(pr_view.findPorfessore(utente.getId_utente()));
+            textWatcher = new ProfiloFragment.CustomTextWatcher();
+            inizializzate_binding_text();
+            setupTextWatchers();
         }
-        binding = FragmentProfiloBinding.inflate(inflater, container, false);
+
+
         return binding.getRoot();
     }
 
@@ -102,9 +124,13 @@ public class ProfiloFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Log.d("utente", String.valueOf(utente));
         if (StringUtils.equals(ruolo, getString(R.string.professore))) {
-            binding.textViewCorsi.setText("Corsi di lauera");
+            binding.textViewCorsi.setText("Corsi di Laurea");
             binding.linearLayoutContainer.setVisibility(View.GONE);
             binding.modificaCorsi.setVisibility(View.VISIBLE);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context,  android.R.layout.simple_dropdown_item_1line, corsi);
+            binding.dropdownprofessoreCorso.setAdapter(adapter);
+            binding.dropdownprofessoreCorso.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+            binding.dropdownprofessoreCorso.setKeyListener(null);
             binding.InsertMatricola.setText(String.valueOf(professore.getMatricola()));
             binding.InsertFacolta.setText(utente.getFacolta());
             binding.InsertCorso.setText(utente.getNome_cdl());
@@ -144,6 +170,8 @@ public class ProfiloFragment extends Fragment {
             set_view();
             binding.componentInputVecchio.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
             binding.componentInputNuovo.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
+            binding.componentInputNuovo.setErrorIconDrawable(null);
+            binding.componentInputVecchio.setErrorIconDrawable(null);
             binding.componentInputVecchio.setHint("Password attuale");
             binding.componentInputNuovo.setHint("Nuova password");
             confirm_modifiche("Password", utente.getPassword());
@@ -181,100 +209,131 @@ public class ProfiloFragment extends Fragment {
             binding.componentInputNuovo.setHint("Nuovo valore esami mancanti.");
             confirm_modifiche("Esami Mancanti", String.valueOf(studente.getEsami_mancanti()));
         });
+
+        binding.modificaCorsi.setOnClickListener(v -> {
+            binding.componentInputNuovo.setVisibility(View.GONE);
+            binding.corsoprofessoreInput.setVisibility(View.VISIBLE);
+            binding.TextVecchio.setEnabled(false);
+            binding.TextVecchio.setText(utente.getNome_cdl());
+            annulla_corso = true;
+            if (!mod_corso) {
+                String[] text = StringUtils.deleteWhitespace(utente.getNome_cdl()).split(",");
+                String updatedText = TextUtils.join(", ", text);
+                validCourses = new ArrayList<>(Arrays.asList(StringUtils.deleteWhitespace(utente.getNome_cdl()).split(",")));
+                binding.dropdownprofessoreCorso.setText(updatedText);
+                binding.dropdownprofessoreCorso.setSelection(updatedText.length());
+            }
+
+            insertedCourses.addAll(validCourses);
+            binding.componentInputVecchio.setHint("Corsi di laurea attuali.");
+            confirm_modifiche( "CorsiProfessore", binding.dropdownprofessoreCorso.getText().toString());
+            set_view();
+        });
     }
 
+
+
     private void confirm_modifiche(String type, String campo) {
-
         binding.buttonRegister.setOnClickListener(view -> {
-
-            if (!ControlInput.is_empty_string(binding.Textnuovo, binding.componentInputNuovo, Objects.requireNonNull(binding.componentInputNuovo.getHint()).toString(),context)
-            || !ControlInput.is_empty_string(binding.TextVecchio, binding.componentInputVecchio, Objects.requireNonNull(binding.componentInputVecchio.getHint()).toString(),context)) {
-                boolean control_nuovo;
-                boolean control_attuale;
-                String campo_nuovo_text = Objects.requireNonNull(binding.Textnuovo.getText()).toString();
-                String message = "Il ".concat(type).concat(" coincide con il").concat(" precedente!");
-                control_attuale =  is_control_campo_attuale(type, campo);
-                control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text, campo, message, Objects.requireNonNull(binding.componentInputNuovo));
-                switch (type) {
-                    case "Nome", "Cognome" -> {
-                        if (ControlInput.is_correct_nome_cognome(binding.Textnuovo, binding.componentInputNuovo, context)) {
-                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+            if(!StringUtils.equals(type, "CorsiProfessore") ){
+                if (!ControlInput.is_empty_string(binding.Textnuovo, binding.componentInputNuovo, Objects.requireNonNull(binding.componentInputNuovo.getHint()).toString(),context)
+                || !ControlInput.is_empty_string(binding.TextVecchio, binding.componentInputVecchio, Objects.requireNonNull(binding.componentInputVecchio.getHint()).toString(),context)) {
+                    boolean control_nuovo;
+                    boolean control_attuale;
+                    String campo_nuovo_text = Objects.requireNonNull(binding.Textnuovo.getText()).toString();
+                    String message = "Il ".concat(type).concat(" coincide con il").concat(" precedente!");
+                    control_attuale =  is_control_campo_attuale(type, campo);
+                    switch (type) {
+                        case "Nome", "Cognome" -> {
+                            if (ControlInput.is_correct_nome_cognome(binding.Textnuovo, binding.componentInputNuovo, context)) {
+                                control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text, campo, message, Objects.requireNonNull(binding.componentInputNuovo));
                                 if (StringUtils.equals(type, "Nome") && (control_attuale && control_nuovo) ) {
-                                    utente.setNome(campo_nuovo_text);
-                                    ut_view.updateUtente(utente);
-                                    binding.InsertNome.setText(utente.getNome());
-                                    changeComponentFirestore("nome", "Utenti", utente.getNome());
-                                    close_card_modifica();
+                                        utente.setNome(campo_nuovo_text);
+                                        ut_view.updateUtente(utente);
+                                        binding.InsertNome.setText(utente.getNome());
+                                        changeComponentFirestore("nome", "Utenti", utente.getNome());
+                                        close_card_modifica();
+                                    } else if (StringUtils.equals(type, "Cognome")&& (control_attuale && control_nuovo)) {
+                                        utente.setCognome(campo_nuovo_text);
+                                        ut_view.updateUtente(utente);
+                                        binding.InsertCongnome.setText(utente.getCognome());
+                                        changeComponentFirestore("cognome", "Utenti", utente.getCognome());
+                                        close_card_modifica();
+                                    }
 
-                                } else if (StringUtils.equals(type, "Cognome")&& (control_attuale && control_nuovo)) {
-                                    utente.setCognome(campo_nuovo_text);
+                            }
+                        }
+                        case "Password" -> {
+                            if (ControlInput.is_correct_password(binding.Textnuovo, binding.componentInputNuovo,context)){
+                                control_nuovo = is_equal_campi("NUOVO", ControlInput.hashWith256(campo_nuovo_text), campo, message, Objects.requireNonNull(binding.componentInputNuovo));
+                                if (control_attuale && control_nuovo) {
+                                    utente.setPassword(ControlInput.hashWith256(Objects.requireNonNull(binding.Textnuovo.getText()).toString()));
                                     ut_view.updateUtente(utente);
-                                    binding.InsertCongnome.setText(utente.getCognome());
-                                    changeComponentFirestore("cognome", "Utenti", utente.getCognome());
+                                    updatePasswordAutentication();
+                                    changeComponentFirestore("password","Utenti" ,utente.getPassword());
                                     close_card_modifica();
                                 }
-
-                        }
-                    }
-                    case "Password" -> {
-                        if (ControlInput.is_correct_password(binding.Textnuovo, binding.componentInputNuovo,context)){
-                            if (control_attuale && control_nuovo) {
-                                utente.setPassword(ControlInput.hashWith256(Objects.requireNonNull(binding.Textnuovo.getText()).toString()));
-                                ut_view.updateUtente(utente);
-                                updatePasswordAutentication();
-                                changeComponentFirestore("password","Utenti" ,utente.getPassword());
-                                close_card_modifica();
                             }
                         }
-                    }
-                    case "Matricola" ->{
-                        if (ControlInput.is_correct_matricola(binding.Textnuovo, binding.componentInputNuovo, context, ruolo)) {
-                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
-                            if (control_attuale && control_nuovo){
-                                if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                                    confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
-                                    studente.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
-                                    st_view.updateStudente(studente);
-                                    changeComponentFirestore("matricola","Utenti/Studenti/Studenti" ,String.valueOf(studente.getMatricola()));
-                                }else{
-                                    confirm_modifiche("Matricola", String.valueOf(professore.getMatricola()));
-                                    professore.setMatricola((binding.Textnuovo.getText().toString()));
-                                    changeComponentFirestore("matricola","Utenti/Professori/Professori" ,professore.getMatricola());
-                                }
-
-                                binding.InsertMatricola.setText(binding.Textnuovo.getText().toString());
-
-                                close_card_modifica();
-                            }
-                        }
-                    }
-                    case "Media" -> {
-                        if (ControlInput.is_correct_media(binding.Textnuovo, binding.componentInputNuovo, context)) {
-                            ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
-                            if (control_attuale && control_nuovo) {
-                                studente.setMedia(Integer.parseInt(binding.Textnuovo.getText().toString()));
-                                st_view.updateStudente(studente);
-                                binding.InsertMedia.setText(binding.Textnuovo.getText().toString());
-                                changeComponentFirestore("media", "Utenti/Studenti/Studenti", String.valueOf(studente.getMedia()));
-                                close_card_modifica();
-                            }
-                        }
-                    }
-                        case "Esami Mancanti" ->{
-                            if (ControlInput.is_correct_esami_mancanti(binding.Textnuovo, binding.componentInputNuovo, context)) {
-                                ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height_error_email);
+                        case "Matricola" ->{
+                            if (ControlInput.is_correct_matricola(binding.Textnuovo, binding.componentInputNuovo, context, ruolo)) {
+                                control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text, campo, message, Objects.requireNonNull(binding.componentInputNuovo));
                                 if (control_attuale && control_nuovo){
-                                    studente.setEsami_mancanti(Integer.parseInt(binding.Textnuovo.getText().toString()));
-                                    st_view.updateStudente(studente);
-                                    binding.InsertEsamiMancanti.setText(binding.Textnuovo.getText().toString());
-                                    changeComponentFirestore("esami_mancanti","Utenti/Studenti/Studenti" ,String.valueOf(studente.getEsami_mancanti()));
+                                    if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+                                        confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
+                                        studente.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
+                                        st_view.updateStudente(studente);
+                                        changeComponentFirestore("matricola","Utenti/Studenti/Studenti" ,String.valueOf(studente.getMatricola()));
+                                    }else{
+                                        confirm_modifiche("Matricola", String.valueOf(professore.getMatricola()));
+                                        professore.setMatricola((binding.Textnuovo.getText().toString()));
+                                        changeComponentFirestore("matricola","Utenti/Professori/Professori" ,professore.getMatricola());
+                                    }
+                                    binding.InsertMatricola.setText(binding.Textnuovo.getText().toString());
                                     close_card_modifica();
                                 }
                             }
+                        }
+                        case "Media" -> {
+                            if (ControlInput.is_correct_media(binding.Textnuovo, binding.componentInputNuovo, context)) {
+                                control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text, campo, message, Objects.requireNonNull(binding.componentInputNuovo));
+                                if (control_attuale && control_nuovo) {
+                                    studente.setMedia(Integer.parseInt(binding.Textnuovo.getText().toString()));
+                                    st_view.updateStudente(studente);
+                                    binding.InsertMedia.setText(binding.Textnuovo.getText().toString());
+                                    changeComponentFirestore("media", "Utenti/Studenti/Studenti", String.valueOf(studente.getMedia()));
+                                    close_card_modifica();
+                                }
+                            }
+                        }
+                            case "Esami Mancanti" ->{
+                                if (ControlInput.is_correct_esami_mancanti(binding.Textnuovo, binding.componentInputNuovo, context)) {
+                                    control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text, campo, message, Objects.requireNonNull(binding.componentInputNuovo));
+                                    if (control_attuale && control_nuovo){
+                                        studente.setEsami_mancanti(Integer.parseInt(binding.Textnuovo.getText().toString()));
+                                        st_view.updateStudente(studente);
+                                        binding.InsertEsamiMancanti.setText(binding.Textnuovo.getText().toString());
+                                        changeComponentFirestore("esami_mancanti","Utenti/Studenti/Studenti" ,String.valueOf(studente.getEsami_mancanti()));
+                                        close_card_modifica();
+                                    }
+                                }
+                        }
+
                     }
 
                 }
-
+            }else{
+                if(!ControlInput.is_empty_string( binding.dropdownprofessoreCorso, binding.corsoprofessoreInput,  Objects.requireNonNull(binding.corsoprofessoreInput.getHint()).toString(), context)){
+                    if (StringUtils.equals(utente.getNome_cdl(), binding.dropdownprofessoreCorso.getText().toString())){
+                        ControlInput.set_error(binding.corsoprofessoreInput, true, "I campi inseriti sono già presenti!", error_color, context, R.dimen.input_text_layout_height_error);
+                    }else{
+                        ControlInput.set_error(binding.corsoprofessoreInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+                        utente.setNome_cdl(binding.dropdownprofessoreCorso.getText().toString());
+                        ut_view.updateUtente(utente);
+                        changeComponentFirestore("nome_cdl","Utenti" ,String.valueOf(utente.getNome_cdl()));
+                        close_card_modifica();
+                    }
+                }
             }
 
         });
@@ -290,8 +349,6 @@ public class ProfiloFragment extends Fragment {
             }
         } else if (StringUtils.equals(tipo_controllo, "NUOVO")) {
             if (StringUtils.equals(campo1, campo2)) {
-                Log.d("campo", campo1);
-                Log.d("campo2", campo2);
                 ControlInput.set_error(layout, true, error_message, error_color, context, R.dimen.input_text_layout_height_error);
             } else {
                 ControlInput.set_error(layout, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
@@ -302,7 +359,6 @@ public class ProfiloFragment extends Fragment {
     }
 
     private boolean is_control_campo_attuale(String type, String campo) {
-
             switch (type) {
                 case "Nome", "Cognome", "Media", "Matricola", "Esami Mancanti" -> {
                     return is_equal_campi("VECCHIO", Objects.requireNonNull(binding.TextVecchio.getText()).toString(),
@@ -323,34 +379,46 @@ public class ProfiloFragment extends Fragment {
         binding.cardViewCdl.setVisibility(View.GONE);
         binding.modificaCampo.setVisibility(View.VISIBLE);
         binding.buttonAnnulla.setOnClickListener(view2 -> {
+            binding.corsoprofessoreInput.setVisibility(View.GONE);
+            binding.componentInputNuovo.setVisibility(View.VISIBLE);
+            if (StringUtils.equals(ruolo, getString(R.string.professore))) {
+                annulla_corso = false;
+                String[] text = StringUtils.deleteWhitespace(utente.getNome_cdl()).split(",");
+                String updatedText = TextUtils.join(", ", text);
+                validCourses = new ArrayList<>(Arrays.asList(StringUtils.deleteWhitespace(utente.getNome_cdl()).split(",")));
+                binding.dropdownprofessoreCorso.setText(updatedText);
+                binding.dropdownprofessoreCorso.setSelection(updatedText.length());
+            }
             close_card_modifica();
         });
     }
 
     private void close_card_modifica() {
         binding.cardViewAnagrafica.setVisibility(View.VISIBLE);
+        binding.TextVecchio.setEnabled(true);
         binding.cardViewCdl.setVisibility(View.VISIBLE);
         binding.modificaCampo.setVisibility(View.GONE);
         binding.Textnuovo.setText("");
         binding.TextVecchio.setText("");
         ControlInput.set_error(Objects.requireNonNull(binding.componentInputVecchio), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
         ControlInput.set_error(Objects.requireNonNull(binding.componentInputNuovo), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+        if (StringUtils.equals(ruolo ,getString(R.string.professore))){
+            mod_corso = true;
+            binding.InsertCorso.setText(utente.getNome_cdl());
+        }
     }
 
 
 
     private void updatePasswordAutentication(){
         user.updatePassword(utente.getPassword())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // Password aggiornata con successo
-                            Log.d("UPDATE PASSWORD", "Password aggiornata con successo");
-                        } else {
-                            // Si è verificato un errore durante l'aggiornamento della password
-                            Log.e("UPDATE PASSWORD", "Errore nell'aggiornamento della password", task.getException());
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Password aggiornata con successo
+                        Log.d("UPDATE PASSWORD", "Password aggiornata con successo");
+                    } else {
+                        // Si è verificato un errore durante l'aggiornamento della password
+                        Log.e("UPDATE PASSWORD", "Errore nell'aggiornamento della password", task.getException());
                     }
                 });
         close_card_modifica();
@@ -380,6 +448,95 @@ public class ProfiloFragment extends Fragment {
             // Gestisci il caso in cui l'ID utente non sia valido o vuoto
             Log.e("USER_ERROR", "ERRORE UTENTE NON VALIDO");
         }
+
+
+    }
+
+    private  class CustomTextWatcher implements TextWatcher {
+        Object component;
+        private boolean programmaticTextChange = false;
+        public CustomTextWatcher() {
+        }
+
+        /**
+         * Chiamato prima che il testo nel campo di input cambi.
+         *
+         * @param charSequence Il testo attuale prima della modifica.
+         * @param i            L'indice del carattere iniziale della modifica.
+         * @param i1           Il numero di caratteri da rimuovere.
+         * @param i2           Il numero di caratteri da inserire.
+         */
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            // Nessuna azione richiesta prima della modifica del testo.
+        }
+
+        /**
+         * Chiamato quando il testo nel campo di input sta cambiando.
+         *
+         * @param charSequence Il testo attuale dopo la modifica.
+         * @param i            L'indice del carattere iniziale della modifica.
+         * @param i1           Il numero di caratteri da rimuovere.
+         * @param i2           Il numero di caratteri da inserire.
+         */
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        /**
+         * Chiamato dopo che il testo nel campo di input è stato modificato.
+         *
+         * @param editable Il testo modificato dopo la modifica.
+         */
+        @Override
+        public void afterTextChanged(Editable editable) {
+            // Nessuna azione richiesta dopo la modifica del testo.
+            if (programmaticTextChange) {
+                // L'evento è stato generato programmaticamente, non fare nulla.
+                programmaticTextChange = false;
+                return;
+            }
+            if (component instanceof MultiAutoCompleteTextView && annulla_corso) {
+                programmaticTextChange = true;
+                String inputText = binding.dropdownprofessoreCorso.getText().toString();
+                String[] enteredCourses = StringUtils.deleteWhitespace(inputText).split(",");
+                if (!insertedCourses.contains(String.valueOf(enteredCourses[enteredCourses.length - 1]))) {
+                    validCourses.add(enteredCourses[enteredCourses.length - 1]);
+                } else {
+                    validCourses.remove(enteredCourses[enteredCourses.length - 1]);
+                }
+                String updatedText = TextUtils.join(", ", validCourses);
+                binding.dropdownprofessoreCorso.setText(updatedText);
+                binding.dropdownprofessoreCorso.setSelection(updatedText.length());
+                insertedCourses.clear(); // Rimuovi tutti i corsi inseriti
+                insertedCourses.addAll(validCourses); // Aggiungi nuovamente i corsi validi
+                programmaticTextChange = false;
+
+            }
+        }
+            public void setComponent(Object component) {
+            this.component = component;
+        }
+    }
+
+
+    private void inizializzate_binding_text(){
+        if(StringUtils.equals(ruolo, getString(R.string.professore))){
+            elem_text.put("CorsiProfessore", binding.dropdownprofessoreCorso);
+        }
+    }
+
+
+    private void setupTextWatchers(){
+        elem_text.forEach((key, value)->  {
+        if(value instanceof  MultiAutoCompleteTextView){
+            ((MultiAutoCompleteTextView) value).addTextChangedListener(textWatcher);
+            ((MultiAutoCompleteTextView) value).setOnFocusChangeListener((view, hasFocus) -> {
+                if (hasFocus) {
+                    textWatcher.setComponent(value);
+                }
+            });
+        }});
     }
 
 }

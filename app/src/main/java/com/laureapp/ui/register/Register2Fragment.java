@@ -63,7 +63,6 @@ public class Register2Fragment extends Fragment {
     private AutoCompleteTextView autoCompleteTextView;
     private AutoCompleteTextView autoCompleteTextViewcorso;
     private MultiAutoCompleteTextView professoreTextViewcorso;
-    private final int error_color = com.google.android.material.R.color.design_default_color_error;
     private final Register2Fragment.CustomTextWatcher textWatcher = new Register2Fragment.CustomTextWatcher();
     private final HashMap<String, Object> elem_text = new HashMap<>();
     private FirebaseAuth mAuth;
@@ -104,7 +103,7 @@ public class Register2Fragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.facoltaInput.setVisibility(View.VISIBLE);
         facolta = getResources().getStringArray(R.array.Dipartimento);
-        ArrayAdapter<String> adapterfacolta = new ArrayAdapter<>(getContext(), R.layout.dropdown_item, facolta);
+        ArrayAdapter<String> adapterfacolta = new ArrayAdapter<>(context, R.layout.dropdown_item, facolta);
         autoCompleteTextView.setAdapter(adapterfacolta);
 
         if (StringUtils.equals(ruolo, getString(R.string.professore))){

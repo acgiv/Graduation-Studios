@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profiloProfessoreLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:rotation="0"
+    android:visibility="visible"
+    tools:context=".ui.profilo.ProfiloFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- ... Griglia contenente le varie card ... -->
+
+        <!-- ... bottoni home e profilo ... -->
+
+        <GridLayout
+            android:id="@+id/grigliaDati"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="1dp"
+            android:columnCount="3"
+            android:rowCount="3"
+            app:backgroundTint="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <!-- ... Card Dati anagrafici ... -->
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewDettagliTask"
+                android:layout_width="375dp"
+                android:layout_height="400dp"
+                android:layout_gravity="center"
+                android:layout_margin="12dp"
+                app:backgroundTint="@null"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5">
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:background="@color/color_primary"
+                        android:visibility="visible" />
+
+                    <!--Campo di testo dettagli-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="70dp"
+                        android:layout_marginTop="-5dp"
+                        android:drawablePadding="8dp"
+                        android:text="@string/text_dettagli"
+                        android:textColor="@android:color/white"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        tools:visibility="visible"
+                        app:drawableLeftCompat="@drawable/baseline_info_24" />
+
+
+                    <!--Campo Titolo task -->
+                    <!-- TextView per l'etichetta titolo task -->
+                    <TextView
+                        android:id="@+id/titoloTaskTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="42dp"
+                        android:elevation="8dp"
+                        android:text="@string/titolo_dettagli_task"
+                        android:textColor="@color/light_black"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="@+id/startDateBar"
+                        app:layout_constraintStart_toStartOf="@+id/startDateBar"
+                        app:layout_constraintTop_toBottomOf="@+id/startDateBar" />
+
+                    <!-- Barra titolo task -->
+                    <EditText
+                        android:id="@+id/titoloTaskBar"
+                        style="Base.Theme.LaureApp"
+                        android:layout_width="250dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="49dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/input_color"
+                        android:gravity="start|center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:textColor="@color/color_primary"
+                        android:hint="@string/dettagli_task_label"
+                        app:backgroundTint="@null"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:autofillHints=""
+                        tools:ignore="LabelFor,RtlSymmetry" />
+
+
+                    <!--Campo stato -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/dropdownStatoTask"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="250dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="109dp"
+                        app:boxBackgroundMode="outline"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/filled_exposed_dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/input_color"
+                            android:clickable="true"
+                            android:elevation="8dp"
+                            android:ems="10"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/stato_task"
+                            android:importantForAutofill="no"
+                            android:padding="7dp"
+                            style="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu.NoDropdownIcon"
+                            android:text="@string/default_stato_task"
+                            android:textColor="@color/color_primary" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <!-- TextView per l'etichetta Data Inizio -->
+                    <TextView
+                        android:id="@+id/startDateLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="172dp"
+                        android:elevation="8dp"
+                        android:text="@string/data_inizio_dettagli_task"
+                        android:textColor="@color/light_black"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="@+id/startDateBar"
+                        app:layout_constraintStart_toStartOf="@+id/startDateBar"
+                        app:layout_constraintTop_toBottomOf="@+id/startDateBar" />
+
+                    <!-- Pulsante startDateBar -->
+                    <Button
+                        android:id="@+id/startDateBar"
+                        style="Base.Theme.LaureApp"
+                        android:layout_width="250dp"
+                        android:layout_height="49dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="179dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/input_color"
+                        android:gravity="start|center_vertical"
+                        android:hint="@string/hint_data_inizio"
+                        android:orientation="horizontal"
+                        android:textColor="@color/color_primary"
+                        app:backgroundTint="@null"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <!-- TextView per l'etichetta data scadenza -->
+                    <TextView
+                        android:id="@+id/dueDateLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="80dp"
+                        android:layout_marginTop="242dp"
+                        android:elevation="8dp"
+                        android:text="@string/hint_data_scadenza"
+                        android:textColor="@color/light_black"
+                        android:textSize="12sp"
+                        app:layout_constraintEnd_toEndOf="@+id/dueDateBar"
+                        app:layout_constraintStart_toStartOf="@+id/dueDateBar"
+                        app:layout_constraintTop_toBottomOf="@+id/dueDateBar" />
+
+                    <!--Data scadenza button -->
+                    <Button
+                        android:id="@+id/dueDateBar"
+                        style="Base.Theme.LaureApp"
+                        android:layout_width="250dp"
+                        android:layout_height="49dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="249dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/input_color"
+                        android:hint="@string/hint_data_scadenza_button"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/color_primary"
+                        app:backgroundTint="@null"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="RtlCompat,RtlSymmetry" />
+
+
+                    <!-- TextView per l'errore di Data Scadenza -->
+                    <TextView
+                        android:id="@+id/errorDueDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red"
+                        android:layout_marginTop="298dp"
+                        android:layout_marginStart="70dp"
+                        android:visibility="gone"
+                        android:text="@string/error_scadenza_inizio"
+                        app:layout_constraintStart_toStartOf="@+id/dueDateBar"
+                        app:layout_constraintTop_toBottomOf="@+id/dueDateBar" />
+
+
+
+                    <!--Button per salvare le modifiche -->
+                    <Button
+                        android:id="@+id/button_salva_modifiche_task"
+                        android:layout_width="150dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="339dp"
+                        android:background="@drawable/button_blu"
+                        android:text="@string/salva"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        app:backgroundTint="@null"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </FrameLayout>
+
+                <CalendarView
+                    android:id="@+id/calendarStartTaskView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:dateTextAppearance="@style/CalendarDateText"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:ignore="MissingConstraints" />
+            </androidx.cardview.widget.CardView>
+
+
+        </GridLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

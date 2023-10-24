@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity(tableName = "Richieste_Tesi", foreignKeys = {
-        @ForeignKey(entity = StudenteTesi.class, parentColumns = "id_studente_tesi", childColumns = "id_studente_tesi", onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = Tesi.class, parentColumns = "id_tesi", childColumns = "id_tesi", onDelete = ForeignKey.CASCADE),
 },
-        indices = {@Index("id_studente_tesi")})
+        indices = {@Index("id_tesi")})
 public class RichiesteTesi implements Serializable {
 
     //Colonne tabella
@@ -22,11 +22,11 @@ public class RichiesteTesi implements Serializable {
     @ColumnInfo(name = "id_richiesta_tesi")
     private Long id_richiesta_tesi;
 
-    @ColumnInfo(name = "id_studente_tesi")
-    private Long id_studente_tesi;
+    @ColumnInfo(name = "id_tesi")
+    private Long id_tesi;
 
     @ColumnInfo(name = "stato")
-    private Long stato;
+    private String stato;
 
 
     //Getter e setter
@@ -38,26 +38,26 @@ public class RichiesteTesi implements Serializable {
         this.id_richiesta_tesi = idRichiestaTesi;
     }
 
-    public Long getId_studente_tesi() {
-        return id_studente_tesi;
+    public Long getId_tesi() {
+        return id_tesi;
     }
 
-    public void setId_studente_tesi(Long idStudenteTesi) {
-        this.id_studente_tesi = idStudenteTesi;
+    public void setId_tesi(Long id_tesi) {
+        this.id_tesi = id_tesi;
     }
 
-    public Long getStato() {
+    public String getStato() {
         return stato;
     }
 
-    public void setStato(Long stato) {
+    public void setStato(String stato) {
         this.stato = stato;
     }
 
 
     public Map<String, Object> getRichiesteTesiMap() {
         Map<String, Object> richiesteTesiMap = new HashMap<>();
-        richiesteTesiMap.put("id_studente_tesi", this.id_studente_tesi);
+        richiesteTesiMap.put("id_tesi", this.id_tesi);
         richiesteTesiMap.put("id_richiesta_tesi",this.id_richiesta_tesi);
         richiesteTesiMap.put("stato", this.stato);
 
@@ -70,7 +70,7 @@ public class RichiesteTesi implements Serializable {
     @Override
     public String toString() {
         return "RichiesteTesi{" +
-                "id_studente_tesi=" + id_studente_tesi +
+                "id_tesi=" + id_tesi +
                 ", id_richiesta_tesi=" + id_richiesta_tesi +
                 ", stato='" + stato + '\'' +
                 '}';

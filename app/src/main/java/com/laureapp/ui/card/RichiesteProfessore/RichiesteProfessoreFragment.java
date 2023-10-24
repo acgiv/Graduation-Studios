@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,8 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
-import com.laureapp.ui.card.Adapter.ElencoTesiAdapter;
 import com.laureapp.ui.card.Adapter.RichiesteProfessoreAdapter;
+import com.laureapp.ui.roomdb.entity.RichiesteTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
@@ -41,8 +42,14 @@ public class RichiesteProfessoreFragment extends Fragment {
     ArrayList<Long> idTesiList = new ArrayList<>();
     ArrayList<Long> idStudenteTesiList = new ArrayList<>();
 
-    String titoloTesi;
+    ArrayList<String> titoliTesi = new ArrayList<>();
 
+    ArrayList<RichiesteTesi> richiesteTesi = new ArrayList<>();
+    Long idRichiestaTesi;
+    Long idStudenteTesi;
+    String stato;
+
+    ArrayList<Long> idRichiesteTesiList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -53,45 +60,54 @@ public class RichiesteProfessoreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
-        email = getEmailFromSharedPreferences(); //chiamata al metodo per ottenere la mail
+        email = getEmailFromSharedPreferences();
+        ListView listView = view.findViewById(R.id.listRichiesteProfessoreView);
 
-        if (email != null) { // se la mail non è nulla
-
-            UtenteModelView utenteView = new UtenteModelView(context); // Inizializza utenteView con un'istanza di UtenteModelView
-            ProfessoreModelView professoreModelView = new ProfessoreModelView(context); // Inizializza utenteView con un'istanza di UtenteModelView
-
+        if (email != null) {
+            UtenteModelView utenteView = new UtenteModelView(context);
+            ProfessoreModelView professoreModelView = new ProfessoreModelView(context);
 
             id_utente = utenteView.getIdUtente(email);
             id_professore = professoreModelView.findProfessore(id_utente);
 
             loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) { //se il task è completato con successo
-                    idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
-                    if(idTesiList != null && !idTesiList.isEmpty()) { //se ci sono tesi associate al professore
-                        loadTesiDataByIdTesi(idTesiList).addOnCompleteListener(task1 -> { //carico tutte le tesi associate
+                if (task.isSuccessful()) {
+                    idTesiList = task.getResult();
+                    if (idTesiList != null && !idTesiList.isEmpty()) {
+
+                        loadTesiDataByIdTesi(idTesiList).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 tesiList = task1.getResult();
 
-
-                            }
-
-                        });
-
-                        loadIdTesiStudenteByIdTesi(idTesiList).addOnCompleteListener(task2->{
-                            if(task2.isSuccessful()){
-                                idStudenteTesiList = task2.getResult();
-                                Log.d("vedi", String.valueOf(idStudenteTesiList));
+                                // Una volta ottenuti i dati delle tesi, crea l'elenco dei titoli
+                                for (Tesi tesi : tesiList) {
+                                    String titolo = tesi.getTitolo();
+                                    titoliTesi.add(titolo);
+                                }
                             }
                         });
+
+                        loadRichiesteTesiByIdTesi(idTesiList).addOnCompleteListener(task2 -> {
+                            if (task2.isSuccessful()) {
+                                richiesteTesi = task2.getResult();
+                                adapter = new RichiesteProfessoreAdapter(context, richiesteTesi, titoliTesi);
+                                listView.setAdapter(adapter);
+
+                            }
+                        });
+
+
                     }
+
+
                 } else {
                     Log.e("Firestore Error", "Error getting data", task.getException());
                 }
+
             });
-
         }
-
     }
+
 
     /**
      * Si utilizza questo metodo per prendere le preferenze salvate nel metodo presente in HomeFragment
@@ -180,33 +196,38 @@ public class RichiesteProfessoreFragment extends Fragment {
                 });
     }
 
-    /**
-     * Metodo utilizzato per ottenere l'idStudenteTesi partendo dall'id della tesi associata al professore
-     * Cerco all'interno della tabella StudenteTesi l'id_studente_tesi
-     * @return idStudenteTesiList lista contenente tutti gli id tesi legate allo studente
-     *
-     */
 
-    private Task<ArrayList<Long>> loadIdTesiStudenteByIdTesi(ArrayList<Long> idTesiList) {
-        final ArrayList<Long> idStudenteTesiList = new ArrayList<>();
+    private Task<ArrayList<RichiesteTesi>> loadRichiesteTesiByIdTesi(ArrayList<Long> idTesiList) {
+        final ArrayList<RichiesteTesi> richiesteTesi = new ArrayList<>();
 
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi")
+                .collection("RichiesteTesi")
                 .whereIn("id_tesi", idTesiList)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot doc : task.getResult()) {
-                            Long data = doc.getLong("id_studente_tesi");
-                            if (data != null) {
-                                idStudenteTesiList.add(data);
+                            Long idTesi = doc.getLong("id_tesi");
+                            Long idRichiestaTesi = doc.getLong("id_richiesta_tesi");
+                            String stato = doc.getString("stato");
+
+                            if (idTesi != null && idRichiestaTesi != null && stato != null) {
+                                RichiesteTesi richiestaTesi = new RichiesteTesi();
+                                richiestaTesi.setId_tesi(idTesi);
+                                richiestaTesi.setId_richiesta_tesi(idRichiestaTesi);
+                                richiestaTesi.setStato(stato);
+
+                                richiesteTesi.add(richiestaTesi);
+
                             }
                         }
                     }
-                    return idStudenteTesiList;
-                });
-    }
 
+                    return richiesteTesi;
+                });
+
+
+    }
 
 
 

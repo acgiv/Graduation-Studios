@@ -265,6 +265,15 @@
     <fragment
         android:id="@+id/richiesteProfessoreFragment"
         android:name="com.laureapp.ui.card.RichiesteProfessore.RichiesteProfessoreFragment"
-        android:label="Richieste di Tesi" />
+        android:label="Richieste di Tesi" >
+        <action
+            android:id="@+id/action_richiesteProfessoreFragment_to_dettaglioRichiestaFragment"
+            app:destination="@id/dettaglioRichiestaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dettaglioRichiestaFragment"
+        android:name="com.laureapp.ui.card.RichiesteProfessore.DettaglioRichiestaFragment"
+        android:label="Dettaglio Richiesta Tesi"
+        tools:layout="@layout/fragment_dettaglio_richieste_tesi" />
 
 </navigation>

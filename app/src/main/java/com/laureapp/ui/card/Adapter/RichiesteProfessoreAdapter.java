@@ -59,11 +59,11 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
                     }
                 }
 
-                listItemView.setOnClickListener(v -> {
-                    // Handle the click action here
+                //Qui gestisco quando l'utnte clicca una tesi
+                    listItemView.setOnClickListener(v -> {
                     Bundle args = new Bundle();
-                    // args.putSerializable("RichiestaTesi", currentRichiesta);
-                    // Navigation.findNavController(v).navigate(R.id.tua_azione_per_dettagli_richiesta, args);
+                    Navigation.findNavController(v).navigate(R.id.action_richiesteProfessoreFragment_to_dettaglioRichiestaFragment,args);
+
                 });
             }
         }

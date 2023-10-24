@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dettaglioRichiesta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible"
+    tools:context=".ui.card.RichiesteProfessore.DettaglioRichiestaFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="40dp">
+
+        <GridLayout
+            android:id="@+id/grigliaDati"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginBottom="18dp"
+            android:columnCount="3"
+            android:rowCount="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:layout_constraintVertical_bias="0.035">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardViewDettaglioRichiesta"
+                android:layout_width="375dp"
+                android:layout_height="400dp"
+                android:layout_marginTop="80dp"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_gravity="center"
+                android:layout_margin="12dp"
+                app:cardElevation="8dp"
+                app:cardCornerRadius="15dp">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:id="@+id/constraintLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/color_primary"
+                            android:gravity="center_horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+
+                            <TextView
+                                android:id="@+id/textViewLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawableStart="@drawable/outline_person_add_24"
+                                android:drawablePadding="8dp"
+                                android:drawableTint="@color/white"
+                                android:padding="3dp"
+                                android:text="Richiesta Tesi"
+                                android:textColor="@android:color/white"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                tools:visibility="visible" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintBottom_toTopOf="@+id/linearLayoutCognome"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                            <TextView
+                                android:id="@+id/textViewIdRichiesta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Richiesta num: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewIdRichiesta"
+                                android:layout_width="276dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
+                        <View
+                            android:id="@+id/line1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEmail"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutCognome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail">
+
+                            <TextView
+                                android:id="@+id/TextViewTitoloTesi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tesi: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewAbstract"
+                                android:layout_width="272dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
+                        <View
+                            android:id="@+id/line2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome" />
+
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutVincoli"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="140dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome">
+
+
+                            <TextView
+                                android:id="@+id/TextViewVincoli"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Info Studente "
+                                android:textColor="@color/color_primary"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line6"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutTempistiche"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli">
+
+
+                            <TextView
+                                android:id="@+id/TextViewMatricolaStudente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Matricola:"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewMatricolaStudente"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line7"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutMedia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche">
+
+
+                            <TextView
+                                android:id="@+id/TextViewNomeStudente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nome:"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewNomeStudente"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line8"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutEsamiMancanti"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
+
+
+                            <TextView
+                                android:id="@+id/TextViewCognomeStudente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Cognome:"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewEsamiMancanti"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line9"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutSkill"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
+
+
+                            <TextView
+                                android:id="@+id/TextViewEmailStudente"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Email:"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewEmailStudente"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/linearLayoutAvvisoVincoli"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill">
+
+
+
+                            <TextView
+                                android:id="@+id/insertTextViewAvvisoVincoli"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/red"
+                                android:gravity="center"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+                        <View
+                            android:id="@+id/line11"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutAvvisoVincoli" />
+                        <View
+                            android:id="@+id/line10"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+
+
+                        <LinearLayout
+                            android:id="@+id/buttonsLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutAvvisoVincoli"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent">
+
+                            <Button
+                                android:id="@+id/AccettaRichiesta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:text="Accetta" />
+
+                            <Button
+                                android:id="@+id/RifiutaRichiesta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="12dp"
+                                android:text="Rifiuta" />
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </FrameLayout>
+
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

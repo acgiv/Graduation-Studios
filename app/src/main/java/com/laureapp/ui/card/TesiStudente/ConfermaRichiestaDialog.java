@@ -24,12 +24,14 @@ public class ConfermaRichiestaDialog extends DialogFragment {
     private String message;
     private Long idTesi;
     private Long idStudente;
+    private boolean soddisfaRequisiti;
 
     // Constructor to pass the message
-    public ConfermaRichiestaDialog(String message,Long idTesi,Long idStudente) {
+    public ConfermaRichiestaDialog(String message,Long idTesi,Long idStudente,boolean soddisfaRequisiti ) {
         this.idTesi = idTesi;
         this.idStudente = idStudente;
         this.message = message;
+        this.soddisfaRequisiti = soddisfaRequisiti;
     }
 
     @NonNull
@@ -58,6 +60,12 @@ public class ConfermaRichiestaDialog extends DialogFragment {
         Map<String, Object> richiestaTesi = new HashMap<>();
         richiestaTesi.put("id_tesi", idTesi);
         richiestaTesi.put("id_studente",idStudente);
+        if(soddisfaRequisiti == true){
+            richiestaTesi.put("soddisfa_requisiti",true);
+
+        }else{
+            richiestaTesi.put("soddisfa_requisiti",false);
+        }
         // Trova il massimo ID attuale e incrementalo di 1
         findMaxRequestId(new MaxRequestIdCallback() {
             @Override

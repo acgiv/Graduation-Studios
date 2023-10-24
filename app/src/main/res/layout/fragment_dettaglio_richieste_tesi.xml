@@ -144,7 +144,7 @@
                                 app:layout_constraintEnd_toEndOf="parent" />
 
                             <TextView
-                                android:id="@+id/insertTextViewAbstract"
+                                android:id="@+id/insertTextViewTitoloTesi"
                                 android:layout_width="272dp"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"
@@ -310,7 +310,7 @@
                                 app:layout_constraintEnd_toEndOf="parent" />
 
                             <TextView
-                                android:id="@+id/insertTextViewEsamiMancanti"
+                                android:id="@+id/insertTextViewCognomeStudente"
                                 android:layout_width="246dp"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"
@@ -377,13 +377,12 @@
                             app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill">
 
 
-
                             <TextView
                                 android:id="@+id/insertTextViewAvvisoVincoli"
-                                android:layout_width="246dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/red"
                                 android:gravity="center"
+                                android:textColor="@color/red"
                                 android:textSize="18sp"
                                 app:layout_constraintEnd_toEndOf="parent" />
 

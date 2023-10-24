@@ -31,12 +31,21 @@ public class RichiesteTesi implements Serializable {
     @ColumnInfo(name = "id_studente")
     private Long id_studente;
 
-
+    @ColumnInfo(name = "soddisfa_requisiti")
+    private boolean soddisfa_requisiti;
     //Getter e setter
+
+    public boolean isSoddisfa_requisiti() {
+        return soddisfa_requisiti;
+    }
+
+    public void setSoddisfa_requisiti(boolean soddisfa_requisiti) {
+        this.soddisfa_requisiti = soddisfa_requisiti;
+    }
 
     public Long getId_studente(){return id_studente;}
 
-    public void setId_studente(Long idStudente){
+    public void setId_studente(Long id_studente){
         this.id_studente = id_studente;
     }
     public Long getId_richiesta_tesi() {
@@ -68,8 +77,10 @@ public class RichiesteTesi implements Serializable {
         Map<String, Object> richiesteTesiMap = new HashMap<>();
         richiesteTesiMap.put("id_tesi", this.id_tesi);
         richiesteTesiMap.put("id_richiesta_tesi",this.id_richiesta_tesi);
-        richiesteTesiMap.put("stato", this.stato);
         richiesteTesiMap.put("id_studente",this.id_studente);
+        richiesteTesiMap.put("soddisfa_requisiti",this.soddisfa_requisiti);
+        richiesteTesiMap.put("stato", this.stato);
+
 
 
         return richiesteTesiMap;
@@ -83,6 +94,7 @@ public class RichiesteTesi implements Serializable {
                 "id_tesi=" + id_tesi +
                 ", id_richiesta_tesi=" + id_richiesta_tesi +
                 ", id_studente" + id_studente +
+                ", soddisfa_requisiti " + soddisfa_requisiti +
                 ", stato='" + stato + '\'' +
                 '}';
     }

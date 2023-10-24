@@ -87,7 +87,9 @@ public class RichiesteProfessoreFragment extends Fragment {
                                             tesiList = task1.getResult();
 
                                             adapter = new RichiesteProfessoreAdapter(context, richiesteTesi, tesiList);
-                                            listView.setAdapter(adapter);                                        }
+                                            listView.setAdapter(adapter);
+                                            Log.d("vedi", String.valueOf(richiesteTesi));
+                                        }
                                     });
                                 }
                             }
@@ -197,13 +199,15 @@ public class RichiesteProfessoreFragment extends Fragment {
                             Long idTesi = doc.getLong("id_tesi");
                             Long idRichiestaTesi = doc.getLong("id_richiesta_tesi");
                             String stato = doc.getString("stato");
-
+                            Long idStudente = doc.getLong("id_studente");
+                            boolean soddisfaRequisiti = doc.getBoolean("soddisfa_requisiti");
                             if (idTesi != null && idRichiestaTesi != null && stato != null) {
                                 RichiesteTesi richiestaTesi = new RichiesteTesi();
                                 richiestaTesi.setId_tesi(idTesi);
                                 richiestaTesi.setId_richiesta_tesi(idRichiestaTesi);
                                 richiestaTesi.setStato(stato);
-
+                                richiestaTesi.setId_studente(idStudente);
+                                richiestaTesi.setSoddisfa_requisiti(soddisfaRequisiti);
                                 richiesteTesi.add(richiestaTesi);
 
                             }

@@ -21,7 +21,7 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
     private Context mContext;
     private ArrayList<RichiesteTesi> mRichiesteTesiList;
     private ArrayList<Tesi> mTesiList;
-
+    private String titolo;
     public RichiesteProfessoreAdapter(Context context, ArrayList<RichiesteTesi> richiesteTesiList, ArrayList<Tesi> tesiList) {
         super(context, 0, richiesteTesiList);
         mContext = context;
@@ -45,11 +45,12 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
 
             if (currentRichiesta != null) {
                 Long idRichiestaTesi = currentRichiesta.getId_richiesta_tesi();
-
+                Long idStudente = currentRichiesta.getId_studente();
+                boolean soddisfaRequisiti = currentRichiesta.isSoddisfa_requisiti();
+                Log.d("vedi", String.valueOf(soddisfaRequisiti));
                 if (idRichiestaTesi != null) {
                     // Cerca il titolo corrispondente utilizzando l'id_tesi
-                    String titolo = findTitoloByTesiId(currentRichiesta.getId_tesi());
-
+                    titolo = findTitoloByTesiId(currentRichiesta.getId_tesi());
                     if (titolo != null) {
                         titoloTextView.setText(titolo);
                         idRichiestaTextView.setText(idRichiestaTesi.toString());
@@ -59,9 +60,13 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
                     }
                 }
 
-                //Qui gestisco quando l'utnte clicca una tesi
+                //Qui gestisco quando l'utnte clicca una richiesta
                     listItemView.setOnClickListener(v -> {
                     Bundle args = new Bundle();
+                    args.putSerializable("idRichiestaTesi",idRichiestaTesi);
+                    args.putSerializable("Titolo",titolo);
+                    args.putSerializable("idStudente",idStudente);
+                    args.putSerializable("Soddisfa",soddisfaRequisiti);
                     Navigation.findNavController(v).navigate(R.id.action_richiesteProfessoreFragment_to_dettaglioRichiestaFragment,args);
 
                 });
@@ -80,4 +85,6 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
         }
         return null; // Ritorna null se non trovi una corrispondenza
     }
+
+
 }

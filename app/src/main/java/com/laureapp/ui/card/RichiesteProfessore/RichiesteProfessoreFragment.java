@@ -49,7 +49,7 @@ public class RichiesteProfessoreFragment extends Fragment {
     Long idStudenteTesi;
     String stato;
 
-    ArrayList<Long> idRichiesteTesiList = new ArrayList<>();
+    ArrayList<Long> idTesiListFromRichieste= new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle args) {
@@ -75,27 +75,23 @@ public class RichiesteProfessoreFragment extends Fragment {
                     idTesiList = task.getResult();
                     if (idTesiList != null && !idTesiList.isEmpty()) {
 
-                        loadTesiDataByIdTesi(idTesiList).addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                tesiList = task1.getResult();
-
-                                // Una volta ottenuti i dati delle tesi, crea l'elenco dei titoli
-                                for (Tesi tesi : tesiList) {
-                                    String titolo = tesi.getTitolo();
-                                    titoliTesi.add(titolo);
-                                }
-                            }
-                        });
 
                         loadRichiesteTesiByIdTesi(idTesiList).addOnCompleteListener(task2 -> {
                             if (task2.isSuccessful()) {
                                 richiesteTesi = task2.getResult();
-                                adapter = new RichiesteProfessoreAdapter(context, richiesteTesi, titoliTesi);
-                                listView.setAdapter(adapter);
+                               idTesiListFromRichieste = extractIdTesiFromRichieste(richiesteTesi);
 
+                                if (!idTesiListFromRichieste.isEmpty()) {
+                                    loadTesiDataByIdTesiRichieste(idTesiListFromRichieste).addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            tesiList = task1.getResult();
+
+                                            adapter = new RichiesteProfessoreAdapter(context, richiesteTesi, tesiList);
+                                            listView.setAdapter(adapter);                                        }
+                                    });
+                                }
                             }
                         });
-
 
                     }
 
@@ -151,15 +147,15 @@ public class RichiesteProfessoreFragment extends Fragment {
     /**
      * Questo metodo mi permette di caricare da firestore le tesi in base al cognome del relatore
      *
-     * @param idTesiList lista di tutti gli id delle tesi
+     * @param idTesiListFromRichieste lista di tutti gli id delle tesi presa dalla tabella richieste
      * @return una lista di tipo Tesi contenente tutte le tesi filtrate per cognome relatore
      */
-    private Task<ArrayList<Tesi>> loadTesiDataByIdTesi(ArrayList<Long> idTesiList) {
+    private Task<ArrayList<Tesi>> loadTesiDataByIdTesiRichieste(ArrayList<Long> idTesiListFromRichieste) {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
-        final ArrayList<Tesi> tesiByIdProfessore = new ArrayList<>();
 
         return FirebaseFirestore.getInstance()
                 .collection("Tesi")
+                .whereIn("id_tesi",idTesiListFromRichieste)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful()) {
@@ -182,20 +178,11 @@ public class RichiesteProfessoreFragment extends Fragment {
                             tesiList.add(tesi);
                         }
 
-                        for (Long idTesi : idTesiList) {
-                            for (Tesi tesi : tesiList) {
-                                if (idTesi.equals(tesi.getId_tesi())) {
-                                    tesiByIdProfessore.add(tesi);
-                                    break; // Esci dal ciclo interno dopo aver trovato una corrispondenza
-                                }
-                            }
-                        }
 
                     }
-                    return tesiByIdProfessore;
+                    return tesiList;
                 });
     }
-
 
     private Task<ArrayList<RichiesteTesi>> loadRichiesteTesiByIdTesi(ArrayList<Long> idTesiList) {
         final ArrayList<RichiesteTesi> richiesteTesi = new ArrayList<>();
@@ -227,6 +214,15 @@ public class RichiesteProfessoreFragment extends Fragment {
                 });
 
 
+    }
+
+    private ArrayList<Long> extractIdTesiFromRichieste(ArrayList<RichiesteTesi> richiesteList) {
+        idTesiListFromRichieste = new ArrayList<>();
+
+        for (RichiesteTesi richiesta : richiesteList) {
+            idTesiListFromRichieste.add(richiesta.getId_tesi());
+        }
+        return idTesiListFromRichieste;
     }
 
 

@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 
 import com.laureapp.R;
@@ -32,7 +31,7 @@ public class HomeFragment extends Fragment {
     CardView CardTask;
     CardView CardTesisti;
     CardView CardSocial;
-    CardView CardMessaggi;
+    CardView CardSegnalazioni;
     String ruolo;
     Context context;
     Bundle args;
@@ -49,7 +48,6 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
-            args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
 
         }
 
@@ -72,11 +70,7 @@ public class HomeFragment extends Fragment {
         CardSocial =  view.findViewById(R.id.cardViewSocial);
         CardTesisti = view.findViewById(R.id.cardViewTesisti);
 
-        TextView taskTextView = view.findViewById(R.id.taskTextView);
 
-        if (StringUtils.equals("Professore", ruolo)) {
-            taskTextView.setText("Richieste");
-        }
 
         CardTesi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
@@ -91,12 +85,10 @@ public class HomeFragment extends Fragment {
 
         CardTask.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
+                mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment,args);
                 Log.d("Task", "cliccato Task studente");
-            }else if(StringUtils.equals("Professore", ruolo)){
-
-                mNav.navigate(R.id.action_fragment_home_to_richiesteProfessoreFragment,args);
-
             }else {
+                mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment);
                 Log.d("Task", "cliccato Task Ospite");
             }
         });
@@ -106,7 +98,7 @@ public class HomeFragment extends Fragment {
         CardTesisti.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Tesisti", "cliccato Tesisti Professore");
-                mNav.navigate(R.id.action_fragment_home_to_tesisti,args);
+                mNav.navigate(R.id.action_fragment_home_to_tesisti, args);
             }else {
                 Log.d("Tesisti", "cliccato Tesisti Ospite");
                 mNav.navigate(R.id.action_fragment_home_to_tesisti);
@@ -117,14 +109,14 @@ public class HomeFragment extends Fragment {
             mNav.navigate(R.id.action_fragment_home_to_social_fragment);
         });
 
-        CardMessaggi =  view.findViewById(R.id.cardViewMessaggi);
-        CardMessaggi.setOnClickListener(view1 -> {
+        CardSegnalazioni =  view.findViewById(R.id.cardViewMessaggi);
+        CardSegnalazioni.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
-                Log.d("Task", "cliccato Task Professore");
-                mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
-            }else {
-                Log.d("Task", "cliccato Task Ospite");
-                mNav.navigate(R.id.action_fragment_home_to_messaggiFragment);
+                Log.d("Segn", "cliccato Segnalazione Professore"  + ruolo);
+                mNav.navigate(R.id.action_fragment_home_to_tesisti);
+            }else if(StringUtils.equals("Studente", ruolo)){
+                Log.d("Segn", "cliccato Segnalazione Studente"  + ruolo);
+                mNav.navigate(R.id.action_fragment_home_to_segnStudentiFragment);
             }
         });
 

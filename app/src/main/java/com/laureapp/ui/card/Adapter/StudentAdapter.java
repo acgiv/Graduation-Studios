@@ -45,8 +45,7 @@ import java.util.TimerTask;
 public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements Filterable {
     private final List<StudenteWithUtente> studentList;
     private List<StudenteWithUtente> filteredStudentList;
-    private Filter studentFilter;
-    private StudentFilter filter;
+
 
 
 
@@ -56,7 +55,7 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
      * @param context     si riferisce al contesto in cui viene utilizzato
      * @param studentList corrisponde alla lista di studenti da passare
      */
-    public StudentAdapter(@NonNull Context context, List<StudenteWithUtente> studentList, List<StudenteWithUtente> filteredStudentList) {
+    public StudentAdapter(@NonNull Context context, List<StudenteWithUtente> studentList) {
         super(context, 0, studentList);
         this.studentList = new ArrayList<>(studentList);
         this.filteredStudentList = filteredStudentList; // Inizializza filteredStudentList con la stessa lista
@@ -83,7 +82,6 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
 
         StudenteWithUtente studenteWithUtenteItem = getItem(position);
 
-
         if (studenteWithUtenteItem != null && studenteWithUtenteItem.getUtente() != null) {
             Utente utente = studenteWithUtenteItem.getUtente();
 
@@ -103,53 +101,10 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
             matricolaTextView.setText("");
         }
 
-
         return convertView;
     }
 
 
-    @Override
-    public Filter getFilter() {
-        if (filter == null) {
-            filter = new StudentFilter();
-        }
-        return filter;
-    }
-
-    private class StudentFilter extends Filter {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
-            List<StudenteWithUtente> filteredStudents = new ArrayList<>();
-
-            if (constraint == null || constraint.length() == 0) {
-                // Se il testo di ricerca è vuoto, mostra tutti gli studenti
-                filteredStudents.addAll(studentList);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-
-                for (StudenteWithUtente student : studentList) {
-                    // Filtra in base alla matricola (sostituisci "getMatricola()" con il metodo corretto)
-                    if (student.getStudente().getMatricola().toString().toLowerCase().contains(filterPattern)) {
-                        filteredStudents.add(student);
-                    }
-                }
-            }
-
-            results.values = filteredStudents;
-            results.count = filteredStudents.size();
-            return results;
-        }
-
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredStudentList.clear();
-            filteredStudentList.addAll((List<StudenteWithUtente>) results.values);
-            notifyDataSetChanged();
-        }
-
-    }
 
 
 

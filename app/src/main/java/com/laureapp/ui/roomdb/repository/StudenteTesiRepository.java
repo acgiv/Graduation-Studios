@@ -28,6 +28,19 @@ public class StudenteTesiRepository {
     public void updateStudenteTesi(StudenteTesi studenteTesi){
         executor.execute(() -> roomDbSqlLite.studenteTesiDao().update(studenteTesi));
     }
+    public Long findIdTesiByIdStudente(Long idStudente){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long id = roomDbSqlLite.studenteTesiDao().findIdTesiByIdStudente(idStudente);
+            future.complete(id);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
 
     // Update the StudenteTesi database with the latest data
     public void updateStudenteTesiDatabase(List<StudenteTesi> latestData) {
@@ -107,4 +120,6 @@ public class StudenteTesiRepository {
             return -1L;
         }
     }
+
+
 }

@@ -25,6 +25,7 @@ public class QueryFirestore {
     CollectionReference studentiRef = db.collection("Utenti/Studenti/Studenti");
     CollectionReference professoriRef = db.collection("Utenti/Professori/Professori");
     CollectionReference taskRef = db.collection("Task");
+    CollectionReference segnRef = db.collection("Segnalazioni");
     CollectionReference taskStudentRef = db.collection("TaskStudente");
     CollectionReference ricevimentiRef = db.collection("Ricevimenti");
 
@@ -196,5 +197,34 @@ public class QueryFirestore {
 
         return future;
     }
+
+    public CompletableFuture<Long> trovaIdSegnMax(Context context) {
+        CompletableFuture<Long> future = new CompletableFuture<>();
+
+        segnRef
+                .orderBy("id_segn", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+                        Utente utente = document.toObject(Utente.class);
+                        if (utente != null) {
+                            Long idMax = utente.getId_utente();
+                            future.complete(idMax);
+                        }
+                    } else {
+                        future.complete(0L); // Completa con una stringa vuota in caso di nessun utente
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Errore durante la ricerca dell'ID più grande", e);
+                    ControlInput.showToast(context, "Errore durante la ricerca dell'ID più grande");
+                    future.completeExceptionally(e); // Completa con l'eccezione in caso di errore
+                });
+
+        return future;
+    }
+
 
 }

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LaureApp</string>
+    <string name="name">Name</string>
+    <string name="cognome">Last Name</string>
+    <string name="email">Email</string>
+    <string name="ruolo">Role: </string>
+    <string name="professore">Professor</string>
+    <string name="studente">Student</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="registrati">Register</string>
+    <string name="indietro">Back</string>
+    <string name="profilo">Profile</string>
+    <string name="accedi">Login</string>
+    <string name="accedi_come_ospite">Login as Guest</string>
+    <string name="ricorda_credenziali">Remember Credentials</string>
+    <string name="password_dimenticata">Forgot Password?</string>
+    <string name="registrati_qui"><u>Register Here</u></string>
+    <string name="non_sei_ancora_registrato">Not Registered Yet?</string>
+    <string name="logout">Logout</string>
+    <string name="Impostazione">Settings</string>
+    <string name="utente">User</string>
+    <string name="edit_icon">&#004070;</string>
+    <string name="close_nav" />
+    <string name="open_nav" />
+    <string name="messaggio">Message</string>
+    <string name="invio">Send</string>
+
+    <string name="home">Home</string>
+    <string name="tesi">Thesis</string>
+    <string name="classifica">Ranking</string>
+    <string name="social">Social</string>
+    <string name="tesi_description">Thesis Description</string>
+    <string name="chat_description">Chat</string>
+    <string name="classifica_description" />
+    <string name="social_description" />
+    <string name="richieste_description" />
+    <string name="richieste">Requests</string>
+    <string name="task_description" />
+    <string name="tesisti" />
+    <string name="tesisti_description" />
+    <string name="tesisti2">Thesists</string>
+
+    <!-- Strings related to error input -->
+    <string name="errore_stringa">Field {campo} should contain only characters.</string>
+    <string name="errore_email">Please enter a valid email address.</string>
+    <string name="errore_campo_vuoto">Field {campo} is required and cannot be empty!</string>
+    <string name="errore_matricola">Field {campo} should contain 6 numeric digits.</string>
+    <string name="errore_matricola_duplicate">A {campo} associated with this matriculation already exists.</string>
+    <string name="errore_media">Field {campo} should contain 2 numeric digits between 18 and 30.</string>
+    <string name="errore_scelta">The entered field is not in the selection.</string>
+    <string name="password_not_safe_error">The password does not meet security requirements</string>
+    <string name="non_equivalent_passwords">Passwords do not match</string>
+    <string name="errore_autenticazione">Authentication error. Please make sure the email and password are correct.</string>
+
+    <!-- Strings related to Change Password Page  -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="matricola">Matriculation</string>
+    <string name="inserisci_l_email_di_registrazione">Enter the registration email</string>
+    <string name="avanti">Next</string>
+    <string name="facolta">Faculty</string>
+    <string name="media">GPA</string>
+    <string name="esami_mancanti">Missing Exams</string>
+    <string name="corsi">Degree Course</string>
+    <string name="impostaLingua">Select Language</string>
+    <string name="italiano">Italian</string>
+    <string name="inglese">English</string>
+
+    <string-array name="Dipartimento">
+        <item>Mathematics</item>
+        <item>Computer Science</item>
+        <item>Pharmacy</item>
+    </string-array>
+
+    <string-array name="StatoTask">
+        <item>Not Started</item>
+        <item>In Progress</item>
+        <item>Completed</item>
+    </string-array>
+    <string-array name="Corsi">
+        <item>Itps</item>
+        <item>Mathematics</item>
+        <item>Computer Science</item>
+    </string-array>
+
+    <string-array name="OrdinaPer">
+        <item>Views</item>
+        <item>See</item>
+        <item>Itps</item>
+        <item>Mathematics</item>
+        <item>Computer Science</item>
+    </string-array>
+
+    <string name="title_activity_loading_page">Loading Page Activity</string>
+    <string name="title_activity_login">Login Activity</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="Messaggi" />
+    <string name="messaggi">Messages</string>
+    <string name="task">Task</string>
+    <string name="arrow_forward_icon">Arrow Forward Icon</string>
+    <string name="edit_password_icon">Edit Password Icon</string>
+    <string name="taskk">Task</string>
+    <string name="classificaTesi">Ranking</string>
+    <string name="le_mie_tesi">My Theses</string>
+    <string name="elenco_tesi">Thesis List</string>
+    <string name="student_name_placeholder">%1$s %2$s</string>
+    <string name="add_icon_description">Add Icon</string>
+    <string name="elimina">Delete</string>
+    <string name="salva">Save</string>
+    <string name="ricevimento_1">Meeting 1</string>
+    <string name="argomento">Topic 1</string>
+    <string name="data_ricevimento">Date 1</string>
+    <string name="pulsante_task">Task</string>
+    <string name="nome_tesista_task">Name:</string>
+    <string name="cognome_task_tesista">Last Name:</string>
+    <string name="matricola_task">Matriculation:</string>
+    <string name="facolta_task_tesista">Faculty:</string>
+    <string name="cdl_task_tesista">Degree Course</string>
+    <string name="ciclo_cdl_task_tesista">Degree Course Cycle:</string>
+    <string name="cdl_nome_task_tesista">Degree Course:</string>
+    <string name="titolo_tesi_task_tesista">Thesis Title:</string>
+    <string name="anagrafica_task_tesista">Profile</string>
+    <string name="titolo_dettagli_task">Task</string>
+    <string name="stato_task">Status</string>
+    <string name="default_stato_task">Not Started</string>
+    <string name="data_inizio_dettagli_task">Start Date</string>
+    <string name="hint_data_inizio">Start</string>
+    <string name="hint_data_scadenza">Deadline</string>
+    <string name="hint_data_scadenza_button">Deadline Date</string>
+    <string name="text_ricevimenti_button">Meetings</string>
+    <string name="text_dettagli">Details</string>
+    <string name="dettagli_task_label">Task</string>
+    <string name="delete_icon">Delete Icon</string>
+    <string name="intestazione_colonna_ricevimento">Meeting</string>
+    <string name="intestazione_colonna_argomento">Topic</string>
+    <string name="intestazione_colonna_data">Date</string>
+    <string name="error_scadenza_inizio">Deadline date is earlier than the start date.</string>
+    <string name="error_inizio_scadenza">Start date is later than the deadline.</string>
+    <string name="errore_email_esistente">An account associated with this email already exists.</string>
+    <string name="ElencoTesi">Thesis List</string>
+
+    <style name="CalendarDateText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#000000</item>
+    </style>
+</resources>

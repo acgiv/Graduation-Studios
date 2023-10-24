@@ -115,7 +115,8 @@ public class TaskStudenteFragment extends Fragment {
         mNav = Navigation.findNavController(view);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
 
-        adapter = new TaskStudenteAdapter(context, taskList,mNav);
+        adapter = new TaskStudenteAdapter(context, taskList,mNav, args);
+        Log.d("id_utente_lista", utente.getId_utente().toString());
 
         loadStudentForUserId(utente.getId_utente());
 
@@ -205,6 +206,7 @@ public class TaskStudenteFragment extends Fragment {
             utente = args.getSerializable("Utente", Utente.class);
             //Aggiungo la task a Firestore in base all'utente loggato
             addTaskToFirestoreLast(utente.getId_utente(), inputData, startDate, dueDate);
+            Log.d("id_utente_lista", utente.getId_utente().toString());
         });
 
 
@@ -365,7 +367,7 @@ public class TaskStudenteFragment extends Fragment {
      */
     private Task<Long> loadStudentByUserId(Long id_utente) {
         return FirebaseFirestore.getInstance()
-                .collection("Utenti").document("Studenti").collection("Studenti")
+                .collection("Utenti/Studenti/Studenti")
                 .whereEqualTo("id_utente", id_utente)
                 .limit(1)
                 .get()
@@ -484,6 +486,8 @@ public class TaskStudenteFragment extends Fragment {
                 Long id_studente = studentTask.getResult();
                 loadStudenteTesiForStudenteId(id_studente);
             } else {
+                taskList.clear();
+                adapter.notifyDataSetChanged();
                 showToast(context, "Dati studenti non caricati correttamente");
 
             }
@@ -519,6 +523,8 @@ public class TaskStudenteFragment extends Fragment {
                 taskList.clear();
                 addTasksToList(task.getResult());
             } else {
+                taskList.clear();
+                adapter.notifyDataSetChanged();
                 showToast(context, "Dati task non caricati correttamente");
             }
         });

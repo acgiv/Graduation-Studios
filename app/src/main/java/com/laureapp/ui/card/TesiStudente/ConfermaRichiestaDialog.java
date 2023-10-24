@@ -57,6 +57,7 @@ public class ConfermaRichiestaDialog extends DialogFragment {
         // Crea un oggetto per la nuova richiesta di tesi
         Map<String, Object> richiestaTesi = new HashMap<>();
         richiestaTesi.put("id_tesi", idTesi);
+        richiestaTesi.put("id_studente",idStudente);
         // Trova il massimo ID attuale e incrementalo di 1
         findMaxRequestId(new MaxRequestIdCallback() {
             @Override

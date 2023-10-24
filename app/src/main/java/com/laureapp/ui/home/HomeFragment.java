@@ -33,6 +33,8 @@ public class HomeFragment extends Fragment {
     CardView CardTesisti;
     CardView CardSocial;
     CardView CardMessaggi;
+
+    CardView CardSegnalazioni;
     String ruolo;
     Context context;
     Bundle args;
@@ -93,10 +95,12 @@ public class HomeFragment extends Fragment {
             if(StringUtils.equals("Studente", ruolo)){
                 mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment,args);
                 Log.d("Task", "cliccato Task studente");
+            } else if(StringUtils.equals("Professore", ruolo)){
+                mNav.navigate(R.id.action_fragment_home_to_richiesteProfessoreFragment,args);
             }else {
                 mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment);
-                Log.d("Task", "cliccato Task Ospite");
-            }
+                Log.d("Task", "cliccato Task Ospite");            }
+
         });
 
 

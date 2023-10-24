@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_fragment_home_to_impostazioniFragment"
             app:destination="@id/fragment_impostazioni" />
+        <action
+            android:id="@+id/action_fragment_home_to_richiesteProfessoreFragment"
+            app:destination="@id/richiesteProfessoreFragment" />
 
     </fragment>
 
@@ -259,5 +262,9 @@
         android:label="Tesi"
         tools:layout="@layout/fragment_tab_tesi_professore" >
     </fragment>
+    <fragment
+        android:id="@+id/richiesteProfessoreFragment"
+        android:name="com.laureapp.ui.card.RichiesteProfessore.RichiesteProfessoreFragment"
+        android:label="Richieste di Tesi" />
 
 </navigation>

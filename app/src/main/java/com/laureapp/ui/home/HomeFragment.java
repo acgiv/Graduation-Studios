@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import com.laureapp.R;
@@ -31,6 +32,8 @@ public class HomeFragment extends Fragment {
     CardView CardTask;
     CardView CardTesisti;
     CardView CardSocial;
+    CardView CardMessaggi;
+
     CardView CardSegnalazioni;
     String ruolo;
     Context context;
@@ -48,6 +51,7 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
+            args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
 
         }
 
@@ -70,7 +74,11 @@ public class HomeFragment extends Fragment {
         CardSocial =  view.findViewById(R.id.cardViewSocial);
         CardTesisti = view.findViewById(R.id.cardViewTesisti);
 
+        TextView taskTextView = view.findViewById(R.id.taskTextView);
 
+        if (StringUtils.equals("Professore", ruolo)) {
+            taskTextView.setText("Richieste");
+        }
 
         CardTesi.setOnClickListener(view1 -> {
             if(StringUtils.equals("Studente", ruolo)){
@@ -87,10 +95,12 @@ public class HomeFragment extends Fragment {
             if(StringUtils.equals("Studente", ruolo)){
                 mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment,args);
                 Log.d("Task", "cliccato Task studente");
+            } else if(StringUtils.equals("Professore", ruolo)){
+                mNav.navigate(R.id.action_fragment_home_to_richiesteProfessoreFragment,args);
             }else {
                 mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment);
-                Log.d("Task", "cliccato Task Ospite");
-            }
+                Log.d("Task", "cliccato Task Ospite");            }
+
         });
 
 

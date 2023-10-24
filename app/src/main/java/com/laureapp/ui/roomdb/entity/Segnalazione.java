@@ -47,6 +47,7 @@ public class Segnalazione {
     // Costruttore per creare una nuova segnalazioni
     public Segnalazione(Long idSegnalazione, Long idTesi, String titolo, String richiesta) {
         this.idSegnalazione = idSegnalazione;
+        this.idTesi = idTesi;
         this.titolo = titolo;
         this.richiesta = richiesta;
     }

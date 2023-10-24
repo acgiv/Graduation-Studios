@@ -2,6 +2,7 @@ package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.laureapp.R;
 import com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment;
 import com.laureapp.ui.roomdb.entity.Segnalazione;
+import com.laureapp.ui.roomdb.entity.TaskStudente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +30,22 @@ import java.util.List;
 
 public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
 
-    public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioni) {
+    private Context mContex;
+    private List<Segnalazione> segnalazioniList;
+    public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioni, Bundle args) {
         super(context, 0, segnalazioni);
+        mContex = context;
+        segnalazioniList = segnalazioni;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        View listItem = convertView;
+        if (listItem == null) {
+            listItem = LayoutInflater.from(mContex).inflate(R.layout.lista_segnalazioni, parent, false);
+        }
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         convertView = inflater.inflate(R.layout.lista_segnalazioni, parent, false);
@@ -45,11 +57,16 @@ public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
         // Imposta la richiesta nell'elemento secondario (subitem)
         TextView subTextView = convertView.findViewById(R.id.text_richiesta);
 
-        if (segnalazione != null) {
+        assert segnalazione != null;
+        if(segnalazione.getTitolo() != null) {
             mainTextView.setText(segnalazione.getTitolo());
+        }
+
+        if(segnalazione.getRichiesta() != null) {
             subTextView.setText(segnalazione.getRichiesta());
         }
 
-        return convertView;
+
+        return listItem;
     }
 }

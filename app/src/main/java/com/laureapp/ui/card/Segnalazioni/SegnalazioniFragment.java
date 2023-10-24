@@ -42,6 +42,8 @@ import com.laureapp.ui.card.Adapter.SegnalazioniAdapter;
 import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.RoomDbSqlLite;
 import com.laureapp.ui.roomdb.entity.Segnalazione;
+import com.laureapp.ui.roomdb.entity.StudenteTesi;
+import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.repository.SegnalazioneRepository;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteTesiModelView;
@@ -59,8 +61,8 @@ public class SegnalazioniFragment extends Fragment {
     Long idTesiDesiderata;
     ArrayList<Long> idTesiList = new ArrayList<>();
     private AlertDialog alertDialog;
-    private static List<Segnalazione> segnalazioniList;
-    private static SegnalazioniAdapter adapter;
+    private static ArrayList<Segnalazione> segnalazioniList = new ArrayList<>();
+    private SegnalazioniAdapter adapter;
     private static final String TAG = "FragmentSegnalazione"; // Definizione della variabile TAG
 
     //FragmentSegnBuilding binding;
@@ -94,68 +96,97 @@ public class SegnalazioniFragment extends Fragment {
 
         email = getEmailFromSharedPreferences(context);
         Log.d("segnM", email);
-        if(email != null) {
-            id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
-            Log.d("idUtente", String.valueOf(id_utente));
-            id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
-            Log.d("idStudente", String.valueOf(id_studente));
-            //id_stedente_tesi = studenteTesiView.findIdTesiByIdTesi(id_studente);
+
+        id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
+        Log.d("idUtente", String.valueOf(id_utente));
+        id_studente = studenteView.findStudente(id_utente); //ottengo l'id dello studente corrispondente all'id dell'utente
+        Log.d("idStudente", String.valueOf(id_studente));
+        //id_stedente_tesi = studenteTesiView.findIdTesiByIdTesi(id_studente);
 
 
-            //Ricerca Tesi
-            db.collection("StudenteTesi")
-                    .whereEqualTo("id_studente", id_studente)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if(task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Ottieni il valore id_tesi dal documento
-                                idTesiDesiderata = document.getLong("id_tesi");
-                                // Ottieni l'ID della tesi desiderata
-                                Log.d("tesiStudente", String.valueOf(idTesiDesiderata));
-                            }
-                        }else {
-                            Log.d("Firestore", "Errore durante la ricerca: ", task.getException());
-                        }
-                    });
-
-        }
-
-        //Recupera i dati dalla collezione "Segnalazioni"
-        segnalazioniRef.get()
+        //Ricerca Tesi
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("StudenteTesi")
+                .whereEqualTo("id_studente", id_studente)
+                .limit(1)
+                .get()
                 .addOnCompleteListener(task -> {
-                   if(task.isSuccessful()) {
-                       for(QueryDocumentSnapshot document : task.getResult()){
-                           Segnalazione segnalazione = document.toObject(Segnalazione.class);
-                           segnalazioniList.add(segnalazione);
-                       }
-                   }else {
-                       Log.d(TAG, "Error getting documents: " + task.getException().getMessage());
-                   }
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
+
+                        Long id_tesi = doc.getLong("id_tesi");
+
+                        db.collection("Segnalazioni")
+                                .whereEqualTo("id_tesi", id_tesi)
+                                .get()
+                                .addOnCompleteListener(task2 -> {
+                                    if (task2.isSuccessful() && !task2.getResult().isEmpty()) {
+                                        for(QueryDocumentSnapshot doc2 : task2.getResult()) {
+
+                                            Segnalazione segnalazione = new Segnalazione();
+                                            segnalazione.setIdTesi(id_tesi);
+                                            segnalazione.setRichiesta(doc2.getString("Richiesta"));
+                                            segnalazione.setTitolo((doc2.getString("Titolo")));
+                                            segnalazione.setIdSegnalazione(doc2.getLong("id_segn"));
+                                            Log.d("Segnalazini", String.valueOf(segnalazione));
+                                            segnalazioniList.add(segnalazione);
+
+                                        }
+
+                                        // Ottieni il riferimento alla ListView
+                                        ListView listView = rootView.findViewById(R.id.segn_list_view);
+                                        // Crea l'adapter personalizzato e imposta sulla ListView
+                                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList,args);
+                                        // Collega l'adapter alla ListView
+                                        listView.setAdapter(adapter);
+
+                                        // Imposta un listener per gli elementi della ListView
+                                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                // Ottieni il NavController dalla tua Activity principale
+                                                NavController navController = NavHostFragment.findNavController(SegnalazioniFragment.this);
+
+                                                // Esegui la navigazione verso DiscussioneFragment
+                                                navController.navigate(R.id.action_segnalazioniFragment_to_discussioneFragment);
+                                            }
+                                        });
+                                    }
+                                    });
+
+                    }
                 });
+
 
         // Ottieni il riferimento alla ListView
         //ListView listView = rootView.findViewById(R.id.segn_list_view);
 
         // Crea un'istanza del repository delle segnalazioni
-        SegnalazioneRepository segnalazioneRepository = new SegnalazioneRepository(requireContext());
+        //SegnalazioneRepository segnalazioneRepository = new SegnalazioneRepository(requireContext());
 
         // Ottieni le segnalazioni per la tesi desiderata dal repository
-        segnalazioniList = segnalazioneRepository.findSegnalazioniByTesiId(idTesiDesiderata);
+        //segnalazioniList = segnalazioneRepository.findSegnalazioniByTesiId(idTesiDesiderata);
 
-        //Recupera i dati dalla collezione "Segnalazioni"
+        //Recupera i dati dalla collezione "Segnalazioni" in base alla idTesiDesiderata
+        /*
         segnalazioniRef.get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         for(QueryDocumentSnapshot document : task.getResult()){
-                            Segnalazione segnalazione = document.toObject(Segnalazione.class);
-                            segnalazioniList.add(segnalazione);
+                            //Segnalazione segnalazione = document.toObject(Segnalazione.class);
+                            Long idSegnalazione = document.getLong("id_segn");
+                            Long idTesi = document.getLong("id_tesi");
+                            String titolo = document.getString("Titolo");
+                            String richiesta = document.getString("Richiesta");
+
+                            Segnalazione segnalazione = new Segnalazione(idSegnalazione, idTesi, titolo, richiesta);
+
                         }
 
                         // Ottieni il riferimento alla ListView
                         ListView listView = rootView.findViewById(R.id.segn_list_view);
                         // Crea l'adapter personalizzato e imposta sulla ListView
-                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList);
+                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList,args);
                         // Collega l'adapter alla ListView
                         listView.setAdapter(adapter);
 
@@ -174,7 +205,9 @@ public class SegnalazioniFragment extends Fragment {
                     }else {
                         Log.d(TAG, "Error getting documents: " + task.getException().getMessage());
                     }
-                });
+                });*/
+
+
 
 
 

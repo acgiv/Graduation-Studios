@@ -30,22 +30,22 @@ import java.util.List;
 
 public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
 
-    private final LayoutInflater inflater;
-    Context context;
-    private final List<Segnalazione> segnalazioni;
-    Bundle args;
-
-
+    private Context mContex;
+    private List<Segnalazione> segnalazioniList;
     public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioni, Bundle args) {
         super(context, 0, segnalazioni);
-        inflater = LayoutInflater.from(context);
-        this.context = context;
-        this.segnalazioni = segnalazioni;
-        this.args = args;
+        mContex = context;
+        segnalazioniList = segnalazioni;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
+        View listItem = convertView;
+        if (listItem == null) {
+            listItem = LayoutInflater.from(mContex).inflate(R.layout.lista_segnalazioni, parent, false);
+        }
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         convertView = inflater.inflate(R.layout.lista_segnalazioni, parent, false);
@@ -57,11 +57,16 @@ public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
         // Imposta la richiesta nell'elemento secondario (subitem)
         TextView subTextView = convertView.findViewById(R.id.text_richiesta);
 
-        if (segnalazione != null) {
+        assert segnalazione != null;
+        if(segnalazione.getTitolo() != null) {
             mainTextView.setText(segnalazione.getTitolo());
+        }
+
+        if(segnalazione.getRichiesta() != null) {
             subTextView.setText(segnalazione.getRichiesta());
         }
 
-        return convertView;
+
+        return listItem;
     }
 }

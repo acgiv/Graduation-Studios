@@ -1,6 +1,7 @@
 package com.laureapp.ui.card.TesiProfessore;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,33 +10,42 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.ListaTesiProfessoreAdapter;
+import com.laureapp.ui.card.TesiStudente.ConfermaRichiestaDialog;
 import com.laureapp.ui.roomdb.entity.Tesi;
+import com.laureapp.ui.roomdb.entity.Vincolo;
 import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class ListaTesiProfessoreFragment extends Fragment {
 
@@ -69,9 +79,6 @@ public class ListaTesiProfessoreFragment extends Fragment {
             UtenteModelView utenteView =  new UtenteModelView(context); //inizializza utenteView con un'istanza di UtenteModelView
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
             id_professore = professoreView.findProfessore(id_utente); //ottengo l'id del professore corrispondente all'id dell'utente
-
-            //Log.d("prof", String.valueOf(id_professore));
-            //Log.d("ut", String.valueOf(id_utente));
 
             //Carico l'elenco degli id delle tesi collegate con il professore
             loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
@@ -107,9 +114,10 @@ public class ListaTesiProfessoreFragment extends Fragment {
             Log.d("Email salvata: ", "Non trovata");
             }
 
-            addButton.setOnClickListener(view1 ->
-                showInputDialog()
-            );
+            addButton.setOnClickListener(view1 -> {
+                view.setAlpha(0.1f); // Imposta l'opacità desiderata (0.0-1.0)
+                showTesiDialog(view); //quando viene cliccato il pulsante filtra si apre il dialog
+            });
 
         }
 
@@ -198,24 +206,324 @@ public class ListaTesiProfessoreFragment extends Fragment {
      * Metodo per mostrare il pop-up in un'attività o fragment
      */
 
-    public void showInputDialog() {
+    public void showTesiDialog(View rootView) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Nuova tesi");
 
-        //Includi il layout XML personalizzato
-        View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_tesi_professore_popup,null);
+        // Include the custom XML layout
+        View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_tesi_professore_popup, null);
         builder.setView(view);
 
-        //EditText
+        // EditText
         EditText editTextTitolo = view.findViewById(R.id.editTextTitoloTesiProfessore);
         EditText editTextTipologia = view.findViewById(R.id.editTextTipologiaTesiProfessore);
+
+        //Gestisco il campo data di pubblicazione
         EditText editTextDataPubblicazione = view.findViewById(R.id.editTextDataPubblicazioneTesiProfessore);
+        editTextDataPubblicazione.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePicker(editTextDataPubblicazione);
+            }
+        });
+
         EditText editTextCicloCdl = view.findViewById(R.id.editTextCicloCdlTesiProfessore);
         EditText editTextAbstract = view.findViewById(R.id.editTextAbstractTesiProfessore);
 
-        //Button
-        Button buttonAvanti = view.findViewById(R.id.buttonAvantiTesiProfessore);
+        // Button
+        Button avantiButton = view.findViewById(R.id.buttonAvantiTesiProfessore);
+        Button annullaButton = view.findViewById(R.id.buttomAnnullaTesiProfessore);
+
+        // Create the AlertDialog
+        alertDialog = builder.create();
+
+        // Show the dialog
+        alertDialog.show();
+
+        // Set a listener for the "Avanti" button
+        avantiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //quando l'utente clicca avanti
+                //definisco un oggetto di tipo tesi che conterrà i vari campi
+                Tesi tesiNew = new Tesi();
+                String titolo = editTextTitolo.getText().toString();
+                String tipologia = editTextTipologia.getText().toString();
+                String ciclocdl = editTextCicloCdl.getText().toString();
+                String descrizione = editTextAbstract.getText().toString();
+                String dataPubblicazione = editTextDataPubblicazione.getText().toString();
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                Date dataConvertita = null;
+                try {
+                    dataConvertita = dateFormat.parse(dataPubblicazione);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+
+                tesiNew.setTitolo(titolo);
+                tesiNew.setAbstract_tesi(descrizione);
+                tesiNew.setData_pubblicazione(dataConvertita);
+                tesiNew.setTipologia(tipologia);
+                tesiNew.setCiclo_cdl(ciclocdl);
+                tesiNew.setVisualizzazioni(0L);
+
+
+                alertDialog.dismiss();
+                showVincoliDialog(view,tesiNew);
+            }
+        });
+
+        annullaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the "Avanti" button click here
+
+                // Close the dialog when you're done
+                alertDialog.dismiss();
+                rootView.setAlpha(1); //reimpose l'opacità di default
+
+            }
+        });
+
+        /**
+         * Gestione del metodo on dismiss quando si clicca fuori o si clicca annulla
+         */
+        alertDialog.setOnDismissListener(dialog -> {
+            rootView.setAlpha(1); //reimpose l'opacità di default
+
+        });
 
     }
+
+    public void showVincoliDialog(View rootView,Tesi tesiNew) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+
+        // Include the custom XML layout
+        View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_vincolo_tesi_popup, null);
+        builder.setView(view);
+
+        // EditText
+        EditText editTextMedia = view.findViewById(R.id.editTextMediaVincoloTesi);
+        EditText editTextTempistiche = view.findViewById(R.id.editTextTempisticheVincoloTesi);
+        EditText editTextEsamiMancanti= view.findViewById(R.id.editTextEsamiVincoloTesi);
+        EditText editTextSkill = view.findViewById(R.id.editTextSkillVincoloTesi);
+
+        // Button
+        Button creaButton = view.findViewById(R.id.buttonConfermaVincoloTesi);
+        Button annullaButton = view.findViewById(R.id.buttomAnnullaTesiProfessore);
+
+        // Create the AlertDialog
+        alertDialog = builder.create();
+
+        // Show the dialog
+        alertDialog.show();
+
+        // Set a listener for the "Avanti" button
+        creaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //quando l'utente clicca avanti
+                //definisco un oggetto di tipo tesi che conterrà i vari campi
+                Vincolo vincoloNew = new Vincolo();
+                String media = editTextMedia.getText().toString();
+                String tempistiche = editTextTempistiche.getText().toString();
+                String esami = editTextEsamiMancanti.getText().toString();
+                String skill = editTextSkill.getText().toString();
+
+                vincoloNew.setMedia_voti(Long.valueOf(media));
+                vincoloNew.setTempistiche(Long.valueOf(tempistiche));
+                vincoloNew.setEsami_mancanti_necessari(Long.valueOf(esami));
+                vincoloNew.setSkill(skill);
+
+                createVincoloTesi(vincoloNew,tesiNew);
+                alertDialog.dismiss();
+            }
+        });
+
+        annullaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle the "Avanti" button click here
+
+                // Close the dialog when you're done
+                alertDialog.dismiss();
+                rootView.setAlpha(1); //reimpose l'opacità di default
+
+            }
+        });
+
+        /**
+         * Gestione del metodo on dismiss quando si clicca fuori o si clicca annulla
+         */
+        alertDialog.setOnDismissListener(dialog -> {
+            rootView.setAlpha(1); //reimpose l'opacità di default
+
+        });
+
+    }
+
+    /**
+     * Metodo per mostrare il calendario quando l'utente clicca il campo data di pubblicazione
+     * @param view
+     */
+    public void showDatePicker(View view) {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                // Called when the user selects a date from the DatePickerDialog
+                String selectedDate = year + "-" + (month + 1) + "-" + dayOfMonth;
+                EditText editTextDataPubblicazione = alertDialog.findViewById(R.id.editTextDataPubblicazioneTesiProfessore);
+                editTextDataPubblicazione.setText(selectedDate);
+            }
+        };
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), dateSetListener, year, month, day);
+        datePickerDialog.show();
+    }
+
+    private void createVincoloTesi(Vincolo vincoloNew,Tesi tesiNew){
+
+        // Crea un oggetto per la nuova richiesta di tesi
+        Map<String, Object> vincoloTesi = new HashMap<>();
+        vincoloTesi.put("esami_mancanti_necessari", vincoloNew.getEsami_mancanti_necessari());
+        vincoloTesi.put("media_voti",vincoloNew.getMedia_voti());
+        vincoloTesi.put("skill",vincoloNew.getSkill());
+        vincoloTesi.put("tempistiche",vincoloNew.getTempistiche());
+
+        // Trova il massimo ID attuale e incrementalo di 1
+        findMaxVincoloId(new ListaTesiProfessoreFragment.MaxRequestIdCallback() {
+            @Override
+            public void onCallback(Long maxRequestId) {
+                vincoloTesi.put("id_vincolo", maxRequestId + 1);
+
+                // Aggiungi la nuova richiesta di tesi a Firestore
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference richiesteTesiRef = db.collection("Vincolo");
+
+                richiesteTesiRef.add(vincoloTesi)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                //se viene creato il vincolo
+                                createTesi(tesiNew, (Long) vincoloTesi.get("id_vincolo")); //creo la tesi su firestore
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Si è verificato un errore nell'aggiunta della richiesta di tesi
+                            }
+                        });
+            }
+        });
+    }
+
+    private interface MaxRequestIdCallback {
+        void onCallback(Long maxRequestId);
+    }
+
+    private void findMaxVincoloId(ListaTesiProfessoreFragment.MaxRequestIdCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference vincoloRef = db.collection("Vincolo");
+
+        vincoloRef
+                .orderBy("id_vincolo", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        Long maxRequestId = queryDocumentSnapshots.getDocuments().get(0).getLong("id_vincolo");
+                        if (maxRequestId != null) {
+                            callback.onCallback(maxRequestId);
+                        } else {
+                            // Nessun ID trovato, inizia da 1
+                            callback.onCallback(1L);
+                        }
+                    } else {
+                        // Nessun documento trovato, inizia da 1
+                        callback.onCallback(1L);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore Error", "Error finding max request ID", e);
+                });
+    }
+
+    private void createTesi(Tesi tesiNew,Long idVincolo){
+
+        Long visualizzazioni = 0L;
+
+        // Crea un oggetto per la nuova richiesta di tesi
+        Map<String, Object> tesiMap = new HashMap<>();
+        tesiMap.put("titolo", tesiNew.getTitolo());
+        tesiMap.put("abstract_tesi",tesiNew.getAbstract_tesi());
+        tesiMap.put("ciclo_cdl",tesiNew.getCiclo_cdl());
+        tesiMap.put("data_pubblicazione",tesiNew.getData_pubblicazione());
+        tesiMap.put("id_vincolo",idVincolo);
+        tesiMap.put("visualizzazioni",visualizzazioni);
+
+        // Trova il massimo ID attuale e incrementalo di 1
+        findMaxTesiId(new ListaTesiProfessoreFragment.MaxRequestIdCallback() {
+            @Override
+            public void onCallback(Long maxRequestId) {
+                tesiMap.put("id_tesi", maxRequestId + 1);
+
+                // Aggiungi la nuova richiesta di tesi a Firestore
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference richiesteTesiRef = db.collection("Tesi");
+
+                richiesteTesiRef.add(tesiMap)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                //se viene creato la tesi
+
+
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Si è verificato un errore nell'aggiunta della richiesta di tesi
+                            }
+                        });
+            }
+        });
+    }
+
+    private void findMaxTesiId(ListaTesiProfessoreFragment.MaxRequestIdCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference richiesteTesiRef = db.collection("Tesi");
+
+        richiesteTesiRef
+                .orderBy("id_tesi", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        Long maxRequestId = queryDocumentSnapshots.getDocuments().get(0).getLong("id_tesi");
+                        if (maxRequestId != null) {
+                            callback.onCallback(maxRequestId);
+                        } else {
+                            // Nessun ID trovato, inizia da 1
+                            callback.onCallback(1L);
+                        }
+                    } else {
+                        // Nessun documento trovato, inizia da 1
+                        callback.onCallback(1L);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore Error", "Error finding max request ID", e);
+                });
+    }
+
+
+
+
 
 }

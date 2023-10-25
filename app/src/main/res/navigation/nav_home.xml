@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_fragment_home_to_impostazioniFragment"
             app:destination="@id/fragment_impostazioni" />
+        <action
+            android:id="@+id/action_fragment_home_to_richiesteProfessoreFragment"
+            app:destination="@id/richiesteProfessoreFragment" />
 
     </fragment>
 
@@ -258,6 +261,23 @@
         android:name="com.laureapp.ui.card.TesiProfessore.TesiTabProfessoreFragment"
         android:label="Tesi"
         tools:layout="@layout/fragment_tab_tesi_professore" >
+    </fragment>
+    <fragment
+        android:id="@+id/richiesteProfessoreFragment"
+        android:name="com.laureapp.ui.card.RichiesteProfessore.RichiesteProfessoreFragment"
+        android:label="Richieste di Tesi" >
+        <action
+            android:id="@+id/action_richiesteProfessoreFragment_to_dettaglioRichiestaFragment"
+            app:destination="@id/dettaglioRichiestaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dettaglioRichiestaFragment"
+        android:name="com.laureapp.ui.card.RichiesteProfessore.DettaglioRichiestaFragment"
+        android:label="Dettaglio Richiesta Tesi"
+        tools:layout="@layout/fragment_dettaglio_richieste_tesi" >
+        <action
+            android:id="@+id/action_dettaglioRichiestaFragment_to_richiesteProfessoreFragment"
+            app:destination="@id/richiesteProfessoreFragment" />
     </fragment>
 
 </navigation>

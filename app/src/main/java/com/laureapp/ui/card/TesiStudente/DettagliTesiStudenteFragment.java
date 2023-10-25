@@ -131,8 +131,26 @@ public class DettagliTesiStudenteFragment extends Fragment {
                         mediaTextView.setText(media.toString());
                         skillTextView.setText(vincolo.getSkill());
 
+                        Button richiediTesiButton = view.findViewById(R.id.richiediTesi);
+                        richiediTesiButton.setOnClickListener(view1 -> {
+
+
+                            if (StudenteMatchesVincoli( media, esamiMancanti)) {
+                                boolean soddisfaRequisiti = true;
+                                Log.d("vedi2", String.valueOf(soddisfaRequisiti));
+
+                                showConfirmationDialog("Vuoi richiedere questa tesi?", id_tesi, id_studente, soddisfaRequisiti);
+                            } else {
+                                boolean soddisfaRequisiti = false;
+
+                                showConfirmationDialog("Attenzione: Non soddisfi tutti i requisiti per richiedere questa tesi. Vuoi richiederla comunque?", id_tesi, id_studente, soddisfaRequisiti);
+                            }
+
+                        });
+
                         //chiamo il metodo che verifica se lo studente rispetti i vincoli per richiedere la tesi
-                        StudenteMatchesVincoli(view,media,esamiMancanti);
+
+
 
                     } else {
                         Log.e("vincolo Firestore Error", "Error getting vincolo data", taskVincolo.getException());
@@ -230,11 +248,10 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
     /**
      * Metodo utilizzato per verificare se lo studente rispetti i vincoli in modo tale da poter richiedere la tesi
-     * @param view
      * @param media
      * @param esamiMancanti
      */
-    private void StudenteMatchesVincoli(View view,Long media,Long esamiMancanti) {
+    private boolean  StudenteMatchesVincoli(Long media,Long esamiMancanti) {
         List<Studente> studenti;
         context = getContext();
         email = getEmailFromSharedPreferences(context); // Chiamata al metodo per ottenere la mail
@@ -251,17 +268,21 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                 Long mediaStudente = (long) studente.getMedia();
                 Long esamiStudente = (long) studente.getEsami_mancanti();
-                if(mediaStudente < media && esamiStudente > esamiMancanti ){
-                    Button richiediTesiButton = view.findViewById(R.id.richiediTesi);
-                    richiediTesiButton.setOnClickListener(view1 -> {
-                        Toast toast = Toast.makeText(context, "Impossibile richiede la tesi. Non soddisfi tutti i vincoli", Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.TOP, 0, 0); // Imposta il Toast in alto
-                        toast.show();
-
-                    });
+                if(mediaStudente > media && esamiStudente < esamiMancanti ){
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    /**
+     * Metodo utilizzato per mostrare il dialog di conferma richiesta tesi
+     * @param message
+     */
+    private void showConfirmationDialog(String message, Long idTesi, Long idStudente, boolean soddisfaRequisiti) {
+        ConfermaRichiestaDialog dialog = new ConfermaRichiestaDialog(message, idTesi, idStudente, soddisfaRequisiti);
+        dialog.show(getFragmentManager(), "ConfermaRichiestaDialog");
     }
 
     /**

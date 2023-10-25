@@ -274,20 +274,6 @@ public class ElencoTesiFragment extends Fragment {
             String selectedOrdinaper = ordinaperSpinner.getSelectedItem().toString();
 
 
-            //converto in long da string
-            if (!mediaString.isEmpty()) {
-                media = Long.parseLong(mediaString);
-
-            }
-            if (!esamiString.isEmpty()) {
-                esami = Long.parseLong(esamiString);
-
-            }
-            if (!tempisticheString.isEmpty()) {
-                tempistiche = Long.parseLong(tempisticheString);
-
-            }
-
 
             //filtro in base al cognome del relatore
             Long id_utente = getIdUtenteByCognome(cognome);

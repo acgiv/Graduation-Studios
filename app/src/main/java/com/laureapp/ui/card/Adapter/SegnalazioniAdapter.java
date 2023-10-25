@@ -53,9 +53,9 @@ public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
         // Ottieni l'oggetto Segnalazione corrente
         Segnalazione segnalazione = getItem(position);
         // Imposta il titolo dell'elemento principale
-        TextView mainTextView = convertView.findViewById(R.id.text_title);
+        TextView mainTextView = listItem.findViewById(R.id.text_title);
         // Imposta la richiesta nell'elemento secondario (subitem)
-        TextView subTextView = convertView.findViewById(R.id.text_richiesta);
+        TextView subTextView = listItem.findViewById(R.id.text_richiesta);
 
         assert segnalazione != null;
         if(segnalazione.getTitolo() != null) {

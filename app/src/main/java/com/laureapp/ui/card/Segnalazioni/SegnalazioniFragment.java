@@ -17,10 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavHostController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.room.Room;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +39,7 @@ import java.util.Map;
 
 import android.app.AlertDialog;
 
+import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.SegnalazioniAdapter;
 import com.laureapp.ui.roomdb.QueryFirestore;
@@ -59,17 +62,14 @@ public class SegnalazioniFragment extends Fragment {
     Long id_utente;
     Long id_studente;
     Long idTesiDesiderata;
-    ArrayList<Long> idTesiList = new ArrayList<>();
     private AlertDialog alertDialog;
     private static ArrayList<Segnalazione> segnalazioniList = new ArrayList<>();
     private SegnalazioniAdapter adapter;
     private static final String TAG = "FragmentSegnalazione"; // Definizione della variabile TAG
 
-    //FragmentSegnBuilding binding;
-
-    UtenteModelView utenteView = new UtenteModelView(context); // Inizializza utenteView con un'istanza di UtenteModelView
-    StudenteModelView studenteView = new StudenteModelView(context);
-    StudenteTesiModelView studenteTesiView = new StudenteTesiModelView(context);
+    UtenteModelView utenteView; // Inizializza utenteView con un'istanza di UtenteModelView
+    StudenteModelView studenteView;
+    StudenteTesiModelView studenteTesiView;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -85,14 +85,17 @@ public class SegnalazioniFragment extends Fragment {
 
 
         context = requireContext();
-        args= getArguments();
+        args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
             Log.d("Segn ruolo ", ruolo);
         }
 
+        utenteView = new UtenteModelView(context);
+        studenteView = new StudenteModelView(context);
+        studenteTesiView = new StudenteTesiModelView(context);
 
-    View rootView = inflater.inflate(R.layout.fragment_segnalazioni_studente, container, false);;
+        View rootView = inflater.inflate(R.layout.fragment_segnalazioni_studente, container, false);;
 
         email = getEmailFromSharedPreferences(context);
         Log.d("segnM", email);
@@ -104,111 +107,77 @@ public class SegnalazioniFragment extends Fragment {
         //id_stedente_tesi = studenteTesiView.findIdTesiByIdTesi(id_studente);
 
 
-        //Ricerca Tesi
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /**
+         * Ricerca Tesi su Firestore
+         */
+        db.collection("StudenteTesi")
+                .whereEqualTo("id_studente", id_studente)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
+                            Long id_tesi = doc.getLong("id_tesi");
+                        }
+                    }
+                });
+        /*
         db.collection("StudenteTesi")
                 .whereEqualTo("id_studente", id_studente)
                 .limit(1)
                 .get()
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                    if(task.isSuccessful() && !task.getResult().isEmpty()) {
                         QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
 
                         Long id_tesi = doc.getLong("id_tesi");
+
+                        /**
+                         * Ricerca Segnalazioni
 
                         db.collection("Segnalazioni")
                                 .whereEqualTo("id_tesi", id_tesi)
                                 .get()
                                 .addOnCompleteListener(task2 -> {
-                                    if (task2.isSuccessful() && !task2.getResult().isEmpty()) {
-                                        for(QueryDocumentSnapshot doc2 : task2.getResult()) {
+                                    if (task2.isSuccessful() && !task2.getResult().isEmpty()){
+                                        for(QueryDocumentSnapshot doc2 : task2.getResult()){
 
                                             Segnalazione segnalazione = new Segnalazione();
                                             segnalazione.setIdTesi(id_tesi);
-                                            segnalazione.setRichiesta(doc2.getString("Richiesta"));
-                                            segnalazione.setTitolo((doc2.getString("Titolo")));
                                             segnalazione.setIdSegnalazione(doc2.getLong("id_segn"));
-                                            Log.d("Segnalazini", String.valueOf(segnalazione));
+                                            segnalazione.setTitolo(doc2.getString("Titolo"));
+                                            segnalazione.setRichiesta("Richiesta");
+                                            Log.d("Segnalazione", String.valueOf(segnalazione));
                                             segnalazioniList.add(segnalazione);
 
                                         }
 
-                                        // Ottieni il riferimento alla ListView
+                                        //Riferimento ListView
                                         ListView listView = rootView.findViewById(R.id.segn_list_view);
-                                        // Crea l'adapter personalizzato e imposta sulla ListView
-                                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList,args);
-                                        // Collega l'adapter alla ListView
+                                        //Adapter impostato e collegato sulla ListView
+                                        adapter = new SegnalazioniAdapter(context, segnalazioniList, args);
                                         listView.setAdapter(adapter);
 
-                                        // Imposta un listener per gli elementi della ListView
+                                        //Listener per gli elementi della ListView
                                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             @Override
-                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                // Ottieni il NavController dalla tua Activity principale
+                                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                //navigazione nel fragment discussione
                                                 NavController navController = NavHostFragment.findNavController(SegnalazioniFragment.this);
-
-                                                // Esegui la navigazione verso DiscussioneFragment
                                                 navController.navigate(R.id.action_segnalazioniFragment_to_discussioneFragment);
+
                                             }
                                         });
-                                    }
-                                    });
-
+                                    } else
+                                        Log.d(TAG,"Errore ricerca Segnalazioni: "+ task2.getException().getMessage());
+                                });
+                    } else {
+                        Log.d("Firestore", "Errore ricerca tesi: "+ task.getException().getMessage());
                     }
-                });
 
-
-        // Ottieni il riferimento alla ListView
-        //ListView listView = rootView.findViewById(R.id.segn_list_view);
-
-        // Crea un'istanza del repository delle segnalazioni
-        //SegnalazioneRepository segnalazioneRepository = new SegnalazioneRepository(requireContext());
-
-        // Ottieni le segnalazioni per la tesi desiderata dal repository
-        //segnalazioniList = segnalazioneRepository.findSegnalazioniByTesiId(idTesiDesiderata);
-
-        //Recupera i dati dalla collezione "Segnalazioni" in base alla idTesiDesiderata
-        /*
-        segnalazioniRef.get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        for(QueryDocumentSnapshot document : task.getResult()){
-                            //Segnalazione segnalazione = document.toObject(Segnalazione.class);
-                            Long idSegnalazione = document.getLong("id_segn");
-                            Long idTesi = document.getLong("id_tesi");
-                            String titolo = document.getString("Titolo");
-                            String richiesta = document.getString("Richiesta");
-
-                            Segnalazione segnalazione = new Segnalazione(idSegnalazione, idTesi, titolo, richiesta);
-
-                        }
-
-                        // Ottieni il riferimento alla ListView
-                        ListView listView = rootView.findViewById(R.id.segn_list_view);
-                        // Crea l'adapter personalizzato e imposta sulla ListView
-                        adapter = new SegnalazioniAdapter(requireContext(), segnalazioniList,args);
-                        // Collega l'adapter alla ListView
-                        listView.setAdapter(adapter);
-
-                        // Imposta un listener per gli elementi della ListView
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                // Ottieni il NavController dalla tua Activity principale
-                                NavController navController = NavHostFragment.findNavController(SegnalazioniFragment.this);
-
-                                // Esegui la navigazione verso DiscussioneFragment
-                                navController.navigate(R.id.action_segnalazioniFragment_to_discussioneFragment);
-                            }
-                        });
-
-                    }else {
-                        Log.d(TAG, "Error getting documents: " + task.getException().getMessage());
-                    }
                 });*/
-
-
-
 
 
         //Bottone nuova segnalazione
@@ -229,6 +198,7 @@ public class SegnalazioniFragment extends Fragment {
         SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
         return preferences.getString("email", null);
     }
+
 
     public void showInputDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -280,6 +250,7 @@ public class SegnalazioniFragment extends Fragment {
 
 
     }
+
 
     private void addSegnToFirestore (String titolo, String richiesta, Long id_tesi) {
 
@@ -349,31 +320,4 @@ public class SegnalazioniFragment extends Fragment {
         alertDialog.show();
     }
 
-
-    public void uptadeSQLiteFirestore () {
-        // Inizializza il database
-        RoomDbSqlLite myDatabase = Room.databaseBuilder(context, RoomDbSqlLite.class, "Graduation_Studio_V2").build();
-        SegnalazioneDao segnalazioneDao = myDatabase.segnalazioneDao();
-        // Recupera i dati dalla collezione "Segnalazioni" su Firestore
-        db.collection("Segnalazioni").get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    // Recupera i valori da Firestore
-                    String titolo = document.getString("Titolo");
-                    String richiesta = document.getString("Richiesta");
-                    Long idTesi = document.getLong("id_tesi");
-                    Long idSegnalazioni = document.getLong("id_segn");
-
-                    // Crea un oggetto Segnalazione con i valori recuperati
-                    Segnalazione segnalazione = new Segnalazione(idSegnalazioni,idTesi,titolo,richiesta);
-
-                    // Aggiungi l'oggetto Segnalazione al database SQLite utilizzando il DAO appropriato
-                    segnalazioneDao.insert(segnalazione);// Assicurati di adattare questo all'implementazione del tuo DAO
-                }
-            } else {
-                Log.d(TAG, "Error getting documents: " + task.getException().getMessage());
-            }
-        });
-
-    }
 }

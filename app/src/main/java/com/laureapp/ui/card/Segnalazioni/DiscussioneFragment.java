@@ -1,4 +1,4 @@
-package com.laureapp.ui.home;
+package com.laureapp.ui.card.Segnalazioni;
 
 import android.os.Bundle;
 

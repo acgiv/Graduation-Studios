@@ -22,7 +22,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.room.Room;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,7 +38,6 @@ import java.util.Map;
 
 import android.app.AlertDialog;
 
-import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.SegnalazioniAdapter;
 import com.laureapp.ui.roomdb.QueryFirestore;
@@ -114,20 +112,6 @@ public class SegnalazioniFragment extends Fragment {
                 .whereEqualTo("id_studente", id_studente)
                 .limit(1)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
-                            Long id_tesi = doc.getLong("id_tesi");
-                        }
-                    }
-                });
-        /*
-        db.collection("StudenteTesi")
-                .whereEqualTo("id_studente", id_studente)
-                .limit(1)
-                .get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful() && !task.getResult().isEmpty()) {
                         QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
@@ -136,7 +120,7 @@ public class SegnalazioniFragment extends Fragment {
 
                         /**
                          * Ricerca Segnalazioni
-
+                         */
                         db.collection("Segnalazioni")
                                 .whereEqualTo("id_tesi", id_tesi)
                                 .get()
@@ -177,7 +161,7 @@ public class SegnalazioniFragment extends Fragment {
                         Log.d("Firestore", "Errore ricerca tesi: "+ task.getException().getMessage());
                     }
 
-                });*/
+                });
 
 
         //Bottone nuova segnalazione

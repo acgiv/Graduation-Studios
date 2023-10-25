@@ -111,13 +111,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createAppBar() {
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home, R.id.profilo_studente)
                 .setOpenableLayout(drawerLayout)
                 .build();
 
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
-        NavigationUI.setupActionBarWithNavController(this, navController);
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 

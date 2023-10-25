@@ -213,6 +213,8 @@ public class ProfiloFragment extends Fragment {
         binding.modificaCorsi.setOnClickListener(v -> {
             binding.componentInputNuovo.setVisibility(View.GONE);
             binding.corsoprofessoreInput.setVisibility(View.VISIBLE);
+            binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.TextVecchio.setEnabled(false);
             binding.TextVecchio.setText(utente.getNome_cdl());
             annulla_corso = true;
@@ -332,6 +334,8 @@ public class ProfiloFragment extends Fragment {
                         ut_view.updateUtente(utente);
                         changeComponentFirestore("nome_cdl","Utenti" ,String.valueOf(utente.getNome_cdl()));
                         close_card_modifica();
+                        binding.corsoprofessoreInput.setVisibility(View.GONE);
+                        binding.componentInputNuovo.setVisibility(View.VISIBLE);
                     }
                 }
             }

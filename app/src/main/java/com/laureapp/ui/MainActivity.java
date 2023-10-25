@@ -1,18 +1,23 @@
 package com.laureapp.ui;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavGraph;
-import androidx.navigation.fragment.NavHostFragment;
+
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
@@ -30,6 +35,8 @@ import com.laureapp.ui.login.LoginActivity;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -42,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences prefsLanguage = getSharedPreferences("LanguagePrefs", 0);
+        String language = prefsLanguage.getString("Language", "it");
+        setLocal(language);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -53,8 +64,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Imposta gli argomenti per il fragment
         navigationView = findViewById(R.id.navigation);
+
         drawerLayout = findViewById(R.id.drawer);
         toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
         createAppBar();
@@ -66,10 +79,14 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         navigationView.bringToFront();
 
+        NavController finalNavController = navController;
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.itemSettings) {
-                //navController.navigate(R.id.home_fragment);
+
+                finalNavController.navigate(R.id.action_fragment_home_to_impostazioniFragment);
+                drawerLayout.closeDrawers(); // Chiude il menu
+
                 Toast.makeText(getApplicationContext(), "Impostazioni", Toast.LENGTH_LONG).show();
             } else if (id == R.id.itemProfile) {
                 Toast.makeText(getApplicationContext(), "Profilo", Toast.LENGTH_LONG).show();
@@ -127,6 +144,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+   }
+
+    public void setLocal(String lingua){
+        Resources resources = getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(new Locale(lingua));
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+        onConfigurationChanged(config);
+
     }
 
 

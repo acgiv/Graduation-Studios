@@ -1,4 +1,4 @@
-package com.laureapp.ui.card.TesiStudente;
+package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,21 +7,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.laureapp.R; // Replace with the correct package name
+import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Tesi;
 
 import java.util.ArrayList;
 
-public class LeMieTesiAdapter extends ArrayAdapter<Tesi> {
+public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
+
     private Context mContext;
     private ArrayList<Tesi> mTesiList;
+    private NavController mNav;
 
-    public LeMieTesiAdapter(Context context, ArrayList<Tesi> tesiList) {
-        super(context, 0, tesiList);
+    public ListaTesiProfessoreAdapter(Context context, ArrayList<Tesi> tesiList) {
+        super(context,0,tesiList);
         mContext = context;
         mTesiList = tesiList;
     }
@@ -31,12 +35,12 @@ public class LeMieTesiAdapter extends ArrayAdapter<Tesi> {
         View listItemView = convertView;
 
         if (listItemView == null) {
-            listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_studente, parent, false);
+            listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_professore, parent, false);
         }
 
         final Tesi currentTesi = mTesiList.get(position);
 
-        TextView titleTextView = listItemView.findViewById(R.id.titoloTesi);
+        TextView titleTextView = listItemView.findViewById(R.id.titoloTesiProfessore);
 
         if (currentTesi != null) {
             String titolo = currentTesi.getTitolo();
@@ -52,13 +56,10 @@ public class LeMieTesiAdapter extends ArrayAdapter<Tesi> {
         listItemView.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putSerializable("Tesi",currentTesi);
-            Navigation.findNavController(v).navigate(R.id.action_fragment_tesistudenteFragment_to_dettagli_tesi_studente,args);
-
-
+            Navigation.findNavController(v).navigate(R.id.action_tesiProfessoreFragment_to_tesiTabProfessoreFragment,args);
 
         });
 
         return listItemView;
     }
-
 }

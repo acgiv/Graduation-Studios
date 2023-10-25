@@ -31,15 +31,20 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentLoginBinding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+
+import java.io.Serializable;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class LoginFragment extends Fragment {
 
@@ -92,6 +97,12 @@ public class LoginFragment extends Fragment {
         error_text = view.findViewById(R.id.error_text);
         ConnectivityManager cm = (ConnectivityManager) requireContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         //Pulsante di login
+        Log.d("PROFESSORI", pr.getAllProfessore().toString());
+        Log.d("STUDENTI", st.getAllStudente().toString());
+
+
+
+
         binding.buttonLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
                 HashMap<String, Boolean> result = is_correct_email_password();
@@ -218,7 +229,9 @@ public class LoginFragment extends Fragment {
 
         private void redirectHome() {
             Bundle bundle = new Bundle();
+            
             Long id_utente = utenteView.getIdUtente(String.valueOf(email_text.getText()));
+            Utente utente = utenteView.findAllById(id_utente);
             StudenteModelView stud_view = new StudenteModelView(context);
             if( stud_view.findStudente(id_utente)!= null){
                 bundle.putString("ruolo", "Studente");
@@ -227,6 +240,7 @@ public class LoginFragment extends Fragment {
                 bundle.putString("ruolo", "Professore");
             }
             bundle.putString("email", String.valueOf(email_text.getText()));
+            bundle.putSerializable("Utente", utente);
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
             HomeActivity.putExtras(bundle);
             startActivity(HomeActivity);

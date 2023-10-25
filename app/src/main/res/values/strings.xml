@@ -47,7 +47,7 @@
     <string name="errore_email">Inserisci un indirizzo email valido.</string>
     <string name="errore_campo_vuoto">Campo {campo} obbligatorio mancante!</string>
     <string name="errore_matricola">Campo {campo} deve contenere 6 cifre numeriche.</string>
-    <string name="errore_matricola_duplicate">Esiste uno studente assosciato a questa matricola.</string>
+    <string name="errore_matricola_duplicate">Esiste uno {campo} assosciato a questa matricola.</string>
     <string name="errore_media">Campo {campo} deve contenere 2 cifre numeriche comprese tra 18 e 30</string>
     <string name="errore_scelta">Il campo inserito non è presente nella scelta.</string>
     <string name="password_not_safe_error">La password non incontra i requisiti di sicurezza</string>
@@ -63,12 +63,17 @@
     <string name="media">Media</string>
     <string name="esami_mancanti">Esami mancanti</string>
     <string name="corsi">Corso di Laurea</string>
+    <string name="impostaLingua">Seleziona lingua</string>
+    <string name="italiano">Italiano</string>
+    <string name="inglese">Inglese</string>
 
     <string-array name="Dipartimento">
         <item>Matematica</item>
-        <item>Informazica</item>
+        <item>Informatica</item>
         <item>Farmacia</item>
     </string-array>
+
+
 
     <string-array name="StatoTask">
         <item>Non iniziato</item>
@@ -79,6 +84,13 @@
         <item>Itps</item>
         <item>Matematica</item>
         <item>Informatica</item>
+    </string-array>
+
+    <string-array name="OrdinaPer">
+        <item>Visualizzazioni</item>
+        <item>Media</item>
+        <item>Esami Mancanti</item>
+        <item>Tempistiche</item>
     </string-array>
 
     <string name="title_activity_loading_page">LoadingPageActivity</string>
@@ -131,6 +143,10 @@
     <string name="error_scadenza_inizio">Data scadenza precedente alla data inizio.</string>
     <string name="error_inizio_scadenza">Data inizio successiva alla scadenza</string>
     <string name="errore_email_esistente">Esiste già un utente asscociato a questa email.</string>
+    <string name="ElencoTesi">Elenco Tesi</string>
+    <string name="titolo">Titolo</string>
+    <string name="richiesta">Richiesta</string>
+    <string name="aggiungi">Aggiungi</string>
 
     <style name="CalendarDateText">
         <item name="android:textSize">18sp</item>

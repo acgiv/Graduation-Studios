@@ -253,6 +253,7 @@ public class ControlInput {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+
     public static boolean is_correct_matricola(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context, String ruolo){
         StudenteModelView st = new StudenteModelView(context);
         ProfessoreModelView pr = new ProfessoreModelView(context);
@@ -393,5 +394,6 @@ public class ControlInput {
         }
         return  false;
     }
+
 
 }

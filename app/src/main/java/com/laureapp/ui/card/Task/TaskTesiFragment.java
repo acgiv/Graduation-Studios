@@ -2,7 +2,7 @@ package com.laureapp.ui.card.Task;
 
 import static android.view.View.VISIBLE;
 
-import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
+import static com.laureapp.ui.controlli.ControlInput.showToast;
 import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
@@ -32,13 +32,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.TaskTesiAdapter;
-import com.laureapp.ui.controlli.ControlInput;
+import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.TaskTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
-import com.laureapp.databinding.FragmentTaskBinding;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -51,52 +50,33 @@ import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TaskTesiFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 
 public class TaskTesiFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private NavController mNav;
 
-    Context context;
+    static Context context;
 
-    FragmentTaskBinding binding;
+    com.laureapp.databinding.FragmentTaskBinding binding;
+
+
 
     // Dichiarazione di una variabile di istanza per il dialog
     private AlertDialog alertDialog;
-    private TaskTesiAdapter adapter;
+    private static TaskTesiAdapter adapter;
+    TaskTesi selectedTask;
 
-    FirebaseFirestore db;
+    static FirebaseFirestore db;
+    Bundle args;
+    Utente utente;
 
-
-    private List<TaskTesi> taskList = new ArrayList<>();
+    private static List<TaskTesi> taskList = new ArrayList<>();
 
 
     public TaskTesiFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TaskFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TaskTesiFragment newInstance(String param1, String param2) {
-        TaskTesiFragment fragment = new TaskTesiFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -109,11 +89,16 @@ public class TaskTesiFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inizializza il binding
-        binding = FragmentTaskBinding.inflate(inflater, container, false);
+        binding = com.laureapp.databinding.FragmentTaskBinding.inflate(inflater, container, false);
         context = requireContext();
+        args = getArguments();
 
-        // Inizializza il calendario
 
+        if(args != null) {
+
+            utente = args.getSerializable("Utente", Utente.class);
+            //Carico i dati delle task in base all'utente loggato
+        }
         // Altri codici del tuo fragment
         db = FirebaseFirestore.getInstance();
 
@@ -124,28 +109,19 @@ public class TaskTesiFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ImageButton addButton = view.findViewById(R.id.add_task_ImageButton);
-
         mNav = Navigation.findNavController(view);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
 
-        adapter = new TaskTesiAdapter(context, taskList);
-        String userEmail = getEmailFromSharedPreferences(requireContext());
+        adapter = new TaskTesiAdapter(context, taskList,mNav);
 
-        //Carico i dati delle task in base all'utente loggato
-        loadDataForUser(userEmail);
-
+        loadStudentForUserId(utente.getId_utente());
 
         addButton.setOnClickListener(view1 ->
                 showInputDialog()
         );
 
-
         listTaskView.setAdapter(adapter);
 
-        listTaskView.setOnItemClickListener((parent, view1, position, id) -> {
-            mNav.navigate(R.id.action_task_to_dettagli_task);
-            Log.d("Tesi", "cliccato il tesista");
-        });
     }
 
 
@@ -175,7 +151,6 @@ public class TaskTesiFragment extends Fragment {
         calendarDueView.setVisibility(View.GONE);
 
 
-        String userEmail = getEmailFromSharedPreferences(requireContext());
 
         //Click sulla data di inizio task
         startDateButton.setOnClickListener(view1 -> {
@@ -224,9 +199,12 @@ public class TaskTesiFragment extends Fragment {
                         throw new RuntimeException(e);
                     }
 
-                    //Aggiungo la task a Firestore in base all'utente loggato
-                    addTaskToFirestore(userEmail, inputData, startDate, dueDate);
 
+
+
+                        utente = args.getSerializable("Utente", Utente.class);
+                        //Aggiungo la task a Firestore in base all'utente loggato
+                        addTaskToFirestoreLast(utente.getId_utente(), inputData, startDate, dueDate);
                 });
 
 
@@ -376,39 +354,6 @@ public class TaskTesiFragment extends Fragment {
     }
 
 
-    /**
-     * Questo metodo mi permette di caricare da firestore gli utenti dando come parametro la mail dell'utente
-     *
-     * @param email email utente loggato
-     * @return l'id dell'utente corrispondente alla mail dell'utente loggato
-     */
-    private Task<Long> loadUserByEmail(String email) {
-        return FirebaseFirestore.getInstance()
-                .collection("Utenti")
-                .whereEqualTo("email", email)
-                .limit(1)
-                .get()
-                .continueWith(task -> {
-
-
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0); // Otteniamo il primo documento
-                        Utente utente = new Utente();
-                        utente.setId_utente(doc.getLong("id_utente"));
-                        utente.setNome(doc.getString("nome"));
-                        utente.setCognome(doc.getString("cognome"));
-                        utente.setEmail(doc.getString("email"));
-                        utente.setPassword(doc.getString("password"));
-                        utente.setFacolta(doc.getString("facolta"));
-                        utente.setNome_cdl(doc.getString("nome_cdl"));
-
-
-
-                        return utente.getId_utente();
-                    }
-                    throw new NoSuchElementException("Utente non trovato con questa mail: " + email);
-                });
-    }
 
 
     /**
@@ -537,7 +482,7 @@ public class TaskTesiFragment extends Fragment {
                             TaskTesi taskTesi = new TaskTesi();
                             taskTesi.setId_task(doc.getLong("id_task"));
                             taskTesi.setId_tesi(doc.getLong("id_tesi"));
-                            taskTesi.setStato("Non iniziato");
+                            taskTesi.setStato(doc.getString("stato"));
                             taskTesi.setTitolo(doc.getString("titolo"));
                             taskTesi.setData_inizio(Objects.requireNonNull(doc.getTimestamp("data_inizio")).toDate());
                             taskTesi.setData_scadenza(Objects.requireNonNull(doc.getTimestamp("data_scadenza")).toDate());
@@ -557,21 +502,7 @@ public class TaskTesiFragment extends Fragment {
         METODI PER LA LETTURA DEI DATI E LA LORO VISUALIZZAZIONE NELL'ADAPTER
      */
 
-    /**
-     * Questo metodo permette di recuperare l'utente in base alla sua mail.
-     * È il primo metodo(1) utile per poter recuperare le tasks.
-     * @param userEmail è la mail dell'utente loggato
-     */
-    private void loadDataForUser(String userEmail) {
-        loadUserByEmail(userEmail).addOnCompleteListener(userTask -> {
-            if (userTask.isSuccessful()) {
-                Long id_utente = userTask.getResult();
-                loadStudentForUserId(id_utente);
-            } else {
-                ControlInput.showToast(context, "Dati utenti non caricati correttamente");
-            }
-        });
-    }
+
 
     /**
      * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
@@ -584,7 +515,7 @@ public class TaskTesiFragment extends Fragment {
                 Long id_studente = studentTask.getResult();
                 loadStudenteTesiForStudenteId(id_studente);
             } else {
-                ControlInput.showToast(context, "Dati studenti non caricati correttamente");
+                showToast(context, "Dati studenti non caricati correttamente");
 
             }
         });
@@ -601,7 +532,7 @@ public class TaskTesiFragment extends Fragment {
                 Long id_tesi_in_studente_tesi = studenteTesiTask.getResult();
                 loadTesiForTesiIdInStudenteTesi(id_tesi_in_studente_tesi);
             } else {
-                ControlInput.showToast(context, "Dati StudenteTesi non caricati correttamente");
+                showToast(context, "Dati StudenteTesi non caricati correttamente");
             }
         });
     }
@@ -617,7 +548,7 @@ public class TaskTesiFragment extends Fragment {
                 Long id_tesi = tesiTask.getResult();
                 loadTasksForTesiId(id_tesi);
             } else {
-                ControlInput.showToast(context, "Dati tesi non caricati correttamente");
+                showToast(context, "Dati tesi non caricati correttamente");
             }
         });
     }
@@ -632,7 +563,7 @@ public class TaskTesiFragment extends Fragment {
                 taskList.clear();
                 addTasksToList(task.getResult());
             } else {
-                ControlInput.showToast(context, "Dati task non caricati correttamente");
+                showToast(context, "Dati task non caricati correttamente");
             }
         });
     }
@@ -646,6 +577,7 @@ public class TaskTesiFragment extends Fragment {
         for (TaskTesi taskTesi : tasks) {
             if (taskTesi != null) {
                 taskList.add(taskTesi);
+
             }
         }
         adapter.notifyDataSetChanged();
@@ -655,107 +587,68 @@ public class TaskTesiFragment extends Fragment {
     Metodi per l'aggiunta e visualizzazione di una nuova task
  */
 
-    /**
-     * Metodo per l'aggiunta delle task a Firestore.
-     * accetta la userEmail come parametro, quindi inizia caricando l'utente
-     * tramite l'email e quindi procede a caricare lo studente e infine aggiunge la task a Firestore.
-     *
-     * @param userEmail mail utente loggato
-     * @param inputData è il titolo della task
-     * @param startDate è la data di inizio inserita
-     * @param dueDate è la data di scadenza inserita
-     */
-    private void addTaskToFirestore(String userEmail, String inputData, Timestamp startDate, Timestamp dueDate) {
-        loadUserByEmail(userEmail).addOnCompleteListener(userTask -> {
-            if (userTask.isSuccessful()) {
-                Long id_utente = userTask.getResult();
-                loadStudentAndAddTask(id_utente, inputData, startDate, dueDate);
-            } else {
-                ControlInput.showToast(context, "Operazione completata con successo!");
-            }
-        });
+
+    private void addTaskToFirestoreLast(Long id_utente, String inputData, Timestamp startDate, Timestamp dueDate) {
+
+        // Ottieni l'ID della tesi in base all'ID utente fornito
+        loadStudentAndAddTask(id_utente, inputData, startDate, dueDate);
     }
 
-    /**
-     * Metodo per il caricamento dello studente e l'aggiunta di una nuova task.
-     * @param id_utente id dell'utente loggato
-     * @param inputData titolo task
-     * @param startDate data inizio inserita
-     * @param dueDate data scadenza inserita
-     */
     private void loadStudentAndAddTask(Long id_utente, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadStudentByUserId(id_utente).addOnCompleteListener(studentTask -> {
             if (studentTask.isSuccessful()) {
                 Long id_studente = studentTask.getResult();
                 loadStudenteTesiAndAddTask(id_studente, inputData, startDate, dueDate);
             } else {
-                ControlInput.showToast(context, "Lettura dati studenti e aggiunta task non avvenuta correttamente");
+                showToast(context, "Lettura dati studenti e aggiunta task non avvenuta correttamente");
             }
         });
     }
 
-    /**
-     * Metodo per il caricamento dello studente e l'aggiunta di una nuova task.
-     * @param id_studente id dello studente
-     * @param inputData è il titolo della task
-     * @param startDate data inizio inserita
-     * @param dueDate data scadenza inserita
-     */
     private void loadStudenteTesiAndAddTask(Long id_studente, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadStudenteTesiByStudenteId(id_studente).addOnCompleteListener(studenteTesiTask -> {
             if (studenteTesiTask.isSuccessful()) {
                 Long id_tesi_in_studente_tesi = studenteTesiTask.getResult();
                 loadTesiAndAddTask(id_tesi_in_studente_tesi, inputData, startDate, dueDate);
             } else {
-                ControlInput.showToast(context, "Dati StudenteTesi e aggiunta task non avvenuta correttamente");
+                showToast(context, "Dati StudenteTesi e aggiunta task non avvenuta correttamente");
             }
         });
     }
 
-    /**
-     * Metodo per il caricamento della tesi e l'aggiunta di una nuova task.
-     * @param id_tesi_in_studente_tesi id tesi nella tabella StudenteTesi
-     * @param inputData è il titolo della task
-     * @param startDate data inizio inserita
-     * @param dueDate data scadenza inserita
-     */
     private void loadTesiAndAddTask(Long id_tesi_in_studente_tesi, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadTesiByIdTesiInStudenteTesi(id_tesi_in_studente_tesi).addOnCompleteListener(tesiTask -> {
             if (tesiTask.isSuccessful()) {
                 Long id_tesi = tesiTask.getResult();
                 addTaskToFirestore(id_tesi, inputData, startDate, dueDate);
             } else {
-                ControlInput.showToast(context, "Lettura dati tesi e aggiunta task non avvenuta correttamente");
+                showToast(context, "Lettura dati tesi e aggiunta task non avvenuta correttamente");
             }
         });
     }
 
-    /**
-     * Metodo per l'aggiunta di una nuova task a Firestore.  accetta direttamente l'id_tesi come parametro e non richiede
-     * il caricamento dell'utente o dello studente. Serve per aggiungere una task quando hai già l'id_tesi disponibile.
-     *
-     * @param id_tesi id tesi associata alla task
-     * @param inputData è il titolo della task
-     * @param startDate data inizio inserita
-     * @param dueDate data scadenza inserita
-     */
     private void addTaskToFirestore(Long id_tesi, String inputData, Timestamp startDate, Timestamp dueDate) {
         CollectionReference taskRef = db.collection("Task");
-        Long id_task = 0L;
+        QueryFirestore queryFirestore = new QueryFirestore();
         Map<String, Object> taskData = new HashMap<>();
-        taskData.put("id_task", id_task);
-        taskData.put("titolo", inputData);
-        taskData.put("data_inizio", startDate);
-        taskData.put("data_scadenza", dueDate);
-        taskData.put("stato", "Non iniziato");
-        taskData.put("id_tesi", id_tesi);
+        queryFirestore.trovaIdTaskMax(context)
+                .thenAccept(idMax -> {
+                    idMax = idMax + 1L;
+                    taskData.put("id_task", idMax);
+                    taskData.put("titolo", inputData);
+                    taskData.put("data_inizio", startDate);
+                    taskData.put("data_scadenza", dueDate);
+                    taskData.put("stato", "Non iniziato");
+                    taskData.put("id_tesi", id_tesi);
 
-        // Supponendo che 'taskRef' sia un oggetto valido di tipo CollectionReference
-        taskRef.document().set(taskData).addOnSuccessListener(
-                aVoid -> addTaskToList(id_task, inputData, startDate, dueDate, id_tesi)
-        ).addOnFailureListener(e -> {
-            // Gestisci l'errore
-        });
+                    // Supponendo che 'taskRef' sia un oggetto valido di tipo CollectionReference
+                    Long finalIdMax = idMax;
+                    taskRef.document().set(taskData).addOnSuccessListener(
+                            aVoid -> addTaskToList(finalIdMax, inputData, startDate, dueDate, id_tesi)
+                    ).addOnFailureListener(e -> {
+                        // Gestisci l'errore
+                    });
+                });
     }
 
     /**
@@ -781,6 +674,38 @@ public class TaskTesiFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    public static void deleteTask(int position) {
+        if (position >= 0 && position < taskList.size()) {
+            TaskTesi taskToDelete = taskList.get(position);
+
+            // Rimuovi la task da Firestore
+            deleteTaskFromFirestore(taskToDelete.getId_task());
+
+            // Rimuovi la task dalla lista locale
+            taskList.remove(position);
+            adapter.notifyDataSetChanged();
+        } else {
+            showToast(context, "Posizione non valida o elemento non trovato");
+        }
+    }
+
+
+    private static void deleteTaskFromFirestore(Long id_task) {
+        // Ottieni il riferimento al documento della task da eliminare
+        CollectionReference taskRef = db.collection("Task");
+        taskRef.whereEqualTo("id_task", id_task).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
+                doc.getReference().delete().addOnSuccessListener(aVoid -> {
+                    showToast(context, "Task eliminata con successo");
+                }).addOnFailureListener(e -> {
+                    showToast(context, "Errore durante l'eliminazione della task");
+                });
+            } else {
+                showToast(context, "Task non trovata nel database");
+            }
+        });
+    }
 
 
 

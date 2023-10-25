@@ -1,12 +1,10 @@
 package com.laureapp.ui.card.Adapter;
 
 
-
 import static com.laureapp.ui.card.Task.TaskStudenteFragment.deleteTask;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableString;
@@ -32,10 +30,8 @@ import java.util.Objects;
 
 public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
-    private final LayoutInflater inflater;
-    private final List<TaskStudente> taskList;
-    private NavController mNav;
-    private Context context;
+    private final NavController mNav;
+    private final Context context;
     String ruolo;
     Bundle args;
 
@@ -47,9 +43,7 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
      */
     public TaskStudenteAdapter(Context context, List<TaskStudente> taskList, NavController navController, Bundle args) {
         super(context,0,taskList);
-        inflater = LayoutInflater.from(context);
         this.context = context;
-        this.taskList = taskList;
         this.mNav = navController;  // Inizializza il NavController
         this.args = args;
     }
@@ -117,15 +111,15 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
         // Gestisci il clic sull'elemento della lista
         itemView.setOnClickListener(v -> {
             TaskStudente selectedTask = getItem(position);
-
             if (selectedTask != null) {
-                args.putSerializable("SelectedTask", selectedTask);
 
                 if(StringUtils.equals("Studente", args.getString("ruolo"))){
+                    args.putSerializable("SelectedTask", selectedTask);
                     mNav.navigate(R.id.action_fragment_taskStudenteFragment_to_dettagli_task, args);
 
                 }else if(StringUtils.equals("Professore", args.getString("ruolo"))) {
                     // Utilizza la NavHostController per navigare al dettaglio del task
+                    args.putSerializable("SelectedTask", selectedTask);
                     mNav.navigate(R.id.action_task_to_dettagli_task, args);
                 }
             }
@@ -147,20 +141,14 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
         builder.setMessage(message);
 
-        builder.setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // Elimina l'elemento
-                deleteTask(position);
-                dialog.dismiss(); // Chiudi il popup
-            }
+        builder.setPositiveButton("Conferma", (dialog, which) -> {
+            // Elimina l'elemento
+            deleteTask(position);
+            dialog.dismiss(); // Chiudi il popup
         });
 
-        builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Chiudi il popup
-            }
+        builder.setNegativeButton("Annulla", (dialog, which) -> {
+            dialog.dismiss(); // Chiudi il popup
         });
 
         // Mostra il popup

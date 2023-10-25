@@ -98,6 +98,7 @@ public class DettagliTesistaFragment extends Fragment {
 
 
 
+
             loadStudenteTesiForStudenteId(studente.getId_studente()).addOnCompleteListener(tesiTask -> {
                 if (tesiTask.isSuccessful()) {
                     Tesi tesi = tesiTask.getResult();

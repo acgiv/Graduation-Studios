@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <!-- Barra blu -->
     <LinearLayout
@@ -70,22 +72,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/listRicevimentiView"
+        android:layout_above="@+id/add_ricevimento_ImageButton"
         android:layout_marginTop="-65dp"
         android:layout_marginLeft="5dp"
         android:text="Task:"
         android:textColor="#000000"
-        android:textSize="28sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/add_ricevimento_ImageButton"
         android:layout_below="@+id/listRicevimentiView"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="-65dp"
-        android:layout_marginLeft="78dp"
+        android:layout_toEndOf="@+id/titleLabelTextView"
         android:textColor="@color/color_primary"
-        android:textSize="28sp"/>
+        android:textSize="16sp" />
 
     <!-- Pulsante di aggiunta -->
     <ImageButton

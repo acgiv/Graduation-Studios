@@ -72,9 +72,11 @@ public class DettagliTaskFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = requireContext();
         args = getArguments();
         if(args != null) {
-
+            taskStudente = new TaskStudente();
             taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
             //Carico i dati delle task in base all'utente loggato
         }
@@ -94,13 +96,12 @@ public class DettagliTaskFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentDettagliTaskBinding.inflate(inflater, container, false);
         // Inizializza le variabili nel metodo onCreate
         startDateButton = binding.startDateBar;
         dueDateButton = binding.dueDateBar;
         autoCompleteTextView = binding.filledExposedDropdown;
-        context = requireContext();
+
 
         return binding.getRoot();
     }

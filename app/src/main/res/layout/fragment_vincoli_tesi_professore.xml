@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tempistiche: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -53,8 +53,14 @@
                         android:layout_width="230dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaTempisticheTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
 
                 </LinearLayout>
 
@@ -68,7 +74,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempisticheTesiProfessore" />
 
                 <LinearLayout
-                    android:id="@+id/linearLayoutMediaVotoTesiProfessore"
+                    android:id="@+id/linearLayoutMediaVotiTesiProfessore"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
@@ -79,22 +85,29 @@
                     app:layout_constraintTop_toBottomOf="@id/linearLayoutTempisticheTesiProfessore">
 
                     <TextView
-                        android:id="@+id/mediaVotoTesiProfessore"
+                        android:id="@+id/mediaVotiTesiProfessore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Media Voto: "
+                        android:text="Media Voti: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
-                        android:id="@+id/insertMediaVotoTesiProfessore"
-                        android:layout_width="245dp"
+                        android:id="@+id/insertMediaVotiTesiProfessore"
+                        android:layout_width="246dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25sp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaMediaVotoTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
+
 
                 </LinearLayout>
 
@@ -103,10 +116,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@android:color/darker_gray"
-                    app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMediaVotoTesiProfessore"
+                    app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMediaVotiTesiProfessore"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutMediaVotoTesiProfessore" />
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutMediaVotiTesiProfessore" />
 
                 <LinearLayout
                     android:id="@+id/linearLayoutEsamiMancantiTesiProfessore"
@@ -119,7 +132,7 @@
                     android:paddingBottom="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/linearLayoutMediaVotoTesiProfessore">
+                    app:layout_constraintTop_toBottomOf="@id/linearLayoutMediaVotiTesiProfessore">
 
                     <TextView
                         android:id="@+id/esamiMancantiTesiProfessore"
@@ -127,17 +140,23 @@
                         android:layout_height="wrap_content"
                         android:text="Esami mancanti: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/insertEsamiMancantiTesiProfessore"
-                        android:layout_width="193dp"
+                        android:layout_width="194dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaEsamiMancantiTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
 
                 </LinearLayout>
 
@@ -169,17 +188,23 @@
                         android:layout_height="wrap_content"
                         android:text="Skill: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/insertSkillTesiProfessore"
-                        android:layout_width="323dp"
+                        android:layout_width="311dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaSkillTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
 
                 </LinearLayout>
 

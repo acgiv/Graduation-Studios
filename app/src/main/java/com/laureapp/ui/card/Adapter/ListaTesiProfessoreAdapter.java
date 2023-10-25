@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.NavController;
@@ -21,6 +22,7 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
 
     private Context mContext;
     private ArrayList<Tesi> mTesiList;
+    private NavController mNav;
 
     public ListaTesiProfessoreAdapter(Context context, ArrayList<Tesi> tesiList) {
         super(context,0,tesiList);

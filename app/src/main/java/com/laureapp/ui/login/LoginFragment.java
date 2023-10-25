@@ -96,9 +96,7 @@ public class LoginFragment extends Fragment {
         password_text = view.findViewById(R.id.conferma_password);
         error_text = view.findViewById(R.id.error_text);
         ConnectivityManager cm = (ConnectivityManager) requireContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        //Pulsante di login
-        Log.d("PROFESSORI", pr.getAllProfessore().toString());
-        Log.d("STUDENTI", st.getAllStudente().toString());
+
 
 
 

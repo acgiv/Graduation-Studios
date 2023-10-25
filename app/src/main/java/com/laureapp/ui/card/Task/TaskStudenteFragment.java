@@ -77,7 +77,7 @@ public class TaskStudenteFragment extends Fragment {
 
     private static FirebaseFirestore db;
     private Bundle args;
-    private Utente utente;
+    private Studente utente_studente;
 
     private static List<TaskStudente> taskList = new ArrayList<>();
 
@@ -99,7 +99,7 @@ public class TaskStudenteFragment extends Fragment {
 
         if(args != null) {
 
-            utente = args.getSerializable("Utente", Utente.class);
+            utente_studente = args.getSerializable("Studente", Studente.class);
             //Carico i dati delle task in base all'utente loggato
         }
         // Altri codici del tuo fragment
@@ -116,9 +116,9 @@ public class TaskStudenteFragment extends Fragment {
         ListView listTaskView = view.findViewById(R.id.listTaskView);
 
         adapter = new TaskStudenteAdapter(context, taskList,mNav, args);
-        Log.d("id_utente_lista", utente.getId_utente().toString());
+        //Log.d("id_utente_lista", utente.getId_utente().toString());
 
-        loadStudentForUserId(utente.getId_utente());
+        loadStudentForUserId(utente_studente.getId_utente());
 
         addButton.setOnClickListener(view1 ->
                 showInputDialog()
@@ -203,10 +203,9 @@ public class TaskStudenteFragment extends Fragment {
                 throw new RuntimeException(e);
             }
 
-            utente = args.getSerializable("Utente", Utente.class);
             //Aggiungo la task a Firestore in base all'utente loggato
-            addTaskToFirestoreLast(utente.getId_utente(), inputData, startDate, dueDate);
-            Log.d("id_utente_lista", utente.getId_utente().toString());
+            addTaskToFirestoreLast(utente_studente.getId_utente(), inputData, startDate, dueDate);
+            Log.d("id_utente_lista", utente_studente.getId_utente().toString());
         });
 
 
@@ -369,7 +368,6 @@ public class TaskStudenteFragment extends Fragment {
         return FirebaseFirestore.getInstance()
                 .collection("Utenti/Studenti/Studenti")
                 .whereEqualTo("id_utente", id_utente)
-                .limit(1)
                 .get()
                 .continueWith(task -> {
 
@@ -410,7 +408,6 @@ public class TaskStudenteFragment extends Fragment {
         return FirebaseFirestore.getInstance()
                 .collection("StudenteTesi")
                 .whereEqualTo("id_studente", id_studente)
-                .limit(1)
                 .get()
                 .continueWith(task -> {
 
@@ -421,11 +418,11 @@ public class TaskStudenteFragment extends Fragment {
                         studenteTesi.setId_studente(doc.getLong("id_studente"));
                         studenteTesi.setId_studente_tesi(doc.getLong("id_studente_tesi"));
                         studenteTesi.setId_tesi(doc.getLong("id_tesi"));
+                        Log.d("id_studente_tesi", studenteTesi.getId_studente_tesi().toString());
 
 
 
-
-                        return studenteTesi.getId_tesi();
+                        return studenteTesi.getId_studente_tesi();
                     }
                     throw new NoSuchElementException("Utente non trovato con questa mail: " + id_studente);
                 });
@@ -521,6 +518,8 @@ public class TaskStudenteFragment extends Fragment {
         loadTaskById(id_stud_tesi_in_studente_tesi).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 taskList.clear();
+                //Mi stampa due volte l'id_studenteTesi, prima quello corretto e poi 4
+                Log.d("id_studente_tesi", id_stud_tesi_in_studente_tesi.toString() + task.getResult());
                 addTasksToList(task.getResult());
             } else {
                 taskList.clear();
@@ -541,6 +540,8 @@ public class TaskStudenteFragment extends Fragment {
         for (TaskStudente taskStudente : tasks) {
             if (taskStudente != null) {
                 taskList.add(taskStudente);
+                Log.d("id_studente_in_studente_tesi", taskStudente.getId_studente_tesi().toString());
+
             }
         }
         adapter.notifyDataSetChanged();
@@ -561,6 +562,7 @@ public class TaskStudenteFragment extends Fragment {
         loadStudentByUserId(id_utente).addOnCompleteListener(studentTask -> {
             if (studentTask.isSuccessful()) {
                 Long id_studente = studentTask.getResult();
+
                 loadStudenteTesiAndAddTask(id_studente, inputData, startDate, dueDate);
             } else {
                 showToast(context, "Lettura dati studenti e aggiunta task non avvenuta correttamente");

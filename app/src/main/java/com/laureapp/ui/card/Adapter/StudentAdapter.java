@@ -86,7 +86,7 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
             Utente utente = studenteWithUtenteItem.getUtente();
 
             if (utente.getNome() != null && utente.getCognome() != null) {
-                String nomeCompleto = utente.getNome() + " " + utente.getCognome();
+                String nomeCompleto = utente.getCognome() + " " + utente.getNome();
                 nomeTextView.setText(nomeCompleto);
             } else {
                 // Gestisci il caso in cui il nome o il cognome sia null

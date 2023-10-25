@@ -1,10 +1,8 @@
 package com.laureapp.ui.card.Task;
 
-import static android.view.View.VISIBLE;
 import static com.laureapp.ui.controlli.ControlInput.showToast;
-import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
+import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -14,40 +12,29 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.EditText;
+
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.databinding.FragmentTaskBinding;
 import com.laureapp.ui.card.Adapter.TaskStudenteAdapter;
-import com.laureapp.ui.card.Adapter.TaskTesiAdapter;
-import com.laureapp.ui.roomdb.QueryFirestore;
+
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.TaskStudente;
-import com.laureapp.ui.roomdb.entity.TaskTesi;
-import com.laureapp.ui.roomdb.entity.Tesi;
+
 import com.laureapp.ui.roomdb.entity.Utente;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -65,21 +52,20 @@ public class TaskHomeStudenteFragment extends Fragment {
 
     private NavController mNav;
 
-    static Context context;
+    Context context;
 
     FragmentTaskBinding binding;
 
 
 
     // Dichiarazione di una variabile di istanza per il dialog
-    private static TaskStudenteAdapter adapter;
+    static TaskStudenteAdapter adapter;
 
-    private static FirebaseFirestore db;
-    private Bundle args;
     String ruolo;
-    private Utente utente;
 
-    private static List<TaskStudente> taskList = new ArrayList<>();
+    private static final List<TaskStudente> taskList = new ArrayList<>();
+    String email;
+    Bundle args;
 
 
     @Override
@@ -99,12 +85,14 @@ public class TaskHomeStudenteFragment extends Fragment {
 
         if(args != null) {
 
-            utente = args.getSerializable("Utente", Utente.class);
+            Utente utente = args.getSerializable("Utente", Utente.class);
             ruolo = args.getString("ruolo");
+            assert utente != null;
+            loadStudentForUserId(utente.getId_utente());
+
             //Carico i dati delle task in base all'utente loggato
         }
         // Altri codici del tuo fragment
-        db = FirebaseFirestore.getInstance();
 
         return binding.getRoot();
     }
@@ -113,12 +101,13 @@ public class TaskHomeStudenteFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ImageButton addButton = view.findViewById(R.id.add_task_ImageButton);
-        mNav = Navigation.findNavController(view);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
 
-        adapter = new TaskStudenteAdapter(context, taskList,mNav,args);
+        mNav = Navigation.findNavController(view);
+        adapter = new TaskStudenteAdapter(context, taskList,mNav, args);
 
-        loadStudentForUserId(utente.getId_utente());
+        email = getEmailFromSharedPreferences(context);
+
 
         addButton.setVisibility(View.GONE);
 
@@ -140,7 +129,6 @@ public class TaskHomeStudenteFragment extends Fragment {
         return FirebaseFirestore.getInstance()
                 .collection("Utenti").document("Studenti").collection("Studenti")
                 .whereEqualTo("id_utente", id_utente)
-                .limit(1)
                 .get()
                 .continueWith(task -> {
 
@@ -181,7 +169,6 @@ public class TaskHomeStudenteFragment extends Fragment {
         return FirebaseFirestore.getInstance()
                 .collection("StudenteTesi")
                 .whereEqualTo("id_studente", id_studente)
-                .limit(1)
                 .get()
                 .continueWith(task -> {
 
@@ -196,7 +183,7 @@ public class TaskHomeStudenteFragment extends Fragment {
 
 
 
-                        return studenteTesi.getId_tesi();
+                        return studenteTesi.getId_studente();
                     }
                     throw new NoSuchElementException("Utente non trovato con questa mail: " + id_studente);
                 });

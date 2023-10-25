@@ -46,6 +46,12 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
             if (currentRichiesta != null) {
                 Long idRichiestaTesi = currentRichiesta.getId_richiesta_tesi();
                 Long idStudente = currentRichiesta.getId_studente();
+                String stato = currentRichiesta.getStato();
+                if (stato != null && (stato.equals("Rifiutata") || stato.equals("Accettata"))) {
+                    // Se la richiesta è nello stato "Rifiutato" o "Accettato", restituisci una vista vuota
+                    return new View(mContext);
+                }
+
                 boolean soddisfaRequisiti = currentRichiesta.isSoddisfa_requisiti();
                 Log.d("vedi", String.valueOf(soddisfaRequisiti));
                 if (idRichiestaTesi != null) {

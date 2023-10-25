@@ -13,8 +13,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.R;
+import com.laureapp.ui.card.TesiStudente.ConfermaRichiestaDialog;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -25,8 +40,10 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DettaglioRichiestaFragment extends Fragment {
     String titolo;
@@ -38,6 +55,7 @@ public class DettaglioRichiestaFragment extends Fragment {
     List<Utente> utenti;
     StudenteModelView studenteModelView = new StudenteModelView(context);
     UtenteModelView utenteView = new UtenteModelView(context);
+    Long idTesi;
 
     boolean soddisfaRequisiti;
     @Override
@@ -104,8 +122,177 @@ public class DettaglioRichiestaFragment extends Fragment {
                 }
 
             }
+
+            Button accettaButton = view.findViewById(R.id.AccettaRichiesta);
+            accettaButton.setOnClickListener(view1 -> {
+
+                createStudenteTesi(idStudente,titolo);
+                changeStatoAccettata(idRichiestaTesi);
+                Navigation.findNavController(view).navigate(R.id.action_dettaglioRichiestaFragment_to_richiesteProfessoreFragment);
+
+
+            });
+
+            Button rifiutaButton = view.findViewById(R.id.RifiutaRichiesta);
+            rifiutaButton.setOnClickListener(view2 -> {
+
+                changeStatoRifiutata(idRichiestaTesi);
+                Navigation.findNavController(view).navigate(R.id.action_dettaglioRichiestaFragment_to_richiesteProfessoreFragment);
+                //da implementare invio segnalazione allo studente
+
+
+            });
         }
 
 
     }
+
+    public void changeStatoAccettata(Long idRichiestaTesi){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference richiesteRef = db.collection("RichiesteTesi");
+
+        Query query = richiesteRef.whereEqualTo("id_richiesta_tesi", idRichiestaTesi);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    // Ottieni il documento corrispondente (potrebbe esserci più di uno, ma ne usiamo il primo)
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+
+                    // Estrai l'ID del documento
+                    String documentId = documentSnapshot.getId();
+
+                    // Incrementa le visualizzazioni utilizzando l'ID del documento
+                    richiesteRef
+                            .document(documentId)
+                            .update("stato", "Accettata");
+                }
+            } else {
+                Log.e("Firestore Error", "Error querying Tesi collection", task.getException());
+            }
+        });
+    }
+
+    public void changeStatoRifiutata(Long idRichiestaTesi){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference richiesteRef = db.collection("RichiesteTesi");
+
+        Query query = richiesteRef.whereEqualTo("id_richiesta_tesi", idRichiestaTesi);
+
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    // Ottieni il documento corrispondente (potrebbe esserci più di uno, ma ne usiamo il primo)
+                    DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+
+                    // Estrai l'ID del documento
+                    String documentId = documentSnapshot.getId();
+
+                    // Incrementa le visualizzazioni utilizzando l'ID del documento
+                    richiesteRef
+                            .document(documentId)
+                            .update("stato", "Rifiutata");
+                }
+            } else {
+                Log.e("Firestore Error", "Error querying Tesi collection", task.getException());
+            }
+        });
+    }
+    private Task<Long> findTesiIdByTitolo(String titolo) {
+        final TaskCompletionSource<Long> tcs = new TaskCompletionSource<>();
+
+        CollectionReference tesiCollection = FirebaseFirestore.getInstance().collection("Tesi");
+        Query query = tesiCollection.whereEqualTo("titolo", titolo);
+
+        query.get().continueWith(new Continuation<QuerySnapshot, Long>() {
+            @Override
+            public Long then(Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot result = task.getResult();
+                    if (result != null && !result.isEmpty()) {
+                        for (QueryDocumentSnapshot doc : result) {
+                            Long idTesi = doc.getLong("id_tesi");
+                            tcs.setResult(idTesi);
+                            return idTesi;
+                        }
+                    }
+                }
+                tcs.setResult(null); // Nessuna corrispondenza trovata
+                return null;
+            }
+        });
+
+        return tcs.getTask();
+    }
+    private void createStudenteTesi(Long idStudente, String titolo) {
+        findTesiIdByTitolo(titolo).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Long idTesi = task.getResult();
+                // Ora abbiamo l'idTesi, possiamo procedere a ottenere il massimo id_studente_tesi
+                getMaxIdStudenteTesiAndCreateStudenteTesi(idStudente, idTesi);
+            }
+        });
+    }
+
+    private void getMaxIdStudenteTesiAndCreateStudenteTesi(Long idStudente, Long idTesi) {
+        // Ottieni il massimo id_studente_tesi da Firestore
+        findMaxIdStudenteTesi(new MaxStudenteTesiCallback() {
+            @Override
+            public void onCallback(Long maxIdStudenteTesi) {
+                Long newIdStudenteTesi = maxIdStudenteTesi + 1; // Corrected variable name
+
+                // Crea il documento "studenteTesi" con l'id incrementato
+                Map<String, Object> studenteTesi = new HashMap<>();
+                studenteTesi.put("id_tesi", idTesi);
+                studenteTesi.put("id_studente", idStudente);
+                studenteTesi.put("id_studente_tesi", newIdStudenteTesi);
+
+                // Aggiungi il nuovo documento "studenteTesi" a Firestore
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference studenteTesiRef = db.collection("StudenteTesi");
+                studenteTesiRef.add(studenteTesi)
+                        .addOnSuccessListener(documentReference -> {
+                            // La richiesta di tesi è stata aggiunta con successo
+                        })
+                        .addOnFailureListener(e -> {
+                            // Si è verificato un errore nell'aggiunta del documento "studenteTesi"
+                        });
+            }
+        });
+    }
+
+
+    private interface MaxStudenteTesiCallback {
+        void onCallback(Long maxIdStudenteTesi);
+    }
+
+    private void findMaxIdStudenteTesi(MaxStudenteTesiCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference studenteTesiRef = db.collection("StudenteTesi");
+
+        studenteTesiRef
+                .orderBy("id_studente_tesi", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        Long maxIdStudenteTesi = queryDocumentSnapshots.getDocuments().get(0).getLong("id_studente_tesi");
+                        if (maxIdStudenteTesi != null) {
+                            callback.onCallback(maxIdStudenteTesi);
+                        } else {
+                            // Nessun valore trovato, inizia da 1
+                            callback.onCallback(1L);
+                        }
+                    } else {
+                        // Nessun documento trovato, inizia da 1
+                        callback.onCallback(1L);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore Error", "Error finding max id_studente_tesi", e);
+                });
+    }
+
 }

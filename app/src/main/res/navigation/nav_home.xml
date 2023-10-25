@@ -274,6 +274,10 @@
         android:id="@+id/dettaglioRichiestaFragment"
         android:name="com.laureapp.ui.card.RichiesteProfessore.DettaglioRichiestaFragment"
         android:label="Dettaglio Richiesta Tesi"
-        tools:layout="@layout/fragment_dettaglio_richieste_tesi" />
+        tools:layout="@layout/fragment_dettaglio_richieste_tesi" >
+        <action
+            android:id="@+id/action_dettaglioRichiestaFragment_to_richiesteProfessoreFragment"
+            app:destination="@id/richiesteProfessoreFragment" />
+    </fragment>
 
 </navigation>

@@ -110,7 +110,7 @@ public class ProfiloFragment extends Fragment {
             studente = st_view.findAllById(st_view.findStudente(utente.getId_utente()));
         }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
             corsi = getResources().getStringArray(R.array.Corsi);
-            professore = pr_view.findAllById(pr_view.findPorfessore(utente.getId_utente()));
+            professore = pr_view.findAllById(pr_view.findProfessore(utente.getId_utente()));
             textWatcher = new ProfiloFragment.CustomTextWatcher();
             inizializzate_binding_text();
             setupTextWatchers();

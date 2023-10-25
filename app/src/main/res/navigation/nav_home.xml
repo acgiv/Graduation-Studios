@@ -160,7 +160,7 @@
         <action
             android:id="@+id/action_to_profilo"
             app:destination="@id/profilo_studente" />
-            app:destination="@id/taskStudenteFragment" />
+
         <action
             android:id="@+id/action_dettagli_tesista_to_lista_tesisti"
             app:destination="@id/tesisti" />
@@ -211,17 +211,16 @@
         android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
         android:label="Dettagni Segnalazione"
         tools:layout="@layout/fragment_discussione">
-        <action
 
-            android:id="@+id/action_discussioneFragment_to_messaggiFragment"
-            app:destination="@id/messaggiFragment" />
+        <action
+            android:id="@+id/action_discussioneFragment_to_segnalazioneFragment"
+            app:destination="@id/segnStudentiFragment" />
 
         <action
             android:id="@+id/action_to_profilo"
             app:destination="@id/profilo_studente" />
 
-            android:id="@+id/action_discussioneFragment_to_segnalazioneFragment"
-            app:destination="@id/segnStudentiFragment" />
+
     </fragment>
 
     <!--Fragment Nuova Segnalazione-->

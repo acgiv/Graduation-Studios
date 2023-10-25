@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addTesiProfessorePopup"
+    android:layout_width="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/editTextTitoloTesiProfessore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Titolo"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextTipologiaTesiProfessore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Tipologia"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextTitoloTesiProfessore" />
+
+    <EditText
+        android:id="@+id/editTextDataPubblicazioneTesiProfessore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Data pubblicazione"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextTipologiaTesiProfessore" />
+
+    <EditText
+        android:id="@+id/editTextCicloCdlTesiProfessore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Ciclo CDL"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextDataPubblicazioneTesiProfessore" />
+
+    <EditText
+        android:id="@+id/editTextAbstractTesiProfessore"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Abstract"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextCicloCdlTesiProfessore" />
+
+    <Button
+        android:id="@+id/buttonAvantiTesiProfessore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextAbstractTesiProfessore"
+        tools:text="Avanti" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

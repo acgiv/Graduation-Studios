@@ -1,5 +1,6 @@
 package com.laureapp.ui.card.TesiProfessore;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,11 +8,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.Task;
@@ -37,11 +43,15 @@ public class ListaTesiProfessoreFragment extends Fragment {
     String email;
     Long id_utente;
     Long id_professore;
+    private NavController mNav;
     private ListView listView;
     private ListaTesiProfessoreAdapter adapter;
+    private static ListaTesiProfessoreAdapter adapterDue;
     ProfessoreModelView professoreView = new ProfessoreModelView(context);
-
     ArrayList<Long> idTesiList = new ArrayList<>();
+
+    //Dichiarazioni di una variabile di istanza per il dialog
+    private AlertDialog alertDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +62,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
         email = getEmailFromSharedPreferences();
+        ImageButton addButton = view.findViewById(R.id.addTesiProfessore);
 
         if (email != null) { // se la mail non è nulla
 
@@ -59,8 +70,8 @@ public class ListaTesiProfessoreFragment extends Fragment {
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
             id_professore = professoreView.findProfessore(id_utente); //ottengo l'id del professore corrispondente all'id dell'utente
 
-            Log.d("prof", String.valueOf(id_professore));
-            Log.d("ut", String.valueOf(id_utente));
+            //Log.d("prof", String.valueOf(id_professore));
+            //Log.d("ut", String.valueOf(id_utente));
 
             //Carico l'elenco degli id delle tesi collegate con il professore
             loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
@@ -95,6 +106,11 @@ public class ListaTesiProfessoreFragment extends Fragment {
             } else {
             Log.d("Email salvata: ", "Non trovata");
             }
+
+            addButton.setOnClickListener(view1 ->
+                showInputDialog()
+            );
+
         }
 
     private String getEmailFromSharedPreferences() {
@@ -176,6 +192,30 @@ public class ListaTesiProfessoreFragment extends Fragment {
             }
             return tesiList;
         });
+    }
+
+    /**
+     * Metodo per mostrare il pop-up in un'attività o fragment
+     */
+
+    public void showInputDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Nuova tesi");
+
+        //Includi il layout XML personalizzato
+        View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_tesi_professore_popup,null);
+        builder.setView(view);
+
+        //EditText
+        EditText editTextTitolo = view.findViewById(R.id.editTextTitoloTesiProfessore);
+        EditText editTextTipologia = view.findViewById(R.id.editTextTipologiaTesiProfessore);
+        EditText editTextDataPubblicazione = view.findViewById(R.id.editTextDataPubblicazioneTesiProfessore);
+        EditText editTextCicloCdl = view.findViewById(R.id.editTextCicloCdlTesiProfessore);
+        EditText editTextAbstract = view.findViewById(R.id.editTextAbstractTesiProfessore);
+
+        //Button
+        Button buttonAvanti = view.findViewById(R.id.buttonAvantiTesiProfessore);
+
     }
 
 }

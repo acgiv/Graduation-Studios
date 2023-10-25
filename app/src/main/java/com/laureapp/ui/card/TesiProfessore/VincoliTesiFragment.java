@@ -40,7 +40,7 @@ public class VincoliTesiFragment extends Fragment {
 
         //Inizializzo
         TextView tempisticheProfessoreTextView = view.findViewById(R.id.insertTempisticheTesiProfessore);
-        TextView mediaVotoProfessoreTextView = view.findViewById(R.id.insertMediaVotoTesiProfessore);
+        TextView mediaVotiProfessoreTextView = view.findViewById(R.id.insertMediaVotiTesiProfessore);
         TextView esamiMancantiProfessoreTextView = view.findViewById(R.id.insertEsamiMancantiTesiProfessore);
         TextView skillProfessoreTextView = view.findViewById(R.id.insertSkillTesiProfessore);
 
@@ -59,7 +59,7 @@ public class VincoliTesiFragment extends Fragment {
                         esamiMancanti = vincolo.getEsami_mancanti_necessari();
 
                         tempisticheProfessoreTextView.setText(vincolo.getTempistiche().toString());
-                        mediaVotoProfessoreTextView.setText(media.toString());
+                        mediaVotiProfessoreTextView.setText(media.toString());
                         esamiMancantiProfessoreTextView.setText(esamiMancanti.toString());
                         skillProfessoreTextView.setText(vincolo.getSkill());
 

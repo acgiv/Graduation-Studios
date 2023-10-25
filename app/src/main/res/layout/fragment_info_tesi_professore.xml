@@ -48,16 +48,23 @@
                         android:layout_height="wrap_content"
                         android:text="Titolo: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertTitoloTesiProfesore"
-                        android:layout_width="313dp"
+                        android:layout_width="295dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaTitoloTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
+
 
                 </LinearLayout>
 
@@ -89,17 +96,24 @@
                         android:layout_height="wrap_content"
                         android:text="Tipologia: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/insertTipologiaTesiProfessore"
-                        android:layout_width="272dp"
+                        android:layout_width="261dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaTipologiaTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
+
 
                 </LinearLayout>
 
@@ -131,17 +145,25 @@
                         android:layout_height="wrap_content"
                         android:text="Data pubblicazione: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/insertDataPubblicazioneTesiProfessore"
-                        android:layout_width="162dp"
+                        android:layout_width="164dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaDataPubblicazioneTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon"/>
+
+
 
                 </LinearLayout>
 
@@ -173,17 +195,24 @@
                         android:layout_height="wrap_content"
                         android:text="Ciclo CDL: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/insertCicloCdlTesiProfessore"
-                        android:layout_width="268dp"
+                        android:layout_width="258dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaCicloCdlTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
+
 
                 </LinearLayout>
 
@@ -215,17 +244,24 @@
                         android:layout_height="wrap_content"
                         android:text="Abstract: "
                         android:textColor="@color/color_primary"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/insertAbstractTesiProfessore"
-                        android:layout_width="282dp"
+                        android:layout_width="268dp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="25dp"
+                        android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/modificaAbstractTesiProfessore"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/edit_icon" />
+
 
                 </LinearLayout>
 

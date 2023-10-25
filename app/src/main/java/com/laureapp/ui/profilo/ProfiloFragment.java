@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import java.util.Arrays;
 import android.view.LayoutInflater;
@@ -22,8 +23,6 @@ import androidx.annotation.Nullable;
 
 
 import androidx.fragment.app.Fragment;
-import com.google.android.material.textfield.MaterialAutoCompleteTextView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,11 +41,9 @@ import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -81,6 +78,8 @@ public class ProfiloFragment extends Fragment {
     private final int error_color = com.google.android.material.R.color.design_default_color_error;
     private boolean mod_corso = false;
     private boolean annulla_corso = false;
+    private final Map<Class<?>, Object> component_pass = new HashMap<>();
+
 
 
     @Override
@@ -152,6 +151,8 @@ public class ProfiloFragment extends Fragment {
             set_view();
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            binding.TextVecchio.setTransformationMethod(null);
+            binding.Textnuovo.setTransformationMethod(null);
             binding.componentInputVecchio.setHint("Nome Attuale");
             binding.componentInputNuovo.setHint("Nuovo Nome");
             confirm_modifiche("Nome", utente.getNome());
@@ -161,6 +162,8 @@ public class ProfiloFragment extends Fragment {
             set_view();
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            binding.TextVecchio.setTransformationMethod(null);
+            binding.Textnuovo.setTransformationMethod(null);
             binding.componentInputVecchio.setHint("Cognome attuale");
             binding.componentInputNuovo.setHint("Nuovo Cognome");
             confirm_modifiche("Cognome", utente.getCognome());
@@ -170,6 +173,8 @@ public class ProfiloFragment extends Fragment {
             set_view();
             binding.componentInputVecchio.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
             binding.componentInputNuovo.setEndIconMode(END_ICON_PASSWORD_TOGGLE);
+            binding.TextVecchio.setTransformationMethod(new PasswordTransformationMethod());
+            binding.Textnuovo.setTransformationMethod(new PasswordTransformationMethod());
             binding.componentInputNuovo.setErrorIconDrawable(null);
             binding.componentInputVecchio.setErrorIconDrawable(null);
             binding.componentInputVecchio.setHint("Password attuale");
@@ -181,6 +186,8 @@ public class ProfiloFragment extends Fragment {
             set_view();
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            binding.TextVecchio.setTransformationMethod(null);
+            binding.Textnuovo.setTransformationMethod(null);
             binding.componentInputVecchio.setHint("Matricola attuale");
             binding.componentInputNuovo.setHint("Nuova Matricola");
             if (StringUtils.equals(ruolo, getString(R.string.studente))) {
@@ -192,10 +199,10 @@ public class ProfiloFragment extends Fragment {
 
         binding.modificaMedia.setOnClickListener(v -> {
             set_view();
-            binding.Textnuovo.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
-            binding.TextVecchio.setInputType(TextInputEditText.AUTOFILL_TYPE_TEXT);
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            binding.TextVecchio.setTransformationMethod(null);
+            binding.Textnuovo.setTransformationMethod(null);
             binding.componentInputVecchio.setHint("Media attuale");
             binding.componentInputNuovo.setHint("Nuova Media");
             confirm_modifiche("Media", String.valueOf(studente.getMedia()));
@@ -205,6 +212,8 @@ public class ProfiloFragment extends Fragment {
             set_view();
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            binding.TextVecchio.setTransformationMethod(null);
+            binding.Textnuovo.setTransformationMethod(null);
             binding.componentInputVecchio.setHint("Esami Mancanti attualu");
             binding.componentInputNuovo.setHint("Nuovo valore esami mancanti.");
             confirm_modifiche("Esami Mancanti", String.valueOf(studente.getEsami_mancanti()));
@@ -215,6 +224,7 @@ public class ProfiloFragment extends Fragment {
             binding.corsoprofessoreInput.setVisibility(View.VISIBLE);
             binding.componentInputVecchio.setEndIconMode(TextInputLayout.END_ICON_NONE);
             binding.componentInputNuovo.setEndIconMode(TextInputLayout.END_ICON_NONE);
+            binding.TextVecchio.setTransformationMethod(null);
             binding.TextVecchio.setEnabled(false);
             binding.TextVecchio.setText(utente.getNome_cdl());
             annulla_corso = true;
@@ -232,8 +242,6 @@ public class ProfiloFragment extends Fragment {
             set_view();
         });
     }
-
-
 
     private void confirm_modifiche(String type, String campo) {
         binding.buttonRegister.setOnClickListener(view -> {
@@ -253,13 +261,15 @@ public class ProfiloFragment extends Fragment {
                                         utente.setNome(campo_nuovo_text);
                                         ut_view.updateUtente(utente);
                                         binding.InsertNome.setText(utente.getNome());
-                                        changeComponentFirestore("nome", "Utenti", utente.getNome());
+                                        component_pass.put(String.class, utente.getNome());
+                                        changeComponentFirestore("nome", "Utenti");
                                         close_card_modifica();
                                     } else if (StringUtils.equals(type, "Cognome")&& (control_attuale && control_nuovo)) {
                                         utente.setCognome(campo_nuovo_text);
                                         ut_view.updateUtente(utente);
                                         binding.InsertCongnome.setText(utente.getCognome());
-                                        changeComponentFirestore("cognome", "Utenti", utente.getCognome());
+                                        component_pass.put(String.class, utente.getCognome());
+                                        changeComponentFirestore("cognome", "Utenti");
                                         close_card_modifica();
                                     }
 
@@ -272,7 +282,8 @@ public class ProfiloFragment extends Fragment {
                                     utente.setPassword(ControlInput.hashWith256(Objects.requireNonNull(binding.Textnuovo.getText()).toString()));
                                     ut_view.updateUtente(utente);
                                     updatePasswordAutentication();
-                                    changeComponentFirestore("password","Utenti" ,utente.getPassword());
+                                    component_pass.put(String.class, utente.getPassword());
+                                    changeComponentFirestore("password","Utenti");
                                     close_card_modifica();
                                 }
                             }
@@ -285,11 +296,13 @@ public class ProfiloFragment extends Fragment {
                                         confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
                                         studente.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
                                         st_view.updateStudente(studente);
-                                        changeComponentFirestore("matricola","Utenti/Studenti/Studenti" ,String.valueOf(studente.getMatricola()));
+                                        component_pass.put(Long.class, studente.getMatricola());
+                                        changeComponentFirestore("matricola","Utenti/Studenti/Studenti");
                                     }else{
                                         confirm_modifiche("Matricola", String.valueOf(professore.getMatricola()));
-                                        professore.setMatricola((binding.Textnuovo.getText().toString()));
-                                        changeComponentFirestore("matricola","Utenti/Professori/Professori" ,professore.getMatricola());
+                                        professore.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
+                                        component_pass.put(Long.class, professore.getMatricola());
+                                        changeComponentFirestore("matricola","Utenti/Professori/Professori");
                                     }
                                     binding.InsertMatricola.setText(binding.Textnuovo.getText().toString());
                                     close_card_modifica();
@@ -303,7 +316,8 @@ public class ProfiloFragment extends Fragment {
                                     studente.setMedia(Integer.parseInt(binding.Textnuovo.getText().toString()));
                                     st_view.updateStudente(studente);
                                     binding.InsertMedia.setText(binding.Textnuovo.getText().toString());
-                                    changeComponentFirestore("media", "Utenti/Studenti/Studenti", String.valueOf(studente.getMedia()));
+                                    component_pass.put(Integer.class, studente.getMedia());
+                                    changeComponentFirestore("media", "Utenti/Studenti/Studenti");
                                     close_card_modifica();
                                 }
                             }
@@ -315,7 +329,8 @@ public class ProfiloFragment extends Fragment {
                                         studente.setEsami_mancanti(Integer.parseInt(binding.Textnuovo.getText().toString()));
                                         st_view.updateStudente(studente);
                                         binding.InsertEsamiMancanti.setText(binding.Textnuovo.getText().toString());
-                                        changeComponentFirestore("esami_mancanti","Utenti/Studenti/Studenti" ,String.valueOf(studente.getEsami_mancanti()));
+                                        component_pass.put(Integer.class, studente.getEsami_mancanti());
+                                        changeComponentFirestore("esami_mancanti","Utenti/Studenti/Studenti");
                                         close_card_modifica();
                                     }
                                 }
@@ -332,7 +347,8 @@ public class ProfiloFragment extends Fragment {
                         ControlInput.set_error(binding.corsoprofessoreInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                         utente.setNome_cdl(binding.dropdownprofessoreCorso.getText().toString());
                         ut_view.updateUtente(utente);
-                        changeComponentFirestore("nome_cdl","Utenti" ,String.valueOf(utente.getNome_cdl()));
+                        component_pass.put(String.class, utente.getNome_cdl());
+                        changeComponentFirestore("nome_cdl","Utenti");
                         close_card_modifica();
                         binding.corsoprofessoreInput.setVisibility(View.GONE);
                         binding.componentInputNuovo.setVisibility(View.VISIBLE);
@@ -410,6 +426,7 @@ public class ProfiloFragment extends Fragment {
             mod_corso = true;
             binding.InsertCorso.setText(utente.getNome_cdl());
         }
+        component_pass.clear();
     }
 
 
@@ -428,14 +445,39 @@ public class ProfiloFragment extends Fragment {
         close_card_modifica();
     }
 
-    private void changeComponentFirestore(String key_component,String path,  String component) {
+    private void changeComponentFirestore(String key_component,String path) {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         assert currentUser != null;
         if (!StringUtils.isEmpty(currentUser.getUid())) {
             // Crea un oggetto con i dati da aggiornare nel documento
             Map<String, Object> updateData = new HashMap<>();
-            updateData.put(key_component, component); // "nome" è il nome del campo da aggiornare
+            Map.Entry<Class<?>, Object> firstEntry = component_pass.entrySet().iterator().next();
+            Object value = firstEntry.getValue();
+            Class<?> type = firstEntry.getKey();
+            if (type == String.class) {
+                if (value instanceof String) {
+                    String stringValue = (String) value;
+                    updateData.put(key_component, stringValue);
+                } else {
+                    // Gestisci il caso in cui il valore non è una stringa.
+                }
+            } else if (type == Long.class) {
+                if (value instanceof Long) {
+                    Long longValue = (Long) value;
+                    updateData.put(key_component, longValue);
+                } else {
+                    // Gestisci il caso in cui il valore non è un long.
+                }
+            } else if (type == Integer.class) {
+                if (value instanceof Integer) {
+                    Integer intValue = (Integer) value;
+                    updateData.put(key_component, intValue);
+                } else {
+                    // Gestisci il caso in cui il valore non è un intero.
+                }
+            }
+            // "nome" è il nome del campo da aggiornare
             // Esegui l'aggiornamento nel documento
             firestoreDB.collection(path)
                     .document(currentUser.getUid())

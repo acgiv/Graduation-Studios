@@ -217,7 +217,7 @@ public class Register2Fragment extends Fragment {
             }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
                 Professore professore = new Professore();
                 professore.setId_utente(ut.getId_utente());
-                professore.setMatricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
+                professore.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
                 ProfessoreModelView pr_db = new ProfessoreModelView(context);
                 pr_db.insertProfessore(professore);
                 firestoreDB.collection("Utenti").document("Professori").collection("Professori")

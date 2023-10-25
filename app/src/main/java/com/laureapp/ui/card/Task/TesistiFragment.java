@@ -178,7 +178,7 @@ public class TesistiFragment extends Fragment {
                         Professore professore = new Professore();
                         professore.setId_professore(doc.getLong("id_professore"));
                         professore.setId_utente(doc.getLong("id_utente"));
-                        professore.setMatricola(doc.getString("matricola"));
+                        professore.setMatricola(Long.valueOf(doc.getString("matricola")));
 
 
 

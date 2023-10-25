@@ -59,10 +59,11 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaTitoloTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
 
 
@@ -108,10 +109,12 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaTipologiaTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
+
                         android:src="@drawable/edit_icon" />
 
 
@@ -157,10 +160,12 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaDataPubblicazioneTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
+
                         android:src="@drawable/edit_icon"/>
 
 
@@ -207,10 +212,12 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaCicloCdlTesiProfessore"
                         android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_height="34dp"
+                        android:background="@android:color/transparent"
+
                         android:src="@drawable/edit_icon" />
 
 
@@ -256,10 +263,11 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaAbstractTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
 
 

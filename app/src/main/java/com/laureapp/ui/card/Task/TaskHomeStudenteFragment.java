@@ -85,10 +85,13 @@ public class TaskHomeStudenteFragment extends Fragment {
 
         if(args != null) {
 
-            Utente utente = args.getSerializable("Utente", Utente.class);
+            Utente utente = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                utente = args.getSerializable("Utente", Utente.class);
+                loadStudentForUserId(utente.getId_utente());
+            }
             ruolo = args.getString("ruolo");
-            assert utente != null;
-            loadStudentForUserId(utente.getId_utente());
+
 
             //Carico i dati delle task in base all'utente loggato
         }

@@ -7,6 +7,7 @@ import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
+import com.laureapp.databinding.FragmentTaskBinding;
 import com.laureapp.ui.card.Adapter.TaskTesiAdapter;
 import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Studente;
@@ -89,14 +91,16 @@ public class TaskTesiFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inizializza il binding
-        binding = com.laureapp.databinding.FragmentTaskBinding.inflate(inflater, container, false);
+        binding = FragmentTaskBinding.inflate(inflater, container, false);
         context = requireContext();
         args = getArguments();
 
 
         if(args != null) {
 
-            utente = args.getSerializable("Utente", Utente.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                utente = args.getSerializable("Utente", Utente.class);
+            }
             //Carico i dati delle task in base all'utente loggato
         }
         // Altri codici del tuo fragment
@@ -200,11 +204,12 @@ public class TaskTesiFragment extends Fragment {
                     }
 
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                utente = args.getSerializable("Utente", Utente.class);
+                addTaskToFirestoreLast(utente.getId_utente(), inputData, startDate, dueDate);
 
-
-                        utente = args.getSerializable("Utente", Utente.class);
-                        //Aggiungo la task a Firestore in base all'utente loggato
-                        addTaskToFirestoreLast(utente.getId_utente(), inputData, startDate, dueDate);
+            }
+            //Aggiungo la task a Firestore in base all'utente loggato
                 });
 
 

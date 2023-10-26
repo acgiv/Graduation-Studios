@@ -49,9 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences prefsLanguage = getSharedPreferences("LanguagePrefs", 0);
-        String language = prefsLanguage.getString("Language", "it");
-        setLocal(language);
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -146,15 +144,7 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
    }
 
-    public void setLocal(String lingua){
-        Resources resources = getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(new Locale(lingua));
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-        onConfigurationChanged(config);
 
-    }
 
 
 }

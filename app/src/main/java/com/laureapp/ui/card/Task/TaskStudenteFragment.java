@@ -6,6 +6,7 @@ import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -92,14 +93,16 @@ public class TaskStudenteFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inizializza il binding
-        binding = com.laureapp.databinding.FragmentTaskBinding.inflate(inflater, container, false);
+        binding = FragmentTaskBinding.inflate(inflater, container, false);
         context = requireContext();
         args = getArguments();
 
 
         if(args != null) {
 
-            utente_studente = args.getSerializable("Studente", Studente.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                utente_studente = args.getSerializable("Studente", Studente.class);
+            }
             //Carico i dati delle task in base all'utente loggato
         }
         // Altri codici del tuo fragment

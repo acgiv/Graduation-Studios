@@ -4,6 +4,7 @@ import static com.laureapp.ui.controlli.ControlInput.showToast;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -51,7 +52,9 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
-            args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
+            }
 
         }
 
@@ -123,10 +126,10 @@ public class HomeFragment extends Fragment {
         CardSegnalazioni.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
                 Log.d("Segn", "cliccato Segnalazione Professore"  + ruolo);
-                mNav.navigate(R.id.action_fragment_home_to_tesisti);
+                mNav.navigate(R.id.action_fragment_home_to_tesisti_segnalazione_fragment, args);
             }else if(StringUtils.equals("Studente", ruolo)){
                 Log.d("Segn", "cliccato Segnalazione Studente"  + ruolo);
-                mNav.navigate(R.id.action_fragment_home_to_segnStudentiFragment);
+                mNav.navigate(R.id.action_fragment_home_to_segnalazione_fragment, args);
             }
         });
 

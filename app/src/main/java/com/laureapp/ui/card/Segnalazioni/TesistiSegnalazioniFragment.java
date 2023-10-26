@@ -1,4 +1,4 @@
-package com.laureapp.ui.card.Task;
+package com.laureapp.ui.card.Segnalazioni;
 
 
 import static com.laureapp.ui.controlli.ControlInput.showToast;
@@ -51,7 +51,7 @@ import java.util.Objects;
  * Tesisti, lato professore. Questa lista viene filtrata in base al testo inserito dall'utente.
  *
  */
-public class TesistiFragment extends Fragment {
+public class TesistiSegnalazioniFragment extends Fragment {
 
     private NavController mNav;
     String ruolo;
@@ -63,15 +63,14 @@ public class TesistiFragment extends Fragment {
 
     StudentAdapter adapter;
     Utente utente;
-    Studente studente;
     String cognomeTesistaCercato;
 
     private List<StudenteWithUtente> studentList = new ArrayList<>();
-    private String tesistaCercato = "";
 
 
 
-    public TesistiFragment() {
+
+    public TesistiSegnalazioniFragment() {
         // Required empty public constructor
     }
 
@@ -83,15 +82,15 @@ public class TesistiFragment extends Fragment {
             ruolo = args.getString("ruolo");
         }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-                utente = args.getSerializable("Utente", Utente.class);
+            utente = args.getSerializable("Utente", Utente.class);
 
 
-            }
-            loadProfessorForUserId(utente.getId_utente());
+        }
+        loadProfessorForUserId(utente.getId_utente());
 
-            mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
 
 
@@ -117,38 +116,6 @@ public class TesistiFragment extends Fragment {
 
 
 
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Handle search query submission (if needed)
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                cognomeTesistaCercato = newText;
-                loadSearchedTesistiData(cognomeTesistaCercato).addOnCompleteListener(tesistiTask -> {
-                    if (tesistiTask.isSuccessful()) {
-                        List<StudenteWithUtente> searchedUtentiList = tesistiTask.getResult();
-                        studentList.clear();
-                        addStudentsToList(searchedUtentiList);
-                    } else if(newText.isEmpty()){
-                        loadProfessorForUserId(utente.getId_utente());
-                        Log.e("Tesi Firestore Error", "Error getting searched Tesi data", tesistiTask.getException());
-                    }
-                });
-
-                return true;
-            }
-
-
-
-
-
-        });
-
-
         listView.setAdapter(adapter);
 
 
@@ -164,7 +131,7 @@ public class TesistiFragment extends Fragment {
             args.putSerializable("Utente", studenteWithUtente.getUtente());
 
             // Passa il Bundle al fragment di destinazione
-            mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista, args);
+            mNav.navigate(R.id.action_tesisti_segnalazioni_to_segnalazioni_fragment, args);
         });
 
 
@@ -620,7 +587,7 @@ public class TesistiFragment extends Fragment {
 
 
 
-    }
+}
 
 
 

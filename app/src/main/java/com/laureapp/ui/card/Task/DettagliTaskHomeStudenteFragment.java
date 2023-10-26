@@ -6,6 +6,7 @@ import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -79,7 +80,9 @@ public class DettagliTaskHomeStudenteFragment extends Fragment {
         args = getArguments();
         if(args != null) {
 
-            taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
+            }
             ruolo = args.getString("ruolo");
             //Carico i dati delle task in base all'utente loggato
         }

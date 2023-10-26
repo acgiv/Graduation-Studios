@@ -39,10 +39,7 @@
             android:id="@+id/action_fragment_home_to_tesisti"
             app:destination="@id/tesisti" />
 
-        <!-- Home to segnalazioni fragment -->
-        <action
-            android:id="@+id/action_fragment_home_to_segnStudentiFragment"
-            app:destination="@id/segnStudentiFragment" />
+
 
 
         <!-- Home to tesi professore fragment -->
@@ -57,10 +54,22 @@
         <action
             android:id="@+id/action_fragment_home_to_impostazioniFragment"
             app:destination="@id/fragment_impostazioni" />
+
+        <!--Home to richieste professore fragment -->
         <action
             android:id="@+id/action_fragment_home_to_richiesteProfessoreFragment"
             app:destination="@id/richiesteProfessoreFragment" />
 
+        <!--Home to tesisti segnalazioni fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_tesisti_segnalazione_fragment"
+            app:destination="@id/tesistiSegnalazioniFragment"
+            android:label="Tesisti - Segnalazioni"/>
+
+        <!--Home to segnalazioni fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_segnalazione_fragment"
+            app:destination="@id/segnalazioniFragment" />
 
 
     </fragment>
@@ -143,10 +152,8 @@
             android:id="@+id/action_to_profilo"
             app:destination="@id/profilo_studente" />
 
-        <action
-            android:id="@+id/action_tesisti_to_segnFragment"
-            app:destination="@id/segnFragment" />
     </fragment>
+
 
     <!--Fragment dettagli tesista -->
     <fragment
@@ -155,8 +162,8 @@
         android:label="Tesista"
         tools:layout="@layout/fragment_dettagli_tesista">
         <action
-            android:id="@+id/action_dettagli_tesista_to_task"
-            app:destination="@id/taskFragment" />
+            android:id="@+id/action_dettagli_tesista_to_task_studente"
+            app:destination="@id/taskStudenteFragment" />
         <action
             android:id="@+id/action_to_profilo"
             app:destination="@id/profilo_studente" />
@@ -167,73 +174,10 @@
 
     </fragment>
 
-    <!--Fragment segnalazioni-->
-    <fragment
-        android:id="@+id/segnStudentiFragment"
-        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
-        android:label="Lista Segnalazioni"
-        tools:layout="@layout/fragment_segnalazioni_studente">
-        <action
-            android:id="@+id/action_segnalazioniFragment_to_discussioneFragment"
-            app:destination="@id/discussioneFragment" />
-        <action
-            android:id="@+id/action_segnalazioniFragment_to_fragment_home"
-            app:destination="@id/fragment_home" />
 
 
-        <action
-            android:id="@+id/action_to_profilo"
-            app:destination="@id/profilo_studente" />
-
-        <action
-            android:id="@+id/action_segnStudentiFragment_to_newSegnalazioni"
-            app:destination="@id/newSegnalazione" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/segnFragment"
-        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
-        android:label="Lista Segnalazioni"
-        tools:layout="@layout/fragment_segnalazioni">
-        <action
-            android:id="@+id/action_segnalazioniFragment_to_discussioneFragment"
-            app:destination="@id/discussioneFragment" />
-        <action
-            android:id="@+id/action_segnFragment_to_tesisti"
-            app:destination="@id/tesisti" />
-
-    </fragment>
 
 
-    <!--Fragment discussione -->
-    <fragment
-        android:id="@+id/discussioneFragment"
-        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
-        android:label="Dettagni Segnalazione"
-        tools:layout="@layout/fragment_discussione">
-
-        <action
-            android:id="@+id/action_discussioneFragment_to_segnalazioneFragment"
-            app:destination="@id/segnStudentiFragment" />
-
-        <action
-            android:id="@+id/action_to_profilo"
-            app:destination="@id/profilo_studente" />
-
-
-    </fragment>
-
-    <!--Fragment Nuova Segnalazione-->
-    <fragment
-        android:id="@+id/newSegnalazione"
-        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
-        android:label="Nuova Segnalazione"
-        tools:layout="@layout/add_segn_popup" >
-        <action
-            android:id="@+id/action_newSegnFragment_to_segnStudentiFragment"
-            app:destination="@id/segnStudentiFragment" />
-
-    </fragment>
 
     <!--Fragment task tesi -->
     <fragment
@@ -335,6 +279,38 @@
         <action
             android:id="@+id/action_dettaglioRichiestaFragment_to_richiesteProfessoreFragment"
             app:destination="@id/richiesteProfessoreFragment" />
+    </fragment>
+
+    <!--Fragment tesisti segnalazioni -->
+    <fragment
+        android:id="@+id/tesistiSegnalazioniFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.TesistiSegnalazioniFragment"
+        tools:layout="@layout/fragment_tesisti">
+        <action
+            android:id="@+id/action_tesisti_segnalazioni_to_segnalazioni_fragment"
+            app:destination="@id/segnalazioniFragment" />
+
+    </fragment>
+
+    <!--Segnalazioni fragment -->
+    <fragment
+        android:id="@+id/segnalazioniFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment"
+        tools:layout="@layout/fragment_segnalazioni"
+        android:label="Lista segnalazioni">
+        <action
+            android:id="@+id/action_fragment_segnalazioni_to_chat_fragment"
+            app:destination="@id/chatFragment" />
+
+    </fragment>
+
+    <!--Chat fragment -->
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.laureapp.ui.card.Segnalazioni.ChatFragment"
+        tools:layout="@layout/fragment_chat"
+        android:label="Chat">
+
     </fragment>
 
 </navigation>

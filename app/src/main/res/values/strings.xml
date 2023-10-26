@@ -30,7 +30,7 @@
     <string name="tesi">Tesi</string>
     <string name="classifica">Classifica</string>
     <string name="social">Social</string>
-    <string name="tesi_description">tesi_description</string>
+    <string name="tesi_description" translatable="false">tesi_description</string>
     <string name="chat_description">chat</string>
     <string name="classifica_description" />
     <string name="social_description" />
@@ -72,7 +72,6 @@
         <item>Informatica</item>
         <item>Farmacia</item>
     </string-array>
-
 
 
     <string-array name="StatoTask">
@@ -145,8 +144,10 @@
     <string name="errore_email_esistente">Esiste già un utente asscociato a questa email.</string>
     <string name="ElencoTesi">Elenco Tesi</string>
     <string name="titolo">Titolo</string>
-    <string name="richiesta">Richiesta</string>
     <string name="aggiungi">Aggiungi</string>
+    <string name="tesista">Tesista</string>
+    <string name="titolo_tesi">Titolo tesi</string>
+    <string name="richiesta">Richiesta</string>
 
     <style name="CalendarDateText">
         <item name="android:textSize">18sp</item>

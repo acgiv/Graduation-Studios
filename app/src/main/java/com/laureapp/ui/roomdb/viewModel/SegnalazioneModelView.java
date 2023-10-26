@@ -39,8 +39,8 @@ public class SegnalazioneModelView {
         return segnalazioneRepository.findSegnalazioneById(idSegnalazione);
     }
 
-    public List<Segnalazione> findSegnalazioniByTesiId(Long idTesi) {
-        return segnalazioneRepository.findSegnalazioniByTesiId(idTesi);
+    public List<Segnalazione> findSegnalazioniByStudenteTesiId(Long idStudenteTesi) {
+        return segnalazioneRepository.findSegnalazioniByStudenteTesiId(idStudenteTesi);
     }
 
     // Altri metodi specifici per la gestione delle segnalazioni

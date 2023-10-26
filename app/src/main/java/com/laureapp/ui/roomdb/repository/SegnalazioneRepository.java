@@ -57,10 +57,10 @@ public class SegnalazioneRepository {
         }
     }
 
-    public List<Segnalazione> findSegnalazioniByTesiId(Long idTesi) {
+    public List<Segnalazione> findSegnalazioniByStudenteTesiId(Long idStudenteTesi) {
         CompletableFuture<List<Segnalazione>> future = new CompletableFuture<>();
         executor.execute(() -> {
-            List<Segnalazione> segnalazioni = segnalazioneDao.findByTesiId(idTesi);
+            List<Segnalazione> segnalazioni = segnalazioneDao.findByStudenteTesiId(idStudenteTesi);
             future.complete(segnalazioni);
         });
         try {

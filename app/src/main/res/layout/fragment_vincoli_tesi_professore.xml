@@ -104,7 +104,7 @@
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <ImageButton
-                        android:id="@+id/modificaMediaVotoTesiProfessore"
+                        android:id="@+id/modificaMediaVotiTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"

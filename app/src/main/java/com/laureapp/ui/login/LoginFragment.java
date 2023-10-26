@@ -33,11 +33,11 @@ import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Utente;
-import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.io.Serializable;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -76,11 +76,9 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
-        context = requireContext();
-
+        context = getContext();
         utenteView = new UtenteModelView(context);
         return binding.getRoot();
 
@@ -97,12 +95,8 @@ public class LoginFragment extends Fragment {
         email_text = view.findViewById(R.id.email_register);
         password_text = view.findViewById(R.id.conferma_password);
         error_text = view.findViewById(R.id.error_text);
-        StudenteModelView st = new StudenteModelView(context);
-        ProfessoreModelView pr = new ProfessoreModelView(context);
         ConnectivityManager cm = (ConnectivityManager) requireContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        //Pulsante di login
-        Log.d("PROFESSORI", pr.getAllProfessore().toString());
-        Log.d("STUDENTI", st.getAllStudente().toString());
+
 
 
 
@@ -123,8 +117,6 @@ public class LoginFragment extends Fragment {
                             redirectHome();
                         }
                     } else if (isConnected(cm)) {
-                        Log.d("ciao",String.valueOf(utenteView.getAllUtente()));
-
                         loginUser(Objects.requireNonNull(email_text.getText()).toString(), Objects.requireNonNull(hashWith256(String.valueOf(password_text.getText()))));
                     }
                 }
@@ -148,19 +140,19 @@ public class LoginFragment extends Fragment {
 
     private HashMap<String,Boolean> is_correct_email_password(){
         HashMap<String,Boolean> result_error = new HashMap<>();
-        if(is_empty_string(email_text , email_layout,"Email")){
+        if(ControlInput.is_empty_string(email_text , email_layout,"Email", context)){
             result_error.put("Email", false);
         // controllo che il campo email non sia valido
         }else if (!ControlInput.isValidEmailFormat(String.valueOf(email_text.getText()))) {
             String error_message = getString(R.string.errore_email);
-            ControlInput.set_error(email_layout, true, error_message, error_color, context ,R.dimen.input_text_layout_height_error, getResources());
+            ControlInput.set_error(email_layout, true, error_message, error_color, context ,R.dimen.input_text_layout_height_error);
             result_error.put("email", false);
         }else{
             // cancello i messaggi di errore sul campo email
             correct_text(email_layout, "email", result_error);
         }
         // controllo che il campo password non sia vuoto
-        if(is_empty_string(password_text, password_layout, "Password")){
+        if(ControlInput.is_empty_string(password_text, password_layout, "Password", context)){
             if (StringUtils.isNoneEmpty(String.valueOf(email_text.getText()))){
                 password_text.requestFocus();
             }
@@ -174,20 +166,10 @@ public class LoginFragment extends Fragment {
 
 
     private void correct_text(TextInputLayout inputLayout, String campo, HashMap<String, Boolean> error ){
-        ControlInput.set_error(inputLayout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height, getResources());
+        ControlInput.set_error(inputLayout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height);
         error.put(campo, true);
     }
 
-    private Boolean is_empty_string(TextInputEditText editText, TextInputLayout layout_input, String campo_error){
-        boolean result = false;
-        if(StringUtils.isEmpty(Objects.requireNonNull(editText.getText()).toString())) {
-            String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", campo_error);
-            ControlInput.set_error(layout_input, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-            editText.requestFocus();
-            result = true;
-        }
-        return result;
-    }
 
     private String hashWith256(String textToHash) {
         try {
@@ -200,8 +182,6 @@ public class LoginFragment extends Fragment {
         }
         return "";
     }
-
-
 
         /**
          *

@@ -1,6 +1,7 @@
 package com.laureapp.ui.register;
 import static com.laureapp.ui.controlli.ControlInput.hashWith256;
 import static com.laureapp.ui.controlli.ControlInput.isConnected;
+import static com.laureapp.ui.controlli.ControlInput.is_correct_password;
 
 import android.content.Context;
 import android.content.Intent;
@@ -51,8 +52,6 @@ public class RegisterFragment extends Fragment {
     private Context context;
     private final CustomTextWatcher textWatcher = new CustomTextWatcher();
     private final HashMap<String,TextInputEditText> elem_text = new HashMap<>();
-    private final int error_color = com.google.android.material.R.color.design_default_color_error;
-    private FirebaseAuth mAuth;
     private Bundle bundle;
 
     /**
@@ -66,7 +65,6 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
 
         // Esegui qui eventuali operazioni di setup e inizializzazione
     }
@@ -164,49 +162,25 @@ public class RegisterFragment extends Fragment {
         return ut;
     }
 
-
-
     private  boolean is_correct_form(TextInputEditText editText) {
         boolean result_error = false;
-        Log.d("fix_error","sono qui "+editText.getHint());
-        if(!is_empty_string(editText ,getInputText(editText) , Objects.requireNonNull(editText.getHint()).toString())) {
+        if(!ControlInput.is_empty_string(editText ,getInputText(editText) , Objects.requireNonNull(editText.getHint()).toString(), context)) {
             String campo = Objects.requireNonNull(editText.getHint()).toString();
-            switch (campo){
-                case "Cognome":
-                case "Nome":
-                    if (!StringUtils.isAlpha(Objects.requireNonNull(editText.getText()).toString())) {
-                        String error_message = getString(R.string.errore_stringa).replace("{campo}", editText.getHint().toString());
-                        ControlInput.set_error(Objects.requireNonNull(getInputText(editText)), true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                    } else {
-                        ControlInput.set_error(Objects.requireNonNull(getInputText(editText)), false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                        return true;
-                    }
-                    break;
-                case "Email":
-                    String email = Objects.requireNonNull(binding.emailRegister.getText()).toString();
-                    if (!ControlInput.isValidEmailFormat(email)) {
-                        String error_message = getString(R.string.errore_email);
-                        ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                    } else if(ControlInput.isExistEmail(email, context)){
-                        String error_message = getString(R.string.errore_email_esistente);
-                        ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                    }
-                    else {
-                        ControlInput.set_error(binding.emailInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                        return true;
-                    }
-                    break;
-                case "Password":
-                    if (!ControlInput.isPasswordSafe(Objects.requireNonNull(binding.passwordRegister.getText()).toString())) {
-                        String error_message = getString(R.string.password_not_safe_error);
-                        ControlInput.set_error(binding.passwordInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                    } else {
-                        ControlInput.set_error(binding.passwordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                        return control_confirm_password();
-                    }
-                    break;
-                case "Conferma Password":
-                    return control_confirm_password();
+            switch (campo) {
+                case "Cognome", "Nome" -> {
+                    return ControlInput.is_correct_nome_cognome(editText, getInputText(editText), context);
+                }
+                case "Email" -> {
+                    return ControlInput.is_correct_email(editText, getInputText(editText), context);
+                }
+                case "Password" -> {
+                   if (is_correct_password(editText, getInputText(editText), context)){
+                       return ControlInput.is_correct_confirm_password(editText, binding.confermaPassword ,binding.confermaPasswordInput, context);
+                   }
+                }
+                case "Conferma Password" -> {
+                    return ControlInput.is_correct_confirm_password(binding.passwordRegister, editText ,getInputText(editText), context);
+                }
             }
         }
         return result_error;
@@ -319,29 +293,5 @@ public class RegisterFragment extends Fragment {
     }
 
 
-
-
-
-
-    private Boolean is_empty_string(TextInputEditText editText, TextInputLayout layout_input, String campo_error){
-        boolean result = false;
-        if(StringUtils.isEmpty(Objects.requireNonNull(editText.getText()).toString())){
-            String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", campo_error);
-            ControlInput.set_error(layout_input, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-            editText.requestFocus();
-            result = true;
-        }
-        return result;
-    }
-
-    private boolean control_confirm_password(){
-        boolean result_error = ControlInput.is_equal_password(error_color, Objects.requireNonNull(binding.confermaPassword.getText()).toString(),
-                Objects.requireNonNull(binding.passwordRegister.getText()).toString(), binding.confermaPasswordInput,
-                getString(R.string.non_equivalent_passwords), context, getResources());
-        if(result_error)
-            ControlInput.set_error(binding.confermaPasswordInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-        return result_error;
-
-    }
 
 }

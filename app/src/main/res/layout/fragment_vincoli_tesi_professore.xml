@@ -56,10 +56,11 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaTempisticheTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
 
                 </LinearLayout>
@@ -102,10 +103,11 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/modificaMediaVotoTesiProfessore"
+                    <ImageButton
+                        android:id="@+id/modificaMediaVotiTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
 
 
@@ -152,10 +154,11 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaEsamiMancantiTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
 
                 </LinearLayout>
@@ -200,10 +203,12 @@
                         android:textSize="22dp"
                         app:layout_constraintEnd_toEndOf="parent" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/modificaSkillTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:background="@android:color/transparent"
+
                         android:src="@drawable/edit_icon" />
 
                 </LinearLayout>

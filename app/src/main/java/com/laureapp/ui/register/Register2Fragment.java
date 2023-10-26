@@ -1,5 +1,7 @@
 package com.laureapp.ui.register;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -32,7 +35,6 @@ import com.laureapp.R;
 import com.laureapp.databinding.FragmentRegister2Binding;
 import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.controlli.ControlInput;
-import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -48,10 +50,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +63,6 @@ public class Register2Fragment extends Fragment {
     private AutoCompleteTextView autoCompleteTextView;
     private AutoCompleteTextView autoCompleteTextViewcorso;
     private MultiAutoCompleteTextView professoreTextViewcorso;
-    private final int error_color = com.google.android.material.R.color.design_default_color_error;
     private final Register2Fragment.CustomTextWatcher textWatcher = new Register2Fragment.CustomTextWatcher();
     private final HashMap<String, Object> elem_text = new HashMap<>();
     private FirebaseAuth mAuth;
@@ -105,7 +103,7 @@ public class Register2Fragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.facoltaInput.setVisibility(View.VISIBLE);
         facolta = getResources().getStringArray(R.array.Dipartimento);
-        ArrayAdapter<String> adapterfacolta = new ArrayAdapter<>(getContext(), R.layout.dropdown_item, facolta);
+        ArrayAdapter<String> adapterfacolta = new ArrayAdapter<>(context, R.layout.dropdown_item, facolta);
         autoCompleteTextView.setAdapter(adapterfacolta);
 
         if (StringUtils.equals(ruolo, getString(R.string.professore))){
@@ -146,13 +144,7 @@ public class Register2Fragment extends Fragment {
                         if (task.isSuccessful()) {
                             FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
                             // Registrazione avvenuta con successo, puoi eseguire ulteriori azioni qui
-                            try {
-                                ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
-                            } catch (ExecutionException | InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-
-
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
                             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
                             bundle.putSerializable("email", ut.getEmail());
                             HomeActivity.putExtras(bundle);
@@ -171,11 +163,7 @@ public class Register2Fragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-                            try {
-                                ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
-                            } catch (ExecutionException | InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
+                            ut.setId_utente(saveToFirestore( mAuth.getCurrentUser(), firestoreDB));
                             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
                             bundle.putSerializable("email", ut.getEmail());
                             HomeActivity.putExtras(bundle);
@@ -191,8 +179,7 @@ public class Register2Fragment extends Fragment {
         }
     }
 
-    private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB) throws ExecutionException, InterruptedException {
-
+    private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB)  {
 
         if (currentUser != null) {
             String uid = currentUser.getUid();
@@ -200,78 +187,47 @@ public class Register2Fragment extends Fragment {
             ut.setFacolta(Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString());
             if (StringUtils.equals(ruolo, getString(R.string.professore))){
                 ut.setNome_cdl(binding.dropdownprofessoreCorso.getText().toString());
-            }else if (StringUtils.equals(ruolo, getString(R.string.studente))){
+            }else if (StringUtils.equals(ruolo, getString(R.string.professore))){
                 ut.setNome_cdl(binding.dropdownCorso.getText().toString());
             }
 
-            QueryFirestore queryFirestore = new QueryFirestore();
-
-
-            queryFirestore.trovaIdUtenteMax(context)
-                    .thenAccept(idMax -> {
-                        idMax = idMax+ 1L;
-                        ut.setId_utente(idMax);
-                        ut_vew.insertUtente(ut);
-                        Log.d("ID_MAX", String.valueOf(idMax)); // Stampa il nuovo valore di idMax
-                        firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
-                                .addOnSuccessListener(aVoid -> {
-                                })
-                                .addOnFailureListener(e -> System.out.println("Error writing document"));
-                        if (StringUtils.equals(ruolo, getString(R.string.studente))){
-                            // Qui puoi creare e impostare il tuo oggetto Studente
-                            Studente studente = new Studente();
-                            studente.setId_utente(idMax);
-
-                            //Setto id_studente
-                            queryFirestore.trovaIdStudenteMax(context)
-                                    .thenAccept(idMaxStudente -> {
-
-
-                                                studente.setId_studente(idMaxStudente + 1L);
-                                                studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
-                                                studente.setEsami_mancanti(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
-                                                studente.setMedia(Integer.parseInt(Objects.requireNonNull(binding.mediaRegister.getText()).toString()));
-
-                                                StudenteModelView st_db = new StudenteModelView(context);
-                                                st_db.insertStudente(studente);
-                                                firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
-                                                        .addOnSuccessListener(aVoid -> {
-
-                                                });
-
-                            });
-                        }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
-                            Professore professore = new Professore();
-                            professore.setId_utente(idMax);
-
-                            //Setto id_professore
-                            queryFirestore.trovaIdProfessoreMax(context)
-                                    .thenAccept(idMaxProfessore -> {
-
-                                        professore.setId_professore(idMaxProfessore + 1L);
-                                        professore.setMatricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString());
-                                        ProfessoreModelView pr_db = new ProfessoreModelView(context);
-                                        pr_db.insertProfessore(professore);
-                                        firestoreDB.collection("Utenti").document("Professori").collection("Professori")
-                                                .document(uid).set(professore.getProfessoreMap())
-                                                .addOnSuccessListener(aVoid -> {
-                                                });
-
-                                    });
-
-
-                        }
+            ut_vew.insertUtente(ut);
+            ut.setId_utente(ut_vew.getIdUtente(ut.getEmail()));
+            firestoreDB.collection("Utenti").document(uid).set(ut.getUtenteMap())
+                    .addOnSuccessListener(aVoid -> {
                     })
-                    .exceptionally(e -> {
-                        throw new RuntimeException(e);
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            System.out.println("Error writing document");
+                        }
                     });
-
+            if (StringUtils.equals(ruolo, getString(R.string.studente))){
+                // Qui puoi creare e impostare il tuo oggetto Studente
+                Studente studente = new Studente();
+                studente.setId_utente(ut.getId_utente());
+                studente.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
+                studente.setEsami_mancanti(Integer.parseInt(Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString()));
+                studente.setMedia((Integer.parseInt(Objects.requireNonNull(binding.mediaRegister.getText()).toString())));
+                StudenteModelView st_db = new StudenteModelView(context);
+                st_db.insertStudente(studente);
+                firestoreDB.collection("Utenti").document("Studenti").collection("Studenti").document(uid).set(studente.getStudenteMap())
+                        .addOnSuccessListener(aVoid -> {
+                        });
+            }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
+                Professore professore = new Professore();
+                professore.setId_utente(ut.getId_utente());
+                professore.setMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString()));
+                ProfessoreModelView pr_db = new ProfessoreModelView(context);
+                pr_db.insertProfessore(professore);
+                firestoreDB.collection("Utenti").document("Professori").collection("Professori")
+                        .document(uid).set(professore.getProfessoreMap())
+                        .addOnSuccessListener(aVoid -> {
+                        });
+            }
         }
         return ut.getId_utente();
     }
-
-
-
 
     private void inizializzate_binding_text(){
         elem_text.put("matricola", binding.matricolaRegister);
@@ -323,89 +279,43 @@ public class Register2Fragment extends Fragment {
     }
 
     private  boolean is_correct_form(Object component) {
-        boolean result_error = false;
         String hint = getHintText(component);
-        StudenteModelView st = new StudenteModelView(context);
-        ProfessoreModelView pr = new ProfessoreModelView(context);
-        Log.d("fix_error","sono qui "+ getHintText(component));
-        if(!is_empty_string(component, getInputText(component),  hint)) {
-            switch (hint){
-                case "Matricola":
-                    if (!ControlInput.is_correct_matricola(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) {
-                        String error_message = getString(R.string.errore_matricola).replace("{campo}", getString(R.string.matricola));
-                        ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
+        if(!ControlInput.is_empty_string(component, getInputText(component),  hint, context)) {
+            switch (hint) {
+                case "Matricola" -> {
+                    return ControlInput.is_correct_matricola(binding.matricolaRegister, binding.matricolaInput, context, ruolo);
+                }
+                case "Media" -> {
+                    if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+                        return ControlInput.is_correct_media(binding.mediaRegister, binding.mediaInput, context);
                     } else {
-                        Long presentestud = st.findStudenteMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) ;
-                        Long presenteprof = pr.findProfessoreMatricola(Long.valueOf(Objects.requireNonNull(binding.matricolaRegister.getText()).toString())) ;
-                        if (presentestud == null && presenteprof == null) {
-                            ControlInput.set_error(binding.matricolaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        }else{
-                            String error_message = getString(R.string.errore_matricola_duplicate).replace("{campo}", ruolo);
-                            ControlInput.set_error(binding.matricolaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-                        }
+                        return true;
                     }
-                    break;
-                case "Media":
+                }
+                case "Esami mancanti" -> {
                     if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                        String media = Objects.requireNonNull(binding.mediaRegister.getText()).toString();
-                        if (StringUtils.isNumeric(media) && (Integer.parseInt(media)) >= 18 && Integer.parseInt(media) <= 30) {
-                            ControlInput.set_error(binding.mediaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        } else {
-                            String error_message = getString(R.string.errore_media).replace("{campo}", getString(R.string.media));
-                            ControlInput.set_error(binding.mediaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
-                        }
-                    }else{
-                        return true;
-                    }
-                    break;
-                case "Esami mancanti":
-                    if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                        String esami = Objects.requireNonNull(binding.esamiMancantiRegister.getText()).toString();
-                        if (StringUtils.isNumeric(esami) && (Integer.parseInt(esami)) >= 0 && Integer.parseInt(esami) <= 40) {
-                            ControlInput.set_error(binding.esamiMancantiInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        } else {
-                            String error_message = getString(R.string.errore_media).replace("{campo}", getString(R.string.media)).replace("30", "40");
-                            ControlInput.set_error(binding.esamiMancantiInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
-                        }
-                    }else{
-                        return true;
-                    }
-                    break;
-                case "Facoltà":
-                    String facolta_text = Objects.requireNonNull(binding.filledExposedDropdown.getText()).toString();
-                    boolean isFacoltaTextEqual = Arrays.stream(facolta)
-                            .anyMatch(s -> StringUtils.equals(s, facolta_text));
-                    if (isFacoltaTextEqual) {
-                        ControlInput.set_error(binding.facoltaInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                        return true;
+                        return ControlInput.is_correct_esami_mancanti(binding.esamiMancantiRegister, binding.esamiMancantiInput, context);
                     } else {
-                        String error_message = getString(R.string.errore_scelta);
-                        ControlInput.set_error(binding.facoltaInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
-                    }
-                    break;
-                case "Corso di Laurea":
-                    if (StringUtils.equals(ruolo, getString(R.string.studente))) {
-                        String corso_text = Objects.requireNonNull(binding.dropdownCorso.getText()).toString();
-                        boolean iscorsiTextEqual = Arrays.stream(corsi)
-                                .anyMatch(s -> StringUtils.equals(s, corso_text));
-                        if (iscorsiTextEqual) {
-                            ControlInput.set_error(binding.corsoInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
-                            return true;
-                        } else {
-                            String error_message = getString(R.string.errore_scelta);
-                            ControlInput.set_error(binding.corsoInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
-                        }
-                    }else{
-                        ControlInput.set_error(binding.corsoprofessoreInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
                         return true;
                     }
-                    break;
+                }
+                case "Facoltà" -> {
+                    return ControlInput.is_correct_facolta(binding.filledExposedDropdown, binding.facoltaInput, context, facolta);
+                }
+                case "Corso di Laurea" -> {
+                    if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+                        return ControlInput.is_correct_corso_di_laurea(binding.dropdownCorso, binding.corsoInput, context, corsi);
+                    } else {
+                        ControlInput.set_error( binding.corsoInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
+                        return true;
+                    }
+                }
+                default -> {
+                    return false;
+                }
             }
         }
-        return result_error;
+        return false;
     }
 
     private String getHintText(Object component) {
@@ -421,26 +331,29 @@ public class Register2Fragment extends Fragment {
     }
 
     private TextInputLayout getInputText(Object component){
-        switch (getHintText(component)){
-            case "Matricola":
+        switch (getHintText(component)) {
+            case "Matricola" -> {
                 return binding.matricolaInput;
-            case "Media":
+            }
+            case "Media" -> {
                 return binding.mediaInput;
-            case "Esami mancanti":
+            }
+            case "Esami mancanti" -> {
                 return binding.esamiMancantiInput;
-            case "Facoltà":
+            }
+            case "Facoltà" -> {
                 return binding.facoltaInput;
-            case "Corso di Laurea":
-                if (StringUtils.equals(ruolo, "Studente")){
-                    return  binding.corsoInput;
-                }else{
+            }
+            case "Corso di Laurea" -> {
+                if (StringUtils.equals(ruolo, "Studente")) {
+                    return binding.corsoInput;
+                } else {
                     return binding.corsoprofessoreInput;
                 }
+            }
         }
         return null;
     }
-
-
 
 
     /**
@@ -468,6 +381,7 @@ public class Register2Fragment extends Fragment {
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             // Nessuna azione richiesta prima della modifica del testo.
 
+
         }
 
         /**
@@ -480,8 +394,9 @@ public class Register2Fragment extends Fragment {
          */
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (component != null)
+            if (component != null){
                 is_correct_form(component);
+            }
         }
 
         /**
@@ -502,7 +417,6 @@ public class Register2Fragment extends Fragment {
                 String inputText = binding.dropdownprofessoreCorso.getText().toString();
 
                 String[] enteredCourses = StringUtils.deleteWhitespace(inputText).split(",");
-                Log.d ("corsi", String.valueOf(enteredCourses.toString()));
                 if( !insertedCourses.contains(String.valueOf(enteredCourses[enteredCourses.length-1]))){
                     validCourses.add(enteredCourses[enteredCourses.length-1]);
                 }else{
@@ -526,32 +440,5 @@ public class Register2Fragment extends Fragment {
             this.component = component;
         }
 
-        // Aggiungi anche un listener di testo modificato per gestire l'input dell'utente
-
-
     }
-
-
-
-    private Boolean is_empty_string(Object component, TextInputLayout layout_input, String campo_error){
-        String text = null;
-        String error_message;
-        if (component instanceof TextInputEditText){
-            text= Objects.requireNonNull(((TextInputEditText) component).getText()).toString();
-        }else if (component instanceof MaterialAutoCompleteTextView) {
-            text= Objects.requireNonNull(((MaterialAutoCompleteTextView) component).getText()).toString();
-        }else if (component instanceof MultiAutoCompleteTextView) {
-            text= Objects.requireNonNull(((MultiAutoCompleteTextView) component).getText()).toString();
-        }
-        if(StringUtils.isEmpty(text)){
-            error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", campo_error);
-            ControlInput.set_error(layout_input, true, error_message, error_color, context, R.dimen.input_text_layout_height_error, getResources());
-            if (component instanceof View) {
-                ((View) component).requestFocus();
-            }
-            return true;
-        }
-        return false;
-    }
-
 }

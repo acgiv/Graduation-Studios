@@ -54,10 +54,10 @@ public class ProfessoreRepository {
         }
     }
 
-    public Long findProfessore(Long id_utente) {
+    public Long findProfessore(Long id_utente){
         CompletableFuture<Long> future = new CompletableFuture<>();
         executor.execute(() -> {
-            Long id = roomDbSqlLite.professoreDao().findProfessore(id_utente);
+            Long id = roomDbSqlLite.professoreDao().findPorfessore(id_utente);
             future.complete(id);
         });
         try {

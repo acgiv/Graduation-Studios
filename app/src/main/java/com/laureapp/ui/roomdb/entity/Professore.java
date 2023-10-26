@@ -24,9 +24,9 @@ public class Professore implements Serializable {
     private Long id_utente;
 
     @ColumnInfo(name = "matricola")
-    private String matricola;
+    private Long matricola;
 
-    public Professore(Long id_professore, Long id_utente, String matricola) {
+    public Professore(Long id_professore, Long id_utente, Long matricola) {
         this.id_professore = id_professore;
         this.id_utente = id_utente;
         this.matricola = matricola;
@@ -51,11 +51,11 @@ public class Professore implements Serializable {
         this.id_utente = id_utente;
     }
 
-    public String getMatricola() {
+    public Long getMatricola() {
         return matricola;
     }
 
-    public void setMatricola(String matricola) {
+    public void setMatricola(Long matricola) {
         this.matricola = matricola;
     }
 

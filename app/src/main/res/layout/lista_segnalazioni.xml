@@ -10,15 +10,9 @@
         android:id="@+id/text_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/titolo"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="Titolo" />
-
-    <TextView
-        android:id="@+id/text_richiesta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:text="Richiesta" />
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
 </LinearLayout>

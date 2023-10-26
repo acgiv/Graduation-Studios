@@ -58,7 +58,7 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
      *                    usata per chiamare operazioni a livello applicazione launching activities, broadcasting e receiving intents
      * @return la view con la lista aggiornata
      */
-    @NonNull
+    /*@NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View itemView = convertView;
@@ -135,7 +135,7 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
         alertDialog.show();
     }
 
-
+*/
 }
 
 

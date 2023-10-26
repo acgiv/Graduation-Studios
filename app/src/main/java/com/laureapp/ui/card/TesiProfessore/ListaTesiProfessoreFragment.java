@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,7 +34,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.ListaTesiProfessoreAdapter;
-import com.laureapp.ui.card.TesiStudente.ConfermaRichiestaDialog;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
@@ -73,6 +71,8 @@ public class ListaTesiProfessoreFragment extends Fragment {
     List<Utente> utenteList = new ArrayList<>();
     List<String> nomeCognomeProfessoreList = new ArrayList<>();
 
+    Long professoreSceltoId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_lista_tesi_professore, container, false);
@@ -88,20 +88,20 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
         if (email != null) { // se la mail non è nulla
 
-            UtenteModelView utenteView =  new UtenteModelView(context); //inizializza utenteView con un'istanza di UtenteModelView
+            UtenteModelView utenteView = new UtenteModelView(context); //inizializza utenteView con un'istanza di UtenteModelView
             id_utente = utenteView.getIdUtente(email); //ottengo l'id dell'utente corrispondente a tale mail
             id_professore = professoreView.findProfessore(id_utente); //ottengo l'id del professore corrispondente all'id dell'utente
 
             //Carico l'elenco degli id delle tesi collegate con il professore
             loadIdTesiDataByProfessoreId(id_professore).addOnCompleteListener(task -> {
-                if(task.isSuccessful()) { //se il task è completato con successo
+                if (task.isSuccessful()) { //se il task è completato con successo
                     idTesiList = task.getResult(); //assegno gli id delle tesi ad una lista di tipo Long
                     Log.d("Id Tesi", "Id Tesi " + idTesiList.toString());
 
                     //Verifica se idTesiList è null o vuoto
                     if (idTesiList != null && !idTesiList.isEmpty()) {
                         loadTesiData(idTesiList).addOnCompleteListener(tesiTask -> { //Chiamo il metodo per ottenere le tesi in base alle id tesi ottenute
-                            if(tesiTask.isSuccessful()) {
+                            if (tesiTask.isSuccessful()) {
                                 ArrayList<Tesi> tesiList = tesiTask.getResult();
                                 Log.d("Tesi", "Id Tesi " + tesiList.toString());
 
@@ -117,21 +117,21 @@ public class ListaTesiProfessoreFragment extends Fragment {
                     }
 
 
-                    } else {
-                    Log.e("Firestore Error","Error getting data", task.getException());
-                    }
-                });
-
-            } else {
-            Log.d("Email salvata: ", "Non trovata");
-            }
-
-            addButton.setOnClickListener(view1 -> {
-                view.setAlpha(0.1f); // Imposta l'opacità desiderata (0.0-1.0)
-                showTesiDialog(view); //quando viene cliccato il pulsante filtra si apre il dialog
+                } else {
+                    Log.e("Firestore Error", "Error getting data", task.getException());
+                }
             });
 
+        } else {
+            Log.d("Email salvata: ", "Non trovata");
         }
+
+        addButton.setOnClickListener(view1 -> {
+            view.setAlpha(0.1f); // Imposta l'opacità desiderata (0.0-1.0)
+            showTesiDialog(view); //quando viene cliccato il pulsante filtra si apre il dialog
+        });
+
+    }
 
     private String getEmailFromSharedPreferences() {
         if (context != null) {
@@ -170,6 +170,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
     /**
      * Questo metodo mi consente di caricare da firebase tutte le informazioni relative alle tesi legate allo studente
+     *
      * @param idTesiList
      * @return una lista di tipo Tesi contenente le informazioni delle tesi
      */
@@ -271,7 +272,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
 
-                if(titolo!= null && tipologia != null && ciclocdl != null && descrizione != null && dataPubblicazione != null ) {
+                if (titolo != null && tipologia != null && ciclocdl != null && descrizione != null && dataPubblicazione != null) {
 
                     tesiNew.setTitolo(titolo);
                     tesiNew.setAbstract_tesi(descrizione);
@@ -283,7 +284,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
                     alertDialog.dismiss();
                     showVincoliDialog(view, tesiNew);
-                }else{
+                } else {
                     Toast.makeText(context, "Compila tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -311,7 +312,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
     }
 
-    public void showVincoliDialog(View rootView,Tesi tesiNew) {
+    public void showVincoliDialog(View rootView, Tesi tesiNew) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
 
         // Include the custom XML layout
@@ -321,7 +322,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
         // EditText
         EditText editTextMedia = view.findViewById(R.id.editTextMediaVincoloTesi);
         EditText editTextTempistiche = view.findViewById(R.id.editTextTempisticheVincoloTesi);
-        EditText editTextEsamiMancanti= view.findViewById(R.id.editTextEsamiVincoloTesi);
+        EditText editTextEsamiMancanti = view.findViewById(R.id.editTextEsamiVincoloTesi);
         EditText editTextSkill = view.findViewById(R.id.editTextSkillVincoloTesi);
 
         // Button
@@ -332,7 +333,6 @@ public class ListaTesiProfessoreFragment extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, nomeCognomeProfessoreList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         scegliProfessore.setAdapter(adapter);
-
 
 
         // Create the AlertDialog
@@ -354,15 +354,6 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
                 //professore scelto
                 String professoreScelto = scegliProfessore.getSelectedItem().toString();
-                if(professoreScelto != "Nessun Co-Relatore"){
-
-                    //qui devo inserire due elementi in TesiProfessore il relatore e il corelatore scelto nello spinner
-
-                }else{
-                    //qui devo solo inserire in TesiProfessore l'id del relatore
-
-                    Log.d("vedi11","mi trovo qui");
-                }
 
 
                 if (media != null && !media.isEmpty() && tempistiche != null && !tempistiche.isEmpty() &&
@@ -378,7 +369,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
                     }
 
                     vincoloNew.setSkill(skill);
-                    createVincoloTesi(vincoloNew, tesiNew);
+                    createVincoloTesi(vincoloNew, tesiNew, professoreScelto);
                     alertDialog.dismiss();
                 } else {
                     Toast.makeText(context, "Compila tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
@@ -412,6 +403,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
     /**
      * Metodo per mostrare il calendario quando l'utente clicca il campo data di pubblicazione
+     *
      * @param view
      */
     public void showDatePicker(View view) {
@@ -434,14 +426,14 @@ public class ListaTesiProfessoreFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    private void createVincoloTesi(Vincolo vincoloNew,Tesi tesiNew){
+    private void createVincoloTesi(Vincolo vincoloNew, Tesi tesiNew, String professoreScelto) {
 
         // Crea un oggetto per la nuova richiesta di tesi
         Map<String, Object> vincoloTesi = new HashMap<>();
         vincoloTesi.put("esami_mancanti_necessari", vincoloNew.getEsami_mancanti_necessari());
-        vincoloTesi.put("media_voti",vincoloNew.getMedia_voti());
-        vincoloTesi.put("skill",vincoloNew.getSkill());
-        vincoloTesi.put("tempistiche",vincoloNew.getTempistiche());
+        vincoloTesi.put("media_voti", vincoloNew.getMedia_voti());
+        vincoloTesi.put("skill", vincoloNew.getSkill());
+        vincoloTesi.put("tempistiche", vincoloNew.getTempistiche());
 
         // Trova il massimo ID attuale e incrementalo di 1
         findMaxVincoloId(new ListaTesiProfessoreFragment.MaxRequestIdCallback() {
@@ -457,8 +449,7 @@ public class ListaTesiProfessoreFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                //se viene creato il vincolo
-                                createTesi(tesiNew, (Long) vincoloTesi.get("id_vincolo")); //creo la tesi su firestore
+                                createTesi(tesiNew, (Long) vincoloTesi.get("id_vincolo"), professoreScelto); //creo la tesi su firestore
 
                             }
                         })
@@ -503,18 +494,18 @@ public class ListaTesiProfessoreFragment extends Fragment {
                 });
     }
 
-    private void createTesi(Tesi tesiNew,Long idVincolo){
-
+    private void createTesi(Tesi tesiNew, Long idVincolo, String professoreScelto) {
+        tesiNew.setId_vincolo(idVincolo);
         Long visualizzazioni = 0L;
 
         // Crea un oggetto per la nuova richiesta di tesi
         Map<String, Object> tesiMap = new HashMap<>();
         tesiMap.put("titolo", tesiNew.getTitolo());
-        tesiMap.put("abstract_tesi",tesiNew.getAbstract_tesi());
-        tesiMap.put("ciclo_cdl",tesiNew.getCiclo_cdl());
-        tesiMap.put("data_pubblicazione",tesiNew.getData_pubblicazione());
-        tesiMap.put("id_vincolo",idVincolo);
-        tesiMap.put("visualizzazioni",visualizzazioni);
+        tesiMap.put("abstract_tesi", tesiNew.getAbstract_tesi());
+        tesiMap.put("ciclo_cdl", tesiNew.getCiclo_cdl());
+        tesiMap.put("data_pubblicazione", tesiNew.getData_pubblicazione());
+        tesiMap.put("id_vincolo", idVincolo);
+        tesiMap.put("visualizzazioni", visualizzazioni);
 
         // Trova il massimo ID attuale e incrementalo di 1
         findMaxTesiId(new ListaTesiProfessoreFragment.MaxRequestIdCallback() {
@@ -530,7 +521,9 @@ public class ListaTesiProfessoreFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                //se viene creato la tesi
+
+                                tesiNew.setId_tesi((Long) tesiMap.get("id_tesi"));
+                                createTesiProfessore(tesiNew, id_professore, professoreScelto);
 
 
                             }
@@ -551,6 +544,97 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
         richiesteTesiRef
                 .orderBy("id_tesi", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        Long maxRequestId = queryDocumentSnapshots.getDocuments().get(0).getLong("id_tesi");
+                        if (maxRequestId != null) {
+                            callback.onCallback(maxRequestId);
+                        } else {
+                            // Nessun ID trovato, inizia da 1
+                            callback.onCallback(1L);
+                        }
+                    } else {
+                        // Nessun documento trovato, inizia da 1
+                        callback.onCallback(1L);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore Error", "Error finding max request ID", e);
+                });
+    }
+
+    private void createTesiProfessore(Tesi tesiNew, Long id_professore, String professoreScelto) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference tesiProfessoreRef = db.collection("TesiProfessore");
+
+        // Crea un oggetto per la nuova richiesta di tesi
+        Map<String, Object> tesiProfessoreMap = new HashMap<>();
+        tesiProfessoreMap.put("id_tesi", tesiNew.getId_tesi());
+
+        if (!professoreScelto.equals("Nessun Co-Relatore")) {
+            // Se è stato selezionato un co-relatore, trova l'ID del professore scelto
+            Long idProfessoreScelto = findProfessoreSceltoId(professoreScelto);
+
+            // Crea un'istanza in TesiProfessore per il co-relatore
+            Map<String, Object> coRelatoreMap = new HashMap<>();
+            coRelatoreMap.put("id_tesi", tesiNew.getId_tesi());
+            coRelatoreMap.put("id_professore", idProfessoreScelto);
+            coRelatoreMap.put("ruolo_professore", "Co-Relatore");
+
+            // Aggiungi la nuova richiesta di tesi per il co-relatore a Firestore
+            tesiProfessoreRef.add(coRelatoreMap)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            // La richiesta per il co-relatore è stata aggiunta con successo
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Si è verificato un errore nell'aggiunta della richiesta di tesi per il co-relatore
+                        }
+                    });
+        }
+
+        // Crea un'istanza in TesiProfessore per il relatore (in tutti i casi)
+        tesiProfessoreMap.put("id_professore", id_professore);
+        tesiProfessoreMap.put("ruolo_professore", "Relatore");
+
+        // Trova il massimo ID attuale e incrementalo di 1
+        findMaxTesiProfessoreId(new ListaTesiProfessoreFragment.MaxRequestIdCallback() {
+            @Override
+            public void onCallback(Long maxRequestId) {
+                tesiProfessoreMap.put("id_tesi_professore", maxRequestId + 1);
+
+                // Aggiungi la nuova richiesta di tesi per il relatore a Firestore
+                tesiProfessoreRef.add(tesiProfessoreMap)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                // La richiesta per il relatore è stata aggiunta con successo
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Si è verificato un errore nell'aggiunta della richiesta di tesi per il relatore
+                            }
+                        });
+            }
+        });
+    }
+
+
+
+    private void findMaxTesiProfessoreId(ListaTesiProfessoreFragment.MaxRequestIdCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference tesiProfessoreRef = db.collection("TesiProfessore");
+
+        tesiProfessoreRef
+                .orderBy("id_tesi_professore", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -600,11 +684,39 @@ public class ListaTesiProfessoreFragment extends Fragment {
         }
         nomeCognomeProfessoreList.add("Nessun Co-Relatore");
 
-
     }
 
+        private Long findProfessoreSceltoId(String professoreScelto){
+        List<Utente> utenteAssociatoList = new ArrayList<>();
+        Long idProfessoreScelto = 0L;
+            // Itera attraverso la lista dei professori
+            for (Professore professore : professoreList) {
+                // Trova l utente corrispondente utilizzando l'ID
+                Utente utenteAssociato = null;
+                for (Utente utente : utenteList) {
+                    if (professore.getId_utente() == utente.getId_utente()) {
+                        utenteAssociato = utente;
+                        break;
+                    }
+                }
 
+                // Se è stato trovato un utente associato, estrai nome e cognome
+                if (utenteAssociato != null) {
+                    String nomeCognome = utenteAssociato.getNome() + " " + utenteAssociato.getCognome();
+                    nomeCognomeProfessoreList.add(nomeCognome);
+                    utenteAssociatoList.add(utenteAssociato);
+                }
+            }
 
+                for (int i = 0; i < nomeCognomeProfessoreList.size(); i++) {
+                    if (nomeCognomeProfessoreList.get(i).equals(professoreScelto)) {
+                        idProfessoreScelto = professoreList.get(i).getId_professore();
+                         return idProfessoreScelto;
+        
+                    }
+                }
+            return idProfessoreScelto;
+        }
 
 
 }

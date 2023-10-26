@@ -45,6 +45,15 @@
         android:hint="Skill aggiuntive"
         android:inputType="text" />
 
+    <Spinner
+        android:id="@+id/selectProfessore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:minHeight="48dp"
+        android:spinnerMode="dropdown"
+        tools:ignore="LabelFor"
+        android:layout_marginBottom="16dp" />
 
     <LinearLayout
         android:id="@+id/buttonLayout"

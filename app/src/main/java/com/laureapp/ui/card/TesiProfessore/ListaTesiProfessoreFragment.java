@@ -15,12 +15,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +36,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
 import com.laureapp.ui.card.Adapter.ListaTesiProfessoreAdapter;
 import com.laureapp.ui.card.TesiStudente.ConfermaRichiestaDialog;
+import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Tesi;
+import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.entity.Vincolo;
 import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
@@ -44,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -63,6 +69,10 @@ public class ListaTesiProfessoreFragment extends Fragment {
     //Dichiarazioni di una variabile di istanza per il dialog
     private AlertDialog alertDialog;
 
+    List<Professore> professoreList = new ArrayList<>();
+    List<Utente> utenteList = new ArrayList<>();
+    List<String> nomeCognomeProfessoreList = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_lista_tesi_professore, container, false);
@@ -71,6 +81,8 @@ public class ListaTesiProfessoreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
+        getAllProfessoreAndUtente(context);
+
         email = getEmailFromSharedPreferences();
         ImageButton addButton = view.findViewById(R.id.addTesiProfessore);
 
@@ -259,16 +271,21 @@ public class ListaTesiProfessoreFragment extends Fragment {
                     throw new RuntimeException(e);
                 }
 
-                tesiNew.setTitolo(titolo);
-                tesiNew.setAbstract_tesi(descrizione);
-                tesiNew.setData_pubblicazione(dataConvertita);
-                tesiNew.setTipologia(tipologia);
-                tesiNew.setCiclo_cdl(ciclocdl);
-                tesiNew.setVisualizzazioni(0L);
+                if(titolo!= null && tipologia != null && ciclocdl != null && descrizione != null && dataPubblicazione != null ) {
+
+                    tesiNew.setTitolo(titolo);
+                    tesiNew.setAbstract_tesi(descrizione);
+                    tesiNew.setData_pubblicazione(dataConvertita);
+                    tesiNew.setTipologia(tipologia);
+                    tesiNew.setCiclo_cdl(ciclocdl);
+                    tesiNew.setVisualizzazioni(0L);
 
 
-                alertDialog.dismiss();
-                showVincoliDialog(view,tesiNew);
+                    alertDialog.dismiss();
+                    showVincoliDialog(view, tesiNew);
+                }else{
+                    Toast.makeText(context, "Compila tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -311,6 +328,13 @@ public class ListaTesiProfessoreFragment extends Fragment {
         Button creaButton = view.findViewById(R.id.buttonConfermaVincoloTesi);
         Button annullaButton = view.findViewById(R.id.buttomAnnullaTesiProfessore);
 
+        Spinner scegliProfessore = view.findViewById(R.id.selectProfessore);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, nomeCognomeProfessoreList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        scegliProfessore.setAdapter(adapter);
+
+
+
         // Create the AlertDialog
         alertDialog = builder.create();
 
@@ -328,13 +352,39 @@ public class ListaTesiProfessoreFragment extends Fragment {
                 String esami = editTextEsamiMancanti.getText().toString();
                 String skill = editTextSkill.getText().toString();
 
-                vincoloNew.setMedia_voti(Long.valueOf(media));
-                vincoloNew.setTempistiche(Long.valueOf(tempistiche));
-                vincoloNew.setEsami_mancanti_necessari(Long.valueOf(esami));
-                vincoloNew.setSkill(skill);
+                //professore scelto
+                String professoreScelto = scegliProfessore.getSelectedItem().toString();
+                if(professoreScelto != "Nessun Co-Relatore"){
 
-                createVincoloTesi(vincoloNew,tesiNew);
-                alertDialog.dismiss();
+                    //qui devo inserire due elementi in TesiProfessore il relatore e il corelatore scelto nello spinner
+
+                }else{
+                    //qui devo solo inserire in TesiProfessore l'id del relatore
+
+                    Log.d("vedi11","mi trovo qui");
+                }
+
+
+                if (media != null && !media.isEmpty() && tempistiche != null && !tempistiche.isEmpty() &&
+                        esami != null && !esami.isEmpty() && skill != null) {
+                    try {
+                        vincoloNew.setMedia_voti(Long.valueOf(media));
+                        vincoloNew.setTempistiche(Long.valueOf(tempistiche));
+                        vincoloNew.setEsami_mancanti_necessari(Long.valueOf(esami));
+                    } catch (NumberFormatException e) {
+                        // Handle the exception if the conversion fails
+                        Toast.makeText(context, "Invalid input for numeric fields", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    vincoloNew.setSkill(skill);
+                    createVincoloTesi(vincoloNew, tesiNew);
+                    alertDialog.dismiss();
+                } else {
+                    Toast.makeText(context, "Compila tutti i campi prima di procedere", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 
@@ -520,6 +570,37 @@ public class ListaTesiProfessoreFragment extends Fragment {
                 .addOnFailureListener(e -> {
                     Log.e("Firestore Error", "Error finding max request ID", e);
                 });
+    }
+
+    private void getAllProfessoreAndUtente(Context context){
+        context = getContext();
+        UtenteModelView utenteModelView = new UtenteModelView(context);
+        ProfessoreModelView professoreModelView = new ProfessoreModelView(context);
+        professoreList = professoreModelView.getAllProfessore();
+        utenteList = utenteModelView.getAllUtente();
+
+        nomeCognomeProfessoreList = new ArrayList<>();
+
+        // Itera attraverso la lista dei professori
+        for (Professore professore : professoreList) {
+            // Trova l utente corrispondente utilizzando l'ID
+            Utente utenteAssociato = null;
+            for (Utente utente : utenteList) {
+                if (professore.getId_utente() == utente.getId_utente()) {
+                    utenteAssociato = utente;
+                    break;
+                }
+            }
+
+            // Se è stato trovato un utente associato, estrai nome e cognome
+            if (utenteAssociato != null) {
+                String nomeCognome = utenteAssociato.getNome() + " " + utenteAssociato.getCognome();
+                nomeCognomeProfessoreList.add(nomeCognome);
+            }
+        }
+        nomeCognomeProfessoreList.add("Nessun Co-Relatore");
+
+
     }
 
 

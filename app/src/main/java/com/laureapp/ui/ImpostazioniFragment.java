@@ -82,7 +82,7 @@ public class ImpostazioniFragment extends Fragment {
 
     private void saveLangPref(String lingua) {
         // Saving the language preference
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("LanguagePrefs", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("LanguagePrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Language", lingua);
         editor.apply();

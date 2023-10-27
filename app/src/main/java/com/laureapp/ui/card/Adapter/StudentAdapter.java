@@ -45,7 +45,7 @@ import java.util.TimerTask;
 public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements Filterable {
     private final List<StudenteWithUtente> studentList;
     private List<StudenteWithUtente> filteredStudentList;
-
+    private Context context;
 
 
 
@@ -58,7 +58,8 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
     public StudentAdapter(@NonNull Context context, List<StudenteWithUtente> studentList) {
         super(context, 0, studentList);
         this.studentList = new ArrayList<>(studentList);
-        this.filteredStudentList = filteredStudentList; // Inizializza filteredStudentList con la stessa lista
+        this.context = context;
+        // Inizializza filteredStudentList con la stessa lista
     }
 
 
@@ -75,7 +76,7 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.lista_tesisti, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.lista_tesisti, parent, false);
         }
         TextView nomeTextView = convertView.findViewById(R.id.nomeTextView);
         TextView matricolaTextView = convertView.findViewById(R.id.matricolaTextView);

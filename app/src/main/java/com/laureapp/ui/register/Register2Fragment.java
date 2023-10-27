@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -83,7 +84,9 @@ public class Register2Fragment extends Fragment {
         bundle = getArguments();
         if (bundle != null) {
             ruolo = bundle.getString("ruolo");
-            ut = bundle.getSerializable("utente", Utente.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ut = bundle.getSerializable("utente", Utente.class);
+            }
         }
         autoCompleteTextView = binding.filledExposedDropdown;
         autoCompleteTextViewcorso = binding.dropdownCorso;

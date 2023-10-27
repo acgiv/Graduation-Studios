@@ -23,8 +23,6 @@ public class Tesi implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_tesi")
     private Long id_tesi;
-
-
     @ColumnInfo(name = "id_vincolo")
     private Long id_vincolo;
 

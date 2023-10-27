@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,7 +56,6 @@ public class ListaTesiProfessoreFragment extends Fragment {
     String email;
     Long id_utente;
     Long id_professore;
-    private NavController mNav;
     private ListView listView;
     private ListaTesiProfessoreAdapter adapter;
     private static ListaTesiProfessoreAdapter adapterDue;

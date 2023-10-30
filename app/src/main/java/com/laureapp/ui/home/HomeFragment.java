@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
+                args.putSerializable("Utente", (Utente) args.getSerializable("Utente"));
             }
 
         }

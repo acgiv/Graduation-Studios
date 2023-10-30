@@ -397,6 +397,28 @@ public class InfoTesiFragment extends Fragment {
                     ListView listViewFiles = view.findViewById(R.id.listViewFiles);
                     listViewFiles.setAdapter(adapter);
 
+                    adapter.setDeleteButtonClickListener(new InfoTesiProfessoreAdapter.DeleteButtonClickListener() {
+                        @Override
+                        public void onDeleteButtonClick(int position) {
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            StorageReference storageRef = storage.getReference();
+
+                            StorageReference fileRef = storageRef.child("FileTesi/" + id_tesi + "/" + nomiFile.get(position)); // Sostituisci "nome_del_tuo_file.txt" con il nome del tuo file
+
+                            fileRef.delete()
+                                    .addOnSuccessListener(aVoid -> {
+
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(getContext(), "File eliminato con successo", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        // Gestisci eventuali errori durante l'eliminazione
+                                        Log.e("Firebase Storage Error", "Errore nell'eliminazione del file", exception);
+                                        Toast.makeText(getContext(), "Errore nell'eliminazione del file", Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    });
+
                     adapter.setDownloadButtonClickListener(new InfoTesiProfessoreAdapter.DownloadButtonClickListener() {
                         @Override
                         public void onDownloadButtonClick(int position) {
@@ -424,6 +446,9 @@ public class InfoTesiFragment extends Fragment {
                     Toast.makeText(getContext(), "Caricamento file non riuscito", Toast.LENGTH_SHORT).show();
                     Log.e("Firebase Storage Error", "Errore nel caricamento dell'elenco dei file", exception);
                 });
+
+
+
     }
 
 

@@ -39,6 +39,9 @@ public interface StudenteDao {
 
     @Query("SELECT id_studente FROM studente where matricola = :matricola")
     Long findStudenteMatricola(Long matricola);
+    @Query("SELECT matricola FROM studente where id_studente = :id_studente")
+    Long getMatricola(Long id_studente);
+
 
     @Query("SELECT s.*, u.* FROM Utente u, Studente s WHERE u.id_utente = s.id_utente")
     List<StudenteWithUtente> findStudentiWithUtenti();

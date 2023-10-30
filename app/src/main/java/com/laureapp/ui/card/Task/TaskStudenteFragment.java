@@ -2,6 +2,7 @@ package com.laureapp.ui.card.Task;
 
 import static android.view.View.VISIBLE;
 import static com.laureapp.ui.controlli.ControlInput.showToast;
+import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
 import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
@@ -42,6 +43,9 @@ import com.laureapp.ui.roomdb.entity.TaskStudente;
 import com.laureapp.ui.roomdb.entity.TaskTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -79,9 +83,12 @@ public class TaskStudenteFragment extends Fragment {
     private static FirebaseFirestore db;
     private Bundle args;
     private Studente utente_studente;
+    UtenteModelView utenteView;
+    private Long id_utente;
+
 
     private static List<TaskStudente> taskList = new ArrayList<>();
-
+    String ruolo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,15 +103,11 @@ public class TaskStudenteFragment extends Fragment {
         binding = FragmentTaskBinding.inflate(inflater, container, false);
         context = requireContext();
         args = getArguments();
-
-
-        if(args != null) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                utente_studente = args.getSerializable("Studente", Studente.class);
-            }
-            //Carico i dati delle task in base all'utente loggato
+        if (args != null) {
+            ruolo = args.getString("ruolo");
         }
+
+
         // Altri codici del tuo fragment
         db = FirebaseFirestore.getInstance();
 
@@ -118,16 +121,31 @@ public class TaskStudenteFragment extends Fragment {
         mNav = Navigation.findNavController(view);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
 
-        adapter = new TaskStudenteAdapter(context, taskList,mNav, args);
+
         //Log.d("id_utente_lista", utente.getId_utente().toString());
 
-        loadStudentForUserId(utente_studente.getId_utente());
+        if(args != null) {
+            adapter = new TaskStudenteAdapter(context, (ArrayList<TaskStudente>) taskList,mNav, args);
+            utenteView = new UtenteModelView(context);
+            if (StringUtils.equals("Professore", args.getString("ruolo"))) {
+                String email = args.getString("emailStudente");
 
-        addButton.setOnClickListener(view1 ->
-                showInputDialog()
-        );
+                id_utente = utenteView.getIdUtente(email);
+                loadStudentForUserId(id_utente);
 
-        listTaskView.setAdapter(adapter);
+                addButton.setOnClickListener(view1 ->
+                        showInputDialog()
+                );
+            } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
+                String email = getEmailFromSharedPreferences(context);
+                addButton.setVisibility(View.GONE);
+                id_utente = utenteView.getIdUtente(email);
+                loadStudentForUserId(id_utente);
+
+                //Carico i dati delle task in base all'utente loggato
+            }
+            listTaskView.setAdapter(adapter);
+        }
 
     }
 
@@ -193,6 +211,7 @@ public class TaskStudenteFragment extends Fragment {
 
         // Aggiungi un ascoltatore personalizzato al pulsante OK
         builder.setPositiveButton("Ok", (dialog, which) -> {
+
             String inputData = editTextTitolo.getText().toString();
             //effettuo la conversione della stringa in data
             Timestamp startDate;
@@ -205,10 +224,17 @@ public class TaskStudenteFragment extends Fragment {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
+            if (StringUtils.equals("Professore", args.getString("ruolo"))) {
+                String email = args.getString("emailStudente");
+
+                id_utente = utenteView.getIdUtente(email);
+                addTaskToFirestoreLast(id_utente, inputData, startDate, dueDate);
+            }
+
 
             //Aggiungo la task a Firestore in base all'utente loggato
-            addTaskToFirestoreLast(utente_studente.getId_utente(), inputData, startDate, dueDate);
-            Log.d("id_utente_lista", utente_studente.getId_utente().toString());
+
+            Log.d("id_utente_lista", id_utente.toString());
         });
 
 

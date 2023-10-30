@@ -1,19 +1,26 @@
 package com.laureapp.ui.card.TesiStudente;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +31,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Tesi;
@@ -31,6 +42,7 @@ import com.laureapp.ui.roomdb.entity.Vincolo;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +74,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
     Long media;
     Long esamiMancanti;
+    ImageButton share;
 
 
     StudenteModelView studenteView = new StudenteModelView(context);
@@ -120,6 +133,30 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                 ciclocdlTextView.setText(cicloCdl);
 
+
+                share = view.findViewById(R.id.shareImageButton);
+
+
+                share.setOnClickListener(view1 -> {
+                    // Genera il QR code
+                    Bitmap qrCodeBitmap = QRGenerator(tesi);
+
+
+
+
+                    // Avvia un'Activity per condividere il QR code
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("image/*");
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    qrCodeBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    byte[] qrCodeBytes = byteArrayOutputStream.toByteArray();
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MediaStore.Images.Media.insertImage(requireActivity().getContentResolver(), qrCodeBitmap, "QR Code", null)));
+                    startActivity(Intent.createChooser(shareIntent, "Condividi QR Code tramite"));
+                });
+
+
+
+
                 loadVincoloData(id_vincolo).addOnCompleteListener(taskVincolo -> {
                     if (taskVincolo.isSuccessful()) {
                         vincolo = taskVincolo.getResult();
@@ -163,6 +200,8 @@ public class DettagliTesiStudenteFragment extends Fragment {
             }
         }
     }
+
+
 
     /**
      * Questo metodo consente di ottenere i dati dei vincoli delle tesi da firestore e riempire la entity Vincolo
@@ -324,6 +363,41 @@ public class DettagliTesiStudenteFragment extends Fragment {
                 Log.e("Firestore Error", "Error querying Tesi collection", task.getException());
             }
         });
+    }
+
+
+
+    /**
+     * Metodo di generazione del QRCode in base all'id della tesi
+     * @return  restituisce la variabile Bitmap per mostrare il QRCode
+     */
+    public Bitmap QRGenerator(Tesi tesi) {
+        MultiFormatWriter writer = new MultiFormatWriter();
+        Bitmap bitmap = null;
+        try {
+            // Creazione del contenuto del QR Code utilizzando i dati della tesi
+            String content = "Titolo: " + tesi.getTitolo() +
+                    "\nDescrizione: " + tesi.getAbstract_tesi() +
+                    "\nTipologia: " + tesi.getTipologia() +
+                    "\nData Pubblicazione: " + tesi.getData_pubblicazione() +
+                    "\nCiclo CDL: " + tesi.getCiclo_cdl() +
+                    // Aggiungi altri dati della tesi, se necessario.
+                    "\nID Tesi: " + tesi.getId_tesi();
+
+            BitMatrix matrix = writer.encode(content, BarcodeFormat.QR_CODE, 400, 400);
+            int width = matrix.getWidth();
+            int height = matrix.getHeight();
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bitmap.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
 

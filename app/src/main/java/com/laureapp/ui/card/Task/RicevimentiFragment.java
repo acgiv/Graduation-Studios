@@ -103,9 +103,8 @@ public class RicevimentiFragment extends Fragment {
 
         if(args != null) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
-            }
+            taskStudente = (TaskStudente) args.getSerializable("Task");
+
             //Carico i dati delle task in base all'utente loggato
         }
         // Altri codici del tuo fragment

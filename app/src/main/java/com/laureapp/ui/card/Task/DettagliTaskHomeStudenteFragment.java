@@ -80,9 +80,8 @@ public class DettagliTaskHomeStudenteFragment extends Fragment {
         args = getArguments();
         if(args != null) {
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
-            }
+            taskStudente = (TaskStudente)args.getSerializable("SelectedTask");
+
             ruolo = args.getString("ruolo");
             //Carico i dati delle task in base all'utente loggato
         }

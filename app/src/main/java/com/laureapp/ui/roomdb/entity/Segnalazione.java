@@ -30,7 +30,7 @@ import java.io.Serializable;
 public class Segnalazione implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_segnalazione")
-    private Long idSegnalazione;
+    private Long id_segnalazione;
 
     @ColumnInfo(name = "id_studente_tesi")
     private Long id_studente_tesi;
@@ -45,18 +45,18 @@ public class Segnalazione implements Serializable {
 
     // Costruttore per creare una nuova segnalazioni
     public Segnalazione(Long idSegnalazione, Long idStudenteTesi, String titolo) {
-        this.idSegnalazione = idSegnalazione;
+        this.id_segnalazione = idSegnalazione;
         this.id_studente_tesi = idStudenteTesi;
         this.titolo = titolo;
     }
 
     // Getter e Setter per gli attributi
-    public Long getIdSegnalazione() {
-        return idSegnalazione;
+    public Long getId_segnalazione() {
+        return id_segnalazione;
     }
 
-    public void setIdSegnalazione(Long idSegnalazione) {
-        this.idSegnalazione = idSegnalazione;
+    public void setId_segnalazione(Long idSegnalazione) {
+        this.id_segnalazione = idSegnalazione;
     }
 
     public Long getId_studente_tesi() {
@@ -79,7 +79,7 @@ public class Segnalazione implements Serializable {
     @Override
     public String toString() {
         return "Segnalazione{" +
-                "idSegnalazione=" + idSegnalazione +
+                "idSegnalazione=" + id_segnalazione +
                 ", idTesi=" + id_studente_tesi +
                 ", titolo='" + titolo + '\'' +
                 '}';

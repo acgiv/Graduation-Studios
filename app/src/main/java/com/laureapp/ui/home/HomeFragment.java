@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import org.apache.commons.lang3.StringUtils;
 

@@ -27,8 +27,6 @@
     </style>
 
 
-
-
     <style name="Theme.LaureApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/color_primary</item>

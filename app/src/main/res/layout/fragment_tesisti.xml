@@ -7,17 +7,6 @@
 
 
 
-    <!-- Barra di ricerca -->
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchTesistiView"
-        app:queryHint="Cerca Tesisti"
-        app:iconifiedByDefault="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:iconifiedByDefault="false">
-    </androidx.appcompat.widget.SearchView>
-
-
     <!-- Lista di nomi -->
     <ListView
         android:id="@+id/listView"

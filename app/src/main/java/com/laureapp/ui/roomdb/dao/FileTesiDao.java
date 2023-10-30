@@ -7,27 +7,23 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.laureapp.ui.roomdb.entity.FileTesi;
-import com.laureapp.ui.roomdb.entity.Tesi;
 
 import java.util.List;
-
 @Dao
 public interface FileTesiDao {
-
     @Insert
     void insert(FileTesi fileTesi);
 
     @Update
     void update(FileTesi fileTesi);
 
-    @Query("SELECT * FROM FileTesi")
-    List<FileTesi> getAllTesi();
+    @Query("SELECT * FROM filetesi")
+    List<FileTesi> getAllFileTesi();
 
-    @Query("SELECT * FROM FileTesi where id_file = :idFile")
-    Tesi findAllById(Long idFile);
+    @Query("SELECT * FROM filetesi where id_file = :idFile")
+    FileTesi findAllById(Long idFile);
 
     @Delete
     void delete(FileTesi fileTesi);
-
 
 }

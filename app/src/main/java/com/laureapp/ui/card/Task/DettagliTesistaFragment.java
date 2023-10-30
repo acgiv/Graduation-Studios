@@ -2,13 +2,12 @@ package com.laureapp.ui.card.Task;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -31,6 +30,9 @@ import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -54,7 +56,12 @@ public class DettagliTesistaFragment extends Fragment {
     String cicloCdl;
     String nome_cdl;
     String titolo;
+    UtenteModelView utenteModelView;
+    StudenteModelView studenteModelView;
     Bundle args;
+    Long id_utente;
+    Long id_studente;
+    SharedDataModelView sharedViewModel;
 
 
     public DettagliTesistaFragment() {
@@ -64,6 +71,9 @@ public class DettagliTesistaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = requireContext();
+        sharedViewModel = new ViewModelProvider(this).get(SharedDataModelView.class);
+
     }
 
     @Override
@@ -97,6 +107,7 @@ public class DettagliTesistaFragment extends Fragment {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                 utente = args.getSerializable("Utente", Utente.class);
                 Studente studente = args.getSerializable("Studente", Studente.class);
+
                 loadStudenteTesiForStudenteId(studente.getId_studente()).addOnCompleteListener(tesiTask -> {
                     if (tesiTask.isSuccessful()) {
                         Tesi tesi = tesiTask.getResult();
@@ -147,8 +158,6 @@ public class DettagliTesistaFragment extends Fragment {
                 });
 
 
-            } else {
-                utente = null;
             }
         }
 
@@ -158,6 +167,7 @@ public class DettagliTesistaFragment extends Fragment {
 
 
     }
+
 
 
 
@@ -292,7 +302,7 @@ public class DettagliTesistaFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Conferma eliminazione");
 
-        String messageText = "Sei sicuro di voler eliminare il tesista <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + "con matricola" + " " + "<b>" + studente.getMatricola() + "</b>?";
+        String messageText = "Sei sicuro di voler eliminare il tesista <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + "con matricola" + " " + "<b>" + matricola + "</b>?";
 
         // Crea un oggetto SpannableString utilizzando Html.fromHtml per poter utilizzare la formattazione HTML
         // Il testo è ora in grassetto

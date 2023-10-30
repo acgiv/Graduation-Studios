@@ -101,7 +101,7 @@ public class TaskStudenteFragment extends Fragment {
         if(args != null) {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                utente_studente = args.getSerializable("Studente", Studente.class);
+                utente_studente = (Studente) args.getSerializable("Studente", Studente.class);
             }
             //Carico i dati delle task in base all'utente loggato
         }

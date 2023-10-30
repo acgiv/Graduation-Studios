@@ -2,6 +2,7 @@ package com.laureapp.ui;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,6 +33,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.laureapp.databinding.ActivityMainBinding;
 import com.laureapp.ui.home.HomeFragment;
 import com.laureapp.ui.login.LoginActivity;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration mAppBarConfiguration;
     ActivityMainBinding binding;
     String ruolo;
+    SharedDataModelView sharedViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         ruolo = bundle.getString("ruolo");
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         navController.navigate(R.id.fragment_home, bundle);
+
+        sharedViewModel = new ViewModelProvider(this).get(SharedDataModelView.class);
+
 
         // Imposta gli argomenti per il fragment
         navigationView = findViewById(R.id.navigation);

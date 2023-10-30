@@ -102,7 +102,6 @@ public class TesistiSegnalazioniFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
-        searchView = view.findViewById(R.id.searchTesistiView);
         listView = view.findViewById(R.id.listView);
         adapter = new StudentAdapter(context, studentList);
 

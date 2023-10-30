@@ -17,10 +17,10 @@ public interface FileTesiDao {
     @Update
     void update(FileTesi fileTesi);
 
-    @Query("SELECT * FROM filetesi")
+    @Query("SELECT * FROM FileTesi")
     List<FileTesi> getAllFileTesi();
 
-    @Query("SELECT * FROM filetesi where id_file = :idFile")
+    @Query("SELECT * FROM FileTesi where id_file = :idFile")
     FileTesi findAllById(Long idFile);
 
     @Delete

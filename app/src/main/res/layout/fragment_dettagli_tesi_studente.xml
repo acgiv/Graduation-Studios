@@ -34,7 +34,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewDettagliTesi"
                 android:layout_width="375dp"
-                android:layout_height="400dp"
+                android:layout_height="480dp"
                 android:layout_marginTop="80dp"
                 android:layout_row="0"
                 android:layout_column="0"
@@ -249,7 +249,7 @@
                         </LinearLayout>
 
                         <View
-                            android:id="@+id/line4"
+                            android:id="@+id/line12"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@android:color/darker_gray"
@@ -293,6 +293,96 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/linearLayoutRelatore"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl">
+
+
+                            <TextView
+                                android:id="@+id/TextViewRelatore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Relatore: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewRelatore"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line13"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutRelatore" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutCoRelatore"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutRelatore">
+
+
+                            <TextView
+                                android:id="@+id/TextViewCoRelatore"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Co-Relatore: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewCoRelatore"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCoRelatore" />
+
+
+                        <LinearLayout
                             android:id="@+id/linearLayoutVincoli"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -303,7 +393,7 @@
                             android:paddingBottom="2dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl">
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCoRelatore">
 
 
                             <TextView
@@ -495,6 +585,30 @@
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/linearLayoutMateriale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill">
+
+
+                        <TextView
+                            android:id="@+id/TextViewSkill"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Capacità e Skill:"
+                            android:textColor="@color/color_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
                         <View
                             android:id="@+id/line10"
                             android:layout_width="match_parent"
@@ -513,6 +627,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl" />
 
+
                         <Button
                             android:id="@+id/richiediTesi"
                             android:layout_width="wrap_content"
@@ -521,7 +636,7 @@
                             android:text="Richiedi Tesi"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+                            app:layout_constraintTop_toBottomOf="@+id/listViewFiles" />
 
                         <ImageButton
                             android:id="@+id/shareImageButton"
@@ -533,8 +648,17 @@
                             android:contentDescription="shareButton"
                             android:src="@drawable/baseline_share_24"
                             app:layout_constraintStart_toEndOf="@+id/richiediTesi"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+                            app:layout_constraintTop_toBottomOf="@+id/listViewFiles" />
 
+
+                        <!-- Aggiungi il RecyclerView per visualizzare i file sotto il LinearLayout -->
+                        <ListView
+                            android:id="@+id/listViewFiles"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+                        />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.core.widget.NestedScrollView>

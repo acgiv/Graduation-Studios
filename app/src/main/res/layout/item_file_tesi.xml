@@ -20,4 +20,13 @@
         android:src="@drawable/baseline_download_24"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="8dp" />
+
+    <ImageButton
+        android:id="@+id/deleteMaterialeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_delete_forever_24"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp" />
+
 </LinearLayout>

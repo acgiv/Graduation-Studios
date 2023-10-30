@@ -1,6 +1,7 @@
 package com.laureapp.ui.card.Adapter;
 
 import android.content.Context;
+import android.media.Image;
 import android.telephony.mbms.FileInfo;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,16 @@ public class InfoTesiProfessoreAdapter extends BaseAdapter {
         return position;
     }
 
+    public interface DeleteButtonClickListener {
+        void onDeleteButtonClick(int position);
+    }
+
+    private DeleteButtonClickListener deleteButtonClickListener;
+
+    public void setDeleteButtonClickListener(DeleteButtonClickListener listener) {
+        this.deleteButtonClickListener = listener;
+    }
+
     public interface DownloadButtonClickListener {
         void onDownloadButtonClick(int position);
     }
@@ -65,11 +76,22 @@ public class InfoTesiProfessoreAdapter extends BaseAdapter {
 
         // Aggiungi un gestore di clic per il download del file se necessario
         ImageButton downloadButton = convertView.findViewById(R.id.downloadMaterialeButton);
+        ImageButton deleteButton = convertView.findViewById(R.id.deleteMaterialeButton);
+
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (downloadButtonClickListener != null) {
                     downloadButtonClickListener.onDownloadButtonClick(position);
+                }
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (deleteButtonClickListener != null) {
+                    deleteButtonClickListener.onDeleteButtonClick(position);
                 }
             }
         });

@@ -12,6 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Ricevimenti;
+import com.laureapp.ui.roomdb.entity.Segnalazione;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.TaskStudente;
 import com.laureapp.ui.roomdb.entity.TaskTesi;
@@ -202,15 +203,15 @@ public class QueryFirestore {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
         segnRef
-                .orderBy("id_segn", Query.Direction.DESCENDING)
+                .orderBy("id_segnalazione", Query.Direction.ASCENDING)
                 .limit(1)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     if (!querySnapshot.isEmpty()) {
                         DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-                        Utente utente = document.toObject(Utente.class);
-                        if (utente != null) {
-                            Long idMax = utente.getId_utente();
+                        Segnalazione segnalazione = document.toObject(Segnalazione.class);
+                        if (segnalazione != null) {
+                            Long idMax = segnalazione.getId_segnalazione();
                             future.complete(idMax);
                         }
                     } else {

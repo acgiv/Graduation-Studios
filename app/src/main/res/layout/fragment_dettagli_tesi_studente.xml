@@ -29,6 +29,8 @@
 
             app:layout_constraintVertical_bias="0.035">
 
+
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewDettagliTesi"
                 android:layout_width="375dp"
@@ -41,477 +43,505 @@
                 app:cardElevation="8dp"
                 app:cardCornerRadius="15dp">
 
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:id="@+id/constraintLayout"
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/color_primary"
-                        android:gravity="center_horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:layout_height="wrap_content">
 
-
-                    <TextView
-                        android:id="@+id/textViewLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:drawableStart="@drawable/outline_assignment_white_24"
-                        android:drawablePadding="8dp"
-                        android:drawableTint="@color/white"
-                        android:padding="3dp"
-                        android:text="Tesi"
-                        android:textColor="@android:color/white"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        tools:visibility="visible" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutEmail"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintBottom_toTopOf="@+id/linearLayoutCognome"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                        android:layout_height="383dp">
 
-                        <TextView
-                            android:id="@+id/textViewTitolo"
+                        <LinearLayout
+                            android:id="@+id/constraintLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/color_primary"
+                            android:gravity="center_horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+
+                            <TextView
+                                android:id="@+id/textViewLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:drawableStart="@drawable/outline_assignment_white_24"
+                                android:drawablePadding="8dp"
+                                android:drawableTint="@color/white"
+                                android:padding="3dp"
+                                android:text="Tesi"
+                                android:textColor="@android:color/white"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                tools:visibility="visible" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintBottom_toTopOf="@+id/linearLayoutCognome"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                            <TextView
+                                android:id="@+id/textViewTitolo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Titolo: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewTitolo"
+                                android:layout_width="276dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEmail"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutCognome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail">
+
+                            <TextView
+                                android:id="@+id/TextViewAbstract"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Descrizione: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewAbstract"
+                                android:layout_width="272dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutNome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome">
+
+
+                            <TextView
+                                android:id="@+id/TextViewDataPubblicazione"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pubblicata il: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewDataPubblicazione"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutTipologia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome">
+
+                            <TextView
+                                android:id="@+id/TextViewTipologia"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tipologia: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewTipologia"
+                                android:layout_width="244dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line4"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutCicloCdl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia">
+
+
+                            <TextView
+                                android:id="@+id/TextViewCicloCDL"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ciclo CDL: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewCicloCDL"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutVincoli"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="140dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl">
+
+
+                            <TextView
+                                android:id="@+id/TextViewVincoli"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Vincoli Tesi "
+                                android:textColor="@color/color_primary"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line6"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutTempistiche"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli">
+
+
+                            <TextView
+                                android:id="@+id/TextViewTempistiche"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tempistiche (in Mesi):"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewTempistiche"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line7"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutMedia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche">
+
+
+                            <TextView
+                                android:id="@+id/TextViewMedia"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Media:"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewMedia"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line8"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutEsamiMancanti"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
+
+
+                            <TextView
+                                android:id="@+id/TextViewEsamiMancanti"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Esami Mancanti:"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewEsamiMancanti"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line9"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutSkill"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
+
+
+                            <TextView
+                                android:id="@+id/TextViewSkill"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Capacità e Skill:"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewSkill"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line10"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+
+                        <View
+                            android:id="@+id/line5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl" />
+
+                        <Button
+                            android:id="@+id/richiediTesi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Titolo: "
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
+                            android:layout_marginStart="90dp"
+                            android:text="Richiedi Tesi"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
 
-                        <TextView
-                            android:id="@+id/insertTextViewTitolo"
-                            android:layout_width="276dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                    </LinearLayout>
-                    <View
-                        android:id="@+id/line1"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEmail"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutCognome"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail">
-
-                        <TextView
-                            android:id="@+id/TextViewAbstract"
+                        <ImageButton
+                            android:id="@+id/shareImageButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Descrizione: "
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewAbstract"
-                            android:layout_width="272dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                    </LinearLayout>
-                    <View
-                        android:id="@+id/line2"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutNome"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome">
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="11dp"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="shareButton"
+                            android:src="@drawable/baseline_share_24"
+                            app:layout_constraintStart_toEndOf="@+id/richiediTesi"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
 
 
-                        <TextView
-                            android:id="@+id/TextViewDataPubblicazione"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pubblicata il: "
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewDataPubblicazione"
-                            android:layout_width="246dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.core.widget.NestedScrollView>
 
 
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/line3"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutTipologia"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome">
-
-                        <TextView
-                            android:id="@+id/TextViewTipologia"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tipologia: "
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewTipologia"
-                            android:layout_width="244dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="16sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                    </LinearLayout>
-                    <View
-                        android:id="@+id/line4"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutCicloCdl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia">
-
-
-                        <TextView
-                            android:id="@+id/TextViewCicloCDL"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Ciclo CDL: "
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewCicloCDL"
-                            android:layout_width="246dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutVincoli"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="140dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl">
-
-
-                        <TextView
-                            android:id="@+id/TextViewVincoli"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Vincoli Tesi "
-                            android:textColor="@color/color_primary"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/line6"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutTempistiche"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli">
-
-
-                        <TextView
-                            android:id="@+id/TextViewTempistiche"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tempistiche (in Mesi):"
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewTempistiche"
-                            android:layout_width="246dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/line7"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutMedia"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche">
-
-
-                        <TextView
-                            android:id="@+id/TextViewMedia"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Media:"
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewMedia"
-                            android:layout_width="246dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/line8"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutEsamiMancanti"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
-
-
-                        <TextView
-                            android:id="@+id/TextViewEsamiMancanti"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Esami Mancanti:"
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewEsamiMancanti"
-                            android:layout_width="246dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/line9"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayoutSkill"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
-
-
-                        <TextView
-                            android:id="@+id/TextViewSkill"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Capacità e Skill:"
-                            android:textColor="@color/color_primary"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-                        <TextView
-                            android:id="@+id/insertTextViewSkill"
-                            android:layout_width="246dp"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            app:layout_constraintEnd_toEndOf="parent" />
-
-
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/line10"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
-
-                    <View
-                        android:id="@+id/line5"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@android:color/darker_gray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl" />
-
-                    <Button
-                        android:id="@+id/richiediTesi"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="Richiedi Tesi"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
                 </FrameLayout>
+
 
             </androidx.cardview.widget.CardView>
         </GridLayout>

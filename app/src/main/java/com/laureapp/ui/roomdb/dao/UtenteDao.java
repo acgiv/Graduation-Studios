@@ -48,6 +48,11 @@ public interface UtenteDao {
     @Query("SELECT u.email FROM Utente u WHERE u.id_utente =:idUtente")
     String getEmail(Long idUtente);
 
+    @Query("SELECT u.facolta FROM Utente u WHERE u.id_utente =:idUtente")
+    String getFacolta(Long idUtente);
+    @Query("SELECT u.nome_cdl FROM Utente u WHERE u.id_utente =:idUtente")
+    String getNomeCdl(Long idUtente);
+
     @Delete
     void delete(Utente utente);
 

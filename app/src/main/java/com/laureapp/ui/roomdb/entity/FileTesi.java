@@ -25,6 +25,17 @@ public class FileTesi implements Serializable {
     @ColumnInfo(name = "id_tesi")
     private Long id_tesi;
 
+    @ColumnInfo(name = "nomeFile")
+    private String nomeFile;
+
+    public String getNomeFile() {
+        return nomeFile;
+    }
+
+    public void setNomeFile(String nomeFile) {
+        this.nomeFile = nomeFile;
+    }
+
     public Long getId_file() {
         return id_file;
     }
@@ -47,7 +58,7 @@ public class FileTesi implements Serializable {
         Map<String, Object> fileTesiMap = new HashMap<>();
         fileTesiMap.put("id_tesi", this.id_tesi);
         fileTesiMap.put("id_file",this.id_file);
-
+        fileTesiMap.put("nome_file",this.nomeFile);
         return fileTesiMap;
     }
 
@@ -58,6 +69,7 @@ public class FileTesi implements Serializable {
         return "RichiesteTesi{" +
                 "id_tesi=" + id_tesi +
                 ", id_file=" + id_file +
+                ", nome_file=" + nomeFile +
                 '}';
     }
 }

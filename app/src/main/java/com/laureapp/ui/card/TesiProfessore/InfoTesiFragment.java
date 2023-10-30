@@ -1,10 +1,13 @@
 package com.laureapp.ui.card.TesiProfessore;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -157,6 +162,16 @@ public class InfoTesiFragment extends Fragment {
 
 
                 });
+
+                //gestione del click sul pulsante inserisci file
+                ImageButton caricaMaterialeButton = view.findViewById(R.id.caricaMaterialeTesiProfessore);
+                caricaMaterialeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openFileChooser();
+                    }
+                });
+
 
 
             }
@@ -299,6 +314,51 @@ public class InfoTesiFragment extends Fragment {
         datePickerDialog.show();
     }
 
+    private static final int PICKFILE_REQUEST_CODE = 1; // Codice di richiesta per il selettore di file
+
+    private void openFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("application/pdf"); // Accetta qualsiasi tipo di file
+        startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICKFILE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            if (data != null) {
+                Uri fileUri = data.getData();
+                // Ora hai l'URI del file selezionato dall'utente
+
+                // Puoi procedere con il caricamento del file su Firebase Storage
+                uploadFileToFirebaseStorage(fileUri);
+            }
+        }
+    }
+
+    private void uploadFileToFirebaseStorage(Uri fileUri) {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+        String fileName = "nome_file"; // Sostituisci con un nome di file desiderato
+        StorageReference fileRef = storageRef.child("FileTesi/" + fileName);
+
+        fileRef.putFile(fileUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Il file è stato caricato con successo
+                    // Ora puoi ottenere l'URL del file caricato
+                    fileRef.getDownloadUrl()
+                            .addOnSuccessListener(uri -> {
+                                String downloadUrl = uri.toString();
+                                Log.d("vedi",downloadUrl);
+                            })
+                            .addOnFailureListener(e -> {
+                                // Gestisci l'errore nell'ottenere l'URL del file
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    // Gestisci l'errore nel caricamento del file
+                });
+    }
 
 
 }

@@ -32,7 +32,7 @@ public class FileTesiRepository {
     public FileTesi findAllById(Long id){
         CompletableFuture<FileTesi> future = new CompletableFuture<>();
         executor.execute(() -> {
-            FileTesi fileTesi = roomDbSqlLite.fileTesiDao().findAllById(id);
+            FileTesi fileTesi = (FileTesi) roomDbSqlLite.fileTesiDao().getAllTesi();
             future.complete(fileTesi);
         });
         try {
@@ -46,7 +46,7 @@ public class FileTesiRepository {
     public List<FileTesi> getAllFileTesi(){
         CompletableFuture<List<FileTesi>> future = new CompletableFuture<>();
         executor.execute(() -> {
-            List<FileTesi> lista = roomDbSqlLite.fileTesiDao().getAllFileTesi();
+            List<FileTesi> lista = roomDbSqlLite.fileTesiDao().getAllTesi();
             future.complete(lista);
         });
         try {

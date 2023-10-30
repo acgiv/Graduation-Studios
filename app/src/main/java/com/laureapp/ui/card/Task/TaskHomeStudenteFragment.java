@@ -66,6 +66,7 @@ public class TaskHomeStudenteFragment extends Fragment {
     private static final List<TaskStudente> taskList = new ArrayList<>();
     String email;
     Bundle args;
+    Utente utente;
 
 
     @Override
@@ -85,12 +86,10 @@ public class TaskHomeStudenteFragment extends Fragment {
 
         if(args != null) {
 
-            Utente utente = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                utente = args.getSerializable("Utente", Utente.class);
+                utente = (Utente)args.getSerializable("Utente");
                 loadStudentForUserId(utente.getId_utente());
-            }
-            ruolo = args.getString("ruolo");
+
+                ruolo = args.getString("ruolo");
 
 
             //Carico i dati delle task in base all'utente loggato
@@ -107,7 +106,7 @@ public class TaskHomeStudenteFragment extends Fragment {
         ListView listTaskView = view.findViewById(R.id.listTaskView);
 
         mNav = Navigation.findNavController(view);
-        adapter = new TaskStudenteAdapter(context, taskList,mNav, args);
+        adapter = new TaskStudenteAdapter(context, (ArrayList<TaskStudente>) taskList,mNav, args);
 
         email = getEmailFromSharedPreferences(context);
 

@@ -66,7 +66,7 @@ public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
 
 
         if (segnalazione != null) {
-            titoloTextView.setText(segnalazione.getIdSegnalazione().toString() + ". " + segnalazione.getTitolo());
+            titoloTextView.setText(segnalazione.getId_segnalazione().toString() + ". " + segnalazione.getTitolo());
         }
         // Gestisci il clic sull'elemento della lista
         itemView.setOnClickListener(v -> {

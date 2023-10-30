@@ -74,7 +74,6 @@ public class TesistiFragment extends Fragment {
 
 
     private List<StudenteWithUtente> studentList = new ArrayList<>();
-    private String tesistaCercato = "";
 
 
 
@@ -91,7 +90,6 @@ public class TesistiFragment extends Fragment {
         }
 
 
-        sharedViewModel = new ViewModelProvider(this).get(SharedDataModelView.class);
 
         utenteModelView = new UtenteModelView(context);
 
@@ -135,12 +133,8 @@ public class TesistiFragment extends Fragment {
             StudenteWithUtente studenteWithUtente = studentList.get(position);
 
             // Crea un nuovo Bundle per passare i dati all'altro fragment
+            args.putString("emailStudente", studenteWithUtente.getUtente().getEmail());
 
-
-
-
-            args.putSerializable("Studente", studenteWithUtente.getStudente());
-            args.putSerializable("Utente", studenteWithUtente.getUtente());
 
             // Passa il Bundle al fragment di destinazione
             mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista, args);

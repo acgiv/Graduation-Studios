@@ -556,33 +556,28 @@
                             android:id="@+id/linearLayoutSkill"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="140dp"
+                            android:layout_marginEnd="100dp"
                             android:orientation="horizontal"
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMateriale">
 
 
                             <TextView
                                 android:id="@+id/TextViewSkill"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/capacit_e_skill"
+                                android:text="@string/MaterialeTesi"
                                 android:textColor="@color/color_primary"
-                                android:textSize="16sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent" />
 
-                            <TextView
-                                android:id="@+id/insertTextViewSkill"
-                                android:layout_width="246dp"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+
 
 
                         </LinearLayout>
@@ -598,11 +593,11 @@
                             android:paddingBottom="2dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill">
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
 
 
                         <TextView
-                            android:id="@+id/TextViewSkill"
+                            android:id="@+id/TextViewMaterialeTesi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Capacità e Skill:"
@@ -611,6 +606,15 @@
                             android:textStyle="bold"
                             app:layout_constraintEnd_toEndOf="parent" />
 
+                            <TextView
+                                android:id="@+id/insertTextViewSkill"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
                         <View
                             android:id="@+id/line10"
                             android:layout_width="match_parent"

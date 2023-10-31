@@ -1,6 +1,7 @@
 package com.laureapp.ui.card.Adapter;
 
 
+import static androidx.core.content.res.TypedArrayUtils.getString;
 import static com.laureapp.ui.card.Task.TaskStudenteFragment.deleteTask;
 
 import android.app.AlertDialog;
@@ -144,9 +145,9 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
     private void showConfirmationDialog(String titolo, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Conferma eliminazione");
+        builder.setTitle(context.getString(R.string.confermaEliminazioneTitle));
 
-        String messageText = "Vuoi davvero eliminare la task <b>" + titolo + "</b>?";
+        String messageText = context.getString(R.string.eliminareTask) + " <b>" + titolo + "</b>?";
 
         // Crea un oggetto SpannableString utilizzando Html.fromHtml per poter utilizzare la formattazione html
         //Il testo è ora in grassetto
@@ -154,13 +155,13 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
         builder.setMessage(message);
 
-        builder.setPositiveButton("Conferma", (dialog, which) -> {
+        builder.setPositiveButton(context.getString(R.string.conferma), (dialog, which) -> {
             // Elimina l'elemento
             deleteTask(position);
             dialog.dismiss(); // Chiudi il popup
         });
 
-        builder.setNegativeButton("Annulla", (dialog, which) -> {
+        builder.setNegativeButton(context.getString(R.string.annulla), (dialog, which) -> {
             dialog.dismiss(); // Chiudi il popup
         });
 

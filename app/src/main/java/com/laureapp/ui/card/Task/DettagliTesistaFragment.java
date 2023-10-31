@@ -295,9 +295,9 @@ public class DettagliTesistaFragment extends Fragment {
      */
     private void showConfirmationDialog(StudenteModelView studente, UtenteModelView utente) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Conferma eliminazione");
+        builder.setTitle(getString(R.string.confermaEliminazioneTitle));
 
-        String messageText = R.string.confEliminazioneTesista + " <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + R.string.conMatricola + " " + "<b>" + matricola + "</b>?";
+        String messageText = getString(R.string.confEliminazioneTesista) + " <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + getString(R.string.conMatricola) + " " + "<b>" + matricola + "</b>?";
 
         // Crea un oggetto SpannableString utilizzando Html.fromHtml per poter utilizzare la formattazione HTML
         // Il testo è ora in grassetto
@@ -305,7 +305,7 @@ public class DettagliTesistaFragment extends Fragment {
 
         builder.setMessage(message);
 
-        builder.setPositiveButton("Conferma", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.conferma), (dialog, which) -> {
             // Chiama il metodo per eliminare il record dalla tabella studente_tesi
             deleteStudenteTesi(studente.findStudente(utente.getIdUtente(email)));
 
@@ -313,7 +313,7 @@ public class DettagliTesistaFragment extends Fragment {
             dialog.dismiss();
         });
 
-        builder.setNegativeButton("Annulla", (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.annulla), (dialog, which) -> {
             // Chiudi il popup senza effettuare alcuna azione
             dialog.dismiss();
         });

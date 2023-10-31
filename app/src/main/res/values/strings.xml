@@ -27,7 +27,7 @@
     <string name="invio">Invio</string>
 
     <string name="home">Home</string>
-    <string name="tesi">Tesi</string>
+    <string name="tesi">Tesi:</string>
     <string name="classifica">Classifica</string>
     <string name="social">Social</string>
     <string name="tesi_description" translatable="false">tesi_description</string>
@@ -56,12 +56,12 @@
 
     <!-- Strings related to Change Password Page  -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="matricola">Matricola</string>
+    <string name="matricola">Matricola:</string>
     <string name="inserisci_l_email_di_registrazione">Inserisci l\'email di registrazione</string>
     <string name="avanti">Avanti</string>
     <string name="facolta">Facoltà</string>
     <string name="media">Media</string>
-    <string name="esami_mancanti">Esami mancanti</string>
+    <string name="esami_mancanti">Esami mancanti:</string>
     <string name="corsi">Corso di Laurea</string>
     <string name="impostaLingua">Seleziona lingua</string>
     <string name="italiano">Italiano</string>
@@ -128,6 +128,8 @@
     <string name="titolo_dettagli_task">Task</string>
     <string name="stato_task">Stato</string>
     <string name="default_stato_task">Non iniziato</string>
+    <string name="stato_task_in_corso">In corso</string>
+    <string name="stato_task_completato">Completato</string>
     <string name="data_inizio_dettagli_task">Data Inizio</string>
     <string name="hint_data_inizio">Inizio</string>
     <string name="hint_data_scadenza">Scadenza</string>
@@ -154,9 +156,9 @@
         <item name="android:textColor">#000000</item>
     </style>
 
-    <string name="title_activity_qr_code">QrCodeActivity</string>
+    <string name="title_activity_qr_code" translatable="false">QrCodeActivity</string>
 
-    <string name="lorem_ipsum">
+    <string name="lorem_ipsum" translatable="false">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
         dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
@@ -192,5 +194,51 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+
+    <string name="segnalazioni">Segnalazioni</string>
+    <string name="titolo_della_tesi">Titolo della tesi</string>
+    <string name="listaTesi">Lista Tesi</string>
+    <string name="vincoli">Vincoli</string>
+    <string name="info">Info</string>
+    <string name="titoloTesiProfessore">Titolo:</string>
+    <string name="tipologia">Tipologia:</string>
+    <string name="data_pubblicazione">Data pubblicazione:</string>
+    <string name="ciclo_cdl">Ciclo CDL:</string>
+    <string name="abstractTesi">Abstract:</string>
+    <string name="tempistiche">Tempistiche:</string>
+    <string name="media_voti">Media Voti:</string>
+    <string name="skill">Skill:</string>
+    <string name="tesistiSegnalazioni">Tesisti - segnalazioni</string>
+    <string name="listaSegnalazioni">Lista segnalazioni</string>
+    <string name="richiesta_num">Richiesta Num:</string>
+    <string name="tesiRichiesta">Tesi:</string>
+    <string name="TaskStudente">Task-Studente</string>
+    <string name="Profilo">Profilo</string>
+    <string name="Tesisti">Tesisti</string>
+    <string name="Tesista">Tesista</string>
+    <string name="dettagliTask">Dettagli Task</string>
+    <string name="Ricevimentitask">Ricevimenti task</string>
+    <string name="DettaglioTesi">Dettaglio Tesi</string>
+    <string name="RichiestediTesi">Richieste di Tesi</string>
+    <string name="DettaglioRichiestaTesi">Dettaglio Richiesta Tesi</string>
+    <string name="richiesta_tesi">Richiesta Tesi</string>
+    <string name="info_studente">Info Studente</string>
+    <string name="accetta">Accetta</string>
+    <string name="rifiuta">Rifiuta</string>
+    <string name="inizio">Inizio</string>
+    <string name="tesiHome">Tesi</string>
+    <string name="descrizione">Descrizione:</string>
+    <string name="pubblicata_il">Pubblicata il:</string>
+    <string name="vincoliTesi">Vincoli Tesi</string>
+    <string name="tempistiche_in_mesi">Tempistiche (in Mesi):</string>
+    <string name="capacit_e_skill">Capacità e Skill:</string>
+    <string name="richiedi_tesi">Richiedi Tesi</string>
+    <string name="nuovaSegnalazione">Nuova Segnalazione</string>
+    <string name="confEliminazioneTesista">Sei sicuro di voler eliminare il tesista</string>
+    <string name="conMatricola">con matricola</string>
+    <string name="confermaSalataggio">Conferma salvataggio</string>
+    <string name="salvaModificheConf">Sei sicuro di voler salvare le modifiche?</string>
+    <string name="conferma">Conferma</string>
+    <string name="annulla">Annulla</string>
 
 </resources>

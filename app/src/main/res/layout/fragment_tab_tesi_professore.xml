@@ -24,13 +24,13 @@
                 android:id="@+id/info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Info" />
+                android:text="@string/info" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/vincoli"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vincoli" />
+                android:text="@string/vincoli" />
 
         </com.google.android.material.tabs.TabLayout>
 

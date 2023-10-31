@@ -297,7 +297,7 @@ public class DettagliTesistaFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Conferma eliminazione");
 
-        String messageText = "Sei sicuro di voler eliminare il tesista <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + "con matricola" + " " + "<b>" + matricola + "</b>?";
+        String messageText = R.string.confEliminazioneTesista + " <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + R.string.conMatricola + " " + "<b>" + matricola + "</b>?";
 
         // Crea un oggetto SpannableString utilizzando Html.fromHtml per poter utilizzare la formattazione HTML
         // Il testo è ora in grassetto

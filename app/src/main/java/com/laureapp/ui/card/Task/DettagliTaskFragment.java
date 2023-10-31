@@ -65,6 +65,8 @@ public class DettagliTaskFragment extends Fragment {
     private Context context;
     private Button startDateButton;
     private Button dueDateButton;
+    private String nuovaDataInizio;
+    private String nuovaDataScadenza;
     String ruolo;
     AutoCompleteTextView autoCompleteTextView;
 
@@ -207,17 +209,17 @@ public class DettagliTaskFragment extends Fragment {
             salvaButton.setOnClickListener(view1 -> {
                 // Crea un AlertDialog per la conferma del salvataggio
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Conferma salvataggio");
-                builder.setMessage("Sei sicuro di voler salvare le modifiche?");
+                builder.setTitle(R.string.confermaSalataggio);
+                builder.setMessage(R.string.salvaModificheConf);
 
                 // Aggiungi un pulsante "Conferma" che effettuerà il salvataggio
-                builder.setPositiveButton("Conferma", (dialog, which) -> {
+                builder.setPositiveButton(R.string.conferma, (dialog, which) -> {
                     modificaDatiTask(); // Esegui il salvataggio
                     dialog.dismiss(); // Chiudi il popup
                 });
 
                 // Aggiungi un pulsante "Annulla" che chiuderà il popup senza effettuare il salvataggio
-                builder.setNegativeButton("Annulla", (dialog, which) -> {
+                builder.setNegativeButton(R.string.annulla, (dialog, which) -> {
                     dialog.dismiss(); // Chiudi il popup
                 });
 
@@ -378,12 +380,23 @@ public class DettagliTaskFragment extends Fragment {
 
         String nuovoTitolo = binding.titoloTaskBar.getText().toString();
         String nuovoStato = binding.filledExposedDropdown.getText().toString();
-        String nuovaDataInizio = startDateButton.getText().toString();
-        String nuovaDataScadenza = dueDateButton.getText().toString();
+
+
 
         if(args != null) {
             task_studente = (TaskStudente) args.getSerializable("SelectedTask");
 
+            if (startDateButton != null || dueDateButton != null) {
+                nuovaDataInizio = startDateButton.getText().toString();
+                nuovaDataScadenza = dueDateButton.getText().toString();
+                try {
+                    task_studente.setData_inizio(stringToTimestamp(nuovaDataInizio));
+                    task_studente.setData_scadenza(stringToTimestamp(nuovaDataScadenza));
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
             if (nuovoTitolo.isEmpty()) {
                 // Se il titolo è vuoto, mostra un messaggio di errore
@@ -393,12 +406,7 @@ public class DettagliTaskFragment extends Fragment {
                 task_studente.setTitolo(nuovoTitolo);
                 task_studente.setStato(nuovoStato);
 
-                try {
-                    task_studente.setData_inizio(stringToTimestamp(nuovaDataInizio));
-                    task_studente.setData_scadenza(stringToTimestamp(nuovaDataScadenza));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+
 
                 // Salva i dati nel database
                 salvaDatiTaskStudente(task_studente);

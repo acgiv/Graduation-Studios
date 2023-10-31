@@ -110,7 +110,7 @@
                     android:layout_gravity="center_horizontal"
                     android:text="@string/segnalazioni"
                     android:textColor="@color/color_primary"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold">
 
                 </TextView>

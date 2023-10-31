@@ -193,6 +193,15 @@
     <string name="annulla">Cancel</string>
     <string name="stato_task_in_corso">In progress</string>
     <string name="stato_task_completato">Completed</string>
+    <string name="confermaEliminazioneTitle">Confirm deletion</string>
+    <string name="eliminareTask">Do you really want to delete the task</string>
+    <string name="confEliminazioneRicevimento">Do you really want to delete the appointment on</string>
+    <string name="nuovoRicevimento">New appointment</string>
+    <string name="nuovaTask">New task</string>
+
+
+
+
 
 
 

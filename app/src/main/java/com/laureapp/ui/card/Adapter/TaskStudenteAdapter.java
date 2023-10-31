@@ -86,15 +86,15 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
         if (selectedTask != null) {
             taskTextView.setText(selectedTask.getTitolo());
 
-            if(Objects.equals(selectedTask.getStato(), "Non iniziato")){
+            if(Objects.equals(selectedTask.getStato(), "Non iniziato") || Objects.equals(selectedTask.getStato(), "Not Started")){
                 redDot.setVisibility(View.VISIBLE);
                 orangeDot.setVisibility(View.GONE);
                 greenDot.setVisibility(View.GONE);
-            } else if (Objects.equals(selectedTask.getStato(), "In corso")) {
+            } else if (Objects.equals(selectedTask.getStato(), "In corso") || Objects.equals(selectedTask.getStato(), "In Progress") ) {
                 redDot.setVisibility(View.GONE);
                 orangeDot.setVisibility(View.VISIBLE);
                 greenDot.setVisibility(View.GONE);
-            } else if (Objects.equals(selectedTask.getStato(), "Completato")) {
+            } else if (Objects.equals(selectedTask.getStato(), "Completato") || Objects.equals(selectedTask.getStato(), "Completed")) {
                 redDot.setVisibility(View.GONE);
                 orangeDot.setVisibility(View.GONE);
                 greenDot.setVisibility(View.VISIBLE);

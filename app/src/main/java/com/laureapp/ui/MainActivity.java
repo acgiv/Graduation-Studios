@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = findViewById(R.id.drawer);
         toolbar = findViewById(R.id.toolbar);
+
 
         setSupportActionBar(toolbar);
 
@@ -93,8 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawers(); // Chiude il menu
 
                 Toast.makeText(getApplicationContext(), "Impostazioni", Toast.LENGTH_LONG).show();
-            } else if (id == R.id.itemProfile) {
-                Toast.makeText(getApplicationContext(), "Profilo", Toast.LENGTH_LONG).show();
             } else if (id == R.id.itemLogin) {
                 Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
             } else if (id == R.id.itemSignOut) {
@@ -135,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
     private void createAppBar() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home, R.id.profilo_studente)
+        // Passa il tuo R.id.fragment_home come destinazione principale
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home)
                 .setOpenableLayout(drawerLayout)
                 .build();
 
@@ -150,9 +151,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
    }
-
-
-
-
 }
 

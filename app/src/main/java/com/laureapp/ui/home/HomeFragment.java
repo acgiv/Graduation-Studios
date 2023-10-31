@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +61,8 @@ public class HomeFragment extends Fragment {
 
         }
 
+
+
     }
 
     @Override
@@ -82,7 +85,7 @@ public class HomeFragment extends Fragment {
         TextView taskTextView = view.findViewById(R.id.taskTextView);
 
         if (StringUtils.equals("Professore", ruolo)) {
-            taskTextView.setText("Richieste");
+            taskTextView.setText(R.string.richieste);
         }
 
         CardTesi.setOnClickListener(view1 -> {

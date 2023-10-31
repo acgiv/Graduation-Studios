@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/tesi"
+                    android:text="@string/tesiHome"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Segnalazioni"
+                    android:text="@string/segnalazioni"
                     android:textColor="@color/color_primary"
                     android:textSize="16sp"
                     android:textStyle="bold">

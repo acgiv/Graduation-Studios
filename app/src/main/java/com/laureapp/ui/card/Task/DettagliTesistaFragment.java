@@ -1,14 +1,15 @@
 package com.laureapp.ui.card.Task;
 
+import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
+
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -31,6 +32,9 @@ import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -54,7 +58,13 @@ public class DettagliTesistaFragment extends Fragment {
     String cicloCdl;
     String nome_cdl;
     String titolo;
+    UtenteModelView utenteModelView;
+    StudenteModelView studenteModelView;
     Bundle args;
+    Long id_utente;
+    Long id_studente;
+    SharedDataModelView sharedViewModel;
+    String email;
 
 
     public DettagliTesistaFragment() {
@@ -64,6 +74,9 @@ public class DettagliTesistaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = requireContext();
+        sharedViewModel = new ViewModelProvider(this).get(SharedDataModelView.class);
+
     }
 
     @Override
@@ -92,74 +105,66 @@ public class DettagliTesistaFragment extends Fragment {
 
         args = getArguments();
 
-        if (args != null) {
-            Utente utente;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-                utente = args.getSerializable("Utente", Utente.class);
-                Studente studente = args.getSerializable("Studente", Studente.class);
-                loadStudenteTesiForStudenteId(studente.getId_studente()).addOnCompleteListener(tesiTask -> {
-                    if (tesiTask.isSuccessful()) {
-                        Tesi tesi = tesiTask.getResult();
-                        if (tesi != null) {
-                            // Ora puoi accedere ai dati della tesi come segue:
-                            cicloCdl = tesi.getCiclo_cdl();
-                            titolo = tesi.getTitolo();
-                            if (utente != null) {
-                                Log.d("Dati tesista", args.toString());
+        if(args != null) {
+            utenteModelView = new UtenteModelView(context);
+            email = args.getString("emailStudente"); // Chiamata al metodo per ottenere la mail
+            args.putString("emailStudente",email);
 
-                                nome = utente.getNome();
-                                cognome = utente.getCognome();
-                                matricola = studente.getMatricola();
+            id_utente = utenteModelView.getIdUtente(email);
+            studenteModelView = new StudenteModelView(context);
+            id_studente = studenteModelView.findStudente(id_utente);
 
-                                facolta = utente.getFacolta();
-                                nome_cdl = utente.getNome_cdl();
+            loadStudenteTesiForStudenteId(id_studente).addOnCompleteListener(tesiTask -> {
+                if (tesiTask.isSuccessful()) {
+                    Tesi tesi = tesiTask.getResult();
+                    if (tesi != null) {
+                        // Ora puoi accedere ai dati della tesi come segue:
+                        cicloCdl = tesi.getCiclo_cdl();
+                        titolo = tesi.getTitolo();
+                        if (utenteModelView != null) {
+                            Log.d("Dati tesista", args.toString());
 
-                                Log.d("Dati tesista", nome + cognome + matricola.toString() + facolta + cicloCdl + nome_cdl + titolo);
+                            nome = utenteModelView.getNome();
+                            cognome = utenteModelView.getCognome();
+                            matricola = studenteModelView.getMatricola(id_studente);
 
-                                //Setto le textView
-                                nomeTesistaTextView.setText(nome);
-                                cognomeTesistaTextView.setText(cognome);
-                                matricolaTesistaTextView.setText(matricola.toString());
-                                facoltaTextView.setText(facolta);
-                                ciclocdlTextView.setText(cicloCdl);
-                                nomeCdlTextView.setText(nome_cdl);
-                                titoloTesiTextView.setText(titolo);
+                            facolta = utenteModelView.getFacolta(id_utente);
+                            nome_cdl = utenteModelView.getNomeCdl(id_utente);
 
-                            }
-                            Log.d("ciclo+titolo", cicloCdl + titolo);
+                            Log.d("Dati tesista", nome + cognome + matricola.toString() + facolta + cicloCdl + nome_cdl + titolo);
 
+                            //Setto le textView
+                            nomeTesistaTextView.setText(nome);
+                            cognomeTesistaTextView.setText(cognome);
+                            matricolaTesistaTextView.setText(matricola.toString());
+                            facoltaTextView.setText(facolta);
+                            ciclocdlTextView.setText(cicloCdl);
+                            nomeCdlTextView.setText(nome_cdl);
+                            titoloTesiTextView.setText(titolo);
 
-                            // Usa il valore di cicloCdl e titolo come necessario
-                        } else {
-                            // Gestisci il caso in cui la tesi sia null
                         }
+                        Log.d("ciclo+titolo", cicloCdl + titolo);
+
+
+                        // Usa il valore di cicloCdl e titolo come necessario
                     } else {
-                        //ControlInput.showToast(context, "Errore nel caricamento della tesi");
+                        // Gestisci il caso in cui la tesi sia null
                     }
-                });
+                } else {
+                    //ControlInput.showToast(context, "Errore nel caricamento della tesi");
+                }
+            });
 
 
+            taskButton.setOnClickListener(view1 -> mNav.navigate(R.id.action_dettagli_tesista_to_task_studente, args));
 
-                taskButton.setOnClickListener(view1 -> mNav.navigate(R.id.action_dettagli_tesista_to_task_studente, args));
-
-                deleteButton.setOnClickListener(view1 -> {
-                    showConfirmationDialog(studente,utente);
-                });
+            deleteButton.setOnClickListener(view1 -> {
+                showConfirmationDialog(studenteModelView, utenteModelView);
+            });
 
 
-            } else {
-                utente = null;
-            }
         }
-
-
-
-
-
-
     }
-
-
 
 
     /**
@@ -288,11 +293,11 @@ public class DettagliTesistaFragment extends Fragment {
      * @param studente studente presente nella card
      * @param utente utente associato allo studente
      */
-    private void showConfirmationDialog(Studente studente, Utente utente) {
+    private void showConfirmationDialog(StudenteModelView studente, UtenteModelView utente) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Conferma eliminazione");
 
-        String messageText = "Sei sicuro di voler eliminare il tesista <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + "con matricola" + " " + "<b>" + studente.getMatricola() + "</b>?";
+        String messageText = R.string.confEliminazioneTesista + " <b>" + " " + utente.getNome() + " " + utente.getCognome() + " </b>" + R.string.conMatricola + " " + "<b>" + matricola + "</b>?";
 
         // Crea un oggetto SpannableString utilizzando Html.fromHtml per poter utilizzare la formattazione HTML
         // Il testo è ora in grassetto
@@ -302,7 +307,7 @@ public class DettagliTesistaFragment extends Fragment {
 
         builder.setPositiveButton("Conferma", (dialog, which) -> {
             // Chiama il metodo per eliminare il record dalla tabella studente_tesi
-            deleteStudenteTesi(studente.getId_studente());
+            deleteStudenteTesi(studente.findStudente(utente.getIdUtente(email)));
 
             // Chiudi il popup
             dialog.dismiss();

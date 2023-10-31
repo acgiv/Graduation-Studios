@@ -1,6 +1,7 @@
 package com.laureapp.ui.card.Segnalazioni;
 
 import static com.laureapp.ui.controlli.ControlInput.showToast;
+import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
 import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
@@ -37,6 +38,8 @@ import com.laureapp.ui.roomdb.entity.Segnalazione;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -69,7 +72,10 @@ public class SegnalazioniFragment extends Fragment {
 
     private static List<Segnalazione> segnalazioniList = new ArrayList<>();
     ImageButton addButton;
-
+    StudenteModelView studenteView = new StudenteModelView(context);
+    UtenteModelView utenteView = new UtenteModelView(context);
+    Long id_utente;
+    String inputData;
 
 
 
@@ -87,13 +93,7 @@ public class SegnalazioniFragment extends Fragment {
             ruolo = args.getString("ruolo");
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
-            utente = args.getSerializable("Utente", Utente.class);
-
-
-        }
-        loadStudentForUserId(utente.getId_utente());
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -120,16 +120,39 @@ public class SegnalazioniFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mNav = Navigation.findNavController(view);
-        adapter = new SegnalazioniAdapter(context, segnalazioniList,mNav,args);
-        if(StringUtils.equals("Professore", args.getString("ruolo"))) {
-            addButton.setVisibility(View.GONE);
-        } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
-            addButton.setVisibility(View.VISIBLE);
-            addButton.setOnClickListener(view1 ->
-                    showInputDialog()
-            );
+        if(args != null) {
+            adapter = new SegnalazioniAdapter(context, segnalazioniList, mNav, args);
+            if (StringUtils.equals("Professore", args.getString("ruolo"))) {
+                String email = args.getString("emailStudente");
+
+                id_utente = utenteView.getIdUtente(email);
+                loadStudentForUserId(id_utente);
+                addButton.setVisibility(View.VISIBLE);
+                addButton.setOnClickListener(view1 ->
+                        showInputDialog()
+                );
+                addButton.setVisibility(View.GONE);
+            } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
+                String email = getEmailFromSharedPreferences(context);
+
+                id_utente = utenteView.getIdUtente(email);
+                loadStudentForUserId(id_utente);
+                addButton.setVisibility(View.VISIBLE);
+                addButton.setOnClickListener(view1 ->
+                        showInputDialog()
+                );;
+
+                id_utente = utenteView.getIdUtente(email);
+                loadStudentForUserId(id_utente);
+                addButton.setVisibility(View.VISIBLE);
+                addButton.setOnClickListener(view1 ->
+                        showInputDialog()
+                );
+            }
+            listView.setAdapter(adapter);
         }
-        listView.setAdapter(adapter);
+
+
 
 
     }
@@ -137,7 +160,7 @@ public class SegnalazioniFragment extends Fragment {
 
     public void showInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Nuova segnalazione");
+        builder.setTitle(R.string.nuovaSegnalazione);
 
         // Includi il layout XML personalizzato
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_segn_popup, null);
@@ -148,12 +171,12 @@ public class SegnalazioniFragment extends Fragment {
 
         // Aggiungi un ascoltatore personalizzato al pulsante OK
         builder.setPositiveButton("Ok", (dialog, which) -> {
-            String inputData = editTextTitolo.getText().toString();
+            inputData = editTextTitolo.getText().toString();
 
 
             //Aggiungo la task a Firestore in base all'utente loggato
-            addSegnalazioniToFirestoreLast(utente.getId_utente(), inputData);
-            Log.d("id_utente_lista", utente.getId_utente().toString());
+            addSegnalazioniToFirestoreLast(id_utente, inputData);
+            //Log.d("id_utente_lista", utente.getId_utente().toString());
         });
 
         // Imposta un ascoltatore per il pulsante Annulla
@@ -262,7 +285,7 @@ public class SegnalazioniFragment extends Fragment {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot doc : task.getResult()) {
                             Segnalazione segnalazione = new Segnalazione();
-                            segnalazione.setIdSegnalazione(doc.getLong("id_segnalazione"));
+                            segnalazione.setId_segnalazione(doc.getLong("id_segnalazione"));
                             segnalazione.setId_studente_tesi(doc.getLong("id_studente_tesi"));
                             segnalazione.setTitolo(doc.getString("titolo"));
 
@@ -329,8 +352,6 @@ public class SegnalazioniFragment extends Fragment {
         loadSegnalazioniById(id_stud_tesi_in_studente_tesi).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 segnalazioniList.clear();
-                //Mi stampa due volte l'id_studenteTesi, prima quello corretto e poi 4
-                Log.d("id_studente_tesi", id_stud_tesi_in_studente_tesi.toString() + task.getResult());
                 addSegnalazioniToList(task.getResult());
             } else {
                 segnalazioniList.clear();
@@ -425,7 +446,7 @@ public class SegnalazioniFragment extends Fragment {
     private void addSegnalazioneToList(Long id_segnalazione, String inputData, Long id_studente_tesi) {
 
         Segnalazione segnalazione = new Segnalazione();
-        segnalazione.setIdSegnalazione(id_segnalazione);
+        segnalazione.setId_segnalazione(id_segnalazione);
         segnalazione.setTitolo(inputData);
         segnalazione.setId_studente_tesi(id_studente_tesi);
 

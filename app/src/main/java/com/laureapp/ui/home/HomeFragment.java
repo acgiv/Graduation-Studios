@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,10 +56,12 @@ public class HomeFragment extends Fragment {
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                args.putSerializable("Utente", args.getSerializable("Utente", Utente.class));
+                args.putSerializable("Utente", (Utente) args.getSerializable("Utente"));
             }
 
         }
+
+
 
     }
 
@@ -80,7 +85,7 @@ public class HomeFragment extends Fragment {
         TextView taskTextView = view.findViewById(R.id.taskTextView);
 
         if (StringUtils.equals("Professore", ruolo)) {
-            taskTextView.setText("Richieste");
+            taskTextView.setText(R.string.richieste);
         }
 
         CardTesi.setOnClickListener(view1 -> {

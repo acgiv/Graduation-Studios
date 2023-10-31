@@ -48,6 +48,12 @@ public class UtenteModelView{
     public String getEmail(Long id_utente){
         return utenteRepository.getEmail(id_utente);
     }
+    public String getFacolta(Long id_utente){
+        return utenteRepository.getFacolta(id_utente);
+    }
+    public String getNomeCdl(Long id_utente){
+        return utenteRepository.getNomeCdl(id_utente);
+    }
 
     public Utente is_exist_email_password(String email, String password){
         Utente utente = utenteRepository.is_exist_email_password(email, password);

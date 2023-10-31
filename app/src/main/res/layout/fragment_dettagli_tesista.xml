@@ -208,6 +208,17 @@
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
             <!-- ... Card Dati del corso di laurea e della tesi ... -->
+            <ScrollView
+                android:id="@+id/cardScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:layout_column="0"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center"
+                android:layout_margin="12dp"
+                android:layout_marginTop="200dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewCdlTesi"
@@ -227,6 +238,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
 
                     <View
                         android:layout_width="match_parent"
@@ -371,10 +383,11 @@
                     <!--Campo titolo tesi-->
                     <TextView
                         android:id="@+id/titolo_tesi_tesista"
-                        android:layout_width="348dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
+                        android:layout_gravity="left"
+                        android:layout_marginStart="23dp"
+
                         android:layout_marginTop="119dp"
                         android:text="@string/titolo_tesi_task_tesista"
                         android:textColor="@color/color_primary"
@@ -385,11 +398,12 @@
                     <!--Campo inserisci titolo tesi-->
                     <TextView
                         android:id="@+id/insert_titolo_tesi_tesista"
-                        android:layout_width="348dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="105dp"
+                        android:layout_marginStart="80dp"
                         android:layout_marginTop="119dp"
+                        app:layout_constraintStart_toEndOf="@+id/titolo_tesi_tesista"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         tools:visibility="visible" />
@@ -397,6 +411,7 @@
 
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
+            </ScrollView>
 
 
         </GridLayout>

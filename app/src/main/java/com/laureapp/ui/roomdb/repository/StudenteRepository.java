@@ -58,6 +58,20 @@ public class StudenteRepository {
         }
     }
 
+    public Long getMatricola(Long id_studente){
+        CompletableFuture<Long> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            Long matricola = roomDbSqlLite.studenteDao().getMatricola(id_studente);
+            future.complete(matricola);
+        });
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return -1L;
+        }
+    }
+
     public Studente findAllById(Long id){
         CompletableFuture<Studente> future = new CompletableFuture<>();
         executor.execute(() -> {

@@ -22,11 +22,14 @@ import androidx.navigation.NavController;
 
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.TaskStudente;
+import com.laureapp.ui.roomdb.entity.Tesi;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 
 public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
@@ -34,6 +37,9 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
     private final Context context;
     String ruolo;
     Bundle args;
+    private ArrayList<TaskStudente> taskList;
+
+
 
 
 
@@ -41,8 +47,9 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
      * @param context  si riferisce al contesto in cui viene utilizzato
      * @param taskList corrisponde alla lista di task da passare
      */
-    public TaskStudenteAdapter(Context context, List<TaskStudente> taskList, NavController navController, Bundle args) {
+    public TaskStudenteAdapter(Context context, ArrayList<TaskStudente> taskList, NavController navController, Bundle args) {
         super(context,0,taskList);
+        this.taskList = taskList;
         this.context = context;
         this.mNav = navController;  // Inizializza il NavController
         this.args = args;
@@ -73,21 +80,21 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
         ImageView greenDot = itemView.findViewById(R.id.green_status_dot);
 
 
-        TaskStudente task = getItem(position);
+        final TaskStudente selectedTask = taskList.get(position);
 
 
-        if (task != null) {
-            taskTextView.setText(task.getTitolo());
+        if (selectedTask != null) {
+            taskTextView.setText(selectedTask.getTitolo());
 
-            if(Objects.equals(task.getStato(), "Non iniziato")){
+            if(Objects.equals(selectedTask.getStato(), "Non iniziato") || Objects.equals(selectedTask.getStato(), "Not Started")){
                 redDot.setVisibility(View.VISIBLE);
                 orangeDot.setVisibility(View.GONE);
                 greenDot.setVisibility(View.GONE);
-            } else if (Objects.equals(task.getStato(), "In corso")) {
+            } else if (Objects.equals(selectedTask.getStato(), "In corso") || Objects.equals(selectedTask.getStato(), "In Progress") ) {
                 redDot.setVisibility(View.GONE);
                 orangeDot.setVisibility(View.VISIBLE);
                 greenDot.setVisibility(View.GONE);
-            } else if (Objects.equals(task.getStato(), "Completato")) {
+            } else if (Objects.equals(selectedTask.getStato(), "Completato") || Objects.equals(selectedTask.getStato(), "Completed")) {
                 redDot.setVisibility(View.GONE);
                 orangeDot.setVisibility(View.GONE);
                 greenDot.setVisibility(View.VISIBLE);
@@ -99,7 +106,7 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
             }else if(StringUtils.equals("Professore", args.getString("ruolo"))){
                 deleteTaskImageButton.setOnClickListener(view -> {
                     //Titolo della task
-                    String titolo = task.getTitolo();
+                    String titolo = selectedTask.getTitolo();
                     showConfirmationDialog(titolo, position);
                 });
             }
@@ -110,18 +117,24 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
         }
         // Gestisci il clic sull'elemento della lista
         itemView.setOnClickListener(v -> {
-            TaskStudente selectedTask = getItem(position);
+
             if (selectedTask != null) {
+                if (StringUtils.equals("Professore", args.getString("ruolo"))) {
 
-                if(StringUtils.equals("Studente", args.getString("ruolo"))){
-                    args.putSerializable("SelectedTask", selectedTask);
-                    mNav.navigate(R.id.action_fragment_taskStudenteFragment_to_dettagli_task, args);
-
-                }else if(StringUtils.equals("Professore", args.getString("ruolo"))) {
                     // Utilizza la NavHostController per navigare al dettaglio del task
                     args.putSerializable("SelectedTask", selectedTask);
+
+
                     mNav.navigate(R.id.action_task_to_dettagli_task, args);
+                } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
+
+                    // Utilizza la NavHostController per navigare al dettaglio del task
+                    args.putSerializable("SelectedTask", selectedTask);
+
+
+                    mNav.navigate(R.id.action_fragment_taskStudenteFragment_to_dettagli_task, args);
                 }
+
             }
         });
 

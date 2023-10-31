@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Richiesta Num:"
+        android:text="@string/richiesta_num"
         android:textSize="20sp"
         android:textColor="#000000"
         android:layout_marginStart="16dp"
@@ -22,7 +22,6 @@
         android:layout_gravity="left"
         android:layout_marginStart="160dp"
         android:layout_marginTop="-27dp"
-        android:text="Richiesta Num:"
         android:textColor="#000000"
         android:textSize="20sp"
 
@@ -31,7 +30,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tesi:"
+        android:text="@string/tesiRichiesta"
         android:textSize="20sp"
         android:textColor="#000000"
         android:layout_marginStart="16dp"
@@ -42,7 +41,6 @@
         android:id="@+id/titoloTesi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tesi"
         android:textSize="20sp"
         android:textColor="#000000"
         android:layout_marginStart="60dp"

@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">LaureApp</string>
     <string name="name">Name</string>
-    <string name="cognome">Last Name</string>
+    <string name="cognome">Surname</string>
     <string name="email">Email</string>
     <string name="ruolo">Role: </string>
     <string name="professore">Professor</string>
@@ -20,7 +19,7 @@
     <string name="non_sei_ancora_registrato">Not Registered Yet?</string>
     <string name="logout">Logout</string>
     <string name="Impostazione">Settings</string>
-    <string name="utente">User</string>
+    <string name="utente">user</string>
     <string name="edit_icon">&#004070;</string>
     <string name="close_nav" />
     <string name="open_nav" />
@@ -28,11 +27,11 @@
     <string name="invio">Send</string>
 
     <string name="home">Home</string>
-    <string name="tesi">Thesis</string>
+    <string name="tesi">Thesis:</string>
     <string name="classifica">Ranking</string>
     <string name="social">Social</string>
-    <string name="tesi_description">Thesis Description</string>
-    <string name="chat_description">Chat</string>
+    <string name="tesi_description" translatable="false">thesis_description</string>
+    <string name="chat_description">chat</string>
     <string name="classifica_description" />
     <string name="social_description" />
     <string name="richieste_description" />
@@ -43,25 +42,25 @@
     <string name="tesisti2">Thesists</string>
 
     <!-- Strings related to error input -->
-    <string name="errore_stringa">Field {campo} should contain only characters.</string>
+    <string name="errore_stringa">Field {field} must contain only characters.</string>
     <string name="errore_email">Please enter a valid email address.</string>
-    <string name="errore_campo_vuoto">Field {campo} is required and cannot be empty!</string>
-    <string name="errore_matricola">Field {campo} should contain 6 numeric digits.</string>
-    <string name="errore_matricola_duplicate">A {campo} associated with this matriculation already exists.</string>
-    <string name="errore_media">Field {campo} should contain 2 numeric digits between 18 and 30.</string>
-    <string name="errore_scelta">The entered field is not in the selection.</string>
-    <string name="password_not_safe_error">The password does not meet security requirements</string>
+    <string name="errore_campo_vuoto">Field {field} is a required field!</string>
+    <string name="errore_matricola">Field {field} must contain 6 numeric digits.</string>
+    <string name="errore_matricola_duplicate">There is already a {field} associated with this matriculation number.</string>
+    <string name="errore_media">Field {field} must contain 2 numeric digits between 18 and 30</string>
+    <string name="errore_scelta">The entered field is not in the choice.</string>
+    <string name="password_not_safe_error">The password does not meet the security requirements.</string>
     <string name="non_equivalent_passwords">Passwords do not match</string>
-    <string name="errore_autenticazione">Authentication error. Please make sure the email and password are correct.</string>
+    <string name="errore_autenticazione">Authentication error. Make sure the email and password are correct.</string>
 
     <!-- Strings related to Change Password Page  -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="matricola">Matriculation</string>
+    <string name="matricola">Matriculation Number:</string>
     <string name="inserisci_l_email_di_registrazione">Enter the registration email</string>
     <string name="avanti">Next</string>
     <string name="facolta">Faculty</string>
-    <string name="media">GPA</string>
-    <string name="esami_mancanti">Missing Exams</string>
+    <string name="media">Average</string>
+    <string name="esami_mancanti">Missing Exams:</string>
     <string name="corsi">Degree Course</string>
     <string name="impostaLingua">Select Language</string>
     <string name="italiano">Italian</string>
@@ -86,15 +85,13 @@
 
     <string-array name="OrdinaPer">
         <item>Views</item>
-        <item>See</item>
-        <item>Itps</item>
-        <item>Mathematics</item>
-        <item>Computer Science</item>
+        <item>Average</item>
+        <item>Missing Exams</item>
+        <item>Deadlines</item>
     </string-array>
 
-    <string name="title_activity_loading_page">Loading Page Activity</string>
-    <string name="title_activity_login">Login Activity</string>
-
+    <string name="title_activity_loading_page">Loading Page</string>
+    <string name="title_activity_login">Login</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
@@ -102,51 +99,102 @@
     <string name="previous">Previous</string>
     <string name="Messaggi" />
     <string name="messaggi">Messages</string>
-    <string name="task">Task</string>
+    <string name="task">Tasks</string>
     <string name="arrow_forward_icon">Arrow Forward Icon</string>
     <string name="edit_password_icon">Edit Password Icon</string>
-    <string name="taskk">Task</string>
+    <string name="taskk">Tasks</string>
     <string name="classificaTesi">Ranking</string>
     <string name="le_mie_tesi">My Theses</string>
-    <string name="elenco_tesi">Thesis List</string>
+    <string name="elenco_tesi">List of Theses</string>
     <string name="student_name_placeholder">%1$s %2$s</string>
     <string name="add_icon_description">Add Icon</string>
     <string name="elimina">Delete</string>
     <string name="salva">Save</string>
-    <string name="ricevimento_1">Meeting 1</string>
+    <string name="ricevimento_1">Reception 1</string>
     <string name="argomento">Topic 1</string>
     <string name="data_ricevimento">Date 1</string>
-    <string name="pulsante_task">Task</string>
+    <string name="pulsante_task">Tasks</string>
     <string name="nome_tesista_task">Name:</string>
-    <string name="cognome_task_tesista">Last Name:</string>
-    <string name="matricola_task">Matriculation:</string>
+    <string name="cognome_task_tesista">Surname:</string>
+    <string name="matricola_task">Matriculation Number:</string>
     <string name="facolta_task_tesista">Faculty:</string>
     <string name="cdl_task_tesista">Degree Course</string>
     <string name="ciclo_cdl_task_tesista">Degree Course Cycle:</string>
     <string name="cdl_nome_task_tesista">Degree Course:</string>
     <string name="titolo_tesi_task_tesista">Thesis Title:</string>
     <string name="anagrafica_task_tesista">Profile</string>
-    <string name="titolo_dettagli_task">Task</string>
+    <string name="titolo_dettagli_task">Tasks</string>
     <string name="stato_task">Status</string>
     <string name="default_stato_task">Not Started</string>
     <string name="data_inizio_dettagli_task">Start Date</string>
     <string name="hint_data_inizio">Start</string>
     <string name="hint_data_scadenza">Deadline</string>
     <string name="hint_data_scadenza_button">Deadline Date</string>
-    <string name="text_ricevimenti_button">Meetings</string>
+    <string name="text_ricevimenti_button">Receptions</string>
     <string name="text_dettagli">Details</string>
-    <string name="dettagli_task_label">Task</string>
-    <string name="delete_icon">Delete Icon</string>
-    <string name="intestazione_colonna_ricevimento">Meeting</string>
+    <string name="dettagli_task_label">Tasks</string>
+    <string name="delete_icon">Icon for Deleting an Item</string>
+    <string name="intestazione_colonna_ricevimento">Reception</string>
     <string name="intestazione_colonna_argomento">Topic</string>
     <string name="intestazione_colonna_data">Date</string>
-    <string name="error_scadenza_inizio">Deadline date is earlier than the start date.</string>
-    <string name="error_inizio_scadenza">Start date is later than the deadline.</string>
-    <string name="errore_email_esistente">An account associated with this email already exists.</string>
-    <string name="ElencoTesi">Thesis List</string>
+    <string name="error_scadenza_inizio">Deadline date before start date.</string>
+    <string name="error_inizio_scadenza">Start date after deadline</string>
+    <string name="errore_email_esistente">There is already a user associated with this email.</string>
+    <string name="ElencoTesi">List of Theses</string>
+    <string name="titolo">Title</string>
+    <string name="aggiungi">Add</string>
+    <string name="tesista">Thesist</string>
+    <string name="titolo_tesi">Thesis Title</string>
+    <string name="richiesta">Request</string>
+    <string name="segnalazioni">Reports</string>
+    <string name="titolo_della_tesi">Thesis Title</string>
+    <string name="listaTesi">Thesis List</string>
+    <string name="vincoli">Constraints</string>
+    <string name="info">Information</string>
+    <string name="titoloTesiProfessore">Title:</string>
+    <string name="tipologia">Type:</string>
+    <string name="data_pubblicazione">Publication Date:</string>
+    <string name="ciclo_cdl">Degree Course Cycle:</string>
+    <string name="abstractTesi">Abstract:</string>
+    <string name="tempistiche">Deadlines:</string>
+    <string name="media_voti">Average Ratings:</string>
+    <string name="skill">Skills:</string>
+    <string name="tesistiSegnalazioni">Thesists - Reports</string>
+    <string name="listaSegnalazioni">Reports List</string>
+    <string name="richiesta_num">Request Number:</string>
+    <string name="tesiRichiesta">Thesis:</string>
+    <string name="TaskStudente">Student Tasks</string>
+    <string name="Profilo">Profile</string>
+    <string name="Tesisti">Thesists</string>
+    <string name="Tesista">Thesist</string>
+    <string name="dettagliTask">Task Details</string>
+    <string name="Ricevimentitask">Task Receptions</string>
+    <string name="DettaglioTesi">Thesis Details</string>
+    <string name="RichiestediTesi">Thesis Requests</string>
+    <string name="DettaglioRichiestaTesi">Request Details</string>
+    <string name="richiesta_tesi">Thesis Request</string>
+    <string name="info_studente">Student Information</string>
+    <string name="accetta">Accept</string>
+    <string name="rifiuta">Reject</string>
+    <string name="inizio">Start</string>
+    <string name="tesiHome">Thesis</string>
+    <string name="descrizione">Description:</string>
+    <string name="pubblicata_il">Published on:</string>
+    <string name="vincoliTesi">Thesis Constraints</string>
+    <string name="tempistiche_in_mesi">Timelines (in Months):</string>
+    <string name="capacit_e_skill">Abilities and Skills:</string>
+    <string name="richiedi_tesi">Request Thesis</string>
+    <string name="nuovaSegnalazione">New Report</string>
+    <string name="confEliminazioneTesista">Are you sure you want to delete the student</string>
+    <string name="conMatricola">with student ID</string>
+    <string name="confermaSalataggio">Confirm Save</string>
+    <string name="salvaModificheConf">Are you sure you want to save the changes?</string>
+    <string name="conferma">Confirm</string>
+    <string name="annulla">Cancel</string>
+    <string name="stato_task_in_corso">In progress</string>
+    <string name="stato_task_completato">Completed</string>
 
-    <style name="CalendarDateText">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#000000</item>
-    </style>
+
+
+
 </resources>

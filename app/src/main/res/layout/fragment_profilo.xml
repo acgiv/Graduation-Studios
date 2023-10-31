@@ -48,14 +48,21 @@
                 app:cardCornerRadius="15dp"
                 app:cardElevation="8dp">
 
+
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="367dp"
+                        android:layout_height="wrap_content">
+
 
                         <LinearLayout
                             android:id="@+id/constraintLayout"
@@ -273,8 +280,13 @@
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.core.widget.NestedScrollView>
+
                 </FrameLayout>
+
+
             </androidx.cardview.widget.CardView>
+
             <!-- ... Card Dati del corso di laurea ... -->
 
             <androidx.cardview.widget.CardView
@@ -296,6 +308,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -583,6 +598,7 @@
                             app:layout_constraintGuide_begin="343dp" />
                         <!--Icona per vedere i dettagli del corso del profilo studente -->
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.core.widget.NestedScrollView>
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
 
@@ -767,10 +783,14 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             </FrameLayout>
+
 
         </androidx.cardview.widget.CardView>
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.core.widget.NestedScrollView>

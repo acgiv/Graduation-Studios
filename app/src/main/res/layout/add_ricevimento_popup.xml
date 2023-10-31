@@ -28,7 +28,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         android:background="@drawable/input_color"
-        android:hint="Data ricevimento"
+        android:hint="@string/data_ricevimento"
         android:paddingStart="16dp"
         android:textAlignment="viewStart"
         android:textColor="@color/color_primary"

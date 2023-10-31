@@ -160,7 +160,7 @@ public class SegnalazioniFragment extends Fragment {
 
     public void showInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Nuova segnalazione");
+        builder.setTitle(R.string.nuovaSegnalazione);
 
         // Includi il layout XML personalizzato
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_segn_popup, null);

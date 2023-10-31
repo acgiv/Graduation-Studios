@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/addTesiProfessorePopup"
+    android:id="@+id/addVincoliProfessorePopup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,47 +11,49 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Inserisci una Tesi"
+        android:text="Inserisci i Vincoli della tesi"
         android:textColor="@color/color_primary"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:ignore="InefficientWeight" />
 
     <EditText
-        android:id="@+id/editTextTitoloTesiProfessore"
+        android:id="@+id/editTextEsamiVincoloTesi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Titolo"
-        android:inputType="text" />
+        android:hint="Esami mancanti necessari"
+        android:inputType="number" />
 
     <EditText
-        android:id="@+id/editTextTipologiaTesiProfessore"
+        android:id="@+id/editTextMediaVincoloTesi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tipologia"
-        android:inputType="text" />
+        android:hint="Media"
+        android:inputType="number" />
 
     <EditText
-        android:id="@+id/editTextDataPubblicazioneTesiProfessore"
+        android:id="@+id/editTextTempisticheVincoloTesi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Data pubblicazione"
-        android:inputType="none"
-        android:focusable="false" />
+        android:hint="Tempistiche (In mesi)"
+        android:inputType="number" />
 
     <EditText
-        android:id="@+id/editTextCicloCdlTesiProfessore"
+        android:id="@+id/editTextSkillVincoloTesi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Ciclo CDL"
+        android:hint="Skill aggiuntive"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/editTextAbstractTesiProfessore"
+    <Spinner
+        android:id="@+id/selectProfessore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Abstract"
-        android:inputType="text" />
+        android:background="@android:drawable/btn_dropdown"
+        android:minHeight="48dp"
+        android:spinnerMode="dropdown"
+        tools:ignore="LabelFor"
+        android:layout_marginBottom="16dp" />
 
     <LinearLayout
         android:id="@+id/buttonLayout"
@@ -60,11 +62,11 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/buttonAvantiTesiProfessore"
+            android:id="@+id/buttonConfermaVincoloTesi"
             android:layout_width="10dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:text="Avanti" />
+            android:text="Crea" />
 
 
         <Space

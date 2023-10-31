@@ -240,5 +240,6 @@
     <string name="salvaModificheConf">Sei sicuro di voler salvare le modifiche?</string>
     <string name="conferma">Conferma</string>
     <string name="annulla">Annulla</string>
+    <string name="MaterialeTesi">Materiale Tesi</string>
 
 </resources>

@@ -80,6 +80,7 @@ public class TesiProfessore implements Serializable {
         return "TesiProfessore{" +
                 "id=" + id_tesi_professore +
                 ", id_professore=" + id_professore +
+                ", id_tesi= " + id_tesi +
                 ", ruolo_professore='" + ruolo_professore + '\'' +
                 '}';
     }

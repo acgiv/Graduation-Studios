@@ -203,7 +203,7 @@ public class QueryFirestore {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
         segnRef
-                .orderBy("id_segnalazione", Query.Direction.ASCENDING)
+                .orderBy("id_segnalazione", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {

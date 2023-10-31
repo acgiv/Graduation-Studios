@@ -623,7 +623,7 @@ public class TaskStudenteFragment extends Fragment {
                     taskData.put("titolo", inputData);
                     taskData.put("data_inizio", startDate);
                     taskData.put("data_scadenza", dueDate);
-                    taskData.put("stato", "Non iniziato");
+                    taskData.put("stato", R.string.default_stato_task);
                     taskData.put("id_studente_tesi", id_studente_tesi);
 
                     // Supponendo che 'taskRef' sia un oggetto valido di tipo CollectionReference
@@ -651,7 +651,7 @@ public class TaskStudenteFragment extends Fragment {
         taskStudente.setTitolo(inputData);
         taskStudente.setData_inizio(startDate);
         taskStudente.setData_scadenza(dueDate);
-        taskStudente.setStato("Non iniziato");
+        taskStudente.setStato(String.valueOf(R.string.default_stato_task));
         taskStudente.setId_studente_tesi(id_studente_tesi);
 
         // Aggiungi taskTesi alla lista

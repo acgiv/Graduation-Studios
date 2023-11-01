@@ -131,7 +131,7 @@ public class LoadingPageActivity extends AppCompatActivity {
                                 Professore professore = new Professore(
                                         Long.valueOf(String.valueOf(userData.get("id_professore"))),
                                         Long.valueOf(String.valueOf(userData.get("id_utente"))),
-                                        String.valueOf(userData.get("matricola"))
+                                        Long.valueOf(String.valueOf(userData.get("matricola")))
                                 );
                                pr_view.insertProfessore(professore);
 

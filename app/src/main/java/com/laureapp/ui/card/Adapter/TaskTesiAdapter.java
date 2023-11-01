@@ -6,16 +6,12 @@ import static com.laureapp.ui.card.Task.TaskTesiFragment.deleteTask;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -62,7 +58,7 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
      *                    usata per chiamare operazioni a livello applicazione launching activities, broadcasting e receiving intents
      * @return la view con la lista aggiornata
      */
-    @NonNull
+    /*@NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View itemView = convertView;
@@ -139,7 +135,7 @@ public class TaskTesiAdapter extends ArrayAdapter<TaskTesi> {
         alertDialog.show();
     }
 
-
+*/
 }
 
 

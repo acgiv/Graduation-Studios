@@ -56,7 +56,6 @@ public class PasswordRecoveryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         auth = FirebaseAuth.getInstance();
         mNav = Navigation.findNavController(view);
-
         binding.btnSendEmail.setOnClickListener(view1 -> {
             String email = StringUtils.trim(Objects.requireNonNull(binding.emailRegister.getText()).toString());
             if(!StringUtils.isEmpty(email)) {
@@ -66,18 +65,17 @@ public class PasswordRecoveryFragment extends Fragment {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     // Email di recupero inviata con successo
-                                    ControlInput.set_error(binding.emailInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height, getResources());
+                                    ControlInput.set_error(binding.emailInput, false, "", R.color.color_primary, context, R.dimen.input_text_layout_height);
                                     mNav.navigate(R.id.action_passwordRecoveryFragment_to_loginFragment);
                                 } else {
                                     String error_message = "Errore nell'invio dell'email di recupero";
-                                    ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
+                                    ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email);
                                 }
                             }
                         });
-
             }else{
                 String error_message = getString(R.string.errore_campo_vuoto).replace("{campo}", getString(R.string.email));
-                ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email, getResources());
+                ControlInput.set_error(binding.emailInput, true, error_message, error_color, context, R.dimen.input_text_layout_height_error_email);
             }
         });
 

@@ -7,7 +7,7 @@ import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -33,15 +32,14 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
+import com.laureapp.databinding.FragmentTaskBinding;
 import com.laureapp.ui.card.Adapter.TaskTesiAdapter;
-import com.laureapp.ui.controlli.ControlInput;
 import com.laureapp.ui.roomdb.QueryFirestore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.TaskTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
-import com.laureapp.databinding.FragmentTaskBinding;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -63,7 +61,7 @@ public class TaskTesiFragment extends Fragment {
 
     static Context context;
 
-    FragmentTaskBinding binding;
+    com.laureapp.databinding.FragmentTaskBinding binding;
 
 
 
@@ -100,7 +98,9 @@ public class TaskTesiFragment extends Fragment {
 
         if(args != null) {
 
-            utente = args.getSerializable("Utente", Utente.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                utente = args.getSerializable("Utente", Utente.class);
+            }
             //Carico i dati delle task in base all'utente loggato
         }
         // Altri codici del tuo fragment
@@ -204,11 +204,12 @@ public class TaskTesiFragment extends Fragment {
                     }
 
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                utente = args.getSerializable("Utente", Utente.class);
+                addTaskToFirestoreLast(utente.getId_utente(), inputData, startDate, dueDate);
 
-
-                        utente = args.getSerializable("Utente", Utente.class);
-                        //Aggiungo la task a Firestore in base all'utente loggato
-                        addTaskToFirestoreLast(utente.getId_utente(), inputData, startDate, dueDate);
+            }
+            //Aggiungo la task a Firestore in base all'utente loggato
                 });
 
 
@@ -642,7 +643,7 @@ public class TaskTesiFragment extends Fragment {
                     taskData.put("titolo", inputData);
                     taskData.put("data_inizio", startDate);
                     taskData.put("data_scadenza", dueDate);
-                    taskData.put("stato", "Non iniziato");
+                    taskData.put("stato", R.string.default_stato_task);
                     taskData.put("id_tesi", id_tesi);
 
                     // Supponendo che 'taskRef' sia un oggetto valido di tipo CollectionReference
@@ -670,7 +671,7 @@ public class TaskTesiFragment extends Fragment {
         taskTesi.setTitolo(inputData);
         taskTesi.setData_inizio(startDate);
         taskTesi.setData_scadenza(dueDate);
-        taskTesi.setStato("Non iniziato");
+        taskTesi.setStato(String.valueOf(R.string.default_stato_task));
         taskTesi.setId_tesi(id_tesi);
 
         // Aggiungi taskTesi alla lista

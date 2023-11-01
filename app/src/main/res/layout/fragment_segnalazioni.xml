@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- Lista di segnalazioni -->
+    <ListView
+        android:id="@+id/listSegnalazioniView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/add_segnalazioni_ImageButton"
+        android:clickable="true"
+        android:focusable="true"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Pulsante di aggiunta -->
+    <ImageButton
+        android:id="@+id/add_segnalazioni_ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/add_icon_description"
+        android:src="@drawable/baseline_add_circle_48"
+        android:visibility="visible"
+        android:layout_marginBottom="?android:attr/actionBarSize" />
+</RelativeLayout>

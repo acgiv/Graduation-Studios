@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.card.TesiProfessore.ListaTesiProfessoreFragment">
+
+    <!-- Lista di nomi -->
+
+    <ListView
+        android:id="@+id/listTesiProfessoreView"
+        android:layout_width="match_parent"
+        android:layout_height="585dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="8dp"/>
+
+    <!--Icona per aggiungere una tesi -->
+
+    <ImageButton
+        android:id="@+id/addTesiProfessore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/add_icon_description"
+        android:src="@drawable/baseline_add_circle_48"
+        android:visibility="visible">
+
+    </ImageButton>
+
+
+</RelativeLayout>

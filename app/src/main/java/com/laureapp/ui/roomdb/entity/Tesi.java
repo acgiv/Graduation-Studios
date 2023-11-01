@@ -1,11 +1,19 @@
 package com.laureapp.ui.roomdb.entity;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -23,8 +31,6 @@ public class Tesi implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_tesi")
     private Long id_tesi;
-
-
     @ColumnInfo(name = "id_vincolo")
     private Long id_vincolo;
 
@@ -43,6 +49,9 @@ public class Tesi implements Serializable {
 
     @ColumnInfo(name="ciclo_cdl")
     private String ciclo_cdl;
+
+    @ColumnInfo(name="visualizzazioni")
+    private Long visualizzazioni;
 
     //Getter e setter
     public Long getId_tesi() {
@@ -100,6 +109,10 @@ public class Tesi implements Serializable {
         this.ciclo_cdl = ciclo_cdl;
     }
 
+    public Long getVisualizzazioni(){ return visualizzazioni;}
+
+    public void setVisualizzazioni(Long visualizzazioni){this.visualizzazioni = visualizzazioni;}
+
 
     public Map<String, Object> getTesiMap() {
         Map<String, Object> tesiMap = new HashMap<>();
@@ -110,6 +123,7 @@ public class Tesi implements Serializable {
         tesiMap.put("abstract_tesi", this.abstract_tesi);
         tesiMap.put("data_pubblicazione", this.data_pubblicazione);
         tesiMap.put("ciclo_cdl", this.ciclo_cdl);
+        tesiMap.put("visualizzazioni",this.visualizzazioni);
 
 
 
@@ -126,10 +140,14 @@ public class Tesi implements Serializable {
                 ", Tipologia='" + tipologia + '\'' +
                 ", Abstract='" + abstract_tesi + '\'' +
                 ", data_publicazione=" + data_pubblicazione + '\''+
-                ", ciclo_cdl=" + ciclo_cdl +
+                ", ciclo_cdl=" + ciclo_cdl+ '\''+
+                ", visualizzazioni="+visualizzazioni+
 
                 '}';
     }
+
+
+
 
 
 }

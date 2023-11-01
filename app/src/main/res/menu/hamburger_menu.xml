@@ -5,10 +5,6 @@
             android:id="@+id/itemSettings"
             android:title="@string/Impostazione"
             android:icon="@drawable/baseline_settings_24" />
-        <item
-            android:id="@+id/itemProfile"
-            android:title="@string/utente"
-            android:icon="@drawable/baseline_person_24" />
     </group>
 <!--
     <group android:id="@+id/profileOption" android:checkableBehavior="single">

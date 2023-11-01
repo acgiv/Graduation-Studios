@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profiloLayout"
@@ -7,19 +8,13 @@
     android:layout_height="match_parent"
     android:rotation="0"
     android:visibility="visible"
-    tools:context=".ui.profilo.ProfiloStudenteFragment">
-
+    tools:context=".ui.profilo.ProfiloFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="60dp">
-
-
-        <!-- ... Griglia contenente le varie card ... -->
-
-        <!-- ... bottoni home e profilo ... -->
 
         <GridLayout
             android:id="@+id/grigliaDati"
@@ -41,7 +36,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewAnagrafica"
                 android:layout_width="375dp"
-                android:layout_height="155dp"
+                android:layout_height="146dp"
                 android:layout_row="0"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
@@ -53,14 +48,21 @@
                 app:cardCornerRadius="15dp"
                 app:cardElevation="8dp">
 
+
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="367dp"
+                        android:layout_height="wrap_content">
+
 
                         <LinearLayout
                             android:id="@+id/constraintLayout"
@@ -131,8 +133,7 @@
                             android:background="@android:color/darker_gray"
                             app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEmail"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail" />
+                            app:layout_constraintStart_toStartOf="parent" />
 
                         <LinearLayout
                             android:id="@+id/linearLayoutCognome"
@@ -143,8 +144,6 @@
                             android:orientation="horizontal"
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail">
 
                             <TextView
@@ -159,7 +158,7 @@
 
                             <TextView
                                 android:id="@+id/InsertNome"
-                                android:layout_width="272dp"
+                                android:layout_width="274dp"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"
                                 android:textSize="18sp"
@@ -179,7 +178,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@android:color/darker_gray"
-
                             app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome" />
 
                         <LinearLayout
@@ -273,16 +271,28 @@
                                 android:src="@drawable/edit_icon" />
                         </LinearLayout>
 
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_end="32dp" />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.core.widget.NestedScrollView>
+
                 </FrameLayout>
+
+
             </androidx.cardview.widget.CardView>
+
             <!-- ... Card Dati del corso di laurea ... -->
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewCdl"
                 android:layout_width="375dp"
-                android:layout_height="150dp"
+                android:layout_height="174dp"
                 android:layout_row="0"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
@@ -298,10 +308,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
                             android:id="@+id/constraintLayoutCorsi"
@@ -331,8 +344,9 @@
 
                         </LinearLayout>
 
+
                         <LinearLayout
-                            android:id="@+id/linearLayoutCorsi"
+                            android:id="@+id/linearLayoutFacolta"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
@@ -345,10 +359,53 @@
                             app:layout_constraintTop_toBottomOf="@+id/constraintLayoutCorsi">
 
                             <TextView
+                                android:id="@+id/TextFacoltà"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Facoltà: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/InsertFacolta"
+                                android:layout_width="265dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutFacolta"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutCorsi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutFacolta">
+
+                            <TextView
                                 android:id="@+id/TextCorsi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Corsi: "
+                                android:text="Corso: "
                                 android:textColor="@color/color_primary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
@@ -356,40 +413,192 @@
 
                             <TextView
                                 android:id="@+id/InsertCorso"
-                                android:layout_width="280dp"
+                                android:layout_width="276dp"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
                                 app:layout_constraintEnd_toEndOf="parent" />
 
                             <ImageView
-                                android:id="@+id/icona_dettagli_profilo_stud"
+                                android:id="@+id/modificaCorsi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:contentDescription="Arrow Forward Icon"
-                                android:src="@drawable/baseline_arrow_forward_ios_24" />
+                                android:layout_marginStart="4dp"
+                                android:visibility="gone"
+                                android:src="@drawable/edit_icon" />
+
+
                         </LinearLayout>
+
                         <View
                             android:id="@+id/line4"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@android:color/darker_gray"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCorsi"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCorsi" />
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCorsi"
+                            />
 
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginBottom="8dp"
-                            android:src="@drawable/baseline_add_circle_24"
-                            app:layout_constraintBottom_toBottomOf="parent"
+                        <LinearLayout
+                            android:id="@+id/linearLayoutMatricola"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCorsi">
+
+                            <TextView
+                                android:id="@+id/TextMatricola"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Matricola: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/InsertMatricola"
+                                android:layout_width="250dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/modificaMatricola"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:contentDescription="Edit Name Icon"
+                                android:src="@drawable/edit_icon" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line6"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMatricola"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/linearLayoutContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMatricola">
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutMedia"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:id="@+id/EsamiMedia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Media: "
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/InsertMedia"
+                                    android:layout_width="273dp"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <ImageView
+                                    android:id="@+id/modificaMedia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+
+                                    android:src="@drawable/edit_icon" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line7"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintBottom_toBottomOf="@+id/linearLayoutMedia"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutEsamiMancati"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
+
+                                <TextView
+                                    android:id="@+id/TextEsamiMancanti"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Esami Mancanti: "
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/InsertEsamiMancanti"
+                                    android:layout_width="204dp"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <ImageView
+                                    android:id="@+id/modificaEsamiMancanti"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:src="@drawable/edit_icon" />
+
+                            </LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guideline2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_begin="343dp" />
                         <!--Icona per vedere i dettagli del corso del profilo studente -->
                     </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.core.widget.NestedScrollView>
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
 
@@ -399,7 +608,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/modificaCampo"
             android:layout_width="375dp"
-            android:layout_height="324dp"
+            android:layout_height="314dp"
             android:layout_row="0"
             android:layout_rowWeight="1"
             android:layout_column="0"
@@ -466,7 +675,6 @@
                         android:layout_marginTop="24dp"
                         app:boxBackgroundMode="outline"
                         app:hintTextColor="@color/color_secondary"
-
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.488"
                         app:layout_constraintStart_toStartOf="parent"
@@ -490,18 +698,20 @@
                             tools:ignore="MissingConstraints,RtlSymmetry" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/component_input_nuovo"
                         android:layout_width="330dp"
                         android:layout_height="64dp"
                         android:layout_marginTop="8dp"
                         app:boxBackgroundMode="outline"
+                        android:visibility="visible"
                         app:hintTextColor="@color/color_secondary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/component_input_vecchio"
-                        app:layout_constraintVertical_bias="0.097">
+                        app:layout_constraintVertical_bias="0.0">
 
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -521,39 +731,66 @@
                             tools:ignore="MissingConstraints,RtlSymmetry" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/corsoprofessoreInput"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="330dp"
+                        android:layout_height="64dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="@string/corsi"
+                        android:visibility="gone"
+                        app:boxBackgroundMode="outline"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/component_input_vecchio">
+
+                        <MultiAutoCompleteTextView
+                            android:id="@+id/dropdownprofessore_corso"
+                            android:layout_width="match_parent"
+                            android:layout_height="44dp"
+                            android:background="@drawable/input_color"
+                            android:ems="10"
+                            android:importantForAutofill="no"
+                            android:inputType="textMultiLine|textAutoComplete"
+                            android:padding="5dp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_register"
                         android:layout_width="140dp"
                         android:layout_height="44dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_marginTop="60dp"
                         android:background="@drawable/button_background_primary"
                         android:text="CONFERMA"
                         android:textColor="@color/white"
                         app:backgroundTint="@null"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/component_input_nuovo"
-                        app:layout_constraintTop_toBottomOf="@+id/component_input_nuovo" />
+                        app:layout_constraintStart_toStartOf="@+id/component_input_vecchio"
+                        app:layout_constraintTop_toBottomOf="@+id/component_input_vecchio" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_annulla"
                         android:layout_width="140dp"
                         android:layout_height="44dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_marginTop="60dp"
                         android:background="@drawable/button_background_secondary"
                         android:text="Annulla"
                         android:textColor="@color/color_primary"
                         app:backgroundTint="@null"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/component_input_nuovo"
-                        app:layout_constraintTop_toBottomOf="@+id/component_input_nuovo" />
+                        app:layout_constraintEnd_toEndOf="@+id/component_input_vecchio"
+                        app:layout_constraintTop_toBottomOf="@+id/component_input_vecchio" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
             </FrameLayout>
+
 
         </androidx.cardview.widget.CardView>
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.core.widget.NestedScrollView>

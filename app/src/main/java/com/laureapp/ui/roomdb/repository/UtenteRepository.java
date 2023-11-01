@@ -80,7 +80,6 @@ public class UtenteRepository {
             future.complete(cognome);
         });
         try {
-
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -93,6 +92,36 @@ public class UtenteRepository {
         executor.execute(() -> {
             String email = roomDbSqlLite.utenteDao().getEmail(id_utente);
             future.complete(email);
+        });
+        try {
+
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return "-1L";
+        }
+    }
+
+    public String getFacolta(Long id_utente){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            String facolta = roomDbSqlLite.utenteDao().getFacolta(id_utente);
+            future.complete(facolta);
+        });
+        try {
+
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return "-1L";
+        }
+    }
+
+    public String getNomeCdl(Long id_utente){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            String nome_cdl = roomDbSqlLite.utenteDao().getNomeCdl(id_utente);
+            future.complete(nome_cdl);
         });
         try {
 

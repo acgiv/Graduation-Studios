@@ -2,19 +2,28 @@ package com.laureapp.ui.card.Task;
 
 
 import static com.laureapp.ui.controlli.ControlInput.showToast;
+import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,30 +31,27 @@ import android.widget.ListView;
 
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
+import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.card.Adapter.StudentAdapter;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.StudenteWithUtente;
-import com.laureapp.ui.roomdb.entity.TaskTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.TesiProfessore;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.repository.StudenteRepository;
 import com.laureapp.ui.roomdb.repository.UtenteRepository;
-import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -63,14 +69,20 @@ public class TesistiFragment extends Fragment {
     Context context;
     Bundle args;
     private FirebaseAuth mAuth;
-    SearchView searchView;
     ListView listView;
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
 
     StudentAdapter adapter;
-    Utente utente;
+    String cognomeTesistaCercato;
+    UtenteModelView utenteModelView;
+    Long id_utente;
+    SharedDataModelView sharedViewModel;
+
+
+
 
     private List<StudenteWithUtente> studentList = new ArrayList<>();
-    private List<StudenteWithUtente> filteredStudentList = new ArrayList<>();
 
 
 
@@ -78,16 +90,34 @@ public class TesistiFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         context = requireContext();
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            utente = Objects.requireNonNull(args.getSerializable("Utente", Utente.class));
-            loadProfessorForUserId(utente.getId_utente());
         }
+
+
+
+        utenteModelView = new UtenteModelView(context);
+
+        String email = getEmailFromSharedPreferences(context); // Chiamata al metodo per ottenere la mail
+
+        id_utente = utenteModelView.getIdUtente(email);
+
+
+
+        loadProfessorForUserId(id_utente);
+
         mAuth = FirebaseAuth.getInstance();
+
+
+
 
     }
 
@@ -96,9 +126,8 @@ public class TesistiFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
-        searchView = view.findViewById(R.id.searchTesistiView);
         listView = view.findViewById(R.id.listView);
-        adapter = new StudentAdapter(context, studentList,filteredStudentList);
+        adapter = new StudentAdapter(context, studentList);
 
         return view;
     }
@@ -109,35 +138,16 @@ public class TesistiFragment extends Fragment {
         mNav = Navigation.findNavController(view);
 
 
-
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // Quando il testo cambia, applica il filtro
-                adapter.getFilter().filter(newText);
-                return true;
-            }
-        });
-
-
         listView.setAdapter(adapter);
+
 
         listView.setOnItemClickListener((parent, view1, position, id) -> {
             // Recupera l'utente selezionato dalla lista
             StudenteWithUtente studenteWithUtente = studentList.get(position);
 
             // Crea un nuovo Bundle per passare i dati all'altro fragment
+            args.putString("emailStudente", studenteWithUtente.getUtente().getEmail());
 
-
-            // Aggiungi l'utente al Bundle
-            args.putSerializable("Studente", studenteWithUtente.getStudente());
-            args.putSerializable("Utente", studenteWithUtente.getUtente());
 
             // Passa il Bundle al fragment di destinazione
             mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista, args);
@@ -145,6 +155,7 @@ public class TesistiFragment extends Fragment {
 
 
     }
+
 
 
 
@@ -162,7 +173,7 @@ public class TesistiFragment extends Fragment {
                         Professore professore = new Professore();
                         professore.setId_professore(doc.getLong("id_professore"));
                         professore.setId_utente(doc.getLong("id_utente"));
-                        professore.setMatricola(doc.getString("matricola"));
+                        professore.setMatricola(doc.getLong("matricola"));
 
 
 
@@ -207,13 +218,13 @@ public class TesistiFragment extends Fragment {
     /**
      * Questo metodo mi permette di caricare da firestore la tabella tesi dando come parametro l'id della tesi nella tabella studenteTesi
      *
-     * @param id_tesi id della tesi nella tabella StudenteTesi
+     * @param id_tesi_in_tesi_prof id della tesi nella tabella StudenteTesi
      * @return l'id della tesi presente nella tabella studente_tesi
      */
-    private Task<Long> loadTesiByIdTesiInTesiProf(Long id_tesi) {
+    private Task<Long> loadTesiByIdTesiInTesiProf(Long id_tesi_in_tesi_prof) {
         return FirebaseFirestore.getInstance()
                 .collection("Tesi")
-                .whereEqualTo("id_tesi", id_tesi)
+                .whereEqualTo("id_tesi", id_tesi_in_tesi_prof)
                 .limit(1)
                 .get()
                 .continueWith(task -> {
@@ -235,7 +246,7 @@ public class TesistiFragment extends Fragment {
 
                         return tesi.getId_tesi();
                     }
-                    throw new NoSuchElementException("Utente non trovato con questa mail: " + id_tesi);
+                    throw new NoSuchElementException("Utente non trovato con questa mail: " + id_tesi_in_tesi_prof);
                 });
     }
 
@@ -279,13 +290,12 @@ public class TesistiFragment extends Fragment {
     private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente) {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi")
-                .whereEqualTo("id_studente", id_studente)
+                .collection("StudenteTesi").whereEqualTo("id_studente", id_studente)
                 .get()
-                .continueWith(studenteTesiTask -> {
-                    if (studenteTesiTask.isSuccessful() && !studenteTesiTask.getResult().isEmpty()) {
+                .continueWith(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
                         List<Long> studenteIds = new ArrayList<>();
-                        for (QueryDocumentSnapshot studenteTesiDoc : studenteTesiTask.getResult()) {
+                        for (QueryDocumentSnapshot studenteTesiDoc : task.getResult()) {
                             studenteIds.add(studenteTesiDoc.getLong("id_studente"));
                         }
                         return studenteIds;
@@ -296,37 +306,31 @@ public class TesistiFragment extends Fragment {
                 .continueWithTask(studenteIdsTask -> {
                     List<Long> studenteIds = studenteIdsTask.getResult();
 
-                    // Ora ottieni le informazioni degli studenti e degli utenti corrispondenti
+                    // Ottieni le informazioni degli studenti e degli utenti corrispondenti
                     List<Task<StudenteWithUtente>> tasks = new ArrayList<>();
                     for (Long studenteId : studenteIds) {
                         Task<StudenteWithUtente> task = getStudenteWithUtente(studenteId);
                         tasks.add(task);
                     }
+                    Log.d("COSAEQUI", tasks.toString());
 
-                    return Tasks.whenAll(tasks)
-                            .continueWith(taskList -> {
-                                if (taskList.isSuccessful()) {
-                                    List<StudenteWithUtente> studenti = new ArrayList<>();
-                                    for (Task<StudenteWithUtente> task : tasks) {
-                                        if (task.isSuccessful()) {
-                                            StudenteWithUtente studenteWithUtente = task.getResult();
-                                            studenti.add(studenteWithUtente);
-                                        }
-                                    }
-                                    return studenti;
-                                } else {
-                                    // Gestire l'errore se necessario
-                                    Exception exception = taskList.getException();
-                                    if (exception != null) {
-                                        // Gestire l'eccezione
-                                    }
-                                    return new ArrayList<>(); // O un altro valore di fallback
-                                }
-                            });
+
+                    return Tasks.whenAllSuccess(tasks).continueWith(resultTask -> {
+                        // Otteniamo una lista di StudenteWithUtente
+                        List<StudenteWithUtente> studentiWithUtenti = new ArrayList<>();
+                        for (Object studenteWithUtenteTask : resultTask.getResult()) {
+                            studentiWithUtenti.add((StudenteWithUtente) studenteWithUtenteTask);
+                        }
+                        Log.d("MOMOMOM", studentiWithUtenti.toString());
+                        return studentiWithUtenti;
+                    });
+
 
 
                 });
     }
+
+
 
 
 
@@ -364,7 +368,7 @@ public class TesistiFragment extends Fragment {
                 Long id_tesi_in_tesi_professore = tesiProfessoreTask.getResult();
                 loadTesiForIdTesiInProfessoreTesi(id_tesi_in_tesi_professore);
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
+                showToast(context, "Dati tesi professore 1 non caricati correttamente");
 
             }
         });
@@ -381,7 +385,7 @@ public class TesistiFragment extends Fragment {
                 Long id_tesi = tesiTask.getResult();
                 loadStudTesiForIdTesi(id_tesi);
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
+                showToast(context, "Dati tesi 2 professore non caricati correttamente");
 
             }
         });
@@ -398,25 +402,25 @@ public class TesistiFragment extends Fragment {
                 Long id_studente = studTesiTask.getResult();
                 loadStudForIdStudenteInStudenteTesi(id_studente);
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
+                showToast(context, "Dati tesi professore 3 non caricati correttamente");
 
             }
         });
     }
 
+
     /**
      * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
      * È il secondo metodo(2) utile per poter recuperare le tasks.
+     *
      * @param id_studente è l'id dell'utente uguale a quello dello studente
      */
-    private void loadStudForIdStudenteInStudenteTesi(Long id_studente) {
+    private void loadStudForIdStudenteInStudenteTesi(final Long id_studente) {
         loadStudByIdStudenteInStudenteTesi(id_studente).addOnCompleteListener(studTask -> {
             if (studTask.isSuccessful()) {
-                studentList.clear();
-                addStudentsToList(studTask.getResult());
+                requireActivity().runOnUiThread(() -> addStudentsToList(studTask.getResult()));
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
-
+                showToast(context, "Dati tesi professore 4 non caricati correttamente");
             }
         });
     }
@@ -426,14 +430,15 @@ public class TesistiFragment extends Fragment {
      * la visualizzazione delle tasks.
      * @param tasks è la lista delle tasks
      */
-    private void addStudentsToList(List<StudenteWithUtente> tasks) {
-        for (StudenteWithUtente studenteWithUtenteTask : tasks) {
-            if (studenteWithUtenteTask != null) {
-                studentList.add(studenteWithUtenteTask);
-            }
-        }
-        adapter.notifyDataSetChanged();
+    private void addStudentsToList(final List<StudenteWithUtente> tasks) {
+        requireActivity().runOnUiThread(() -> {
+            studentList.addAll(tasks); // Aggiungi tutti gli studenti alla lista esistente.
+            adapter.notifyDataSetChanged();
+        });
     }
+
+
+
 
 
 
@@ -446,6 +451,7 @@ public class TesistiFragment extends Fragment {
                 return loadUtenteByStudente(studente).continueWith(utenteTask -> {
                     if (utenteTask.isSuccessful()) {
                         Utente utente = utenteTask.getResult();
+
                         return new StudenteWithUtente(studente, utente);
                     } else {
                         throw new NoSuchElementException("Utente non trovato per lo studente con id: " + studenteId);
@@ -459,24 +465,47 @@ public class TesistiFragment extends Fragment {
 
 
     private Task<Studente> loadStudenteById(Long studenteId) {
+        TaskCompletionSource<Studente> tcs = new TaskCompletionSource<>();
+
         // Implementa la logica per caricare uno studente per id da dove sono conservati i dati (database, API, ecc.)
-        // Restituisci il risultato come un Task
         // Ad esempio:
         StudenteRepository stRep = new StudenteRepository(context);
         Studente studente = stRep.findAllById(studenteId);
-        return Tasks.forResult(studente);
+
+        // Completa la task con il risultato
+        tcs.setResult(studente);
+
+        return tcs.getTask();
     }
 
+
     private Task<Utente> loadUtenteByStudente(Studente studente) {
+        TaskCompletionSource<Utente> tcs = new TaskCompletionSource<>();
+
         // Implementa la logica per caricare l'utente associato a uno studente da dove sono conservati i dati
-        // Restituisci il risultato come un Task
         // Ad esempio:
         UtenteRepository utRep = new UtenteRepository(context);
         Utente utente = utRep.findAllById(studente.getId_utente());
-        return Tasks.forResult(utente);
+
+        // Completa la task con il risultato
+        tcs.setResult(utente);
+
+        return tcs.getTask();
     }
 
 
 
 
-}
+
+
+
+
+    }
+
+
+
+
+
+
+
+

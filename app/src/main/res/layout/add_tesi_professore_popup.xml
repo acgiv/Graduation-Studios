@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addTesiProfessorePopup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Inserisci una Tesi"
+        android:textColor="@color/color_primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:ignore="InefficientWeight" />
+
+    <EditText
+        android:id="@+id/editTextTitoloTesiProfessore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Titolo"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextTipologiaTesiProfessore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tipologia"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextDataPubblicazioneTesiProfessore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Data pubblicazione"
+        android:inputType="none"
+        android:focusable="false" />
+
+    <EditText
+        android:id="@+id/editTextCicloCdlTesiProfessore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ciclo CDL"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextAbstractTesiProfessore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Abstract"
+        android:inputType="text" />
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonAvantiTesiProfessore"
+            android:layout_width="10dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Avanti" />
+
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/buttomAnnullaTesiProfessore"
+            android:layout_width="10dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Annulla" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

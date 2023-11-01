@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/ElencoTesi">
+
+    <!-- Barra di ricerca -->
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchTesiView"
+        app:queryHint="Cerca Tesi"
+        app:iconifiedByDefault="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false">
+    </androidx.appcompat.widget.SearchView>
+
+    <!-- Pulsante Filtra -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="">
+
+        <Button
+            android:id="@+id/filterButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Filtra"
+            android:textColor="@color/color_text_input"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="8dp"
+        />
+
+
+    </LinearLayout>
+
+    <!-- Lista di tesi -->
+    <ListView
+        android:id="@+id/listClassificaTesiView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_weight="1"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="8dp"/>
+
+</LinearLayout>

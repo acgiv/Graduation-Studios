@@ -102,6 +102,36 @@ public class UtenteRepository {
         }
     }
 
+    public String getFacolta(Long id_utente){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            String facolta = roomDbSqlLite.utenteDao().getFacolta(id_utente);
+            future.complete(facolta);
+        });
+        try {
+
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return "-1L";
+        }
+    }
+
+    public String getNomeCdl(Long id_utente){
+        CompletableFuture<String> future = new CompletableFuture<>();
+        executor.execute(() -> {
+            String nome_cdl = roomDbSqlLite.utenteDao().getNomeCdl(id_utente);
+            future.complete(nome_cdl);
+        });
+        try {
+
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return "-1L";
+        }
+    }
+
     public Utente is_exist_email_password(String email, String password){
         CompletableFuture<Utente> future = new CompletableFuture<>();
         executor.execute(() -> {

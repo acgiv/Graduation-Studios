@@ -6,6 +6,7 @@ import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -79,7 +80,8 @@ public class DettagliTaskHomeStudenteFragment extends Fragment {
         args = getArguments();
         if(args != null) {
 
-            taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
+            taskStudente = (TaskStudente)args.getSerializable("SelectedTask");
+
             ruolo = args.getString("ruolo");
             //Carico i dati delle task in base all'utente loggato
         }
@@ -169,17 +171,17 @@ public class DettagliTaskHomeStudenteFragment extends Fragment {
             salvaButton.setOnClickListener(view1 -> {
                 // Crea un AlertDialog per la conferma del salvataggio
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Conferma salvataggio");
-                builder.setMessage("Sei sicuro di voler salvare le modifiche?");
+                builder.setTitle(R.string.confermaSalataggio);
+                builder.setMessage(R.string.salvaModificheConf);
 
                 // Aggiungi un pulsante "Conferma" che effettuerà il salvataggio
-                builder.setPositiveButton("Conferma", (dialog, which) -> {
+                builder.setPositiveButton(R.string.conferma, (dialog, which) -> {
                     modificaDatiTask(); // Esegui il salvataggio
                     dialog.dismiss(); // Chiudi il popup
                 });
 
                 // Aggiungi un pulsante "Annulla" che chiuderà il popup senza effettuare il salvataggio
-                builder.setNegativeButton("Annulla", (dialog, which) -> {
+                builder.setNegativeButton(R.string.annulla, (dialog, which) -> {
                     dialog.dismiss(); // Chiudi il popup
                 });
 

@@ -4,7 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="36dp"
+    android:layout_marginEnd="36dp"
+    android:layout_marginTop="16dp"
+    >
 
         <ImageView
             android:id="@+id/red_status_dot"
@@ -53,12 +57,12 @@
             android:id="@+id/delete_task_ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_marginStart="8dp"
             android:background="@color/white"
             android:contentDescription="Elimina questa attività"
             android:descendantFocusability="blocksDescendants"
             android:src="@drawable/baseline_delete_forever_48"
             app:layout_constraintTop_toTopOf="@+id/taskTextView"
             app:layout_constraintBottom_toBottomOf="@+id/taskTextView"
+            android:layout_marginStart="-36dp"
             app:layout_constraintStart_toEndOf="@+id/taskTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

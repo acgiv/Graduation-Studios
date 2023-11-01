@@ -1,19 +1,32 @@
 package com.laureapp.ui.card.TesiStudente;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,14 +37,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.laureapp.R;
+import com.laureapp.ui.card.Adapter.InfoTesiProfessoreAdapter;
+import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Tesi;
+import com.laureapp.ui.roomdb.entity.TesiProfessore;
+import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.entity.Vincolo;
+import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -56,16 +83,24 @@ public class DettagliTesiStudenteFragment extends Fragment {
     Long id_utente;
     Long id_studente;
 
+    Long id_professore;
     Long visualizzazioni;
     Context context;
     String email;
+    String nomeCognome;
 
+    String nomeRelatore = "";
+    String nomeCorelatore = "";
     Long media;
     Long esamiMancanti;
+    ImageButton share;
+    ArrayList<String> nomiFile = new ArrayList<>(); // FileInfo rappresenta le informazioni sui file da visualizzare
 
+    List<TesiProfessore> tesiProfessoreList = new ArrayList<>();
 
     StudenteModelView studenteView = new StudenteModelView(context);
-
+    private static final int PERMISSION_REQUEST_CODE = 123;
+    private static final int DOWNLOAD_REQUEST_CODE = 456;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +127,9 @@ public class DettagliTesiStudenteFragment extends Fragment {
         TextView mediaTextView = view.findViewById(R.id.insertTextViewMedia);
         TextView esamiTextView = view.findViewById(R.id.insertTextViewEsamiMancanti);
         TextView skillTextView = view.findViewById(R.id.insertTextViewSkill);
+
+        TextView relatoreTextView = view.findViewById(R.id.insertTextViewRelatore);
+        TextView corelatoreTextView = view.findViewById(R.id.insertTextViewCoRelatore);
 
 
         if (args != null) { //se non sono null
@@ -120,6 +158,28 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                 ciclocdlTextView.setText(cicloCdl);
 
+
+                share = view.findViewById(R.id.shareImageButton);
+
+
+                share.setOnClickListener(view1 -> {
+                    // Genera il QR code
+                    Bitmap qrCodeBitmap = QRGenerator(tesi);
+
+
+
+
+                    // Avvia un'Activity per condividere il QR code
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("image/*");
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    qrCodeBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    byte[] qrCodeBytes = byteArrayOutputStream.toByteArray();
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MediaStore.Images.Media.insertImage(requireActivity().getContentResolver(), qrCodeBitmap, "QR Code", null)));
+                    startActivity(Intent.createChooser(shareIntent, "Condividi QR Code tramite"));
+                });
+
+                //carico i dati dei vincoli
                 loadVincoloData(id_vincolo).addOnCompleteListener(taskVincolo -> {
                     if (taskVincolo.isSuccessful()) {
                         vincolo = taskVincolo.getResult();
@@ -134,6 +194,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
                         Button richiediTesiButton = view.findViewById(R.id.richiediTesi);
                         richiediTesiButton.setOnClickListener(view1 -> {
 
+                            //chiamo il metodo che verifica se lo studente rispetti i vincoli per richiedere la tesi
 
                             if (StudenteMatchesVincoli( media, esamiMancanti)) {
                                 boolean soddisfaRequisiti = true;
@@ -148,7 +209,6 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                         });
 
-                        //chiamo il metodo che verifica se lo studente rispetti i vincoli per richiedere la tesi
 
 
 
@@ -157,12 +217,133 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                     }
                 });
-
+                //chiamata al metodo per controllare se lo studente ha già una tesi
                 StudenteHasATesi(id_tesi,view);
+
+                loadTesiProfessoreData(id_tesi).addOnCompleteListener(taskTesiProfessore -> {
+                    if(taskTesiProfessore.isSuccessful()){
+                        tesiProfessoreList = taskTesiProfessore.getResult();
+                        getRoleTesiProfessoreList(tesiProfessoreList,context,relatoreTextView,corelatoreTextView);
+
+
+                    }
+
+
+                });
+
 
             }
         }
     }
+
+    /**
+     * Questo metodo consente di ottenere i dati dei vincoli delle tesi da firestore e riempire la entity Vincolo
+     *
+     * @param id_tesi id tesi da cercare legata alla tesi
+     * @return entity Vincolo
+     */
+    private Task<List<TesiProfessore>> loadTesiProfessoreData(Long id_tesi) {
+        // Create a Firestore query to fetch Tesi documents with matching IDs
+        Query query = FirebaseFirestore.getInstance()
+                .collection("TesiProfessore")
+                .whereEqualTo("id_tesi", id_tesi);
+
+        return query.get().continueWith(task -> {
+            List<TesiProfessore> tesiProfessoreList = new ArrayList<>();
+
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    TesiProfessore tesiProfessore = new TesiProfessore();
+                    tesiProfessore.setId_professore((Long) document.get("id_professore"));
+                    tesiProfessore.setId_tesi((Long) document.get("id_tesi"));
+                    tesiProfessore.setRuolo_professore((String) document.get("ruolo_professore"));
+                    tesiProfessoreList.add(tesiProfessore);
+                }
+            }
+
+            return tesiProfessoreList;
+        });
+    }
+
+    /**
+     * Metodo utilizzato per iterare la lista dei professori e capire se sono relatori e/o corelatori
+     *
+     */
+    private void getRoleTesiProfessoreList(List<TesiProfessore> tesiProfessoreList, Context context, TextView relatoreTextView, TextView corelatoreTextView) {
+
+
+        for (TesiProfessore tesiProfessore : tesiProfessoreList) {
+            Long idProfessore = tesiProfessore.getId_professore();
+            String ruoloProfessore = tesiProfessore.getRuolo_professore();
+
+            if (ruoloProfessore.equals("Relatore")) {
+                getIdUtenteByIdProfessore(context, idProfessore, true);
+            } else if (ruoloProfessore.equals("Co-Relatore")) {
+                getIdUtenteByIdProfessore(context, idProfessore, false);
+            }
+        }
+
+        if (!nomeRelatore.isEmpty()) {
+            relatoreTextView.setText(nomeRelatore);
+        } else {
+            relatoreTextView.setText(""); // Lascia vuoto se non c'è un relatore
+        }
+
+        if (!nomeCorelatore.isEmpty()) {
+            corelatoreTextView.setText(nomeCorelatore);
+        } else {
+            corelatoreTextView.setText(""); // Lascia vuoto se non c'è un co-relatore
+        }
+    }
+
+
+    /**
+     * Metodo utilizzato per prendere il nome e il cognome del professore in base al suo id
+     */
+    private void getIdUtenteByIdProfessore(Context context, Long idProfessore, boolean isRelatore) {
+        ProfessoreModelView professoreModelView = new ProfessoreModelView(context);
+        List<Professore> professoreList = professoreModelView.getAllProfessore();
+        Long idUtente = null;
+
+        for (Professore professore : professoreList) {
+            if (professore.getId_professore().equals(idProfessore)) {
+                idUtente = professore.getId_utente();
+                break;
+            }
+        }
+
+        if (idUtente != null) {
+            getNomeCognomeProfessoreById(context, idUtente, isRelatore);
+        }
+    }
+
+    /**
+     * Metodo utilizzato per prendere il nome e il cognome del professore in base all'id utente
+     */
+    private void getNomeCognomeProfessoreById(Context context, Long idUtente, boolean isRelatore) {
+        UtenteModelView utenteModelView = new UtenteModelView(context);
+        List<Utente> utenteList = utenteModelView.getAllUtente();
+
+        String nomeCognome = null;
+
+        for (Utente utente : utenteList) {
+            if (utente.getId_utente().equals(idUtente)) {
+                String nome = utente.getNome();
+                String cognome = utente.getCognome();
+                nomeCognome = nome + " " + cognome;
+                break;
+            }
+        }
+
+        if (isRelatore) {
+            nomeRelatore = nomeCognome;
+        } else {
+            nomeCorelatore = nomeCognome;
+        }
+    }
+
+
+
 
     /**
      * Questo metodo consente di ottenere i dati dei vincoli delle tesi da firestore e riempire la entity Vincolo
@@ -235,12 +416,15 @@ public class DettagliTesiStudenteFragment extends Fragment {
                         // Ci sono occorrenze
                         Button filterButton = view.findViewById(R.id.richiediTesi);
                         filterButton.setVisibility(View.INVISIBLE);
+                        loadFileFromFireStore(view);
                     }
                 } else {
                     Log.e("Firestore Error", "Error querying StudenteTesi collection", task.getException());
                 }
             });
+
         }else{ //se i tre valori sono null e quindi sono ospite nascondo il bottone
+
             Button filterButton = view.findViewById(R.id.richiediTesi);
             filterButton.setVisibility(View.INVISIBLE);
         }
@@ -326,5 +510,114 @@ public class DettagliTesiStudenteFragment extends Fragment {
         });
     }
 
+
+
+    /**
+     * Metodo di generazione del QRCode in base all'id della tesi
+     * @return  restituisce la variabile Bitmap per mostrare il QRCode
+     */
+    public Bitmap QRGenerator(Tesi tesi) {
+        MultiFormatWriter writer = new MultiFormatWriter();
+        Bitmap bitmap = null;
+        try {
+            // Creazione del contenuto del QR Code utilizzando i dati della tesi
+            String content = "Titolo: " + tesi.getTitolo() +
+                    "\nDescrizione: " + tesi.getAbstract_tesi() +
+                    "\nTipologia: " + tesi.getTipologia() +
+                    "\nData Pubblicazione: " + tesi.getData_pubblicazione() +
+                    "\nCiclo CDL: " + tesi.getCiclo_cdl() +
+                    // Aggiungi altri dati della tesi, se necessario.
+                    "\nID Tesi: " + tesi.getId_tesi() +
+                    "\nRelatore: " + nomeCognome;
+
+
+            BitMatrix matrix = writer.encode(content, BarcodeFormat.QR_CODE, 400, 400);
+            int width = matrix.getWidth();
+            int height = matrix.getHeight();
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    bitmap.setPixel(x, y, matrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    /**
+     * Metodo utilizzato per mostrare la lista del materiale della tesi
+     */
+
+    private void loadFileFromFireStore(View view) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("FileTesi/" + id_tesi);
+
+        storageRef.listAll()
+                .addOnSuccessListener(listResult -> {
+                    for (StorageReference item : listResult.getItems()) {
+                        nomiFile.add(item.getName());
+                    }
+
+                    InfoTesiProfessoreAdapter adapter = new InfoTesiProfessoreAdapter(getContext(), nomiFile);
+                    ListView listViewFiles = view.findViewById(R.id.listViewFiles);
+                    listViewFiles.setAdapter(adapter);
+
+
+                    adapter.setDeleteButtonClickListener(new InfoTesiProfessoreAdapter.DeleteButtonClickListener() {
+                        @Override
+                        public void onDeleteButtonClick(int position) {
+                            Toast.makeText(getContext(), "Non puoi eliminare questo file", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+
+                    adapter.setDownloadButtonClickListener(new InfoTesiProfessoreAdapter.DownloadButtonClickListener() {
+                        @Override
+                        public void onDownloadButtonClick(int position) {
+                            // Verifica se hai i permessi di scrittura
+                            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                // Richiedi esplicitamente il permesso di scrittura nella memoria esterna
+                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                            } else {
+                                // Se hai già i permessi, puoi procedere con il download
+                                performDownload(position,storageRef);
+                            }
+                        }
+                    });
+
+
+                });
+    }
+
+    /**
+     * Metodo per eseguire il download del file
+      * @param position
+     * @param storageRef
+     */
+    private void performDownload(int position,StorageReference storageRef) {
+            // Ottieni il riferimento al file selezionato
+            StorageReference selectedFileRef = storageRef.child(nomiFile.get(position));
+
+            // Crea un file locale dove scaricare il file nella directory di download
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            File localFile = new File(downloadsDir, nomiFile.get(position));
+
+            // Esegui il download
+            selectedFileRef.getFile(localFile)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Il file è stato scaricato con successo
+                        // Puoi gestire il completamento qui
+                        // Ad esempio, puoi aprire il file o mostrare una notifica di download completato
+                        Toast.makeText(getContext(), "File scaricato con successo", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(exception -> {
+                        // Gestisci eventuali errori durante il download
+                        Log.e("Firebase Storage Error", "Errore nel download del file", exception);
+                        Toast.makeText(getContext(), "Errore nel download del file", Toast.LENGTH_SHORT).show();
+                    });
+        }
 
 }

@@ -2,19 +2,28 @@ package com.laureapp.ui.card.Task;
 
 
 import static com.laureapp.ui.controlli.ControlInput.showToast;
+import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
+import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.card.Adapter.StudentAdapter;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
@@ -38,6 +48,8 @@ import com.laureapp.ui.roomdb.entity.TesiProfessore;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.repository.StudenteRepository;
 import com.laureapp.ui.roomdb.repository.UtenteRepository;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,16 +69,20 @@ public class TesistiFragment extends Fragment {
     Context context;
     Bundle args;
     private FirebaseAuth mAuth;
-    SearchView searchView;
     ListView listView;
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
 
     StudentAdapter adapter;
-    Utente utente;
-    Studente studente;
     String cognomeTesistaCercato;
+    UtenteModelView utenteModelView;
+    Long id_utente;
+    SharedDataModelView sharedViewModel;
+
+
+
 
     private List<StudenteWithUtente> studentList = new ArrayList<>();
-    private String tesistaCercato = "";
 
 
 
@@ -74,18 +90,34 @@ public class TesistiFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         context = requireContext();
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            utente = args.getSerializable("Utente", Utente.class);
-
-            loadProfessorForUserId(utente.getId_utente());
         }
 
+
+
+        utenteModelView = new UtenteModelView(context);
+
+        String email = getEmailFromSharedPreferences(context); // Chiamata al metodo per ottenere la mail
+
+        id_utente = utenteModelView.getIdUtente(email);
+
+
+
+        loadProfessorForUserId(id_utente);
+
         mAuth = FirebaseAuth.getInstance();
+
+
+
 
     }
 
@@ -94,7 +126,6 @@ public class TesistiFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
-        searchView = view.findViewById(R.id.searchTesistiView);
         listView = view.findViewById(R.id.listView);
         adapter = new StudentAdapter(context, studentList);
 
@@ -107,39 +138,6 @@ public class TesistiFragment extends Fragment {
         mNav = Navigation.findNavController(view);
 
 
-
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Handle search query submission (if needed)
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                cognomeTesistaCercato = newText;
-                loadSearchedTesistiData(cognomeTesistaCercato).addOnCompleteListener(tesistiTask -> {
-                    if (tesistiTask.isSuccessful()) {
-                        List<StudenteWithUtente> searchedUtentiList = tesistiTask.getResult();
-                        studentList.clear();
-                        addStudentsToList(searchedUtentiList);
-                    } else if(newText.isEmpty()){
-                        loadProfessorForUserId(utente.getId_utente());
-                        Log.e("Tesi Firestore Error", "Error getting searched Tesi data", tesistiTask.getException());
-                    }
-                });
-
-                return true;
-            }
-
-
-
-
-
-        });
-
-
         listView.setAdapter(adapter);
 
 
@@ -148,11 +146,8 @@ public class TesistiFragment extends Fragment {
             StudenteWithUtente studenteWithUtente = studentList.get(position);
 
             // Crea un nuovo Bundle per passare i dati all'altro fragment
+            args.putString("emailStudente", studenteWithUtente.getUtente().getEmail());
 
-
-            // Aggiungi l'utente al Bundle
-            args.putSerializable("Studente", studenteWithUtente.getStudente());
-            args.putSerializable("Utente", studenteWithUtente.getUtente());
 
             // Passa il Bundle al fragment di destinazione
             mNav.navigate(R.id.action_fragment_tesisti_to_dettagli_tesista, args);
@@ -178,7 +173,7 @@ public class TesistiFragment extends Fragment {
                         Professore professore = new Professore();
                         professore.setId_professore(doc.getLong("id_professore"));
                         professore.setId_utente(doc.getLong("id_utente"));
-                        professore.setMatricola(Long.valueOf(doc.getString("matricola")));
+                        professore.setMatricola(doc.getLong("matricola"));
 
 
 
@@ -223,13 +218,13 @@ public class TesistiFragment extends Fragment {
     /**
      * Questo metodo mi permette di caricare da firestore la tabella tesi dando come parametro l'id della tesi nella tabella studenteTesi
      *
-     * @param id_tesi id della tesi nella tabella StudenteTesi
+     * @param id_tesi_in_tesi_prof id della tesi nella tabella StudenteTesi
      * @return l'id della tesi presente nella tabella studente_tesi
      */
-    private Task<Long> loadTesiByIdTesiInTesiProf(Long id_tesi) {
+    private Task<Long> loadTesiByIdTesiInTesiProf(Long id_tesi_in_tesi_prof) {
         return FirebaseFirestore.getInstance()
                 .collection("Tesi")
-                .whereEqualTo("id_tesi", id_tesi)
+                .whereEqualTo("id_tesi", id_tesi_in_tesi_prof)
                 .limit(1)
                 .get()
                 .continueWith(task -> {
@@ -251,7 +246,7 @@ public class TesistiFragment extends Fragment {
 
                         return tesi.getId_tesi();
                     }
-                    throw new NoSuchElementException("Utente non trovato con questa mail: " + id_tesi);
+                    throw new NoSuchElementException("Utente non trovato con questa mail: " + id_tesi_in_tesi_prof);
                 });
     }
 
@@ -295,7 +290,7 @@ public class TesistiFragment extends Fragment {
     private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente) {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi")
+                .collection("StudenteTesi").whereEqualTo("id_studente", id_studente)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -373,7 +368,7 @@ public class TesistiFragment extends Fragment {
                 Long id_tesi_in_tesi_professore = tesiProfessoreTask.getResult();
                 loadTesiForIdTesiInProfessoreTesi(id_tesi_in_tesi_professore);
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
+                showToast(context, "Dati tesi professore 1 non caricati correttamente");
 
             }
         });
@@ -390,7 +385,7 @@ public class TesistiFragment extends Fragment {
                 Long id_tesi = tesiTask.getResult();
                 loadStudTesiForIdTesi(id_tesi);
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
+                showToast(context, "Dati tesi 2 professore non caricati correttamente");
 
             }
         });
@@ -407,67 +402,43 @@ public class TesistiFragment extends Fragment {
                 Long id_studente = studTesiTask.getResult();
                 loadStudForIdStudenteInStudenteTesi(id_studente);
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
+                showToast(context, "Dati tesi professore 3 non caricati correttamente");
 
             }
         });
     }
+
 
     /**
      * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
      * È il secondo metodo(2) utile per poter recuperare le tasks.
+     *
      * @param id_studente è l'id dell'utente uguale a quello dello studente
      */
-    private void loadStudForIdStudenteInStudenteTesi(Long id_studente) {
+    private void loadStudForIdStudenteInStudenteTesi(final Long id_studente) {
         loadStudByIdStudenteInStudenteTesi(id_studente).addOnCompleteListener(studTask -> {
             if (studTask.isSuccessful()) {
-                studentList.clear();
-                addStudentsToList(studTask.getResult());
+                requireActivity().runOnUiThread(() -> addStudentsToList(studTask.getResult()));
             } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
-
+                showToast(context, "Dati tesi professore 4 non caricati correttamente");
             }
-
         });
     }
-
-    private void loadSearchedStudForIdStudenteInStudenteTesi(Long id_studente) {
-        loadStudByIdStudenteInStudenteTesi(id_studente).addOnCompleteListener(studTask -> {
-            if (studTask.isSuccessful()) {
-                studentList.clear();
-                loadSearchedTesistiData(cognomeTesistaCercato).addOnCompleteListener(tesistiTask -> {
-                    if (tesistiTask.isSuccessful()) {
-                        ArrayList<StudenteWithUtente> searchedUtentiList = tesistiTask.getResult();
-                        addStudentsToList(searchedUtentiList);
-
-                    } else {
-                        Log.e("Tesi Firestore Error", "Error getting searched Tesi data", tesistiTask.getException());
-                    }
-                });
-
-            } else {
-                showToast(context, "Dati tesi professore non caricati correttamente");
-
-            }
-
-        });
-    }
-
-
 
     /**
      * Questo metodo aggiunge le tasks alla lista delle task e aggiorna l'adapter permettendo
      * la visualizzazione delle tasks.
      * @param tasks è la lista delle tasks
      */
-    private void addStudentsToList(List<StudenteWithUtente> tasks) {
-        for (StudenteWithUtente studenteWithUtenteTask : tasks) {
-            if (studenteWithUtenteTask != null) {
-                studentList.add(studenteWithUtenteTask);
-            }
-        }
-        adapter.notifyDataSetChanged();
+    private void addStudentsToList(final List<StudenteWithUtente> tasks) {
+        requireActivity().runOnUiThread(() -> {
+            studentList.addAll(tasks); // Aggiungi tutti gli studenti alla lista esistente.
+            adapter.notifyDataSetChanged();
+        });
     }
+
+
+
 
 
 
@@ -480,6 +451,7 @@ public class TesistiFragment extends Fragment {
                 return loadUtenteByStudente(studente).continueWith(utenteTask -> {
                     if (utenteTask.isSuccessful()) {
                         Utente utente = utenteTask.getResult();
+
                         return new StudenteWithUtente(studente, utente);
                     } else {
                         throw new NoSuchElementException("Utente non trovato per lo studente con id: " + studenteId);
@@ -522,92 +494,9 @@ public class TesistiFragment extends Fragment {
     }
 
 
-    public Task<Long> getUtenteWithStudente(Long utenteId) {
-        Task<Utente> utenteTask = loadUtenteById(utenteId);
-
-        return utenteTask.continueWithTask(task -> {
-            if (task.isSuccessful()) {
-                Utente utente = task.getResult();
-                return loadStudenteByUtente(utente).continueWith(studenteTask -> {
-                    if (studenteTask.isSuccessful()) {
-                        Studente studente = studenteTask.getResult();
-                        return studente.getId_studente();
-                    } else {
-                        throw new NoSuchElementException("Studente non trovato per l'utente con id: " + utenteId);
-                    }
-                });
-            } else {
-                throw new NoSuchElementException("Utente non trovato con id: " + utenteId);
-            }
-        });
-    }
-
-    private Task<Utente> loadUtenteById(Long utenteId) {
-        return FirebaseFirestore.getInstance()
-                .collection("Utenti")
-                .document(utenteId.toString())
-                .get()
-                .continueWith(task -> {
-                    if (task.isSuccessful() && task.getResult().exists()) {
-                        return task.getResult().toObject(Utente.class);
-                    } else {
-                        throw new NoSuchElementException("Utente non trovato con id: " + utenteId);
-                    }
-                });
-    }
-
-    private Task<Studente> loadStudenteByUtente(Utente utente) {
-        return FirebaseFirestore.getInstance()
-                .collection("Studenti")
-                .whereEqualTo("id_utente", utente.getId_utente())
-                .limit(1)
-                .get()
-                .continueWith(task -> {
-                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                        QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
-                        return doc.toObject(Studente.class);
-                    } else {
-                        throw new NoSuchElementException("Studente non trovato per l'utente con id: " + utente.getId_utente());
-                    }
-                });
-    }
 
 
 
-    private Task<ArrayList<StudenteWithUtente>> loadSearchedTesistiData(String searchText) {
-        final ArrayList<StudenteWithUtente> tesistiList = new ArrayList<>();
-
-        return FirebaseFirestore.getInstance()
-                .collection("Utenti") //collection di firebase
-                .orderBy("cognome") //ordino i risultati in base al titolo
-                .startAt(searchText)
-                .endAt(searchText + "\uf8ff")
-                .get()
-                .continueWith(task -> {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            //se la ricerca ha successo, assegno i campi della tesi in un oggetto Tesi
-                            StudenteWithUtente studenteWithUtente = new StudenteWithUtente();
-                            studenteWithUtente.getUtente().setId_utente((Long) document.get("id_utente"));
-                            studenteWithUtente.getUtente().setNome(document.getString("nome"));
-                            studenteWithUtente.getUtente().setCognome(document.getString("cognome"));
-                            studenteWithUtente.getUtente().setEmail(document.getString("email"));
-                            studenteWithUtente.getUtente().setPassword(document.getString("password"));
-                            studenteWithUtente.getUtente().setNome_cdl(document.getString("nome_cdl"));
-                            studenteWithUtente.getUtente().setFacolta(document.getString("facolta"));
-
-                            tesistiList.add(studenteWithUtente);
-                        }
-                        // aggiorno l'adapter con i nuovi dati
-                        if (adapter != null) {
-                            adapter.clear();
-                            adapter.addAll(tesistiList);
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-                    return tesistiList;
-                });
-    }
 
 
 

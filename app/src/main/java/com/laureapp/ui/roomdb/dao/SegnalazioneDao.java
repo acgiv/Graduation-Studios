@@ -29,15 +29,15 @@ public interface SegnalazioneDao {
     @Delete
     void delete(Segnalazione segnalazione);
 
-    @Query("SELECT * FROM Segnalazioni WHERE id_segn = :idSegnalazione")
+    @Query("SELECT * FROM Segnalazione WHERE id_segnalazione = :idSegnalazione")
     Segnalazione findById(Long idSegnalazione);
 
-    @Query("SELECT * FROM Segnalazioni WHERE id_tesi = :idTesi")
-    List<Segnalazione> findByTesiId(Long idTesi);
+    @Query("SELECT * FROM Segnalazione WHERE id_studente_tesi = :idStudenteTesi")
+    List<Segnalazione> findByStudenteTesiId(Long idStudenteTesi);
 
-    @Query("DELETE FROM Segnalazioni WHERE id_segn = :idSegnalazione")
+    @Query("DELETE FROM Segnalazione WHERE id_segnalazione = :idSegnalazione")
     void deleteById(Long idSegnalazione);
 
-    @Query("DELETE FROM Segnalazioni WHERE id_tesi = :idTesi")
-    void deleteByTesiId(Long idTesi);
+    @Query("DELETE FROM Segnalazione WHERE id_studente_tesi = :idStudenteTesi")
+    void deleteByTesiId(Long idStudenteTesi);
 }

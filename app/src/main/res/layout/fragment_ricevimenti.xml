@@ -3,8 +3,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Barra blu -->
     <LinearLayout
@@ -13,48 +13,57 @@
         android:layout_height="48dp"
         android:background="@color/color_primary"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:orientation="horizontal">
 
-        <!-- Intestazione "Ricevimento" -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:gravity="center"
-            android:layout_marginTop="-3dp"
-            android:text="@string/intestazione_colonna_ricevimento"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
+            <!-- TextView per il ricevimento -->
+            <TextView
+                android:id="@+id/ricevimentiTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/intestazione_colonna_ricevimento"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_marginStart="40dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <!-- Intestazione "Argomento" -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:gravity="top|center"
-            android:layout_marginTop="9dp"
-            android:text="@string/intestazione_colonna_argomento"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <!-- TextView per l'argomento -->
+            <TextView
+                android:id="@+id/argomentoRicevimentoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/intestazione_colonna_argomento"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginStart="30dp"
 
-        <!--Intestazione Data -->
-        <TextView
-            android:layout_width="71dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="-2dp"
-            android:layout_marginRight="70dp"
-            android:gravity="center"
-            android:text="@string/intestazione_colonna_data"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ricevimentiTextView" />
+
+            <!-- TextView per la data -->
+            <TextView
+                android:id="@+id/dataRicevimentoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/intestazione_colonna_data"
+                android:textSize="14sp"
+                android:layout_marginStart="35dp"
+
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/argomentoRicevimentoTextView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
-    <!-- Lista di ricevimenti -->
+    <!-- Rimuovi questa parte se non è necessaria -->
     <ListView
         android:id="@+id/listRicevimentiView"
         android:layout_width="match_parent"
@@ -64,9 +73,12 @@
         android:layout_marginBottom="107dp"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp"
-        android:focusable="true" />
+        android:focusable="true"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginTop="8dp"/>
 
-
+    <!-- Rimuovi anche questa parte se non è necessaria -->
     <TextView
         android:id="@+id/titleLabelTextView"
         android:layout_width="wrap_content"
@@ -76,10 +88,13 @@
         android:layout_marginTop="-65dp"
         android:layout_marginLeft="5dp"
         android:text="Task:"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="36dp"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <!-- Rimuovi anche questa parte se non è necessaria -->
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
@@ -88,6 +103,7 @@
         android:layout_below="@+id/listRicevimentiView"
         android:layout_marginStart="25dp"
         android:layout_marginTop="-65dp"
+        android:layout_marginEnd="36dp"
         android:layout_toEndOf="@+id/titleLabelTextView"
         android:textColor="@color/color_primary"
         android:textSize="16sp" />
@@ -104,5 +120,5 @@
         android:src="@drawable/baseline_add_circle_48"
         android:visibility="visible"
         android:layout_marginBottom="?android:attr/actionBarSize" />
-
 </RelativeLayout>
+

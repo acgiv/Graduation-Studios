@@ -54,6 +54,9 @@ public class ConfermaRichiestaDialog extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Metodo utilizzato per creare un campo nella tabella richiestaTesi su firestore
+     */
     private void createRichiestaTesi(){
         String stato = "In Attesa";
         // Crea un oggetto per la nuova richiesta di tesi
@@ -98,6 +101,10 @@ public class ConfermaRichiestaDialog extends DialogFragment {
         void onCallback(Long maxRequestId);
     }
 
+    /**
+     * Metodo utilizzato per trovare l'id massimo presente nella tabella richiesteTesi
+     * @param callback
+     */
     private void findMaxRequestId(MaxRequestIdCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference richiesteTesiRef = db.collection("RichiesteTesi");
@@ -124,6 +131,9 @@ public class ConfermaRichiestaDialog extends DialogFragment {
                     Log.e("Firestore Error", "Error finding max request ID", e);
                 });
     }
+
+
+
 
 
 }

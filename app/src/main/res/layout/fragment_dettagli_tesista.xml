@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <!-- ... Griglia contenente le varie card ... -->
 
         <!-- ... bottoni home e profilo ... -->
@@ -56,9 +55,6 @@
             android:id="@+id/grigliaDati"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="1dp"
             android:layout_marginBottom="18dp"
             android:columnCount="3"
             android:rowCount="3"
@@ -67,12 +63,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.035"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="8dp">
 
-            >
-
-
-            <!-- ... Card Dati tesista ... -->
-
+            <!-- Card Dati tesista -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewAnagraficaTesista"
                 android:layout_width="375dp"
@@ -132,12 +127,13 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="70dp"
+                        android:layout_marginStart="85dp"
                         android:layout_marginTop="35dp"
                         android:textColor="@color/black"
-                        app:layout_constraintEnd_toEndOf="parent"
                         android:textSize="18sp"
-                        tools:visibility="visible" />
+                        app:layout_constraintTop_toBottomOf="@+id/nome_tesista"
+                        app:layout_constraintStart_toStartOf="parent" />
+
                     <!--Linea grigia che separa campi di testo nome e cognome -->
                     <View
                         android:layout_width="match_parent"
@@ -166,11 +162,13 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="100dp"
+                        android:layout_marginStart="115dp"
                         android:layout_marginTop="63dp"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        tools:visibility="visible" />
+                        app:layout_constraintTop_toBottomOf="@+id/cognome_tesista"
+                        app:layout_constraintStart_toStartOf="parent" />
+
                     <!--Linea grigia che separa campi di testo cognome e matricola -->
                     <View
                         android:layout_width="match_parent"
@@ -199,98 +197,111 @@
                         android:layout_width="348dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="100dp"
+                        android:layout_marginStart="115dp"
                         android:layout_marginTop="91dp"
                         android:textColor="@color/black"
                         android:textSize="18sp"
-                        tools:visibility="visible" />
+                        app:layout_constraintTop_toBottomOf="@+id/matricola_tesista"
+                        app:layout_constraintStart_toStartOf="parent" />
 
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
             <!-- ... Card Dati del corso di laurea e della tesi ... -->
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewCdlTesi"
-                android:layout_width="375dp"
-                android:layout_height="150dp"
+            <ScrollView
+                android:id="@+id/cardScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_row="0"
                 android:layout_rowWeight="1"
                 android:layout_column="0"
                 android:layout_columnWeight="1"
                 android:layout_gravity="center"
                 android:layout_margin="12dp"
-                android:layout_marginTop="200dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="8dp">
+                android:layout_marginTop="200dp">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewCdlTesi"
+                    android:layout_width="375dp"
+                    android:layout_height="150dp"
+                    android:layout_row="0"
+                    android:layout_rowWeight="1"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="center"
+                    android:layout_margin="12dp"
+                    android:layout_marginTop="200dp"
+                    app:cardCornerRadius="15dp"
+                    app:cardElevation="8dp">
 
-                    <View
+                    <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_height="35dp"
-                        android:background="@color/color_primary"
-                        android:visibility="visible" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
 
-                    <!--Campo nome cdl -->
-                    <TextView
-                        android:id="@+id/nome_cdl_textView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="80dp"
-                        android:layout_marginTop="-5dp"
-                        android:drawablePadding="8dp"
-                        android:text="@string/cdl_task_tesista"
-                        android:textColor="@android:color/white"
-                        android:textSize="30sp"
-                        android:textStyle="bold"
-                        app:drawableLeftCompat="@drawable/baseline_school_40_white"
-                        tools:visibility="visible" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:background="@color/color_primary"
+                            android:visibility="visible" />
 
-                    <!--Titolo card Cdl -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="80dp"
-                        android:layout_marginTop="-5dp"
-                        android:drawablePadding="8dp"
-                        android:text="@string/cdl_task_tesista"
-                        android:textColor="@android:color/white"
-                        android:textSize="30sp"
-                        android:textStyle="bold"
-                        app:drawableLeftCompat="@drawable/baseline_school_40_white"
-                        tools:visibility="visible" />
 
-                    <!--Campo facoltà-->
-                    <TextView
-                        android:id="@+id/facolta_tesista"
-                        android:layout_width="348dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="35dp"
-                        android:text="@string/facolta_task_tesista"
-                        android:textColor="@color/color_primary"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        tools:visibility="visible" />
+                        <!--Campo nome cdl -->
+                        <TextView
+                            android:id="@+id/nome_cdl_textView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginTop="-5dp"
+                            android:drawablePadding="8dp"
+                            android:text="@string/cdl_task_tesista"
+                            android:textColor="@android:color/white"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            app:drawableLeftCompat="@drawable/baseline_school_40_white"
+                            tools:visibility="visible" />
 
-                    <!--Campo inserisci facoltà-->
-                    <TextView
-                        android:id="@+id/insert_facolta_tesista"
-                        android:layout_width="348dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="80dp"
-                        android:layout_marginTop="35dp"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        tools:visibility="visible" />
+                        <!--Titolo card Cdl -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="80dp"
+                            android:layout_marginTop="-5dp"
+                            android:drawablePadding="8dp"
+                            android:text="@string/cdl_task_tesista"
+                            android:textColor="@android:color/white"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            app:drawableLeftCompat="@drawable/baseline_school_40_white"
+                            tools:visibility="visible" />
+
+                        <!--Campo facoltà-->
+                        <TextView
+                            android:id="@+id/facolta_tesista"
+                            android:layout_width="348dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="35dp"
+                            android:text="@string/facolta_task_tesista"
+                            android:textColor="@color/color_primary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            tools:visibility="visible" />
+
+                        <!-- Campo inserisci facoltà -->
+                        <TextView
+                            android:id="@+id/insert_facolta_tesista"
+                            android:layout_width="348dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="95dp"
+                            android:layout_marginTop="35dp"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            tools:visibility="visible" />
 
                     <!--Linea grigia che separa facoltà con ciclo cdl -->
                     <View
@@ -314,17 +325,16 @@
                         android:textStyle="bold"
                         tools:visibility="visible" />
 
-                    <!--Campo inserisci ciclo cdl-->
-                    <TextView
-                        android:id="@+id/insert_ciclo_cdl_tesista"
-                        android:layout_width="348dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="100dp"
-                        android:layout_marginTop="63dp"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        tools:visibility="visible" />
+                        <TextView
+                            android:id="@+id/insert_ciclo_cdl_tesista"
+                            android:layout_width="348dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="115dp"
+                            android:layout_marginTop="63dp"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            tools:visibility="visible" />
 
                     <!--Linea grigia che separa facoltà con ciclo cdl -->
                     <View
@@ -348,17 +358,16 @@
                         android:textStyle="bold"
                         tools:visibility="visible" />
 
-                    <!--Campo inserisci nome CDL-->
-                    <TextView
-                        android:id="@+id/insert_cdl_tesista"
-                        android:layout_width="348dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart= "55dp"
-                        android:layout_marginTop="91dp"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        tools:visibility="visible" />
+                        <TextView
+                            android:id="@+id/insert_cdl_tesista"
+                            android:layout_width="348dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="70dp"
+                            android:layout_marginTop="91dp"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            tools:visibility="visible" />
 
                     <!--Linea grigia che separa  cdl con titolo tesi -->
                     <View
@@ -371,10 +380,11 @@
                     <!--Campo titolo tesi-->
                     <TextView
                         android:id="@+id/titolo_tesi_tesista"
-                        android:layout_width="348dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="10dp"
+                        android:layout_gravity="left"
+                        android:layout_marginStart="23dp"
+
                         android:layout_marginTop="119dp"
                         android:text="@string/titolo_tesi_task_tesista"
                         android:textColor="@color/color_primary"
@@ -385,11 +395,12 @@
                     <!--Campo inserisci titolo tesi-->
                     <TextView
                         android:id="@+id/insert_titolo_tesi_tesista"
-                        android:layout_width="348dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="105dp"
+                        android:layout_marginStart="95dp"
                         android:layout_marginTop="119dp"
+                        app:layout_constraintStart_toEndOf="@+id/titolo_tesi_tesista"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         tools:visibility="visible" />
@@ -397,6 +408,7 @@
 
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
+            </ScrollView>
 
 
         </GridLayout>

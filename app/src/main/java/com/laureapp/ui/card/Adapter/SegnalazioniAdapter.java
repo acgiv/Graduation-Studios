@@ -1,72 +1,92 @@
 package com.laureapp.ui.card.Adapter;
 
+
+
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.laureapp.R;
-import com.laureapp.ui.card.Segnalazioni.SegnalazioniFragment;
 import com.laureapp.ui.roomdb.entity.Segnalazione;
-import com.laureapp.ui.roomdb.entity.TaskStudente;
 
-import java.util.ArrayList;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
-
-
-
 
 public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
 
-    private Context mContex;
-    private List<Segnalazione> segnalazioniList;
-    public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioni, Bundle args) {
-        super(context, 0, segnalazioni);
-        mContex = context;
-        segnalazioniList = segnalazioni;
+    private final NavController mNav;
+    private final Context context;
+    String ruolo;
+    Bundle args;
+
+
+
+    /**
+     * @param context  si riferisce al contesto in cui viene utilizzato
+     * @param segnalazioneList corrisponde alla lista di task da passare
+     */
+    public SegnalazioniAdapter(Context context, List<Segnalazione> segnalazioneList, NavController navController, Bundle args) {
+        super(context,0,segnalazioneList);
+        this.context = context;
+        this.mNav = navController;  // Inizializza il NavController
+        this.args = args;
     }
 
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View listItem = convertView;
-        if (listItem == null) {
-            listItem = LayoutInflater.from(mContex).inflate(R.layout.lista_segnalazioni, parent, false);
+    /**
+     * @param position    si riferisce alla posizione dell'item della lista
+     * @param convertView si riferisce alla variabile che gestisce il cambiamento della view
+     * @param parent      Interfaccia per le informazioni globali riguardo all'ambiente dell'applicazione.
+     *                    usata per chiamare operazioni a livello applicazione launching activities, broadcasting e receiving intents
+     * @return la view con la lista aggiornata
+     */
+    @NonNull
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View itemView = convertView;
+        if (itemView == null) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            itemView = inflater.inflate(R.layout.lista_segnalazioni, parent, false);
         }
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        convertView = inflater.inflate(R.layout.lista_segnalazioni, parent, false);
+        // Ora puoi ottenere le viste all'interno di 'lista_task.xml' e impostare i dati corrispondenti
 
-        // Ottieni l'oggetto Segnalazione corrente
+        TextView titoloTextView = itemView.findViewById(R.id.text_title);
+
+
+
         Segnalazione segnalazione = getItem(position);
-        // Imposta il titolo dell'elemento principale
-        TextView mainTextView = listItem.findViewById(R.id.text_title);
-        // Imposta la richiesta nell'elemento secondario (subitem)
-        TextView subTextView = listItem.findViewById(R.id.text_richiesta);
 
-        assert segnalazione != null;
-        if(segnalazione.getTitolo() != null) {
-            mainTextView.setText(segnalazione.getTitolo());
+
+        if (segnalazione != null) {
+            titoloTextView.setText(segnalazione.getId_segnalazione().toString() + ". " + segnalazione.getTitolo());
         }
+        // Gestisci il clic sull'elemento della lista
+        itemView.setOnClickListener(v -> {
+            if (segnalazione != null) {
 
-        if(segnalazione.getRichiesta() != null) {
-            subTextView.setText(segnalazione.getRichiesta());
-        }
+                if(StringUtils.equals("Studente", args.getString("ruolo"))){
+                    args.putSerializable("SelectedSegnalazione", segnalazione);
+                    mNav.navigate(R.id.action_fragment_segnalazioni_to_chat_fragment, args);
+
+                }else if(StringUtils.equals("Professore", args.getString("ruolo"))) {
+                    // Utilizza la NavHostController per navigare al dettaglio del task
+                    args.putSerializable("SelectedSegnalazione", segnalazione);
+                    mNav.navigate(R.id.action_fragment_segnalazioni_to_chat_fragment, args);
+                }
+            }
+        });
 
 
-        return listItem;
+        return itemView;
     }
+
+
 }

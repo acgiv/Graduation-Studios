@@ -6,6 +6,7 @@ import static com.laureapp.ui.roomdb.Converters.stringToTimestamp;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -95,14 +96,15 @@ public class RicevimentiFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inizializza il binding
-        binding = com.laureapp.databinding.FragmentRicevimentiBinding.inflate(inflater, container, false);
+        binding = FragmentRicevimentiBinding.inflate(inflater, container, false);
         context = requireContext();
         args = getArguments();
 
 
         if(args != null) {
 
-            taskStudente = args.getSerializable("SelectedTask", TaskStudente.class);
+            taskStudente = (TaskStudente) args.getSerializable("Task");
+
             //Carico i dati delle task in base all'utente loggato
         }
         // Altri codici del tuo fragment
@@ -140,7 +142,7 @@ public class RicevimentiFragment extends Fragment {
      */
     public void showInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Nuovo ricevimento");
+        builder.setTitle(getString(R.string.nuovoRicevimento));
 
         // Includi il layout XML personalizzato
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_ricevimento_popup, null);

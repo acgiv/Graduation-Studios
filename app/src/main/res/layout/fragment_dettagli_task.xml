@@ -28,7 +28,8 @@
             app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
 
             <!-- ... Card Dati anagrafici ... -->
@@ -143,7 +144,7 @@
                             android:importantForAutofill="no"
                             android:padding="7dp"
                             style="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu.NoDropdownIcon"
-                            android:text="@string/default_stato_task"
+
                             android:textColor="@color/color_primary" />
                     </com.google.android.material.textfield.TextInputLayout>
 

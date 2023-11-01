@@ -1,11 +1,19 @@
 package com.laureapp.ui.roomdb.entity;
 
+import android.graphics.Bitmap;
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -23,8 +31,6 @@ public class Tesi implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id_tesi")
     private Long id_tesi;
-
-
     @ColumnInfo(name = "id_vincolo")
     private Long id_vincolo;
 
@@ -139,6 +145,9 @@ public class Tesi implements Serializable {
 
                 '}';
     }
+
+
+
 
 
 }

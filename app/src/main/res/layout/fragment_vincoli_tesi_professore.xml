@@ -44,8 +44,9 @@
 
                     <TextView
                         android:id="@+id/tempisticheTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/tempistiche"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
@@ -53,11 +54,11 @@
 
                     <TextView
                         android:id="@+id/insertTempisticheTesiProfessore"
-                        android:layout_width="230dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaTempisticheTesiProfessore"
@@ -65,8 +66,8 @@
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line1"
@@ -90,21 +91,21 @@
 
                     <TextView
                         android:id="@+id/mediaVotiTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/media_voti"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertMediaVotiTesiProfessore"
-                        android:layout_width="246dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaMediaVotiTesiProfessore"
@@ -112,9 +113,8 @@
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
-
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line2"
@@ -141,21 +141,21 @@
 
                     <TextView
                         android:id="@+id/esamiMancantiTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/esami_mancanti"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertEsamiMancantiTesiProfessore"
-                        android:layout_width="194dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaEsamiMancantiTesiProfessore"
@@ -163,8 +163,8 @@
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line3"
@@ -190,31 +190,30 @@
 
                     <TextView
                         android:id="@+id/skillTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/skill"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertSkillTesiProfessore"
-                        android:layout_width="311dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaSkillTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
-
                         android:src="@drawable/edit_icon" />
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line4"

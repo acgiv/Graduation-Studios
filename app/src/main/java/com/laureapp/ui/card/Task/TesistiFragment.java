@@ -37,7 +37,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
-import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.card.Adapter.StudentAdapter;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
@@ -49,7 +48,6 @@ import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.repository.StudenteRepository;
 import com.laureapp.ui.roomdb.repository.UtenteRepository;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
-import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +75,6 @@ public class TesistiFragment extends Fragment {
     String cognomeTesistaCercato;
     UtenteModelView utenteModelView;
     Long id_utente;
-    SharedDataModelView sharedViewModel;
 
 
 

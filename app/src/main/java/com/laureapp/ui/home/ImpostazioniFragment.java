@@ -1,4 +1,4 @@
-package com.laureapp.ui;
+package com.laureapp.ui.home;
 
 import static android.content.Context.MODE_PRIVATE;
 

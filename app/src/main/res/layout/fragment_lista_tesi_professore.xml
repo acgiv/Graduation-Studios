@@ -15,12 +15,6 @@
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/baseline_delete_24"
-        android:layout_marginStart="380dp"/>
-
     <!--Icona per aggiungere una tesi -->
 
     <ImageButton

@@ -38,7 +38,7 @@ import com.laureapp.ui.roomdb.entity.Vincolo;
         Professore.class, StudenteTesi.class, Vincolo.class,Ricevimenti.class,
         TesiProfessore.class, Tesi.class, TaskTesi.class, TaskStudente.class,
         Segnalazione.class, RichiesteTesi.class, FileTesi.class
-}, version = 22)
+}, version = 20)
 @TypeConverters({Converters.class})
 public abstract class RoomDbSqlLite extends RoomDatabase{
 
@@ -59,7 +59,6 @@ public abstract class RoomDbSqlLite extends RoomDatabase{
         public abstract RichiesteTesiDao richiesteTesiDao();
 
         public abstract FileTesiDao fileTesiDao();
-
         public static RoomDbSqlLite getDatabase(final Context context) {
             if (INSTANCE == null) {
                 synchronized (RoomDbSqlLite.class) {

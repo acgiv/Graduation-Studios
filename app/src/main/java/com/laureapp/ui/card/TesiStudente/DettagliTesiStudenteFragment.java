@@ -90,6 +90,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
     String nomeCorelatore = "";
     Long media;
     Long esamiMancanti;
+    Bitmap qrCodeBitmap;
     ImageButton share;
     ArrayList<String> nomiFile = new ArrayList<>(); // FileInfo rappresenta le informazioni sui file da visualizzare
 
@@ -129,7 +130,6 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
 
         if (args != null) { //se non sono null
-
             tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
             if (tesi != null) {
                 //mi passo tutti i parametri di una Tesi
@@ -160,7 +160,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                 share.setOnClickListener(view1 -> {
                     // Genera il QR code
-                    Bitmap qrCodeBitmap = QRGenerator(tesi);
+                    qrCodeBitmap = QRGenerator(tesi);
 
 
 
@@ -171,7 +171,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     qrCodeBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     byte[] qrCodeBytes = byteArrayOutputStream.toByteArray();
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MediaStore.Images.Media.insertImage(requireActivity().getContentResolver(), qrCodeBitmap, "QR Code", null)));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MediaStore.Images.Media.insertImage(requireActivity().getContentResolver(), qrCodeBitmap, "qr_code_bitmap", null)));
                     startActivity(Intent.createChooser(shareIntent, "Condividi QR Code tramite"));
                 });
 
@@ -524,7 +524,8 @@ public class DettagliTesiStudenteFragment extends Fragment {
                     "\nCiclo CDL: " + tesi.getCiclo_cdl() +
                     // Aggiungi altri dati della tesi, se necessario.
                     "\nID Tesi: " + tesi.getId_tesi() +
-                    "\nRelatore: " + nomeCognome;
+                    "\nRelatore: " + nomeRelatore +
+                    "\nCo-Relatore: " + nomeCorelatore;
 
 
             BitMatrix matrix = writer.encode(content, BarcodeFormat.QR_CODE, 400, 400);

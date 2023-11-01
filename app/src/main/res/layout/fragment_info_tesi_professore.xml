@@ -32,30 +32,30 @@
                 android:layout_marginEnd="36dp"
                 android:layout_marginTop="8dp">
 
-                android:layout_height="wrap_content">
 
 
                 <!-- Altri elementi UI come titolo, tipologia, ecc. -->
 
                 <!-- LinearLayout per i file tesi -->
 
-                    <LinearLayout
-                        android:id="@+id/linearLayoutTitoloTesiProfessore"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
-                        android:orientation="horizontal"
-                        android:paddingTop="2dp"
-                        android:paddingBottom="2dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                <LinearLayout
+                    android:id="@+id/linearLayoutTitoloTesiProfessore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="16dp"
+                    android:orientation="horizontal"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
                         android:id="@+id/titoloTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/titoloTesiProfessore"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
@@ -63,11 +63,11 @@
 
                     <TextView
                         android:id="@+id/insertTitoloTesiProfesore"
-                        android:layout_width="295dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaTitoloTesiProfessore"
@@ -75,9 +75,8 @@
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
-
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line1"
@@ -93,42 +92,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:layout_marginStart="16dp"
                     android:orientation="horizontal"
                     android:paddingTop="2dp"
                     android:paddingBottom="2dp"
-                    android:layout_marginStart="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/linearLayoutTitoloTesiProfessore">
 
                     <TextView
                         android:id="@+id/tipoTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/tipologia"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertTipologiaTesiProfessore"
-                        android:layout_width="261dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaTipologiaTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
-
                         android:src="@drawable/edit_icon" />
-
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line2"
@@ -154,33 +151,30 @@
 
                     <TextView
                         android:id="@+id/dataPubblicazioneTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/data_pubblicazione"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertDataPubblicazioneTesiProfessore"
-                        android:layout_width="164dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaDataPubblicazioneTesiProfessore"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
-
-                        android:src="@drawable/edit_icon"/>
-
-
-
+                        android:src="@drawable/edit_icon" />
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line3"
@@ -206,32 +200,30 @@
 
                     <TextView
                         android:id="@+id/cicloCdlTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/ciclo_cdl"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertCicloCdlTesiProfessore"
-                        android:layout_width="258dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaCicloCdlTesiProfessore"
                         android:layout_width="30dp"
-                        android:layout_height="34dp"
+                        android:layout_height="30dp"
                         android:background="@android:color/transparent"
-
                         android:src="@drawable/edit_icon" />
-
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line4"
@@ -257,21 +249,21 @@
 
                     <TextView
                         android:id="@+id/abstractTesiProfessore"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/abstractTesi"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/insertAbstractTesiProfessore"
-                        android:layout_width="268dp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="2"
                         android:textColor="@color/black"
-                        android:textSize="22dp"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        android:textSize="22dp" />
 
                     <ImageButton
                         android:id="@+id/modificaAbstractTesiProfessore"
@@ -279,9 +271,8 @@
                         android:layout_height="30dp"
                         android:background="@android:color/transparent"
                         android:src="@drawable/edit_icon" />
-
-
                 </LinearLayout>
+
 
                 <View
                     android:id="@+id/line5"
@@ -367,14 +358,19 @@
 
                     </LinearLayout>
 
-                <!-- Aggiungi il RecyclerView per visualizzare i file sotto il LinearLayout -->
-                <ListView
-                    android:id="@+id/listViewFiles"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutFileTesiProfessore" />
-                />
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayoutFileTesiProfessore">
+
+                    <ListView
+                        android:id="@+id/listViewFiles"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp" />
+
+                </ScrollView>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

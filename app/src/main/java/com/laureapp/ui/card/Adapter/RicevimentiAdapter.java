@@ -81,7 +81,7 @@ public class RicevimentiAdapter extends ArrayAdapter<Ricevimenti> {
 
         if (ricevimento != null) {
 
-            String ricevimentoText = "<b>Ricevimento " + ricevimento.getId_ricevimento().toString() + "</b>";
+            String ricevimentoText = "<b>" + ricevimento.getId_ricevimento().toString() + "</b>";
 
             //Il testo è ora in grassetto
             SpannableString ricevimentoTextBold = new SpannableString(Html.fromHtml(ricevimentoText, Html.FROM_HTML_MODE_LEGACY));
@@ -116,9 +116,9 @@ public class RicevimentiAdapter extends ArrayAdapter<Ricevimenti> {
 
     private void showConfirmationDialog(String data_ricevimento, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Conferma eliminazione");
+        builder.setTitle(context.getString(R.string.confermaEliminazioneTitle));
 
-        String messageText = "Vuoi davvero eliminare il ricevimento in data <b>" + data_ricevimento + "</b>?";
+        String messageText = context.getString(R.string.confEliminazioneRicevimento) + " <b>" + data_ricevimento + "</b>?";
 
         // Crea un oggetto SpannableString utilizzando Html.fromHtml per poter utilizzare la formattazione html
         //Il testo è ora in grassetto
@@ -126,13 +126,13 @@ public class RicevimentiAdapter extends ArrayAdapter<Ricevimenti> {
 
         builder.setMessage(message);
 
-        builder.setPositiveButton("Conferma", (dialog, which) -> {
+        builder.setPositiveButton(context.getString(R.string.conferma), (dialog, which) -> {
             // Elimina l'elemento
             deleteRicevimento(position);
             dialog.dismiss(); // Chiudi il popup
         });
 
-        builder.setNegativeButton("Annulla", (dialog, which) -> {
+        builder.setNegativeButton(context.getString(R.string.annulla), (dialog, which) -> {
             dialog.dismiss(); // Chiudi il popup
         });
 

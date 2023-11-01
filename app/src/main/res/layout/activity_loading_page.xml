@@ -55,8 +55,8 @@
 
         <ImageView
             android:id="@+id/logo"
-            android:layout_width="137dp"
-            android:layout_height="137dp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
             android:src="@drawable/logouniba_nobg"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

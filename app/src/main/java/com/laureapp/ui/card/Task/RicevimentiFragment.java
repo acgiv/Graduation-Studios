@@ -142,7 +142,7 @@ public class RicevimentiFragment extends Fragment {
      */
     public void showInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Nuovo ricevimento");
+        builder.setTitle(getString(R.string.nuovoRicevimento));
 
         // Includi il layout XML personalizzato
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_ricevimento_popup, null);

@@ -112,9 +112,9 @@
     <string name="add_icon_description">Icona add</string>
     <string name="elimina">Elimina</string>
     <string name="salva">Salva</string>
-    <string name="ricevimento_1">Ricevimento 1</string>
-    <string name="argomento">Argomento 1</string>
-    <string name="data_ricevimento">Data 1</string>
+    <string name="ricevimento_1">Ricevimento</string>
+    <string name="argomento">Argomento</string>
+    <string name="data_ricevimento">Data</string>
     <string name="pulsante_task">Task</string>
     <string name="nome_tesista_task">Nome:</string>
     <string name="cognome_task_tesista">Cognome:</string>
@@ -240,5 +240,11 @@
     <string name="salvaModificheConf">Sei sicuro di voler salvare le modifiche?</string>
     <string name="conferma">Conferma</string>
     <string name="annulla">Annulla</string>
+    <string name="confermaEliminazioneTitle">Conferma eliminazione</string>
+    <string name="eliminareTask">Vuoi davvero eliminare la task</string>
+    <string name="confEliminazioneRicevimento">Vuoi davvero eliminare il ricevimento in data</string>
+    <string name="nuovoRicevimento">Nuovo ricevimento</string>
+    <string name="nuovaTask">Nuova task</string>
+    <string name="MaterialeTesi">Materiale Tesi</string>
 
 </resources>

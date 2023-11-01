@@ -10,13 +10,20 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -63,6 +70,8 @@ public class TesistiFragment extends Fragment {
     Bundle args;
     private FirebaseAuth mAuth;
     ListView listView;
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
 
     StudentAdapter adapter;
     String cognomeTesistaCercato;
@@ -81,8 +90,12 @@ public class TesistiFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         context = requireContext();
         args = getArguments();
         if (args != null) {

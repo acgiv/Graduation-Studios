@@ -156,7 +156,7 @@ public class TaskStudenteFragment extends Fragment {
      */
     public void showInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Nuova task");
+        builder.setTitle(getString(R.string.nuovaTask));
 
         // Includi il layout XML personalizzato
         View view = LayoutInflater.from(requireContext()).inflate(R.layout.add_data_popup, null);
@@ -245,7 +245,7 @@ public class TaskStudenteFragment extends Fragment {
 
 
         // Imposta un ascoltatore per il pulsante Annulla
-        builder.setNegativeButton("Annulla", (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.annulla), (dialog, which) -> {
             // Chiudi il dialog solo dopo che l'utente ha premuto Annulla
             dialog.dismiss();
         });
@@ -623,7 +623,7 @@ public class TaskStudenteFragment extends Fragment {
                     taskData.put("titolo", inputData);
                     taskData.put("data_inizio", startDate);
                     taskData.put("data_scadenza", dueDate);
-                    taskData.put("stato", R.string.default_stato_task);
+                    taskData.put("stato", getString(R.string.default_stato_task));
                     taskData.put("id_studente_tesi", id_studente_tesi);
 
                     // Supponendo che 'taskRef' sia un oggetto valido di tipo CollectionReference
@@ -651,7 +651,7 @@ public class TaskStudenteFragment extends Fragment {
         taskStudente.setTitolo(inputData);
         taskStudente.setData_inizio(startDate);
         taskStudente.setData_scadenza(dueDate);
-        taskStudente.setStato(String.valueOf(R.string.default_stato_task));
+        taskStudente.setStato(getString(R.string.default_stato_task));
         taskStudente.setId_studente_tesi(id_studente_tesi);
 
         // Aggiungi taskTesi alla lista

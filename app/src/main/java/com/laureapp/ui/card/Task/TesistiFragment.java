@@ -284,10 +284,10 @@ public class TesistiFragment extends Fragment {
      * @param id_studente id della tesi nella tabella StudenteTesi
      * @return l'id della tesi presente nella tabella studente_tesi
      */
-    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente) {
+    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente, Long id_tesi) {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi")
+                .collection("StudenteTesi").whereEqualTo("id_tesi",id_tesi)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -354,11 +354,19 @@ public class TesistiFragment extends Fragment {
 
     private Task<List<StudenteWithUtente>> loadStudTesiForIdTesi(Long id_tesi) {
         return loadTesiByIdTesiInTesiStud(id_tesi)
-                .onSuccessTask(this::loadStudForIdStudenteInStudenteTesi);
+                .onSuccessTask(task -> {
+                    // Qui task rappresenta il risultato della query loadTesiByIdTesiInTesiStud
+                    // Puoi ottenere il valore di id_studente e id_tesi dall'ambiente circostante
+
+                    Long id_studente = task; // Assegna il valore corretto
+
+                    return loadStudForIdStudenteInStudenteTesi(id_studente, id_tesi);
+                });
     }
 
-    private Task<List<StudenteWithUtente>> loadStudForIdStudenteInStudenteTesi(Long id_studente) {
-        return loadStudByIdStudenteInStudenteTesi(id_studente)
+
+    private Task<List<StudenteWithUtente>> loadStudForIdStudenteInStudenteTesi(Long id_studente,Long id_tesi) {
+        return loadStudByIdStudenteInStudenteTesi(id_studente,id_tesi)
                 .addOnCompleteListener(studTask -> {
                     if (studTask.isSuccessful()) {
                         requireActivity().runOnUiThread(() -> {

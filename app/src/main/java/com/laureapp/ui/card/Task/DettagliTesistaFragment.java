@@ -1,4 +1,4 @@
-package com.uniba.graduationStudios.laureapp.ui.card.Task;
+package com.laureapp.ui.card.Task;
 
 import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
 

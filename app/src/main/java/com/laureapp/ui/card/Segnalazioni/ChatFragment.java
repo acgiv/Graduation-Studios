@@ -1,4 +1,4 @@
-package com.uniba.graduationStudios.laureapp.ui.card.Segnalazioni;
+package com.laureapp.ui.card.Segnalazioni;
 
 import android.os.Bundle;
 

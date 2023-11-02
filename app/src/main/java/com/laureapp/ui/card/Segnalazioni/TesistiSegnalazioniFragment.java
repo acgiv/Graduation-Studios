@@ -1,4 +1,4 @@
-package com.uniba.graduationStudios.laureapp.ui.card.Segnalazioni;
+package com.laureapp.ui.card.Segnalazioni;
 
 
 import static com.laureapp.ui.controlli.ControlInput.showToast;
@@ -274,7 +274,7 @@ public class TesistiSegnalazioniFragment extends Fragment {
     private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente) {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi").whereEqualTo("id_studente", id_studente)
+                .collection("StudenteTesi")
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {

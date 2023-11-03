@@ -34,7 +34,6 @@ import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
-import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -63,7 +62,6 @@ public class DettagliTesistaFragment extends Fragment {
     Bundle args;
     Long id_utente;
     Long id_studente;
-    SharedDataModelView sharedViewModel;
     String email;
 
 
@@ -75,7 +73,6 @@ public class DettagliTesistaFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = requireContext();
-        sharedViewModel = new ViewModelProvider(this).get(SharedDataModelView.class);
 
     }
 

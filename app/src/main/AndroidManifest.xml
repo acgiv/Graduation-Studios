@@ -21,21 +21,25 @@
             android:name=".ui.card.QrCode.QrCodeActivity"
             android:exported="false"
             android:label="@string/title_activity_qr_code"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.LaureApp" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.LaureApp" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.LaureApp"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.login.LoadingPageActivity"
             android:exported="true"
             android:theme="@style/Theme.LaureApp"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustPan">
 
             <!-- Set DataEntryActivity come prima pagina di avvio -->

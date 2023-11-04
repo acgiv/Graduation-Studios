@@ -143,7 +143,8 @@ public class TesistiFragment extends Fragment {
             StudenteWithUtente studenteWithUtente = studentList.get(position);
 
             // Crea un nuovo Bundle per passare i dati all'altro fragment
-            args.putString("emailStudente", studenteWithUtente.getUtente().getEmail());
+            args.putSerializable("Utente", studenteWithUtente.getUtente());
+            args.putSerializable("Studente", studenteWithUtente.getStudente());
 
 
             // Passa il Bundle al fragment di destinazione

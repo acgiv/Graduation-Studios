@@ -32,8 +32,6 @@ import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.StudenteTesi;
 import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
-import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
-import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -57,12 +55,8 @@ public class DettagliTesistaFragment extends Fragment {
     String cicloCdl;
     String nome_cdl;
     String titolo;
-    UtenteModelView utenteModelView;
-    StudenteModelView studenteModelView;
     Bundle args;
-    Long id_utente;
-    Long id_studente;
-    String email;
+
 
 
     public DettagliTesistaFragment() {
@@ -103,30 +97,27 @@ public class DettagliTesistaFragment extends Fragment {
         args = getArguments();
 
         if(args != null) {
-            utenteModelView = new UtenteModelView(context);
-            email = args.getString("emailStudente"); // Chiamata al metodo per ottenere la mail
-            args.putString("emailStudente",email);
+            Studente studente = (Studente) args.getSerializable("Studente"); // Chiamata al metodo per ottenere la mail
+            Utente utente = (Utente) args.getSerializable("Utente");
 
-            id_utente = utenteModelView.getIdUtente(email);
-            studenteModelView = new StudenteModelView(context);
-            id_studente = studenteModelView.findStudente(id_utente);
 
-            loadStudenteTesiForStudenteId(id_studente).addOnCompleteListener(tesiTask -> {
+
+            loadStudenteTesiForStudenteId(studente.getId_studente()).addOnCompleteListener(tesiTask -> {
                 if (tesiTask.isSuccessful()) {
                     Tesi tesi = tesiTask.getResult();
                     if (tesi != null) {
                         // Ora puoi accedere ai dati della tesi come segue:
                         cicloCdl = tesi.getCiclo_cdl();
                         titolo = tesi.getTitolo();
-                        if (utenteModelView != null) {
+                        if (utente != null) {
                             Log.d("Dati tesista", args.toString());
 
-                            nome = utenteModelView.getNome();
-                            cognome = utenteModelView.getCognome();
-                            matricola = studenteModelView.getMatricola(id_studente);
+                            nome = utente.getNome();
+                            cognome = utente.getCognome();
+                            matricola = studente.getMatricola();
 
-                            facolta = utenteModelView.getFacolta(id_utente);
-                            nome_cdl = utenteModelView.getNomeCdl(id_utente);
+                            facolta = utente.getFacolta();
+                            nome_cdl = utente.getNome_cdl();
 
                             Log.d("Dati tesista", nome + cognome + matricola.toString() + facolta + cicloCdl + nome_cdl + titolo);
 
@@ -156,7 +147,7 @@ public class DettagliTesistaFragment extends Fragment {
             taskButton.setOnClickListener(view1 -> mNav.navigate(R.id.action_dettagli_tesista_to_task_studente, args));
 
             deleteButton.setOnClickListener(view1 -> {
-                showConfirmationDialog(studenteModelView, utenteModelView);
+                showConfirmationDialog(studente, utente);
             });
 
 
@@ -290,7 +281,7 @@ public class DettagliTesistaFragment extends Fragment {
      * @param studente studente presente nella card
      * @param utente utente associato allo studente
      */
-    private void showConfirmationDialog(StudenteModelView studente, UtenteModelView utente) {
+    private void showConfirmationDialog(Studente studente, Utente utente) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle(getString(R.string.confermaEliminazioneTitle));
 
@@ -304,7 +295,7 @@ public class DettagliTesistaFragment extends Fragment {
 
         builder.setPositiveButton(getString(R.string.conferma), (dialog, which) -> {
             // Chiama il metodo per eliminare il record dalla tabella studente_tesi
-            deleteStudenteTesi(studente.findStudente(utente.getIdUtente(email)));
+            deleteStudenteTesi(studente.getId_studente());
 
             // Chiudi il popup
             dialog.dismiss();

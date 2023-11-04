@@ -24,6 +24,16 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
     private ArrayList<Tesi> mTesiList;
     private NavController mNav;
 
+    public interface DeleteButtonClickListener {
+        void onDeleteButtonClick(int position);
+    }
+
+    private ListaTesiProfessoreAdapter.DeleteButtonClickListener deleteButtonClickListener;
+
+    public void setDeleteButtonClickListener(ListaTesiProfessoreAdapter.DeleteButtonClickListener listener) {
+        this.deleteButtonClickListener = listener;
+    }
+
     public ListaTesiProfessoreAdapter(Context context, ArrayList<Tesi> tesiList) {
         super(context,0,tesiList);
         mContext = context;
@@ -37,6 +47,8 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
         if (listItemView == null) {
             listItemView = LayoutInflater.from(mContext).inflate(R.layout.lista_tesi_professore, parent, false);
         }
+
+        ImageButton deleteButton = listItemView.findViewById(R.id.deleteTesiButton);
 
         final Tesi currentTesi = mTesiList.get(position);
 
@@ -58,6 +70,15 @@ public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
             args.putSerializable("Tesi",currentTesi);
             Navigation.findNavController(v).navigate(R.id.action_tesiProfessoreFragment_to_tesiTabProfessoreFragment,args);
 
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (deleteButtonClickListener != null) {
+                    deleteButtonClickListener.onDeleteButtonClick(position);
+                }
+            }
         });
 
         return listItemView;

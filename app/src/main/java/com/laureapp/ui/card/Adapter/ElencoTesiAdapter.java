@@ -51,6 +51,7 @@ public class ElencoTesiAdapter extends ArrayAdapter<Tesi> {
         listItemView.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putSerializable("Tesi",currentTesi);
+
             Navigation.findNavController(v).navigate(R.id.action_fragment_tesistudenteFragment_to_dettagli_tesi_studente,args);
 
 

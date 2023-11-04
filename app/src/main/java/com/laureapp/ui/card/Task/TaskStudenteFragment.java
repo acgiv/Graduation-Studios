@@ -82,8 +82,7 @@ public class TaskStudenteFragment extends Fragment {
 
     private static FirebaseFirestore db;
     private Bundle args;
-    private Studente utente_studente;
-    UtenteModelView utenteView;
+    Utente utente;
     private Long id_utente;
 
 
@@ -126,21 +125,17 @@ public class TaskStudenteFragment extends Fragment {
 
         if(args != null) {
             adapter = new TaskStudenteAdapter(context, (ArrayList<TaskStudente>) taskList,mNav, args);
-            utenteView = new UtenteModelView(context);
+            utente = (Utente) args.getSerializable("Utente");
             if (StringUtils.equals("Professore", args.getString("ruolo"))) {
-                String email = args.getString("emailStudente");
 
-                id_utente = utenteView.getIdUtente(email);
+                id_utente = utente.getId_utente();
                 loadStudentForUserId(id_utente);
 
                 addButton.setOnClickListener(view1 ->
                         showInputDialog()
                 );
             } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
-                String email = getEmailFromSharedPreferences(context);
                 addButton.setVisibility(View.GONE);
-                id_utente = utenteView.getIdUtente(email);
-                loadStudentForUserId(id_utente);
 
                 //Carico i dati delle task in base all'utente loggato
             }
@@ -225,16 +220,14 @@ public class TaskStudenteFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             if (StringUtils.equals("Professore", args.getString("ruolo"))) {
-                String email = args.getString("emailStudente");
 
-                id_utente = utenteView.getIdUtente(email);
+                id_utente = utente.getId_utente();
                 addTaskToFirestoreLast(id_utente, inputData, startDate, dueDate);
             }
 
 
             //Aggiungo la task a Firestore in base all'utente loggato
 
-            Log.d("id_utente_lista", id_utente.toString());
         });
 
 

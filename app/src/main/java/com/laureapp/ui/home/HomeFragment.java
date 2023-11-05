@@ -37,7 +37,6 @@ public class HomeFragment extends Fragment {
     CardView CardTesi;
     CardView CardTask;
     CardView CardTesisti;
-    CardView CardSocial;
     CardView CardMessaggi;
 
     CardView CardSegnalazioni;
@@ -103,7 +102,6 @@ public class HomeFragment extends Fragment {
         mNav = Navigation.findNavController(view);
         CardTesi =  view.findViewById(R.id.cardViewTesi);
         CardTask =  view.findViewById(R.id.cardViewTask);
-        CardSocial =  view.findViewById(R.id.cardViewSocial);
         CardTesisti = view.findViewById(R.id.cardViewTesisti);
 
         TextView taskTextView = view.findViewById(R.id.taskTextView);
@@ -145,10 +143,6 @@ public class HomeFragment extends Fragment {
                 Log.d("Tesisti", "cliccato Tesisti Ospite");
                 mNav.navigate(R.id.action_fragment_home_to_tesisti);
             }
-        });
-
-        CardSocial.setOnClickListener(view1 -> {
-            mNav.navigate(R.id.action_fragment_home_to_social_fragment);
         });
 
         CardSegnalazioni =  view.findViewById(R.id.cardViewMessaggi);

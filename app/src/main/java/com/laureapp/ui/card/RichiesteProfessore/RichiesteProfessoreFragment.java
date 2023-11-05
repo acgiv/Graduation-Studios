@@ -1,6 +1,5 @@
 package com.laureapp.ui.card.RichiesteProfessore;
 
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,6 +27,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * Questa classe rappresenta un frammento per visualizzare le richieste di tesi inviate dagli studenti a un professore.
+ */
 public class RichiesteProfessoreFragment extends Fragment {
 
     private RichiesteProfessoreAdapter adapter;
@@ -186,6 +188,12 @@ public class RichiesteProfessoreFragment extends Fragment {
                 });
     }
 
+    /**
+     * Carica le richieste di tesi dal database Firestore in base agli ID delle tesi.
+     *
+     * @param idTesiList una lista di ID di tesi da cui ottenere le richieste.
+     * @return un oggetto di tipo Task<ArrayList<RichiesteTesi>> contenente le richieste di tesi.
+     */
     private Task<ArrayList<RichiesteTesi>> loadRichiesteTesiByIdTesi(ArrayList<Long> idTesiList) {
         final ArrayList<RichiesteTesi> richiesteTesi = new ArrayList<>();
 
@@ -217,9 +225,14 @@ public class RichiesteProfessoreFragment extends Fragment {
                     return richiesteTesi;
                 });
 
-
     }
 
+    /**
+     * Estrae gli ID delle tesi da un elenco di richieste di tesi.
+     *
+     * @param richiesteList una lista di richieste di tesi da cui estrarre gli ID delle tesi.
+     * @return una lista di ID delle tesi estratti dalle richieste.
+     */
     private ArrayList<Long> extractIdTesiFromRichieste(ArrayList<RichiesteTesi> richiesteList) {
         idTesiListFromRichieste = new ArrayList<>();
 
@@ -228,7 +241,5 @@ public class RichiesteProfessoreFragment extends Fragment {
         }
         return idTesiListFromRichieste;
     }
-
-
 
 }

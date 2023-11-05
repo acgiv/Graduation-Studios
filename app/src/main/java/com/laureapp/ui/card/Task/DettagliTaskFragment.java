@@ -47,11 +47,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Questa classe rappresenta un frammento per la visualizzazione e la modifica dei dettagli di un task.
  */
 public class DettagliTaskFragment extends Fragment {
 
@@ -231,12 +228,7 @@ public class DettagliTaskFragment extends Fragment {
 
 
     }
-    private void inizializzate_binding_text(){
-        elem_text.put("titolo", binding.titoloTaskBar);
-        elem_text.put("stato", binding.dropdownStatoTask);
-        elem_text.put("data_inizio", binding.startDateBar);
-        elem_text.put("data_scadenza", binding.dueDateBar);
-    }
+
     /**
      * Con questo metodo mostro il calendario dopo che l'utente clicca su una bar
      * @param view corrisponde alla view originaria aggiornata
@@ -373,8 +365,9 @@ public class DettagliTaskFragment extends Fragment {
         }
     }
 
-
-    // Questo metodo viene chiamato quando l'utente vuole salvare le modifiche
+    /**
+     * Questo metodo viene chiamato quando l'utente vuole salvare le modifiche al task.
+     */
     private void modificaDatiTask() {
         // Esegui il recupero dei dati inseriti dall'utente
 
@@ -418,7 +411,11 @@ public class DettagliTaskFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Salva i dati del task modificato nel database Firestore.
+     *
+     * @param taskStudente il task con le modifiche da salvare.
+     */
     private void salvaDatiTaskStudente(TaskStudente taskStudente) {
         // Ottieni un riferimento alla collezione "Task" nel tuo database Firestore
         CollectionReference taskRef = db.collection("TaskStudente");

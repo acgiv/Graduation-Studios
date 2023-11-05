@@ -36,18 +36,13 @@ import com.laureapp.ui.roomdb.entity.Utente;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Use the  factory method to
- * create an instance of this fragment.
+ * Questa classe rappresenta un frammento per la visualizzazione dei dettagli di un tesista e la gestione delle relative azioni.
  */
 public class DettagliTesistaFragment extends Fragment {
 
-    
     Context context;
     private NavController mNav;
-
     String nome;
     String cognome;
     Long matricola;
@@ -247,7 +242,10 @@ public class DettagliTesistaFragment extends Fragment {
         return loadTesiByIdTesiInStudenteTesi(id_tesi_in_studente_tesi);
     }
 
-
+    /**
+     * Questo metodo permette di eliminare il record dello studente tesista dalla tabella StudenteTesi in Firestore.
+     * @param id_studente l'ID dello studente da eliminare dalla tabella StudenteTesi.
+     */
     private void deleteStudenteTesi(Long id_studente) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("StudenteTesi")

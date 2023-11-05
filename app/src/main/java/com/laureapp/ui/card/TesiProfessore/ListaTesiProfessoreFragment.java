@@ -133,6 +133,11 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
     }
 
+    /**
+     * Gestisce l'azione di eliminazione di una tesi in risposta al clic sul pulsante "Elimina".
+     *
+     * @param position La posizione dell'elemento della tesi all'interno dell'adapter.
+     */
     @Override
     public void onDeleteButtonClick(int position) {
         Tesi tesiToDelete = adapter.getItem(position);
@@ -163,6 +168,14 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         alertDialog.show();
     }
 
+    /**
+     * Elimina una tesi dal database Firestore in base alla posizione specificata.
+     *
+     * @param position La posizione dell'elemento tesi all'interno dell'adapter.
+     * @param context Il contesto dell'applicazione.
+     * @param adapter L'adapter che contiene la lista di tesi da cui eliminare l'elemento.
+     */
+
     private static void deleteTesiFromFirestore(int position, Context context, ListaTesiProfessoreAdapter adapter) {
         // Ottieni il riferimento al documento della tesi da eliminare
         Tesi tesiToDelete = adapter.getItem(position);
@@ -190,7 +203,11 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         });
     }
 
-
+    /**
+     * Questo metodo prende le preferenze salvate nel metodo presente in HomeFragment
+     * Esso prende la cartella "preferenze" e ne ricava la mail o l'oggetto che ci serve.
+     * @return
+     */
 
     private String getEmailFromSharedPreferences() {
         if (context != null) {
@@ -202,8 +219,7 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
 
     /**
-     * Questo metodo mi permette di caricare da firestore gli id delle tesi dando come parametro l'id del professore
-     *
+     * Questo metodo permette di caricare da firestore gli id delle tesi dando come parametro l'id del professore
      * @param id_professore
      * @return una lista di tipo Long contenente gli id delle tesi associate allo studente
      */
@@ -230,7 +246,6 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
     /**
      * Questo metodo mi consente di caricare da firebase tutte le informazioni relative alle tesi legate allo studente
-     *
      * @param idTesiList
      * @return una lista di tipo Tesi contenente le informazioni delle tesi
      */
@@ -277,6 +292,7 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
     /**
      * Metodo per mostrare il pop-up in un'attività o fragment
+     * @param rootView la rootView in cui verrà visualizzata la dialog.
      */
 
     public void showTesiDialog(View rootView) {
@@ -365,12 +381,19 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         /**
          * Gestione del metodo on dismiss quando si clicca fuori o si clicca annulla
          */
+
         alertDialog.setOnDismissListener(dialog -> {
             rootView.setAlpha(1); //reimpose l'opacità di default
 
         });
 
     }
+
+    /**
+     * Mostra una dialog personalizzata per inserire i vincoli relativi a una tesi.
+     * @param rootView la rootView in cui verrà visualizzata la dialog.
+     * @param tesiNew l'oggetto Tesi associato ai vincoli da inserire.
+     */
 
     public void showVincoliDialog(View rootView, Tesi tesiNew) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
@@ -454,6 +477,7 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         /**
          * Gestione del metodo on dismiss quando si clicca fuori o si clicca annulla
          */
+
         alertDialog.setOnDismissListener(dialog -> {
             rootView.setAlpha(1); //reimpose l'opacità di default
 
@@ -463,7 +487,6 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
     /**
      * Metodo per mostrare il calendario quando l'utente clicca il campo data di pubblicazione
-     *
      * @param view
      */
     public void showDatePicker(View view) {
@@ -485,6 +508,14 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), dateSetListener, year, month, day);
         datePickerDialog.show();
     }
+
+    /**
+     * Questo metodo crea un nuovo vincolo per una tesi e lo aggiunge a Firestore.
+     *
+     * @param vincoloNew l'oggetto Vincolo contenente i dettagli del vincolo da creare.
+     * @param tesiNew l'oggetto Tesi associato a questo vincolo.
+     * @param professoreScelto il professore scelto per la tesi.
+     */
 
     private void createVincoloTesi(Vincolo vincoloNew, Tesi tesiNew, String professoreScelto) {
 
@@ -523,9 +554,22 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         });
     }
 
+    /**
+     * Questa interfaccia fornisce un callback per ottenere il valore massimo di un identificatore.
+     * È utilizzata per restituire il valore massimo di un identificatore, ad esempio, un ID,
+     * utilizzato all'interno di un'operazione asincrona.
+     */
+
     private interface MaxRequestIdCallback {
         void onCallback(Long maxRequestId);
     }
+
+    /**
+     * Trova il valore massimo dell'identificatore di vincolo all'interno della collezione "Vincolo" in Firestore.
+     * Questo valore viene restituito tramite un callback per l'elaborazione asincrona.
+     *
+     * @param callback
+     */
 
     private void findMaxVincoloId(ListaTesiProfessoreFragment.MaxRequestIdCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -553,6 +597,14 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
                     Log.e("Firestore Error", "Error finding max request ID", e);
                 });
     }
+
+    /**
+     * Questo metodo crea una nuova tesi e la aggiunge a Firestore, collegandola a un vincolo specifico.
+     *
+     * @param tesiNew l'oggetto Tesi contenente i dettagli della tesi da creare.
+     * @param idVincolo l'ID del vincolo a cui collegare la tesi.
+     * @param professoreScelto il nome del professore scelto per la tesi.
+     */
 
     private void createTesi(Tesi tesiNew, Long idVincolo, String professoreScelto) {
         tesiNew.setId_vincolo(idVincolo);
@@ -598,6 +650,13 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         });
     }
 
+    /**
+     * Trova il valore massimo dell'identificatore di tesi all'interno della collezione "Tesi" in Firestore.
+     * Questo valore viene restituito tramite un callback per l'elaborazione asincrona.
+     *
+     * @param callback
+     */
+
     private void findMaxTesiId(ListaTesiProfessoreFragment.MaxRequestIdCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference richiesteTesiRef = db.collection("Tesi");
@@ -624,6 +683,14 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
                     Log.e("Firestore Error", "Error finding max request ID", e);
                 });
     }
+
+    /**
+     * Crea una nuova richiesta di tesi associata a un professore e la aggiunge a Firestore.
+     *
+     * @param tesiNew l'oggetto Tesi contenente i dettagli della tesi associata.
+     * @param id_professore l'ID del professore relatore.
+     * @param professoreScelto il nome del co-relatore, se presente; altrimenti, "Nessun Co-Relatore".
+     */
 
     private void createTesiProfessore(Tesi tesiNew, Long id_professore, String professoreScelto) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -687,7 +754,13 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         });
     }
 
-
+    /**
+     * Trova il valore massimo dell'identificatore di richiesta di tesi associato a un professore
+     * all'interno della collezione "TesiProfessore" in Firestore.
+     * Questo valore viene restituito tramite un callback per l'elaborazione asincrona.
+     *
+     * @param callback
+     */
 
     private void findMaxTesiProfessoreId(ListaTesiProfessoreFragment.MaxRequestIdCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -716,6 +789,11 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
                 });
     }
 
+    /**
+     * Ottiene tutti i professori e gli utenti associati da Firestore e crea una lista di nomi e cognomi dei professori.
+     *
+     * @param context il context dell'applicazione per l'accesso ai dati.
+     */
     private void getAllProfessoreAndUtente(Context context){
         context = getContext();
         UtenteModelView utenteModelView = new UtenteModelView(context);
@@ -746,7 +824,14 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
     }
 
-        private Long findProfessoreSceltoId(String professoreScelto){
+    /**
+     * Trova l'ID del professore corrispondente al nome selezionato tra i professori disponibili.
+     *
+     * @param professoreScelto il nome del professore selezionato.
+     * @return l'ID del professore corrispondente se trovato, altrimenti 0L.
+     */
+
+    private Long findProfessoreSceltoId(String professoreScelto){
         List<Utente> utenteAssociatoList = new ArrayList<>();
         Long idProfessoreScelto = 0L;
             // Itera attraverso la lista dei professori
@@ -776,7 +861,7 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
                     }
                 }
             return idProfessoreScelto;
-        }
+    }
 
 
 }

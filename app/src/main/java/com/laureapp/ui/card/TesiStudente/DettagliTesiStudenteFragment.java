@@ -63,12 +63,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DettagliTesiStudenteFragment} factory method to
- * create an instance of this fragment.
- */
 public class DettagliTesiStudenteFragment extends Fragment {
     Tesi tesi;
     String titolo;
@@ -266,8 +260,13 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo utilizzato per iterare la lista dei professori e capire se sono relatori e/o corelatori
+     * Ottiene il ruolo (Relatore o Co-Relatore) di ciascun professore associato a una lista di TesiProfessore
+     * e imposta i nomi dei professori nei TextView specificati.
      *
+     * @param tesiProfessoreList la lista di oggetti TesiProfessore da cui ottenere le informazioni.
+     * @param context
+     * @param relatoreTextView il TextView in cui impostare il nome del Relatore.
+     * @param corelatoreTextView il TextView in cui impostare il nome del Co-Relatore.
      */
     private void getRoleTesiProfessoreList(List<TesiProfessore> tesiProfessoreList, Context context, TextView relatoreTextView, TextView corelatoreTextView) {
 
@@ -298,7 +297,10 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
 
     /**
-     * Metodo utilizzato per prendere il nome e il cognome del professore in base al suo id
+     * Ottiene l'ID dell'utente associato a un professore specifico e richiede il nome del professore.
+     * @param context il contesto dell'applicazione per l'accesso ai dati.
+     * @param idProfessore l'ID del professore di cui ottenere l'ID dell'utente associato.
+     * @param isRelatore un flag che indica se il professore è un Relatore.
      */
     private void getIdUtenteByIdProfessore(Context context, Long idProfessore, boolean isRelatore) {
         ProfessoreModelView professoreModelView = new ProfessoreModelView(context);
@@ -318,8 +320,13 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo utilizzato per prendere il nome e il cognome del professore in base all'id utente
+     * Ottiene il nome e il cognome di un professore associato a un utente specifico e imposta il nome del professore
+     * come Relatore o Co-Relatore in base al flag isRelatore.
+     * @param context
+     * @param idUtente l'ID dell'utente di cui ottenere il nome e cognome del professore associato.
+     * @param isRelatore un flag che indica se il professore deve essere impostato come Relatore.
      */
+
     private void getNomeCognomeProfessoreById(Context context, Long idUtente, boolean isRelatore) {
         UtenteModelView utenteModelView = new UtenteModelView(context);
         List<Utente> utenteList = utenteModelView.getAllUtente();
@@ -347,7 +354,6 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
     /**
      * Questo metodo consente di ottenere i dati dei vincoli delle tesi da firestore e riempire la entity Vincolo
-     *
      * @param id_vincolo id del vincolo legata alla tesi
      * @return entity Vincolo
      */
@@ -388,9 +394,10 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo utilizzato per nascondere il pulsante Richiedi Tesi qualora abbia già la tesi che si sta visualizzando
-     * @param id_tesi
-     * @param view
+     * Verifica se uno studente ha già effettuato una richiesta per una tesi specifica.
+     *
+     * @param id_tesi l'ID della tesi per cui verificare la richiesta dello studente.
+     * @param view la vista da cui nascondere il bottone se lo studente ha già effettuato una richiesta.
      */
     private void StudenteHasATesi(Long id_tesi, View view) {
         context = getContext();
@@ -431,10 +438,17 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo utilizzato per verificare se lo studente rispetti i vincoli in modo tale da poter richiedere la tesi
-     * @param media
-     * @param esamiMancanti
+     * Verifica se uno studente soddisfa i vincoli specificati relativi a media e esami mancanti.
+     *
+     * Questo metodo confronta i valori di media e esami mancanti di uno studente con i valori passati come parametri.
+     * Se la media dello studente è maggiore della media specificata e il numero di esami mancanti è inferiore a quello specificato,
+     * il metodo restituirà `true`, altrimenti restituirà `false`.
+     *
+     * @param media la media specificata da confrontare con quella dello studente.
+     * @param esamiMancanti il numero di esami mancanti specificato da confrontare con quello dello studente.
+     * @return `true` se lo studente soddisfa i vincoli specificati, altrimenti `false`.
      */
+
     private boolean  StudenteMatchesVincoli(Long media,Long esamiMancanti) {
         List<Studente> studenti;
         context = getContext();
@@ -461,8 +475,13 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo utilizzato per mostrare il dialog di conferma richiesta tesi
-     * @param message
+     * Questo metodo crea e mostra una finestra di dialogo che chiede all'utente di confermare l'invio di una richiesta di tesi.
+     * La finestra di dialogo visualizzerà un messaggio specifico, l'ID della tesi, l'ID dello studente e se i requisiti sono soddisfatti.
+     *
+     * @param message il messaggio da visualizzare nella finestra di dialogo.
+     * @param idTesi l'ID della tesi per cui si sta inviando la richiesta.
+     * @param idStudente l'ID dello studente che sta inviando la richiesta.
+     * @param soddisfaRequisiti un valore booleano che indica se lo studente soddisfa i requisiti richiesti per la tesi.
      */
     private void showConfirmationDialog(String message, Long idTesi, Long idStudente, boolean soddisfaRequisiti) {
         ConfermaRichiestaDialog dialog = new ConfermaRichiestaDialog(message, idTesi, idStudente, soddisfaRequisiti);
@@ -470,9 +489,12 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo utilizzato per incrementare le visualizzazioni di una tesi. Quando si visualizza nel dettaglio una tesi il valore viene incrementato di uno al fine di
-     * stilare una classifica.
-     * @param titoloTesi
+     * Incrementa il conteggio delle visualizzazioni per una tesi specifica nel database Firestore.
+     *
+     * Questo metodo esegue una query per trovare la tesi corrispondente al titolo fornito e incrementa il conteggio
+     * delle visualizzazioni per quella tesi sia nel database Firestore che nel valore locale.
+     *
+     * @param titoloTesi il titolo della tesi per cui incrementare le visualizzazioni.
      */
     private void incrementaVisualizzazioni(String titoloTesi) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -510,11 +532,14 @@ public class DettagliTesiStudenteFragment extends Fragment {
         });
     }
 
-
-
     /**
-     * Metodo di generazione del QRCode in base all'id della tesi
-     * @return  restituisce la variabile Bitmap per mostrare il QRCode
+     * Genera un codice QR basato sui dati di una tesi specifica.
+     *
+     * Questo metodo utilizza i dati di una tesi per creare un contenuto testuale e quindi genera un codice QR
+     * rappresentante questi dati. Il codice QR risultante verrà restituito come un oggetto Bitmap.
+     *
+     * @param tesi la tesi di cui generare il codice QR.
+     * @return un oggetto Bitmap contenente il codice QR rappresentante i dati della tesi.
      */
     public Bitmap QRGenerator(Tesi tesi) {
         MultiFormatWriter writer = new MultiFormatWriter();
@@ -549,7 +574,13 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo utilizzato per mostrare la lista del materiale della tesi
+     * Carica l'elenco dei file relativi a una tesi dal Firebase Storage e visualizza i nomi dei file nell'UI.
+     *
+     * Questo metodo recupera l'elenco dei file relativi a una tesi dal Firebase Storage e li visualizza
+     * nell'UI tramite un adattatore personalizzato. Gli utenti possono quindi visualizzare e/o scaricare
+     * questi file, a seconda dei permessi disponibili.
+     *
+     * @param view la vista corrente in cui visualizzare l'elenco dei file.
      */
 
     private void loadFileFromFireStore(View view) {
@@ -594,9 +625,14 @@ public class DettagliTesiStudenteFragment extends Fragment {
     }
 
     /**
-     * Metodo per eseguire il download del file
-      * @param position
-     * @param storageRef
+     * Esegue il download di un file dal Firebase Storage nel dispositivo locale.
+     *
+     * Questo metodo scarica un file specifico dal Firebase Storage nel dispositivo locale, nella directory
+     * di download. È possibile gestire il completamento del download, ad esempio aprendo il file o mostrando
+     * una notifica di download completato.
+     *
+     * @param position la posizione dell'elemento nell'elenco dei file da scaricare.
+     * @param storageRef il riferimento al Firebase Storage contenente il file da scaricare.
      */
     private void performDownload(int position,StorageReference storageRef) {
             // Ottieni il riferimento al file selezionato

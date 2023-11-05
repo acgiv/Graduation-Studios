@@ -29,13 +29,14 @@ import com.laureapp.ui.roomdb.entity.Utente;
 
 import org.apache.commons.lang3.StringUtils;
 
-
+/**
+ * Fragment principale dell'applicazione che mostra le opzioni disponibili in base al ruolo dell'utente.
+ */
 public class HomeFragment extends Fragment {
 
     CardView CardTesi;
     CardView CardTask;
     CardView CardTesisti;
-    CardView CardSocial;
     CardView CardMessaggi;
 
     CardView CardSegnalazioni;
@@ -45,6 +46,12 @@ public class HomeFragment extends Fragment {
 
     private NavController mNav;
 
+    /**
+     * Questo metodo viene chiamato quando il fragment è stato creato.
+     * Inizializza le variabili di istanza del fragment e salva l'argomento "ruolo" e "email" ottenuti dai dati del bundle.
+     *
+     * @param savedInstanceState i dati precedenti sull'istanza del fragment (opzionale).
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +67,14 @@ public class HomeFragment extends Fragment {
 
         }
 
-
-
     }
 
+    /**
+     * Questo metodo viene chiamato quando la configurazione del dispositivo cambia, ad esempio da modalità paesaggio a ritratto o viceversa.
+     * Puoi utilizzarlo per aggiornare l'interfaccia utente in base alla nuova configurazione, se necessario.
+     *
+     * @param newConfig l'oggetto Configuration che rappresenta la nuova configurazione del dispositivo.
+     */
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -91,7 +102,6 @@ public class HomeFragment extends Fragment {
         mNav = Navigation.findNavController(view);
         CardTesi =  view.findViewById(R.id.cardViewTesi);
         CardTask =  view.findViewById(R.id.cardViewTask);
-        CardSocial =  view.findViewById(R.id.cardViewSocial);
         CardTesisti = view.findViewById(R.id.cardViewTesisti);
 
         TextView taskTextView = view.findViewById(R.id.taskTextView);
@@ -135,10 +145,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        CardSocial.setOnClickListener(view1 -> {
-            mNav.navigate(R.id.action_fragment_home_to_social_fragment);
-        });
-
         CardSegnalazioni =  view.findViewById(R.id.cardViewMessaggi);
         CardSegnalazioni.setOnClickListener(view1 -> {
             if(StringUtils.equals("Professore", ruolo)){
@@ -175,6 +181,12 @@ public class HomeFragment extends Fragment {
         editor.apply();
     }
 
+    /**
+     * Ottiene l'indirizzo email memorizzato nelle preferenze condivise (SharedPreferences).
+     *
+     * @param context il contesto in cui è richiesta l'operazione. È necessario passare un oggetto di tipo Context.
+     * @return l'indirizzo email memorizzato nelle preferenze condivise o null se non è presente.
+     */
     public static String getEmailFromSharedPreferences(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
         return preferences.getString("email", null);

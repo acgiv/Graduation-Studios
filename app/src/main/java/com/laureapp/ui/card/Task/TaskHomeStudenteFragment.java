@@ -40,12 +40,9 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Questa classe rappresenta un frammento per la gestione delle task associate a uno studente.
  */
 public class TaskHomeStudenteFragment extends Fragment {
-
-
 
     public TaskHomeStudenteFragment() {
         // Required empty public constructor
@@ -56,7 +53,6 @@ public class TaskHomeStudenteFragment extends Fragment {
     Context context;
 
     FragmentTaskBinding binding;
-
 
 
     // Dichiarazione di una variabile di istanza per il dialog
@@ -114,9 +110,6 @@ public class TaskHomeStudenteFragment extends Fragment {
         listTaskView.setAdapter(adapter);
 
     }
-
-
-
 
 
     /**
@@ -230,7 +223,6 @@ public class TaskHomeStudenteFragment extends Fragment {
     /*
         METODI PER LA LETTURA DEI DATI E LA LORO VISUALIZZAZIONE NELL'ADAPTER
      */
-
 
 
     /**

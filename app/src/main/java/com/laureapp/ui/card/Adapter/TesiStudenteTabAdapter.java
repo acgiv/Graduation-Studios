@@ -11,19 +11,32 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.laureapp.ui.card.TesiStudente.ElencoTesiFragment;
 import com.laureapp.ui.card.TesiStudente.LeMieTesiFragment;
 
+/**
+ * Questa classe rappresenta un adattatore per gestire le schede di visualizzazione delle tesi in un'applicazione per studenti.
+ */
 public class TesiStudenteTabAdapter extends FragmentStateAdapter {
     private static final int NUM_TABS = 2; // Il numero di tab che hai
     Context context;
     String email;
     Bundle args;
 
-
+    /**
+     * Crea un nuovo adattatore per la gestione delle schede delle tesi studente.
+     *
+     * @param fragmentActivity l'oggetto FragmentActivity associato all'adattatore.
+     */
     public TesiStudenteTabAdapter(@NonNull FragmentActivity fragmentActivity){
         super(fragmentActivity);
 
 
     }
 
+    /**
+     * Restituisce il fragment associato a una determinata posizione di scheda.
+     *
+     * @param position la posizione della scheda per la quale ottenere il fragment associato.
+     * @return il fragment associato alla posizione della scheda specificata.
+     */
     @NonNull
     @Override
     public Fragment createFragment(int position) {
@@ -47,6 +60,11 @@ public class TesiStudenteTabAdapter extends FragmentStateAdapter {
         }
     }
 
+    /**
+     * Restituisce il numero di schede gestite da questo adattatore.
+     *
+     * @return il numero di schede gestite dall'adattatore.
+     */
     @Override
     public int getItemCount() {
         return NUM_TABS;

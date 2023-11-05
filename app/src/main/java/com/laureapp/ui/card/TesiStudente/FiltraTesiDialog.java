@@ -1,6 +1,6 @@
 package com.laureapp.ui.card.TesiStudente;
 
-        import android.app.Dialog;
+import android.app.Dialog;
         import android.content.Context;
         import android.os.Bundle;
         import android.view.LayoutInflater;
@@ -18,7 +18,6 @@ public class FiltraTesiDialog extends DialogFragment {
 
     public FiltraTesiDialog() {
 
-
     }
 
     @Override
@@ -28,7 +27,5 @@ public class FiltraTesiDialog extends DialogFragment {
         return view;
 
     }
-
-
 
 }

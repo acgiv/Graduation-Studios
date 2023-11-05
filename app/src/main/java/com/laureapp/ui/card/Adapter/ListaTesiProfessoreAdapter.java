@@ -18,28 +18,56 @@ import com.laureapp.ui.roomdb.entity.Tesi;
 
 import java.util.ArrayList;
 
+/**
+ * Questa classe rappresenta un adattatore personalizzato utilizzato per visualizzare una lista di tesi associate a un professore.
+ */
 public class ListaTesiProfessoreAdapter extends ArrayAdapter<Tesi> {
 
     private Context mContext;
     private ArrayList<Tesi> mTesiList;
     private NavController mNav;
 
+    /**
+     * Interfaccia DeleteButtonClickListener.
+     *
+     * Questa interfaccia definisce un contratto per gestire gli eventi di clic sul pulsante di eliminazione
+     * all'interno di un adapter personalizzato.
+     */
     public interface DeleteButtonClickListener {
         void onDeleteButtonClick(int position);
     }
 
     private ListaTesiProfessoreAdapter.DeleteButtonClickListener deleteButtonClickListener;
 
+    /**
+     * Imposta un listener per il clic sul pulsante di eliminazione all'interno dell'adapter.
+     *
+     * @param listener
+     */
     public void setDeleteButtonClickListener(ListaTesiProfessoreAdapter.DeleteButtonClickListener listener) {
         this.deleteButtonClickListener = listener;
     }
 
+    /**
+     * Crea un nuovo adapter per la visualizzazione di una lista di tesi associate a un professore.
+     *
+     * @param context
+     * @param tesiList La lista di oggetti Tesi da visualizzare.
+     */
     public ListaTesiProfessoreAdapter(Context context, ArrayList<Tesi> tesiList) {
         super(context,0,tesiList);
         mContext = context;
         mTesiList = tesiList;
     }
 
+    /**
+     * Restituisce la vista dell'elemento dell'adapter in base alla posizione specificata.
+     *
+     * @param position    la posizione dell'elemento nell'adapter.
+     * @param convertView la vista riutilizzata da un elemento precedentemente visualizzato (se disponibile).
+     * @param parent      il ViewGroup genitore a cui verrà eventualmente allegata la vista.
+     * @return            la vista dell'elemento dell'adapter.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItemView = convertView;

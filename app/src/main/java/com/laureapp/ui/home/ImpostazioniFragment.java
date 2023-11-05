@@ -24,8 +24,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Fragment per le impostazioni dell'applicazione.
  */
 public class ImpostazioniFragment extends Fragment {
 
@@ -33,6 +32,9 @@ public class ImpostazioniFragment extends Fragment {
     private Spinner spinner;
     private String[] languages;
 
+    /**
+     * Costruttore vuoto per la classe `ImpostazioniFragment`.
+     */
     public ImpostazioniFragment() {}
 
     @Override
@@ -48,6 +50,9 @@ public class ImpostazioniFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Imposta la lingua dell'applicazione attraverso uno spinner.
+     */
     private void impostaLingua() {
         languages = new String[]{getResources().getString(R.string.impostaLingua), getResources().getString(R.string.italiano), getResources().getString(R.string.inglese)};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this.requireContext(), android.R.layout.simple_spinner_item, languages);
@@ -80,6 +85,11 @@ public class ImpostazioniFragment extends Fragment {
         });
     }
 
+    /**
+     * Salva la preferenza di lingua nelle SharedPreferences.
+     *
+     * @param lingua la lingua da salvare nelle preferenze.
+     */
     private void saveLangPref(String lingua) {
         // Saving the language preference
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("LanguagePrefs", MODE_PRIVATE);
@@ -88,6 +98,11 @@ public class ImpostazioniFragment extends Fragment {
         editor.apply();
     }
 
+    /**
+     * Imposta la lingua dell'applicazione e aggiorna la configurazione.
+     *
+     * @param lingua la lingua da impostare.
+     */
     public void setLocal(String lingua){
         Resources resources = getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();

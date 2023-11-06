@@ -69,6 +69,9 @@
         <action
             android:id="@+id/action_fragment_home_to_fragment_home"
             app:destination="@id/fragment_home" />
+        <action
+            android:id="@+id/action_fragment_home_to_dettagli_tesi_studente"
+            app:destination="@id/dettagliTesiStudente"/>
 
 
     </fragment>
@@ -274,6 +277,8 @@
             android:id="@+id/action_fragment_dettagli_tesi_studente_to_impostazioniFragment"
             app:destination="@id/fragment_impostazioni" />
     </fragment>
+
+
 
     <!--Fragment Tesi Professore -->
 

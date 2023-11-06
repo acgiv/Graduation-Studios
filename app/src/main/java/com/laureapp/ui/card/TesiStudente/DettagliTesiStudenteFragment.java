@@ -93,9 +93,18 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
     List<TesiProfessore> tesiProfessoreList = new ArrayList<>();
 
+
     StudenteModelView studenteView = new StudenteModelView(context);
     private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int DOWNLOAD_REQUEST_CODE = 456;
+
+    public DettagliTesiStudenteFragment(Tesi tesi) {
+        this.tesi = tesi;
+    }
+
+    public DettagliTesiStudenteFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,10 +117,14 @@ public class DettagliTesiStudenteFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_dettagli_tesi_studente, container, false);
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // Prendo gli argomenti passatomi dal layout precedente
         Bundle args = getArguments();
+
+
         TextView titoloTextView = view.findViewById(R.id.insertTextViewTitolo);
         TextView abstractTextView = view.findViewById(R.id.insertTextViewAbstract);
         TextView tipologiaTextView = view.findViewById(R.id.insertTextViewTipologia);
@@ -140,7 +153,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
                 id_tesi = tesi.getId_tesi();
                 visualizzazioni = tesi.getVisualizzazioni();
 
-                incrementaVisualizzazioni(titolo); //incremento le visualizzazioni della tesi che sto visualizzando
+                incrementaVisualizzazioni(id_tesi,visualizzazioni); //incremento le visualizzazioni della tesi che sto visualizzando
 
                 titoloTextView.setText(titolo);
                 abstractTextView.setText(descrizione);
@@ -494,13 +507,13 @@ public class DettagliTesiStudenteFragment extends Fragment {
      * Questo metodo esegue una query per trovare la tesi corrispondente al titolo fornito e incrementa il conteggio
      * delle visualizzazioni per quella tesi sia nel database Firestore che nel valore locale.
      *
-     * @param titoloTesi il titolo della tesi per cui incrementare le visualizzazioni.
+     * @param idTesi il idTesi della tesi per cui incrementare le visualizzazioni.
      */
-    private void incrementaVisualizzazioni(String titoloTesi) {
+    private void incrementaVisualizzazioni(Long idTesi,Long visualizzazioniDaIncr) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tesiRef = db.collection("Tesi");
 
-        Query query = tesiRef.whereEqualTo("titolo", titoloTesi);
+        Query query = tesiRef.whereEqualTo("id_tesi", idTesi);
 
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -512,14 +525,15 @@ public class DettagliTesiStudenteFragment extends Fragment {
                     // Estrai l'ID del documento
                     String documentId = documentSnapshot.getId();
 
+                    Long visualizzazioni = documentSnapshot.getLong("visualizzazioni");
+
+
                     // Incrementa le visualizzazioni utilizzando l'ID del documento
                     tesiRef
                             .document(documentId)
                             .update("visualizzazioni", visualizzazioni + 1)
                             .addOnSuccessListener(aVoid -> {
-                                // L'incremento è riuscito, puoi fare qualcosa in caso di successo
-                                visualizzazioni++; // Aggiorna anche il valore locale
-                                // Puoi anche aggiornare la visualizzazione nell'UI, se necessario
+
                             })
                             .addOnFailureListener(e -> {
                                 // Si è verificato un errore durante l'incremento

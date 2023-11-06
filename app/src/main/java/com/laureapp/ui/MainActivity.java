@@ -1,9 +1,11 @@
 package com.laureapp.ui;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.fragment.app.Fragment;
@@ -59,8 +61,11 @@ import com.laureapp.ui.roomdb.entity.Tesi;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -95,22 +100,20 @@ public class MainActivity extends AppCompatActivity {
         // Imposta gli argomenti per il fragment
         navigationView = findViewById(R.id.navigation);
 
-        drawerLayout = findViewById(R.id.drawer);
-        toolbar = findViewById(R.id.toolbar);
 
 
-        setSupportActionBar(toolbar);
+
 
         createAppBar();
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
+
+
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         navigationView.bringToFront();
 
         NavController finalNavController = navController;
+
         navigationView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.itemSettings) {
@@ -118,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
                 finalNavController.navigate(R.id.action_fragment_home_to_impostazioniFragment);
                 drawerLayout.closeDrawers(); // Chiude il menu
 
+
                 Toast.makeText(getApplicationContext(), "Impostazioni", Toast.LENGTH_LONG).show();
-            } else if (id == R.id.itemLogin) {
-                Toast.makeText(getApplicationContext(), "Login", Toast.LENGTH_LONG).show();
+
             } else if (id == R.id.itemSignOut) {
                 FirebaseAuth.getInstance().signOut();
 
@@ -139,9 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return true;
-            } else if (id == R.id.itemScanQrCode) {
-                scanQR();
-                return true;
             }
             return false;
         });
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
             int id2 = item1.getItemId();
             NavController navController2 = Navigation.findNavController(this, R.id.nav_host_fragment_main);
             if (id2 == R.id.itemProfilo) {
-                navController2.navigate(R.id.action_to_profilo, bundle);
+                navController2.navigate(R.id.profilo_studente, bundle);
             }
             if (id2 == R.id.itemHome) {
                 navController2.navigate(R.id.fragment_home, bundle);
@@ -164,17 +164,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createAppBar() {
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        // Passa il tuo R.id.fragment_home come destinazione principale
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.fragment_home)
+        // Creazione dell'AppBarConfiguration con le destinazioni desiderate
+        Set<Integer> topLevelDestinations = new HashSet<>();
+        topLevelDestinations.add(R.id.fragment_home);
+        drawerLayout = findViewById(R.id.drawer);
+
+        // Aggiungi altre destinazioni principali se necessario
+        mAppBarConfiguration = new AppBarConfiguration.Builder(topLevelDestinations)
                 .setOpenableLayout(drawerLayout)
                 .build();
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        // Collega l'ActionBar o la Toolbar al NavController
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (navController.getCurrentDestination() != null &&
+                    mAppBarConfiguration.getTopLevelDestinations().contains(navController.getCurrentDestination().getId())) {
+                // Se l'utente è in una delle destinazioni principali, apri o chiudi il drawer
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
 
 
     @Override
@@ -296,6 +322,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+
 
 
 

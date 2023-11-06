@@ -31,7 +31,7 @@
             toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
-            navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+            navController = Navigation.findNavController(this, R.id.nav_host_fragment_login);
             NavigationUI.setupActionBarWithNavController(this, navController);
 
             SharedPreferences prefsLanguage = getSharedPreferences("LanguagePrefs", 0);

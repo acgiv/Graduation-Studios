@@ -206,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result -> {
 
         if (result.getContents() != null) {
-            navController.navigate(R.id.dettagliTesiStudente, bundle); // Naviga al fragment DettagliTesiStudente
 
             String qrContent = result.getContents();
             Log.d("ContentsQrCode", qrContent);

@@ -142,9 +142,13 @@ public class ElencoTesiFragment extends Fragment {
     }
 
     /**
-     * Questo metodo serve per caricare la lista di tutte le tesi
+     * Carica i dati di tutte le tesi dal Firestore.
      *
-     * @return la lista delle tesi
+     * Questo metodo effettua una query per recuperare tutti i documenti nella raccolta "Tesi" nel Firestore.
+     * Per ciascun documento recuperato, crea un oggetto Tesi e popola i suoi attributi con i dati dal Firestore.
+     *
+     * @return un'istanza di Task<ArrayList<Tesi>> che rappresenta il risultato dell'operazione di caricamento.
+     *         L'ArrayList contenente le tesi caricate sarà restituito come risultato del task.
      */
     private Task<ArrayList<Tesi>> loadAllTesiData() {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
@@ -359,9 +363,10 @@ public class ElencoTesiFragment extends Fragment {
 
 
     /**
-     * Metodo per ottenere gli id degli utenti cercandoli in base al cognome
+     * Metodo che trova l'ID dell'utente in base al cognome specificato.
      *
-     * @return id delle tesi
+     * @param cognome Il cognome dell'utente da cercare.
+     * @return L'ID dell'utente se trovato; in caso contrario, restituisce null.
      */
     private Long getIdUtenteByCognome(String cognome) {
 
@@ -380,6 +385,7 @@ public class ElencoTesiFragment extends Fragment {
     /**
      * Metodo per ottenere gli id degli utenti cercandoli in base al cognome
      *
+     * @param corso
      * @return id delle tesi
      */
     private ArrayList<Long> getIdUtenteByCorso(String corso) {
@@ -462,6 +468,12 @@ public class ElencoTesiFragment extends Fragment {
                 });
     }
 
+    /**
+     * Metodo che carica una lista di ID di tesi in base a una lista di ID di professori.
+     *
+     * @param idProfessoriList la lista di ID dei professori per cui cercare le tesi.
+     * @return una lista di ID di tesi corrispondenti ai professori specificati.
+     */
     private Task<ArrayList<Long>> loadIdTesiDataByProfessoriList(List<Long> idProfessoriList) {
         final ArrayList<Long> idTesiList = new ArrayList<>();
 
@@ -836,9 +848,6 @@ public class ElencoTesiFragment extends Fragment {
             adapter.notifyDataSetChanged();
         }
     }
-
-
-
 
 }
 

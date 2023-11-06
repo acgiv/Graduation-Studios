@@ -15,16 +15,36 @@ import com.laureapp.ui.roomdb.entity.Tesi;
 
 import java.util.ArrayList;
 
+/**
+ * Questa classe rappresenta un adattatore personalizzato utilizzato per popolare una vista di elenco con una lista di tesi.
+ */
 public class LeMieTesiAdapter extends ArrayAdapter<Tesi> {
     private Context mContext;
     private ArrayList<Tesi> mTesiList;
 
+    /**
+     * Costruttore di LeMieTesiAdapter.
+     *
+     * Questo costruttore crea un'istanza della classe LeMieTesiAdapter, che è un adattatore personalizzato
+     * utilizzato per popolare una vista di elenco con una lista di tesi.
+     *
+     * @param context
+     * @param tesiList la lista di tesi da visualizzare nell'elenco.
+     */
     public LeMieTesiAdapter(Context context, ArrayList<Tesi> tesiList) {
         super(context, 0, tesiList);
         mContext = context;
         mTesiList = tesiList;
     }
 
+    /**
+     * Restituisce la vista dell'elemento dell'adapter in base alla posizione specificata.
+     *
+     * @param position    la posizione dell'elemento nell'adapter.
+     * @param convertView la vista riutilizzata da un elemento precedentemente visualizzato (se disponibile).
+     * @param parent      il ViewGroup genitore a cui verrà eventualmente allegata la vista.
+     * @return            la vista dell'elemento dell'adapter.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItemView = convertView;

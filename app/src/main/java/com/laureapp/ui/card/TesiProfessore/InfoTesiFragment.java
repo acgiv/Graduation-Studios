@@ -63,8 +63,7 @@ public class InfoTesiFragment extends Fragment {
     Long id_tesi;
     private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int PICKFILE_REQUEST_CODE = 1;
-     ArrayList<String> nomiFile = new ArrayList<>(); // FileInfo rappresenta le informazioni sui file da visualizzare
-
+    ArrayList<String> nomiFile = new ArrayList<>(); // FileInfo rappresenta le informazioni sui file da visualizzare
 
 
     @Override
@@ -246,7 +245,7 @@ public class InfoTesiFragment extends Fragment {
     }
 
     /**
-     * Metodo per aggiornare la tesi modificata su firestore
+     * Questo metodo serve per aggiornare la tesi modificata su firestore
      * @param tesi
      */
     private void updateTesiData(Tesi tesi) {
@@ -345,7 +344,12 @@ public class InfoTesiFragment extends Fragment {
         }
     }
 
-    // Gestisci la risposta dell'utente alla richiesta dei permessi
+    /**
+     * Questo metodo serve per gestire la risposta dell'utente alla richiesta dei permesi
+     * @param requestCode The request code passed in {@link #requestPermissions(String[], int)}.
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -361,7 +365,12 @@ public class InfoTesiFragment extends Fragment {
         }
     }
 
-    // Gestisci il risultato della selezione del file
+    /**
+     * Questo metodo serve per gestire il risultato della selezione del file
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -376,6 +385,11 @@ public class InfoTesiFragment extends Fragment {
             }
         }
     }
+
+    /**
+     * Questo metodo serve per caricare i file sul database di Firebase
+     * @param fileUri
+     */
 
     private void uploadFileToFirebaseStorage(Uri fileUri) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -413,6 +427,11 @@ public class InfoTesiFragment extends Fragment {
                     // Gestisci l'errore nel caricamento del file
                 });
     }
+
+    /**
+     * Questo metodo serve per prendere i file da Firestore
+     * @param view
+     */
 
     private void loadFileFromFireStore(View view) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -478,12 +497,6 @@ public class InfoTesiFragment extends Fragment {
                     Log.e("Firebase Storage Error", "Errore nel caricamento dell'elenco dei file", exception);
                 });
 
-
-
     }
-
-
-
-
 
 }

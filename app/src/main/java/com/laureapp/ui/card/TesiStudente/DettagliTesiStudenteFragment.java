@@ -93,9 +93,18 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
     List<TesiProfessore> tesiProfessoreList = new ArrayList<>();
 
+
     StudenteModelView studenteView = new StudenteModelView(context);
     private static final int PERMISSION_REQUEST_CODE = 123;
     private static final int DOWNLOAD_REQUEST_CODE = 456;
+
+    public DettagliTesiStudenteFragment(Tesi tesi) {
+        this.tesi = tesi;
+    }
+
+    public DettagliTesiStudenteFragment() {
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,10 +117,14 @@ public class DettagliTesiStudenteFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_dettagli_tesi_studente, container, false);
     }
 
+
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // Prendo gli argomenti passatomi dal layout precedente
         Bundle args = getArguments();
+
+
         TextView titoloTextView = view.findViewById(R.id.insertTextViewTitolo);
         TextView abstractTextView = view.findViewById(R.id.insertTextViewAbstract);
         TextView tipologiaTextView = view.findViewById(R.id.insertTextViewTipologia);

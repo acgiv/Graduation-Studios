@@ -18,7 +18,9 @@
 
     import java.util.Locale;
 
-
+    /**
+     * Questa è l'activity principale per il login degli utenti.
+     */
     public class LoginActivity extends AppCompatActivity {
         Toolbar toolbar;
         NavController navController;
@@ -40,16 +42,23 @@
 
         }
 
+        /**
+         * Metodo chiamato quando viene premuto il pulsante "Indietro" nella barra delle azioni.
+         * Naviga all'indietro nell'interfaccia utente.
+         *
+         * @return Restituisce true se la navigazione all'indietro è stata gestita con successo.
+         */
         @Override
         public boolean onSupportNavigateUp() {
             navController.navigateUp();
             return super.onSupportNavigateUp();
         }
 
-
-
-
-
+        /**
+         * Imposta la lingua dell'applicazione in base alla lingua specificata.
+         *
+         * @param lingua La lingua da impostare (ad esempio, "it" per l'italiano).
+         */
         public void setLocal(String lingua){
             Resources resources = getResources();
             DisplayMetrics metrics = resources.getDisplayMetrics();

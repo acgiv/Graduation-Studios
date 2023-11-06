@@ -1,4 +1,5 @@
 package com.laureapp.ui.register;
+
 import static com.laureapp.ui.controlli.ControlInput.hashWith256;
 import static com.laureapp.ui.controlli.ControlInput.isConnected;
 import static com.laureapp.ui.controlli.ControlInput.is_correct_password;
@@ -45,6 +46,10 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Questa classe rappresenta un frammento utilizzato per la registrazione di un nuovo utente nell'applicazione.
+ * Gestisce le informazioni e le azioni relative al processo di registrazione.
+ */
 public class RegisterFragment extends Fragment {
 
     private NavController mNav;
@@ -162,6 +167,13 @@ public class RegisterFragment extends Fragment {
         return ut;
     }
 
+    /**
+     * Questo metodo verifica se il campo di input specificato contiene dati corretti in base al tipo di campo specificato.
+     * Restituisce un valore booleano che indica se il campo è valido o contiene errori.
+     *
+     * @param editText Il campo di input da verificare.
+     * @return true se il campo contiene dati corretti, altrimenti false.
+     */
     private  boolean is_correct_form(TextInputEditText editText) {
         boolean result_error = false;
         if(!ControlInput.is_empty_string(editText ,getInputText(editText) , Objects.requireNonNull(editText.getHint()).toString(), context)) {
@@ -276,6 +288,12 @@ public class RegisterFragment extends Fragment {
         }
     }
 
+    /**
+     * Questo metodo restituisce il TextInputLayout associato al campo di input specificato.
+     *
+     * @param editText Il campo di input di cui si desidera ottenere il TextInputLayout.
+     * @return Il TextInputLayout associato al campo di input specificato, o null se il campo non è stato trovato.
+     */
     private TextInputLayout getInputText(TextInputEditText editText){
         switch (Objects.requireNonNull(editText.getHint()).toString()){
             case "Nome":
@@ -291,7 +309,5 @@ public class RegisterFragment extends Fragment {
         }
         return null;
     }
-
-
 
 }

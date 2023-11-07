@@ -62,7 +62,9 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
-
+/**
+ *  Classe MainActivity
+ */
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA = 3;
     DrawerLayout drawerLayout;
@@ -163,6 +165,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *  Barra superiore dell'applicazione
+     */
     private void createAppBar() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -176,7 +181,10 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
-
+    /**
+     * Gestisce il pulsante di navigazione "Indietro" nella barra delle app.
+     * @return true se la navigazione è stata gestita correttamente, false in caso contrario
+     */
     @Override
     public boolean onSupportNavigateUp() {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
@@ -254,6 +262,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Override del metodo che gestisce la risposta alle richieste dei permessi.
+     * @param requestCode Il codice della richiesta di permesso
+     * @param permissions L'array di stringhe che rappresenta i permessi richiesti
+     * @param grantResults L'array di interi che rappresenta i risultati delle richieste di permesso
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -265,9 +279,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-
+    /**
+     * Carica un oggetto Tesi dal database in base all'ID specificato.
+     * @param id_tesi l'ID della tesi da caricare
+     * @return un oggetto Task che rappresenta l'operazione di caricamento dell'oggetto Tesi dal database
+     * @throws NoSuchElementException se non viene trovata alcuna tesi con l'ID specificato
+     * @throws Exception se si verifica un errore durante l'operazione di caricamento dal database
+     */
     private Task<Tesi> loadTesiById(Long id_tesi) {
         return FirebaseFirestore.getInstance()
                 .collection("Tesi")

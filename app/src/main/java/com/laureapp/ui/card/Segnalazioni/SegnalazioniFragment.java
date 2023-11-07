@@ -78,17 +78,11 @@ public class SegnalazioniFragment extends Fragment {
     String inputData;
 
 
-
-    public SegnalazioniFragment() {
-        // Required empty public constructor
-    }
-
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = requireContext();
         args = getArguments();
-
+        Log.d("args", String.valueOf(args));
         if (args != null) {
             ruolo = args.getString("ruolo");
         }

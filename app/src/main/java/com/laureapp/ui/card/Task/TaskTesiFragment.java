@@ -49,12 +49,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Questo è un fragment per la gestione delle task relative alle tesi.
  */
-
 public class TaskTesiFragment extends Fragment {
 
     private NavController mNav;
@@ -76,7 +73,9 @@ public class TaskTesiFragment extends Fragment {
 
     private static List<TaskTesi> taskList = new ArrayList<>();
 
-
+    /**
+     * Costruttore predefinito del fragment.
+     */
     public TaskTesiFragment() {
         // Required empty public constructor
     }
@@ -592,13 +591,30 @@ public class TaskTesiFragment extends Fragment {
     Metodi per l'aggiunta e visualizzazione di una nuova task
  */
 
-
+    /**
+     * Aggiunge una nuova task al database Firestore in base all'ID dell'utente, al titolo della task,
+     * alla data di inizio e alla data di scadenza forniti.
+     *
+     * @param id_utente   l'ID dell'utente associato alla task.
+     * @param inputData   il titolo della nuova task da aggiungere.
+     * @param startDate   la data di inizio della task.
+     * @param dueDate     la data di scadenza della task.
+     */
     private void addTaskToFirestoreLast(Long id_utente, String inputData, Timestamp startDate, Timestamp dueDate) {
 
         // Ottieni l'ID della tesi in base all'ID utente fornito
         loadStudentAndAddTask(id_utente, inputData, startDate, dueDate);
     }
 
+    /**
+     * Carica i dati dello studente in base all'ID dell'utente fornito e aggiunge una nuova task al database Firestore.
+     * Questo metodo è utilizzato per creare una catena di chiamate per caricare i dati necessari e aggiungere una task.
+     *
+     * @param id_utente   l'ID dell'utente associato alla task.
+     * @param inputData   il titolo della nuova task da aggiungere.
+     * @param startDate   la data di inizio della task.
+     * @param dueDate     la data di scadenza della task.
+     */
     private void loadStudentAndAddTask(Long id_utente, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadStudentByUserId(id_utente).addOnCompleteListener(studentTask -> {
             if (studentTask.isSuccessful()) {
@@ -610,6 +626,15 @@ public class TaskTesiFragment extends Fragment {
         });
     }
 
+    /**
+     * Carica i dati dello studente tesi in base all'ID dello studente fornito e aggiunge una nuova task al database Firestore.
+     * Questo metodo è utilizzato per creare una catena di chiamate per caricare i dati necessari e aggiungere una task.
+     *
+     * @param id_studente   l'ID dello studente tesi associato alla task.
+     * @param inputData     il titolo della nuova task da aggiungere.
+     * @param startDate     la data di inizio della task.
+     * @param dueDate       la data di scadenza della task.
+     */
     private void loadStudenteTesiAndAddTask(Long id_studente, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadStudenteTesiByStudenteId(id_studente).addOnCompleteListener(studenteTesiTask -> {
             if (studenteTesiTask.isSuccessful()) {
@@ -621,6 +646,15 @@ public class TaskTesiFragment extends Fragment {
         });
     }
 
+    /**
+     * Carica i dati della tesi in base all'ID della tesi associata allo studente tesi e aggiunge una nuova task al database Firestore.
+     * Questo metodo è utilizzato per creare una catena di chiamate per caricare i dati necessari e aggiungere una task.
+     *
+     * @param id_tesi_in_studente_tesi    l'ID della tesi associata allo studente tesi.
+     * @param inputData                   il titolo della nuova task da aggiungere.
+     * @param startDate                   la data di inizio della task.
+     * @param dueDate                     la data di scadenza della task.
+     */
     private void loadTesiAndAddTask(Long id_tesi_in_studente_tesi, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadTesiByIdTesiInStudenteTesi(id_tesi_in_studente_tesi).addOnCompleteListener(tesiTask -> {
             if (tesiTask.isSuccessful()) {
@@ -632,6 +666,14 @@ public class TaskTesiFragment extends Fragment {
         });
     }
 
+    /**
+     * Aggiunge una nuova task al database Firestore con i dati forniti.
+     *
+     * @param id_tesi      l'ID della tesi associata alla nuova task.
+     * @param inputData    il titolo della nuova task.
+     * @param startDate    la data di inizio della task.
+     * @param dueDate      la data di scadenza della task.
+     */
     private void addTaskToFirestore(Long id_tesi, String inputData, Timestamp startDate, Timestamp dueDate) {
         CollectionReference taskRef = db.collection("Task");
         QueryFirestore queryFirestore = new QueryFirestore();
@@ -679,6 +721,11 @@ public class TaskTesiFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Rimuove una task dalla lista e dal database Firestore in base alla posizione specificata.
+     *
+     * @param position la posizione della task da rimuovere nella lista.
+     */
     public static void deleteTask(int position) {
         if (position >= 0 && position < taskList.size()) {
             TaskTesi taskToDelete = taskList.get(position);
@@ -694,7 +741,11 @@ public class TaskTesiFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Rimuove una task dal database Firestore in base all'ID della task specificato.
+     *
+     * @param id_task l'ID della task da rimuovere dal database Firestore.
+     */
     private static void deleteTaskFromFirestore(Long id_task) {
         // Ottieni il riferimento al documento della task da eliminare
         CollectionReference taskRef = db.collection("Task");
@@ -711,14 +762,5 @@ public class TaskTesiFragment extends Fragment {
             }
         });
     }
-
-
-
-
-
-
-
-
-
 
 }

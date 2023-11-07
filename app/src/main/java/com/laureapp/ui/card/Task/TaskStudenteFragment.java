@@ -57,12 +57,9 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Fragment che gestisce le task degli studenti.
  */
 public class TaskStudenteFragment extends Fragment {
-
-
 
     public TaskStudenteFragment() {
         // Required empty public constructor
@@ -82,8 +79,7 @@ public class TaskStudenteFragment extends Fragment {
 
     private static FirebaseFirestore db;
     private Bundle args;
-    private Studente utente_studente;
-    UtenteModelView utenteView;
+    Utente utente;
     private Long id_utente;
 
 
@@ -126,21 +122,17 @@ public class TaskStudenteFragment extends Fragment {
 
         if(args != null) {
             adapter = new TaskStudenteAdapter(context, (ArrayList<TaskStudente>) taskList,mNav, args);
-            utenteView = new UtenteModelView(context);
+            utente = (Utente) args.getSerializable("Utente");
             if (StringUtils.equals("Professore", args.getString("ruolo"))) {
-                String email = args.getString("emailStudente");
 
-                id_utente = utenteView.getIdUtente(email);
+                id_utente = utente.getId_utente();
                 loadStudentForUserId(id_utente);
 
                 addButton.setOnClickListener(view1 ->
                         showInputDialog()
                 );
             } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
-                String email = getEmailFromSharedPreferences(context);
                 addButton.setVisibility(View.GONE);
-                id_utente = utenteView.getIdUtente(email);
-                loadStudentForUserId(id_utente);
 
                 //Carico i dati delle task in base all'utente loggato
             }
@@ -225,23 +217,15 @@ public class TaskStudenteFragment extends Fragment {
                 throw new RuntimeException(e);
             }
             if (StringUtils.equals("Professore", args.getString("ruolo"))) {
-                String email = args.getString("emailStudente");
 
-                id_utente = utenteView.getIdUtente(email);
+                id_utente = utente.getId_utente();
                 addTaskToFirestoreLast(id_utente, inputData, startDate, dueDate);
             }
 
 
             //Aggiungo la task a Firestore in base all'utente loggato
 
-            Log.d("id_utente_lista", id_utente.toString());
         });
-
-
-
-
-
-
 
 
         // Imposta un ascoltatore per il pulsante Annulla
@@ -382,9 +366,6 @@ public class TaskStudenteFragment extends Fragment {
             }
         }
     }
-
-
-
 
 
     /**
@@ -576,10 +557,18 @@ public class TaskStudenteFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-/*
-    Metodi per l'aggiunta e visualizzazione di una nuova task
- */
+    /*
+        Metodi per l'aggiunta e visualizzazione di una nuova task
+    */
 
+    /**
+     * Aggiunge una nuova task a Firestore e alla lista locale.
+     *
+     * @param id_utente  l'ID dell'utente associato alla task.
+     * @param inputData  il titolo della task.
+     * @param startDate  la data di inizio della task.
+     * @param dueDate    la data di scadenza della task.
+     */
 
     private void addTaskToFirestoreLast(Long id_utente, String inputData, Timestamp startDate, Timestamp dueDate) {
 
@@ -587,6 +576,14 @@ public class TaskStudenteFragment extends Fragment {
         loadStudentAndAddTask(id_utente, inputData, startDate, dueDate);
     }
 
+    /**
+     * Carica lo studente in base all'ID dell'utente e aggiunge la task.
+     *
+     * @param id_utente   l'ID dell'utente associato alla task.
+     * @param inputData   il titolo della task.
+     * @param startDate   la data di inizio della task.
+     * @param dueDate     la data di scadenza della task.
+     */
     private void loadStudentAndAddTask(Long id_utente, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadStudentByUserId(id_utente).addOnCompleteListener(studentTask -> {
             if (studentTask.isSuccessful()) {
@@ -599,6 +596,14 @@ public class TaskStudenteFragment extends Fragment {
         });
     }
 
+    /**
+     * Carica la tabella StudenteTesi dal database in base all'ID dello studente e successivamente aggiunge una nuova task con i dati specificati.
+     *
+     * @param id_studente l'ID dello studente associato alla tabella StudenteTesi.
+     * @param inputData   il titolo della task da aggiungere.
+     * @param startDate   la data di inizio della task.
+     * @param dueDate     la data di scadenza della task.
+     */
     private void loadStudenteTesiAndAddTask(Long id_studente, String inputData, Timestamp startDate, Timestamp dueDate) {
         loadStudenteTesiByStudenteId(id_studente).addOnCompleteListener(studenteTesiTask -> {
             if (studenteTesiTask.isSuccessful()) {
@@ -610,7 +615,14 @@ public class TaskStudenteFragment extends Fragment {
         });
     }
 
-
+    /**
+     * Aggiunge una nuova task al database Firestore con i dati specificati.
+     *
+     * @param id_studente_tesi  l'ID della tesi associata alla task.
+     * @param inputData         il titolo della task da aggiungere.
+     * @param startDate         la data di inizio della task.
+     * @param dueDate           la data di scadenza della task.
+     */
 
     private void addTaskToFirestore(Long id_studente_tesi, String inputData, Timestamp startDate, Timestamp dueDate) {
         CollectionReference taskRef = db.collection("TaskStudente");
@@ -638,6 +650,7 @@ public class TaskStudenteFragment extends Fragment {
 
     /**
      * Metodo per l'aggiunta di una nuova task alla lista di partenza
+     *
      * @param id_task id della task da aggiungere alla lista
      * @param inputData è il titolo della task
      * @param startDate data inizio inserita
@@ -659,6 +672,11 @@ public class TaskStudenteFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Rimuove una task dalla lista e da Firestore.
+     *
+     * @param position la posizione della task nella lista.
+     */
     public static void deleteTask(int position) {
         if (position >= 0 && position < taskList.size()) {
             TaskStudente taskToDelete = taskList.get(position);
@@ -674,7 +692,11 @@ public class TaskStudenteFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Rimuove una task dal database Firestore in base all'ID della task specificato.
+     *
+     * @param id_task l'ID della task da eliminare dal database.
+     */
     private static void deleteTaskFromFirestore(Long id_task) {
         // Ottieni il riferimento al documento della task da eliminare
         CollectionReference taskRef = db.collection("TaskStudente");

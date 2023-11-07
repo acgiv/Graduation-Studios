@@ -8,7 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
+/**
+ * Questa classe contiene metodi di conversione per convertire tipi di dati
+ */
 public class Converters {
     @TypeConverter
     public static Timestamp fromTimestampString(String value) {
@@ -43,12 +45,21 @@ public class Converters {
         return new Timestamp(date.getTime());
     }
 
-
+    /**
+     * Converte un timestamp nel tipo di dati Date
+     * @param timestamp da convertire
+     * @return date corrispondente al timestamp
+     */
     @TypeConverter
     public static Date toDate(Long timestamp) {
         return timestamp == null ? null : new Date(timestamp);
     }
 
+    /**
+     * Converte una Data nel tipo di dati timestamp
+     * @param date da converire
+     * @return Long della data convertita, o null se la data di input è nulla.
+     */
     @TypeConverter
     public static Long toTimestamp(Date date) {
         return date == null ? null : date.getTime();

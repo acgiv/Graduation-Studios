@@ -31,6 +31,7 @@ import com.laureapp.ui.card.Adapter.MessageAdapter;
 import com.laureapp.ui.roomdb.entity.Segnalazione;
 import com.laureapp.ui.roomdb.entity.Utente;
 
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -38,6 +39,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Questa classe rappresenta un fragment utilizzato per gestire la chat all'interno dell'applicazione.
+ * La chat potrebbe essere parte di una funzionalità di segnalazioni o comunicazioni tra gli utenti.
+ * Il fragment visualizza una chat e permette agli utenti di scambiare messaggi.
+ */
 public class ChatFragment extends Fragment {
 
     FragmentChatBinding binding;
@@ -53,7 +59,6 @@ public class ChatFragment extends Fragment {
     Bundle args;
     MessageAdapter messageAdapter;
     private List<Chat> mChat = new ArrayList<>();
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -1,11 +1,8 @@
 package com.laureapp.ui.card.TesiProfessore;
 
-import static com.laureapp.ui.controlli.ControlInput.showToast;
-
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -53,7 +50,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiProfessoreAdapter.DeleteButtonClickListener {
+public class ListaTesiProfessoreFragment extends Fragment {
 
     Context context;
     String email;
@@ -106,8 +103,9 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
                                 //Mostro sulla listview tutte le tesi dello studente associato al professore
                                 listView = view.findViewById(R.id.listTesiProfessoreView);
+                                listView.setNestedScrollingEnabled(true);
+
                                 adapter = new ListaTesiProfessoreAdapter(getContext(), tesiList);
-                                adapter.setDeleteButtonClickListener(this); // 'this' si riferisce al tuo fragment
                                 listView.setAdapter(adapter);
                             } else {
                                 Log.e("Tesi Firestore Error", "Error getting Tesi data", tesiTask.getException());
@@ -133,65 +131,6 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
     }
 
-    @Override
-    public void onDeleteButtonClick(int position) {
-        Tesi tesiToDelete = adapter.getItem(position);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Conferma cancellazione");
-        builder.setMessage("Sei sicuro di voler eliminare questa tesi?");
-
-        // Aggiungi un pulsante "Conferma" per confermare la cancellazione
-        builder.setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                deleteTesiFromFirestore(position,context,adapter);
-            }
-        });
-
-        // Aggiungi un pulsante "Annulla" per annullare l'operazione
-        builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Chiudi il dialog
-            }
-        });
-
-        // Mostra il dialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private static void deleteTesiFromFirestore(int position, Context context, ListaTesiProfessoreAdapter adapter) {
-        // Ottieni il riferimento al documento della tesi da eliminare
-        Tesi tesiToDelete = adapter.getItem(position);
-        Query query = FirebaseFirestore.getInstance()
-                .collection("Tesi");
-        query.whereEqualTo("id_tesi", tesiToDelete.getId_tesi()).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
-                doc.getReference().delete().addOnSuccessListener(aVoid -> {
-                    showToast(context, "Tesi eliminata con successo");
-
-                    // Rimuovi l'elemento corrispondente dalla lista di tesi nell'adapter
-
-                    adapter.remove(tesiToDelete);
-
-                    // Notifica all'adapter che i dati sono cambiati
-                    adapter.notifyDataSetChanged();
-
-                }).addOnFailureListener(e -> {
-                    showToast(context, "Errore durante l'eliminazione della tesi");
-                });
-            } else {
-                showToast(context, "Tesi non trovata nel database");
-            }
-        });
-    }
-
-
-
     private String getEmailFromSharedPreferences() {
         if (context != null) {
             SharedPreferences preferences = context.getSharedPreferences("preferenze", Context.MODE_PRIVATE);
@@ -199,7 +138,6 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
         }
         return null;
     }
-
 
     /**
      * Questo metodo mi permette di caricare da firestore gli id delle tesi dando come parametro l'id del professore

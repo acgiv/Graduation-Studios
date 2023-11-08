@@ -8,7 +8,7 @@
     <!--Fragment delle impostazioni -->
     <fragment
         android:id="@+id/fragment_impostazioni"
-        android:name="com.laureapp.ui.home.ImpostazioniFragment"
+        android:name="com.laureapp.ui.ImpostazioniFragment"
         android:label="Laureapp"
         tools:layout="@layout/fragment_home"/>
 

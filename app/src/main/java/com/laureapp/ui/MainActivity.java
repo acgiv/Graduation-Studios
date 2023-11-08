@@ -34,6 +34,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.laureapp.databinding.ActivityMainBinding;
 import com.laureapp.ui.home.HomeFragment;
 import com.laureapp.ui.login.LoginActivity;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration mAppBarConfiguration;
     ActivityMainBinding binding;
     String ruolo;
-    NavController navController;
+    SharedDataModelView sharedViewModel;
 
 
     @Override
@@ -62,9 +63,10 @@ public class MainActivity extends AppCompatActivity {
         // PASSO LE INFORMAZIONI ATTRAVERSO IL BUNDLE IN FRAGMENT_HOME
         Bundle bundle = getIntent().getExtras();
         ruolo = bundle.getString("ruolo");
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         navController.navigate(R.id.fragment_home, bundle);
 
+        sharedViewModel = new ViewModelProvider(this).get(SharedDataModelView.class);
 
 
         // Imposta gli argomenti per il fragment
@@ -139,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 .setOpenableLayout(drawerLayout)
                 .build();
 
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
@@ -147,9 +149,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
-        navController.navigateUp();
-        return super.onSupportNavigateUp();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
    }
 
 

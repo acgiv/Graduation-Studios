@@ -108,6 +108,8 @@ public class TesistiSegnalazioniFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
         listView = view.findViewById(R.id.listView);
+        listView.setNestedScrollingEnabled(true);
+
         adapter = new StudentAdapter(context, studentList);
 
         return view;
@@ -271,10 +273,10 @@ public class TesistiSegnalazioniFragment extends Fragment {
      * @param id_studente id della tesi nella tabella StudenteTesi
      * @return l'id della tesi presente nella tabella studente_tesi
      */
-    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente,Long id_tesi) {
+    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente) {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi").whereEqualTo("id_tesi",id_tesi)
+                .collection("StudenteTesi").whereEqualTo("id_studente", id_studente)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -384,7 +386,7 @@ public class TesistiSegnalazioniFragment extends Fragment {
         loadTesiByIdTesiInTesiStud(id_tesi).addOnCompleteListener(studTesiTask -> {
             if (studTesiTask.isSuccessful()) {
                 Long id_studente = studTesiTask.getResult();
-                loadStudForIdStudenteInStudenteTesi(id_studente,id_tesi);
+                loadStudForIdStudenteInStudenteTesi(id_studente);
             } else {
                 showToast(context, "Dati tesi professore non caricati correttamente");
 
@@ -397,8 +399,8 @@ public class TesistiSegnalazioniFragment extends Fragment {
      * È il secondo metodo(2) utile per poter recuperare le tasks.
      * @param id_studente è l'id dell'utente uguale a quello dello studente
      */
-    private void loadStudForIdStudenteInStudenteTesi(final Long id_studente,Long id_tesi) {
-        loadStudByIdStudenteInStudenteTesi(id_studente,id_tesi).addOnCompleteListener(studTask -> {
+    private void loadStudForIdStudenteInStudenteTesi(final Long id_studente) {
+        loadStudByIdStudenteInStudenteTesi(id_studente).addOnCompleteListener(studTask -> {
             if (studTask.isSuccessful()) {
                 requireActivity().runOnUiThread(() -> addStudentsToList(studTask.getResult()));
             } else {

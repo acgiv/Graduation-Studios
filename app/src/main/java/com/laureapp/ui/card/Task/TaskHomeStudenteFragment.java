@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +64,7 @@ public class TaskHomeStudenteFragment extends Fragment {
     String ruolo;
 
     private static final List<TaskStudente> taskList = new ArrayList<>();
+    String email;
     Bundle args;
     Utente utente;
 
@@ -88,7 +88,6 @@ public class TaskHomeStudenteFragment extends Fragment {
 
                 utente = (Utente)args.getSerializable("Utente");
                 loadStudentForUserId(utente.getId_utente());
-                Log.d("id_utenteTask", utente.getId_utente().toString());
 
                 ruolo = args.getString("ruolo");
 
@@ -105,9 +104,13 @@ public class TaskHomeStudenteFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ImageButton addButton = view.findViewById(R.id.add_task_ImageButton);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
+        listTaskView.setNestedScrollingEnabled(true);
 
         mNav = Navigation.findNavController(view);
         adapter = new TaskStudenteAdapter(context, (ArrayList<TaskStudente>) taskList,mNav, args);
+
+        email = getEmailFromSharedPreferences(context);
+
 
         addButton.setVisibility(View.GONE);
 
@@ -127,7 +130,7 @@ public class TaskHomeStudenteFragment extends Fragment {
      */
     private Task<Long> loadStudentByUserId(Long id_utente) {
         return FirebaseFirestore.getInstance()
-                .collection("Utenti/Studenti/Studenti")
+                .collection("Utenti").document("Studenti").collection("Studenti")
                 .whereEqualTo("id_utente", id_utente)
                 .get()
                 .continueWith(task -> {
@@ -179,11 +182,11 @@ public class TaskHomeStudenteFragment extends Fragment {
                         studenteTesi.setId_studente(doc.getLong("id_studente"));
                         studenteTesi.setId_studente_tesi(doc.getLong("id_studente_tesi"));
                         studenteTesi.setId_tesi(doc.getLong("id_tesi"));
-                        Log.d("id_studente_tesi", studenteTesi.getId_studente_tesi().toString());
 
 
 
-                        return studenteTesi.getId_studente_tesi();
+
+                        return studenteTesi.getId_studente();
                     }
                     throw new NoSuchElementException("Utente non trovato con questa mail: " + id_studente);
                 });
@@ -246,7 +249,7 @@ public class TaskHomeStudenteFragment extends Fragment {
             } else {
                 taskList.clear();
                 adapter.notifyDataSetChanged();
-                showToast(context, "Dati studenti non caricati correttamente");
+                showToast(context, "Dati studenti non caricati correttamente e/o nessuna task assegnata");
 
             }
         });
@@ -279,12 +282,8 @@ public class TaskHomeStudenteFragment extends Fragment {
         loadTaskById(id_stud_tesi_in_studente_tesi).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 taskList.clear();
-                //Mi stampa due volte l'id_studenteTesi, prima quello corretto e poi 4
-                Log.d("id_studente_tesi", id_stud_tesi_in_studente_tesi.toString() + task.getResult());
                 addTasksToList(task.getResult());
             } else {
-                taskList.clear();
-                adapter.notifyDataSetChanged();
                 showToast(context, "Dati task non caricati correttamente");
             }
         });
@@ -301,10 +300,9 @@ public class TaskHomeStudenteFragment extends Fragment {
         for (TaskStudente taskStudente : tasks) {
             if (taskStudente != null) {
                 taskList.add(taskStudente);
-                Log.d("id_studente_in_studente_tesi", taskStudente.getId_studente_tesi().toString());
-
             }
         }
+
         adapter.notifyDataSetChanged();
     }
 

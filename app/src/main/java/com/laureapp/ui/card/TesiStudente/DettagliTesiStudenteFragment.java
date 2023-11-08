@@ -1,10 +1,8 @@
 package com.laureapp.ui.card.TesiStudente;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
@@ -13,7 +11,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
@@ -93,15 +90,13 @@ public class DettagliTesiStudenteFragment extends Fragment {
     String nomeCorelatore = "";
     Long media;
     Long esamiMancanti;
-    Bitmap qrCodeBitmap;
     ImageButton share;
     ArrayList<String> nomiFile = new ArrayList<>(); // FileInfo rappresenta le informazioni sui file da visualizzare
 
     List<TesiProfessore> tesiProfessoreList = new ArrayList<>();
 
     StudenteModelView studenteView = new StudenteModelView(context);
-    private static final int PERMISSION_REQUEST_CODE = 123;
-    private static final int DOWNLOAD_REQUEST_CODE = 456;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +129,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
 
         if (args != null) { //se non sono null
+
             tesi = (Tesi) args.getSerializable("Tesi"); //prendo la tesi dagli args
             if (tesi != null) {
                 //mi passo tutti i parametri di una Tesi
@@ -164,7 +160,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
 
                 share.setOnClickListener(view1 -> {
                     // Genera il QR code
-                    qrCodeBitmap = QRGenerator(tesi);
+                    Bitmap qrCodeBitmap = QRGenerator(tesi);
 
 
 
@@ -175,7 +171,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     qrCodeBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     byte[] qrCodeBytes = byteArrayOutputStream.toByteArray();
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MediaStore.Images.Media.insertImage(requireActivity().getContentResolver(), qrCodeBitmap, "qr_code_bitmap", null)));
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MediaStore.Images.Media.insertImage(requireActivity().getContentResolver(), qrCodeBitmap, "QR Code", null)));
                     startActivity(Intent.createChooser(shareIntent, "Condividi QR Code tramite"));
                 });
 
@@ -528,8 +524,7 @@ public class DettagliTesiStudenteFragment extends Fragment {
                     "\nCiclo CDL: " + tesi.getCiclo_cdl() +
                     // Aggiungi altri dati della tesi, se necessario.
                     "\nID Tesi: " + tesi.getId_tesi() +
-                    "\nRelatore: " + nomeRelatore +
-                    "\nCo-Relatore: " + nomeCorelatore;
+                    "\nRelatore: " + nomeCognome;
 
 
             BitMatrix matrix = writer.encode(content, BarcodeFormat.QR_CODE, 400, 400);
@@ -578,47 +573,34 @@ public class DettagliTesiStudenteFragment extends Fragment {
                     adapter.setDownloadButtonClickListener(new InfoTesiProfessoreAdapter.DownloadButtonClickListener() {
                         @Override
                         public void onDownloadButtonClick(int position) {
-                            // Verifica se hai i permessi di scrittura
-                            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                // Richiedi esplicitamente il permesso di scrittura nella memoria esterna
-                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
-                            } else {
-                                // Se hai già i permessi, puoi procedere con il download
-                                performDownload(position,storageRef);
-                            }
+                            // Ottieni il riferimento al file selezionato
+                            StorageReference selectedFileRef = storageRef.child(nomiFile.get(position));
+
+                            // Crea un file locale dove scaricare il file
+                            File localFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), nomiFile.get(position));
+
+                            selectedFileRef.getFile(localFile)
+                                    .addOnSuccessListener(taskSnapshot -> {
+                                        // Il file è stato scaricato con successo, puoi gestire il completamento qui
+                                        // Ad esempio, puoi aprire il file o mostrare una notifica di download completato
+                                        Toast.makeText(getContext(), "File scaricato con successo", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        // Gestisci eventuali errori durante il download
+                                        Log.e("Firebase Storage Error", "Errore nel download del file", exception);
+                                        Toast.makeText(getContext(), "Errore nel download del file", Toast.LENGTH_SHORT).show();
+                                    });
                         }
                     });
-
-
+                })
+                .addOnFailureListener(exception -> {
+                    Toast.makeText(getContext(), "Caricamento file non riuscito", Toast.LENGTH_SHORT).show();
+                    Log.e("Firebase Storage Error", "Errore nel caricamento dell'elenco dei file", exception);
                 });
+
+
+
     }
 
-    /**
-     * Metodo per eseguire il download del file
-      * @param position
-     * @param storageRef
-     */
-    private void performDownload(int position,StorageReference storageRef) {
-            // Ottieni il riferimento al file selezionato
-            StorageReference selectedFileRef = storageRef.child(nomiFile.get(position));
-
-            // Crea un file locale dove scaricare il file nella directory di download
-            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-            File localFile = new File(downloadsDir, nomiFile.get(position));
-
-            // Esegui il download
-            selectedFileRef.getFile(localFile)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        // Il file è stato scaricato con successo
-                        // Puoi gestire il completamento qui
-                        // Ad esempio, puoi aprire il file o mostrare una notifica di download completato
-                        Toast.makeText(getContext(), "File scaricato con successo", Toast.LENGTH_SHORT).show();
-                    })
-                    .addOnFailureListener(exception -> {
-                        // Gestisci eventuali errori durante il download
-                        Log.e("Firebase Storage Error", "Errore nel download del file", exception);
-                        Toast.makeText(getContext(), "Errore nel download del file", Toast.LENGTH_SHORT).show();
-                    });
-        }
 
 }

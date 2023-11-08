@@ -4,7 +4,6 @@ import static com.laureapp.ui.controlli.ControlInput.showToast;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -26,6 +25,7 @@ import android.widget.TextView;
 
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -55,26 +55,14 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
-            //args.putSerializable("UtenteLoggato", (Utente) args.getSerializable("Utente"));
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                args.putSerializable("Utente", (Utente) args.getSerializable("Utente"));
+            }
 
         }
 
 
 
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Il dispositivo è in modalità landscape
-            // Puoi aggiornare l'interfaccia utente qui se necessario
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            // Il dispositivo è in modalità ritratto
-            // Puoi aggiornare l'interfaccia utente qui se necessario
-        }
     }
 
     @Override

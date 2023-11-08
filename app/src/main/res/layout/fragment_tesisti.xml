@@ -10,13 +10,13 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"
-        android:layout_marginStart="36dp"
-    android:layout_marginEnd="36dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="?android:attr/actionBarSize" />
+        android:dividerHeight="1dp" />
 
 </LinearLayout>
 

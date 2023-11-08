@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -54,7 +55,6 @@ public class ChatFragment extends Fragment {
     String ruolo;
     Segnalazione segnalazione;
     Utente utenteSend;
-    Long id_tesi;
     Long utenteRecive;
     HashMap<String, Object> info_search_receiver = new HashMap<>();
     Bundle args;
@@ -77,11 +77,13 @@ public class ChatFragment extends Fragment {
             }
         }
         if (StringUtils.equals(ruolo, getString(R.string.studente))){
-            info_search_receiver.put("receiver", "id_professore");
-            info_search_receiver.put("path_id_reciver", "TesiProfessore");
+            info_search_receiver.put("receiver_ruolo", "id_professore");
+            info_search_receiver.put("path_id_tesi_ruolo", "TesiProfessore");
+            info_search_receiver.put("path_id_utente", "Utenti/Professori/Professori");
         }else{
-            info_search_receiver.put("receiver", "id_studente");
-            info_search_receiver.put("path_id_reciver", "StudenteTesi");
+            info_search_receiver.put("receiver_ruolo", "id_studente");
+            info_search_receiver.put("path_id_tesi_ruolo", "StudenteTesi");
+            info_search_receiver.put("path_id_utente", "Utenti/Studenti/Studenti");
         }
 
         reference = FirebaseDatabase.getInstance().getReference("Segnalazione").child(String.valueOf(segnalazione.getId_segnalazione()));
@@ -111,7 +113,7 @@ public class ChatFragment extends Fragment {
                 info_search_receiver.put("id_tesi", task.getResult());
                 loadIdReceiver(task.getResult()).addOnCompleteListener(task2 -> {
                     if (task2.isSuccessful()) {
-                        utenteRecive = task2.getResult();
+                        utenteRecive = task2.getResult() ;
                         readMessage();
                     }
                 });
@@ -164,22 +166,42 @@ public class ChatFragment extends Fragment {
                 });
     }
 
+    private Task<Long> loadIdUtente(Long id_ruolo) {
+        return FirebaseFirestore.getInstance()
+                .collection(Objects.requireNonNull(info_search_receiver.get("path_id_utente")).toString())
+                .whereEqualTo(Objects.requireNonNull(info_search_receiver.get("receiver_ruolo")).toString(), id_ruolo)
+                .limit(1) // Limita la query a un solo documento
+                .get()
+                .continueWith(task4 -> {
+                    if (task4.isSuccessful()) {
+                        QueryDocumentSnapshot doc2 = (QueryDocumentSnapshot) task4.getResult().getDocuments().get(0);
+                        return doc2.getLong("id_utente");
+                    }
+                    return -1L;
+                });
+    }
+
     private Task<Long> loadIdReceiver(Long id_tesi) {
         return FirebaseFirestore.getInstance()
-                .collection(Objects.requireNonNull(info_search_receiver.get("path_id_reciver")).toString())
+                .collection(Objects.requireNonNull(info_search_receiver.get("path_id_tesi_ruolo")).toString())
                 .whereEqualTo("id_tesi", id_tesi)
                 .limit(1) // Limita la query a un solo documento
                 .get()
-                .continueWith(task3 -> {
+                .continueWithTask(task3 -> {
                     if (task3.isSuccessful()) {
-                        for (QueryDocumentSnapshot doc : task3.getResult()) {
-                            Long idProfessore = doc.getLong(info_search_receiver.get("receiver").toString());
-                            if (idProfessore != null) {
-                                return idProfessore;
-                            }
+                        QueryDocumentSnapshot doc = (QueryDocumentSnapshot) task3.getResult().getDocuments().get(0);
+                        Long id_ruolo = doc.getLong(Objects.requireNonNull(info_search_receiver.get("receiver_ruolo")).toString());
+                        if (id_ruolo != null) {
+                            return loadIdUtente(id_ruolo).continueWith(task5 -> {
+                                if (task5.isSuccessful()) {
+                                    return (Long) task5.getResult();
+                                } else {
+                                    return -1L;
+                                }
+                            });
                         }
                     }
-                    return -1L;
+                    return Tasks.forResult(-1L);
                 });
     }
 

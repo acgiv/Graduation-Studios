@@ -10,58 +10,45 @@
     <LinearLayout
         android:id="@+id/blueBar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:background="@color/color_primary"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="@string/Ricevimento"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
-            <!-- TextView per il ricevimento -->
-            <TextView
-                android:id="@+id/ricevimentiTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="@string/intestazione_colonna_ricevimento"
-                android:textSize="14sp"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:layout_marginStart="40dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="@string/argomento"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
-            <!-- TextView per l'argomento -->
-            <TextView
-                android:id="@+id/argomentoRicevimentoTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="@string/intestazione_colonna_argomento"
-                android:textSize="14sp"
-                android:textColor="#FFFFFF"
-                android:layout_marginStart="30dp"
-
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ricevimentiTextView" />
-
-            <!-- TextView per la data -->
-            <TextView
-                android:id="@+id/dataRicevimentoTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:text="@string/intestazione_colonna_data"
-                android:textSize="14sp"
-                android:layout_marginStart="35dp"
-
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/argomentoRicevimentoTextView" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="@string/data_ricevimento"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:gravity="center"/>
     </LinearLayout>
+
 
     <!-- Rimuovi questa parte se non è necessaria -->
     <ListView

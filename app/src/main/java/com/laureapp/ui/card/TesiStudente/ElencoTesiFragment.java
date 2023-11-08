@@ -87,6 +87,8 @@ public class ElencoTesiFragment extends Fragment {
 
         SearchView searchView = view.findViewById(R.id.searchTesiView);
         listView = view.findViewById(R.id.listClassificaTesiView);
+        listView.setNestedScrollingEnabled(true);
+
 
         //Definisco il bottone filtra
         Button filterButton = view.findViewById(R.id.filterButton);

@@ -103,6 +103,8 @@ public class ListaTesiProfessoreFragment extends Fragment {
 
                                 //Mostro sulla listview tutte le tesi dello studente associato al professore
                                 listView = view.findViewById(R.id.listTesiProfessoreView);
+                                listView.setNestedScrollingEnabled(true);
+
                                 adapter = new ListaTesiProfessoreAdapter(getContext(), tesiList);
                                 listView.setAdapter(adapter);
                             } else {

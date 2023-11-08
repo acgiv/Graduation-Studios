@@ -104,6 +104,7 @@ public class TaskHomeStudenteFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ImageButton addButton = view.findViewById(R.id.add_task_ImageButton);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
+        listTaskView.setNestedScrollingEnabled(true);
 
         mNav = Navigation.findNavController(view);
         adapter = new TaskStudenteAdapter(context, (ArrayList<TaskStudente>) taskList,mNav, args);

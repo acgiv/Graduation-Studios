@@ -120,6 +120,8 @@ public class TaskStudenteFragment extends Fragment {
         ImageButton addButton = view.findViewById(R.id.add_task_ImageButton);
         mNav = Navigation.findNavController(view);
         ListView listTaskView = view.findViewById(R.id.listTaskView);
+        listTaskView.setNestedScrollingEnabled(true);
+
 
 
         //Log.d("id_utente_lista", utente.getId_utente().toString());

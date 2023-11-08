@@ -16,7 +16,7 @@
 
         <GridLayout
             android:id="@+id/grigliaDati"
-            android:layout_width="wrap_content"
+            android:layout_width="401dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="18dp"
             android:columnCount="3"
@@ -35,18 +35,18 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewDettagliTesi"
-                android:layout_width="375dp"
-                android:layout_height="480dp"
-                android:layout_marginTop="80dp"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_gravity="center"
-                android:layout_margin="12dp"
-                app:cardElevation="8dp"
-                app:cardCornerRadius="15dp">
+                android:layout_width="345dp"
+                android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="24dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp">
 
+            <FrameLayout
 
-                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -106,143 +106,301 @@
                                 android:id="@+id/textViewTitolo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/titoloTesiProfessore"
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
 
-                            <TextView
-                                android:id="@+id/insertTextViewTitolo"
-                                android:layout_width="276dp"
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintBottom_toTopOf="@+id/linearLayoutCognome"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                                <TextView
+                                    android:id="@+id/textViewTitolo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/titoloTesiProfessore"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/insertTextViewTitolo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line1"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEmail"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutCognome"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="16sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail">
 
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/TextViewAbstract"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/descrizione"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <View
-                            android:id="@+id/line1"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutEmail"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail" />
+                                <TextView
+                                    android:id="@+id/insertTextViewAbstract"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutCognome"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEmail">
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/TextViewAbstract"
-                                android:layout_width="wrap_content"
+                            <View
+                                android:id="@+id/line2"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutNome"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/descrizione"
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome">
 
-                            <TextView
-                                android:id="@+id/insertTextViewAbstract"
-                                android:layout_width="272dp"
+
+                                <TextView
+                                    android:id="@+id/TextViewDataPubblicazione"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/pubblicata_il"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/insertTextViewDataPubblicazione"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line3"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutTipologia"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome">
 
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/TextViewTipologia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/tipologia"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <View
-                            android:id="@+id/line2"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
+                                <TextView
+                                    android:id="@+id/insertTextViewTipologia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome" />
+                            </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutNome"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCognome">
+                            <View
+                                android:id="@+id/line12"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia" />
 
-
-                            <TextView
-                                android:id="@+id/TextViewDataPubblicazione"
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:id="@+id/linearLayoutCicloCdl"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/pubblicata_il"
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia">
 
-                            <TextView
-                                android:id="@+id/insertTextViewDataPubblicazione"
-                                android:layout_width="246dp"
+
+                                <TextView
+                                    android:id="@+id/TextViewCicloCDL"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/ciclo_cdl_task_tesista"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/insertTextViewCicloCDL"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutRelatore"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl">
 
 
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/TextViewRelatore"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Relatore: "
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <View
-                            android:id="@+id/line3"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome" />
+                                <TextView
+                                    android:id="@+id/insertTextViewRelatore"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutTipologia"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutNome">
 
-                            <TextView
-                                android:id="@+id/TextViewTipologia"
-                                android:layout_width="wrap_content"
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line13"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutRelatore" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutCoRelatore"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/tipologia"
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutRelatore">
 
-                            <TextView
-                                android:id="@+id/insertTextViewTipologia"
-                                android:layout_width="244dp"
+
+                                <TextView
+                                    android:id="@+id/TextViewCoRelatore"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Co-Relatore: "
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/insertTextViewCoRelatore"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line4"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCoRelatore" />
+
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutVincoli"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
@@ -277,85 +435,137 @@
                                 android:id="@+id/TextViewCicloCDL"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/ciclo_cdl_task_tesista"
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli">
 
-                            <TextView
-                                android:id="@+id/insertTextViewCicloCDL"
-                                android:layout_width="246dp"
+
+                                <TextView
+                                    android:id="@+id/TextViewTempistiche"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/tempistiche_in_mesi"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/insertTextViewTempistiche"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line7"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutMedia"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche">
 
 
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/TextViewMedia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/media_voti"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutRelatore"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl">
+                                <TextView
+                                    android:id="@+id/insertTextViewMedia"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
 
-                            <TextView
-                                android:id="@+id/TextViewRelatore"
-                                android:layout_width="wrap_content"
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line8"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutEsamiMancanti"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Relatore: "
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-                            <TextView
-                                android:id="@+id/insertTextViewRelatore"
-                                android:layout_width="246dp"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
 
 
+                                <TextView
+                                    android:id="@+id/TextViewEsamiMancanti"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/esami_mancanti"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/line13"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutRelatore" />
-
-                        <LinearLayout
-                            android:id="@+id/linearLayoutCoRelatore"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutRelatore">
+                                <TextView
+                                    android:id="@+id/insertTextViewEsamiMancanti"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
 
-                            <TextView
-                                android:id="@+id/TextViewCoRelatore"
-                                android:layout_width="wrap_content"
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line9"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti" />
+
+                            <LinearLayout
+                                android:id="@+id/linearLayoutSkill"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Co-Relatore: "
                                 android:textColor="@color/color_primary"
@@ -367,163 +577,57 @@
                                 android:id="@+id/insertTextViewCoRelatore"
                                 android:layout_width="246dp"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
+                                android:layout_gravity="start"
+                                android:layout_marginStart="16dp"
+                                android:orientation="horizontal"
+                                android:paddingTop="2dp"
+                                android:paddingBottom="2dp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
 
 
-                        </LinearLayout>
+                                <TextView
+                                    android:id="@+id/TextViewMaterialeTesi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Capacità e Skill:"
+                                    android:textColor="@color/color_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
-                        <View
-                            android:id="@+id/line4"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCoRelatore" />
+                                <TextView
+                                    android:id="@+id/insertTextViewSkill"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="18sp"
+                                    app:layout_constraintEnd_toEndOf="parent" />
 
+                            </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/linearLayoutVincoli"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="140dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCoRelatore">
+                            <View
+                                android:id="@+id/line10"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
 
-
-                            <TextView
-                                android:id="@+id/TextViewVincoli"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/vincoliTesi"
-                                android:textColor="@color/color_primary"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/line6"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli" />
-
-                        <LinearLayout
-                            android:id="@+id/linearLayoutTempistiche"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli">
+                            <View
+                                android:id="@+id/line5"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@android:color/darker_gray"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl" />
 
 
-                            <TextView
-                                android:id="@+id/TextViewTempistiche"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/tempistiche_in_mesi"
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-                            <TextView
-                                android:id="@+id/insertTextViewTempistiche"
-                                android:layout_width="246dp"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/line7"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche" />
-
-                        <LinearLayout
-                            android:id="@+id/linearLayoutMedia"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTempistiche">
-
-
-                            <TextView
-                                android:id="@+id/TextViewMedia"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/media_voti"
-                                android:textColor="@color/color_primary"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-                            <TextView
-                                android:id="@+id/insertTextViewMedia"
-                                android:layout_width="246dp"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/black"
-                                android:textSize="18sp"
-                                app:layout_constraintEnd_toEndOf="parent" />
-
-
-                        </LinearLayout>
-
-                        <View
-                            android:id="@+id/line8"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@android:color/darker_gray"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia" />
-
-                        <LinearLayout
-                            android:id="@+id/linearLayoutEsamiMancanti"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="start"
-                            android:layout_marginStart="16dp"
-                            android:orientation="horizontal"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMedia">
-
-
-                            <TextView
-                                android:id="@+id/TextViewEsamiMancanti"
+                            <Button
+                                android:id="@+id/richiediTesi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/esami_mancanti"

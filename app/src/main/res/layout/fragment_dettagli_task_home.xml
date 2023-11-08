@@ -35,24 +35,27 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewDettagliTask"
-                android:layout_width="375dp"
-                android:layout_height="400dp"
-                android:layout_gravity="center"
-                android:layout_margin="12dp"
-                app:backgroundTint="@null"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5">
+                android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="1dp"
+            app:backgroundTint="@null"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.5">
 
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
+
                     android:orientation="vertical">
 
                     <View
@@ -66,12 +69,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="70dp"
-                        android:layout_marginTop="-5dp"
+                        android:layout_marginStart="55dp"
                         android:drawablePadding="8dp"
                         android:text="@string/text_dettagli"
                         android:textColor="@android:color/white"
-                        android:textSize="30sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"
                         tools:visibility="visible"
                         app:drawableLeftCompat="@drawable/baseline_info_24" />
@@ -240,6 +242,7 @@
                         android:layout_width="150dp"
                         android:layout_height="48dp"
                         android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="339dp"
                         android:background="@drawable/button_blu"
                         android:text="@string/salva"

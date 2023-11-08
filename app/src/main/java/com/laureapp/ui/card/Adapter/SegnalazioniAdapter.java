@@ -72,16 +72,14 @@ public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
         // Gestisci il clic sull'elemento della lista
         itemView.setOnClickListener(v -> {
             if (segnalazione != null) {
+                Bundle updatedArgs = new Bundle(args); // Crea una copia dei dati esistenti
+                updatedArgs.putSerializable("SelectedSegnalazione", segnalazione);
 
-                if(StringUtils.equals("Studente", args.getString("ruolo"))){
-                    args.putSerializable("SelectedSegnalazione", segnalazione);
-                    mNav.navigate(R.id.action_fragment_segnalazioni_to_chat_fragment, args);
-
-                }else if(StringUtils.equals("Professore", args.getString("ruolo"))) {
-                    // Utilizza la NavHostController per navigare al dettaglio del task
-                    args.putSerializable("SelectedSegnalazione", segnalazione);
-                    mNav.navigate(R.id.action_fragment_segnalazioni_to_chat_fragment, args);
+                if (StringUtils.equals("Studente", args.getString("ruolo"))) {
+                    updatedArgs.putString("ruolo", args.getString("ruolo"));
                 }
+
+                mNav.navigate(R.id.action_fragment_segnalazioni_to_chat_fragment, updatedArgs);
             }
         });
 

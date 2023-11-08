@@ -26,7 +26,14 @@ public class ConfermaRichiestaDialog extends DialogFragment {
     private Long idStudente;
     private boolean soddisfaRequisiti;
 
-    // Constructor to pass the message
+    /**
+     * Crea un nuovo oggetto di dialogo per la conferma di una richiesta con i parametri specificati.
+     *
+     * @param message il messaggio da visualizzare nel dialogo di conferma.
+     * @param idTesi l'ID della tesi associata alla richiesta.
+     * @param idStudente l'ID dello studente che ha inviato la richiesta.
+     * @param soddisfaRequisiti un flag che indica se la richiesta soddisfa i requisiti.
+     */
     public ConfermaRichiestaDialog(String message,Long idTesi,Long idStudente,boolean soddisfaRequisiti ) {
         this.idTesi = idTesi;
         this.idStudente = idStudente;
@@ -34,6 +41,12 @@ public class ConfermaRichiestaDialog extends DialogFragment {
         this.soddisfaRequisiti = soddisfaRequisiti;
     }
 
+    /**
+     * Crea e restituisce una finestra di dialogo di conferma per l'invio di una richiesta di tesi.
+     *
+     * @param savedInstanceState un oggetto Bundle che rappresenta lo stato precedente dell'istanza.
+     * @return una finestra di dialogo di conferma per l'invio di una richiesta di tesi.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -53,6 +66,11 @@ public class ConfermaRichiestaDialog extends DialogFragment {
                 });
         return builder.create();
     }
+
+    /**
+     * Crea una nuova richiesta di tesi in Firestore con i parametri specificati.
+     * La richiesta di tesi include l'ID della tesi, l'ID dello studente, lo stato, e se soddisfa i requisiti.
+     */
 
     private void createRichiestaTesi(){
         String stato = "In Attesa";
@@ -94,10 +112,20 @@ public class ConfermaRichiestaDialog extends DialogFragment {
         });
     }
 
+    /**
+     * Questa interfaccia fornisce un callback per ottenere il valore massimo di un identificatore.
+     * È utilizzata per restituire il valore massimo di un identificatore, ad esempio, un ID,
+     * utilizzato all'interno di un'operazione asincrona.
+     */
+
     private interface MaxRequestIdCallback {
         void onCallback(Long maxRequestId);
     }
 
+    /**
+     * Metodo utilizzato per trovare l'id massimo presente nella tabella richiesteTesi
+     * @param callback
+     */
     private void findMaxRequestId(MaxRequestIdCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference richiesteTesiRef = db.collection("RichiesteTesi");
@@ -124,10 +152,6 @@ public class ConfermaRichiestaDialog extends DialogFragment {
                     Log.e("Firestore Error", "Error finding max request ID", e);
                 });
     }
-
-
-
-
 
 }
 

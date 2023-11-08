@@ -1,7 +1,5 @@
 package com.laureapp.ui.card.Adapter;
 
-
-
 import static com.laureapp.ui.card.Task.RicevimentiFragment.deleteRicevimento;
 import static com.laureapp.ui.card.Task.TaskStudenteFragment.deleteTask;
 
@@ -31,6 +29,9 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Questa classe rappresenta un adattatore personalizzato utilizzato per visualizzare una lista di ricevimenti.
+ */
 public class RicevimentiAdapter extends ArrayAdapter<Ricevimenti> {
 
     private final LayoutInflater inflater;
@@ -41,7 +42,9 @@ public class RicevimentiAdapter extends ArrayAdapter<Ricevimenti> {
 
 
     /**
-     * @param context  si riferisce al contesto in cui viene utilizzato
+     * Costruisce un nuovo RicevimentiAdapter.
+     *
+     * @param context         si riferisce al contesto in cui viene utilizzato
      * @param ricevimentiList corrisponde alla lista di task da passare
      */
     public RicevimentiAdapter(Context context, List<Ricevimenti> ricevimentiList, NavController navController) {
@@ -55,11 +58,13 @@ public class RicevimentiAdapter extends ArrayAdapter<Ricevimenti> {
 
 
     /**
+     * Restituisce una vista che rappresenta un elemento dell'elenco dei ricevimenti.
+     *
      * @param position    si riferisce alla posizione dell'item della lista
      * @param convertView si riferisce alla variabile che gestisce il cambiamento della view
      * @param parent      Interfaccia per le informazioni globali riguardo all'ambiente dell'applicazione.
      *                    usata per chiamare operazioni a livello applicazione launching activities, broadcasting e receiving intents
-     * @return la view con la lista aggiornata
+     * @return            la view con la lista aggiornata
      */
     @NonNull
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -106,14 +111,17 @@ public class RicevimentiAdapter extends ArrayAdapter<Ricevimenti> {
                 showConfirmationDialog(data_ricevimento, position);
             });
 
-
         }
-
-
 
         return itemView;
     }
 
+    /**
+     * Mostra una finestra di dialogo di conferma per l'eliminazione di un ricevimento.
+     *
+     * @param data_ricevimento la data del ricevimento da eliminare.
+     * @param position la posizione del ricevimento nella lista da eliminare.
+     */
     private void showConfirmationDialog(String data_ricevimento, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.confermaEliminazioneTitle));

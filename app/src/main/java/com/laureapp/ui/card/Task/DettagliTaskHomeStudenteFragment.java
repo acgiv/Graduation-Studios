@@ -50,11 +50,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Questa classe rappresenta un frammento per la visualizzazione e la modifica dei dettagli di un task per uno studente.
  */
 public class DettagliTaskHomeStudenteFragment extends Fragment {
-
 
     private NavController mNav;
     private AutoCompleteTextView autoCompleteTextView;
@@ -193,10 +191,9 @@ public class DettagliTaskHomeStudenteFragment extends Fragment {
 
     }
 
-
-
-
-    // Questo metodo viene chiamato quando l'utente vuole salvare le modifiche
+    /**
+     * Questo metodo viene chiamato quando l'utente vuole salvare le modifiche al task.
+     */
     private void modificaDatiTask() {
         // Esegui il recupero dei dati inseriti dall'utente
         String nuovoTitolo = binding.titoloTaskBar.getText().toString();
@@ -228,7 +225,11 @@ public class DettagliTaskHomeStudenteFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Salva i dati del task modificato nel database Firestore.
+     *
+     * @param taskStudente Il task con le modifiche da salvare.
+     */
     private void salvaDatiTaskStudente(TaskStudente taskStudente) {
         // Ottieni un riferimento alla collezione "Task" nel tuo database Firestore
         CollectionReference taskRef = db.collection("TaskStudente");

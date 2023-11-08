@@ -1,6 +1,5 @@
 package com.laureapp.ui.card.QrCode;
 
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -16,6 +15,10 @@ import android.widget.TextView;
 import com.laureapp.R;
 import com.laureapp.ui.roomdb.entity.Tesi;
 
+/**
+ * Questa classe rappresenta un'activity per visualizzare un codice QR generato per una tesi.
+ * L'activity visualizza il codice QR e si chiude quando l'utente preme il pulsante Indietro.
+ */
 public class QrCodeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,9 @@ public class QrCodeActivity extends Activity {
         qrCodeImageView.setImageBitmap(qrCodeBitmap);
     }
 
+    /**
+     * Gestisce l'azione di premere il pulsante Indietro. Chiude l'activity del codice QR.
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();

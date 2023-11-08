@@ -1,11 +1,13 @@
 package com.laureapp.ui.card.TesiProfessore;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 
@@ -58,10 +61,10 @@ public class InfoTesiFragment extends Fragment {
     String cicloCdl;
 
     Long id_tesi;
+    private static final int PERMISSION_REQUEST_CODE = 123;
+    private static final int PICKFILE_REQUEST_CODE = 1;
+    ArrayList<String> nomiFile = new ArrayList<>(); // FileInfo rappresenta le informazioni sui file da visualizzare
 
-     ArrayList<String> nomiFile = new ArrayList<>(); // FileInfo rappresenta le informazioni sui file da visualizzare
-
-    private static final int PICKFILE_REQUEST_CODE = 1; // Codice di richiesta per il selettore di file
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -242,7 +245,7 @@ public class InfoTesiFragment extends Fragment {
     }
 
     /**
-     * Metodo per aggiornare la tesi modificata su firestore
+     * Questo metodo serve per aggiornare la tesi modificata su firestore
      * @param tesi
      */
     private void updateTesiData(Tesi tesi) {
@@ -324,13 +327,50 @@ public class InfoTesiFragment extends Fragment {
         datePickerDialog.show();
     }
 
-
+    /**
+     * Questo metodo serve per controllare se l'app ha i permessi necessari a leggere/scrivere la memoria
+     * del dispositivo ed avviare l'Intent di selezione di file pdf da allegare alla tesi
+     */
     private void openFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("application/pdf"); // Accetta qualsiasi tipo di file
-        startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Richiedi esplicitamente i permessi di lettura e scrittura sulla memoria esterna
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        } else {
+            // Se hai già i permessi, puoi aprire il file chooser
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("application/pdf");
+            startActivityForResult(intent, PICKFILE_REQUEST_CODE);
+        }
     }
 
+    /**
+     * Questo metodo serve per gestire la risposta dell'utente alla richiesta dei permesi
+     * @param requestCode The request code passed in {@link #requestPermissions(String[], int)}.
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // I permessi sono stati concessi, puoi ora aprire il file chooser
+                openFileChooser();
+            } else {
+                // L'utente ha rifiutato i permessi, mostra un messaggio o gestisci di conseguenza
+                Toast.makeText(getContext(), "Permesso di lettura/scrittura negato", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    /**
+     * Questo metodo serve per gestire il risultato della selezione del file
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -345,6 +385,11 @@ public class InfoTesiFragment extends Fragment {
             }
         }
     }
+
+    /**
+     * Questo metodo serve per caricare i file sul database di Firebase
+     * @param fileUri
+     */
 
     private void uploadFileToFirebaseStorage(Uri fileUri) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -382,6 +427,11 @@ public class InfoTesiFragment extends Fragment {
                     // Gestisci l'errore nel caricamento del file
                 });
     }
+
+    /**
+     * Questo metodo serve per prendere i file da Firestore
+     * @param view
+     */
 
     private void loadFileFromFireStore(View view) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -449,12 +499,6 @@ public class InfoTesiFragment extends Fragment {
                     Log.e("Firebase Storage Error", "Errore nel caricamento dell'elenco dei file", exception);
                 });
 
-
-
     }
-
-
-
-
 
 }

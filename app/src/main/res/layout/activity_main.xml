@@ -24,21 +24,19 @@
         app:itemTextColor="@color/white"
         app:menu="@menu/hamburger_menu" />
 
-    <LinearLayout
-        android:id="@+id/contentHome"
+    <!-- Contenuto principale -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <!-- App Bar -->
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:theme="@style/Theme.LaureApp.AppBarOverlay"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <!-- ToolBar -->
             <com.google.android.material.appbar.MaterialToolbar
@@ -47,7 +45,6 @@
                 android:layout_height="?attr/actionBarSize"
                 app:titleCentered="true"
                 android:background="@color/color_primary" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView

@@ -1,5 +1,4 @@
 package com.laureapp.ui.login;
-
 import static android.content.ContentValues.TAG;
 
 import static com.laureapp.ui.controlli.ControlInput.isConnected;
@@ -47,9 +46,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Fragment per la schermata di accesso.
- */
 public class LoginFragment extends Fragment {
 
     TextInputLayout password_layout;
@@ -72,11 +68,6 @@ public class LoginFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    /**
-     * Metodo chiamato quando l'activity sta per diventare visibile all'utente.
-     * È un punto di ingresso chiave in cui è possibile iniziare a eseguire operazioni specifiche
-     * all'avvio dell'activity, come il collegamento a servizi o l'inizializzazione di componenti.
-     */
     @Override
     public void onStart() {
         super.onStart();
@@ -105,6 +96,10 @@ public class LoginFragment extends Fragment {
         password_text = view.findViewById(R.id.conferma_password);
         error_text = view.findViewById(R.id.error_text);
         ConnectivityManager cm = (ConnectivityManager) requireContext().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+
+
+
 
         binding.buttonLogin.setOnClickListener(view1 -> {
             if(email_layout != null && password_layout != null) {
@@ -143,13 +138,6 @@ public class LoginFragment extends Fragment {
 
     }
 
-    /**
-     * Controlla se l'indirizzo email e la password inseriti sono validi.
-     *
-     * @return Una mappa di valori booleani che indicano se i campi email e password sono validi o meno.
-     * La chiave "Email" è associata al risultato di validità del campo email e la chiave "Password" è associata
-     * al risultato di validità del campo password.
-     */
     private HashMap<String,Boolean> is_correct_email_password(){
         HashMap<String,Boolean> result_error = new HashMap<>();
         if(ControlInput.is_empty_string(email_text , email_layout,"Email", context)){
@@ -176,24 +164,13 @@ public class LoginFragment extends Fragment {
         return result_error;
     }
 
-    /**
-     * Corregge il campo di input specificato rimuovendo eventuali messaggi di errore.
-     *
-     * @param inputLayout Il TextInputLayout associato al campo di input da correggere.
-     * @param campo       Il nome del campo da correggere (ad esempio, "email" o "password").
-     * @param error       Una mappa di valori booleani in cui indicare che il campo è corretto (true) o errato (false).
-     */
+
     private void correct_text(TextInputLayout inputLayout, String campo, HashMap<String, Boolean> error ){
         ControlInput.set_error(inputLayout, false, "", R.color.color_primary,context ,R.dimen.input_text_layout_height);
         error.put(campo, true);
     }
 
-    /**
-     * Calcola l'hash SHA-256 di una stringa di testo.
-     *
-     * @param textToHash La stringa di testo da cui generare l'hash SHA-256.
-     * @return L'hash SHA-256 della stringa di testo in formato Base64.
-     */
+
     private String hashWith256(String textToHash) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -207,11 +184,10 @@ public class LoginFragment extends Fragment {
     }
 
         /**
-        * Effettua il login di un utente utilizzando l'indirizzo email e la password forniti.
-        *
-        * @param email    L'indirizzo email dell'utente.
-        * @param password La password dell'utente.
-        */
+         *
+         * @param email rappresenta la mail inserita dall'utente che permette il login
+         * @param password rappresenta la password inserita dall'utente per permettere il login
+         */
         public void loginUser(String email, String password) {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(requireActivity(), task -> {
@@ -231,11 +207,10 @@ public class LoginFragment extends Fragment {
         }
 
         /**
-         * Aggiorna l'interfaccia utente dopo una corretta autenticazione dell'utente.
-         *
-         * @param user L'oggetto FirebaseUser che rappresenta l'utente autenticato.
+         * In questo metodo verifichiamo se l'utente è loggato e se risulta loggato, si andrà in MainActivity
          */
-        private void updateUI(FirebaseUser user) {
+        private void
+        updateUI(FirebaseUser user) {
             if (user != null) {
                 String userId = user.getUid(); // Ottieni l'UID dell'utente autenticato
 
@@ -250,12 +225,6 @@ public class LoginFragment extends Fragment {
             }
         }
 
-        /**
-         * Reindirizza l'utente alla schermata principale o alla schermata successiva dopo l'autenticazione.
-         * Questo metodo crea un pacchetto di dati (Bundle) contenente informazioni sull'utente autenticato
-         * e il suo ruolo, quindi avvia l'activity principale (MainActivity) con il pacchetto dati e chiude
-         * l'activity corrente.
-         */
         private void redirectHome() {
             Bundle bundle = new Bundle();
             

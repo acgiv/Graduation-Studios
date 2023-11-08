@@ -34,9 +34,6 @@ import com.laureapp.ui.roomdb.entity.TesiProfessore;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.entity.Vincolo;
 
-/**
- * Database SQLite dell'applicazione
- */
 @Database(entities = {Studente.class, Utente.class,
         Professore.class, StudenteTesi.class, Vincolo.class,Ricevimenti.class,
         TesiProfessore.class, Tesi.class, TaskTesi.class, TaskStudente.class,
@@ -62,13 +59,7 @@ public abstract class RoomDbSqlLite extends RoomDatabase{
         public abstract RichiesteTesiDao richiesteTesiDao();
 
         public abstract FileTesiDao fileTesiDao();
-
-    /**
-     * Istanza del database Room
-     * @param context Il contesto corrente dell'applicazione
-     * @return  L'istanza del database Room
-     */
-    public static RoomDbSqlLite getDatabase(final Context context) {
+        public static RoomDbSqlLite getDatabase(final Context context) {
             if (INSTANCE == null) {
                 synchronized (RoomDbSqlLite.class) {
                     if (INSTANCE == null) {

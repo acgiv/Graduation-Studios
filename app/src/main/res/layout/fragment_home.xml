@@ -118,16 +118,15 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
         <!-- ... card tesisti ... -->
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewTesisti"
             android:layout_width="115dp"
             android:layout_height="115dp"
-            android:layout_row="1"
+            android:layout_row="2"
             android:layout_rowWeight="1"
-            android:layout_column="1"
+            android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_gravity="center"
             android:layout_margin="12dp"
@@ -157,6 +156,49 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/tesisti2"
+                    android:textColor="@color/color_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold">
+
+                </TextView>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <!-- ... card social ... -->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewSocial"
+            android:layout_width="115dp"
+            android:layout_height="115dp"
+            android:layout_row="1"
+            android:layout_rowWeight="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_gravity="center"
+            android:layout_margin="12dp"
+            app:cardCornerRadius="15dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="78dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/social_description"
+                    android:src="@drawable/outline_public_24">
+
+                </ImageView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/social"
                     android:textColor="@color/color_primary"
                     android:textSize="18sp"
                     android:textStyle="bold">

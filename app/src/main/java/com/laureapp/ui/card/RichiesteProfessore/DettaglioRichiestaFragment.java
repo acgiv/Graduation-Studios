@@ -45,9 +45,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * Questa classe rappresenta un frammento per visualizzare i dettagli di una richiesta di tesi da uno studente.
- */
 public class DettaglioRichiestaFragment extends Fragment {
     String titolo;
     Long idRichiestaTesi;
@@ -147,13 +144,9 @@ public class DettaglioRichiestaFragment extends Fragment {
             });
         }
 
+
     }
 
-    /**
-     * Cambia lo stato di una richiesta di tesi in "Accettata" nel database Firestore.
-     *
-     * @param idRichiestaTesi l'ID della richiesta di tesi da accettare.
-     */
     public void changeStatoAccettata(Long idRichiestaTesi){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference richiesteRef = db.collection("RichiesteTesi");
@@ -181,11 +174,6 @@ public class DettaglioRichiestaFragment extends Fragment {
         });
     }
 
-    /**
-     * Cambia lo stato di una richiesta di tesi in "Rifiutata" nel database Firestore.
-     *
-     * @param idRichiestaTesi l'ID della richiesta di tesi da rifiutare.
-     */
     public void changeStatoRifiutata(Long idRichiestaTesi){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference richiesteRef = db.collection("RichiesteTesi");
@@ -212,13 +200,6 @@ public class DettaglioRichiestaFragment extends Fragment {
             }
         });
     }
-
-    /**
-     * Cerca un'ID di tesi nel database Firestore in base al titolo specificato.
-     *
-     * @param titolo il titolo della tesi da cercare.
-     * @return un oggetto di tipo Task<Long> che rappresenta un'operazione asincrona per trovare l'ID della tesi.
-     */
     private Task<Long> findTesiIdByTitolo(String titolo) {
         final TaskCompletionSource<Long> tcs = new TaskCompletionSource<>();
 
@@ -245,13 +226,6 @@ public class DettaglioRichiestaFragment extends Fragment {
 
         return tcs.getTask();
     }
-
-    /**
-     * Crea una relazione tra uno studente e una tesi nel database Firestore.
-     *
-     * @param idStudente l'ID dello studente associato alla tesi.
-     * @param titolo il titolo della tesi da associare allo studente.
-     */
     private void createStudenteTesi(Long idStudente, String titolo) {
         findTesiIdByTitolo(titolo).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -262,12 +236,6 @@ public class DettaglioRichiestaFragment extends Fragment {
         });
     }
 
-    /**
-     * Ottiene il massimo ID di studente_tesi dal database Firestore e crea una nuova relazione studente-tesi.
-     *
-     * @param idStudente l'ID dello studente da associare alla tesi.
-     * @param idTesi l'ID della tesi da associare allo studente.
-     */
     private void getMaxIdStudenteTesiAndCreateStudenteTesi(Long idStudente, Long idTesi) {
         // Ottieni il massimo id_studente_tesi da Firestore
         findMaxIdStudenteTesi(new MaxStudenteTesiCallback() {
@@ -295,18 +263,11 @@ public class DettaglioRichiestaFragment extends Fragment {
         });
     }
 
-    /**
-     * Interfaccia per il callback del massimo ID di studente_tesi.
-     */
+
     private interface MaxStudenteTesiCallback {
         void onCallback(Long maxIdStudenteTesi);
     }
 
-    /**
-     * Trova il massimo ID di studente_tesi dal database Firestore.
-     *
-     * @param callback il callback per restituire il massimo ID di studente_tesi.
-     */
     private void findMaxIdStudenteTesi(MaxStudenteTesiCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference studenteTesiRef = db.collection("StudenteTesi");

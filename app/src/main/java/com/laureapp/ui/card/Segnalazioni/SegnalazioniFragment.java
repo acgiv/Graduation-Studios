@@ -78,15 +78,11 @@ public class SegnalazioniFragment extends Fragment {
     Long id_utente;
     String inputData;
 
-    public SegnalazioniFragment() {
-
-    }
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = requireContext();
         args = getArguments();
-
+        Log.d("args", String.valueOf(args));
         if (args != null) {
             ruolo = args.getString("ruolo");
         }

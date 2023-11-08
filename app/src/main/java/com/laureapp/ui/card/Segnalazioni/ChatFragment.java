@@ -65,12 +65,12 @@ public class ChatFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fuser=  FirebaseAuth.getInstance().getCurrentUser();
+       fuser=  FirebaseAuth.getInstance().getCurrentUser();
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            utenteSend = (Utente) args.getSerializable("Utente");
-            segnalazione =(Segnalazione) args.getSerializable("SelectedSegnalazione");
+                utenteSend = (Utente) args.getSerializable("Utente");
+                segnalazione =(Segnalazione) args.getSerializable("SelectedSegnalazione");
         }
         if (StringUtils.equals(ruolo, getString(R.string.studente))){
             info_search_receiver.put("receiver_ruolo", "id_professore");

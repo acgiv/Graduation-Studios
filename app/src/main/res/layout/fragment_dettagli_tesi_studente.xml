@@ -18,16 +18,19 @@
             android:id="@+id/grigliaDati"
             android:layout_width="401dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginEnd="36dp"
             android:layout_marginBottom="18dp"
             android:columnCount="3"
             android:rowCount="3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="8dp"
 
-            >
+            app:layout_constraintVertical_bias="0.035">
+
 
 
             <androidx.cardview.widget.CardView
@@ -42,9 +45,8 @@
             app:cardCornerRadius="15dp"
             app:cardElevation="8dp">
 
-
-
             <FrameLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -53,43 +55,58 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="383dp">
+
+                        <LinearLayout
+                            android:id="@+id/constraintLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="383dp">
+                            android:layout_height="wrap_content"
+                            android:background="@color/color_primary"
+                            android:gravity="center_horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                            <LinearLayout
-                                android:id="@+id/constraintLayout"
-                                android:layout_width="match_parent"
+
+                            <TextView
+                                android:id="@+id/textViewLabel"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@color/color_primary"
-                                android:gravity="center_horizontal"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
+                                android:layout_gravity="center"
+                                android:drawableStart="@drawable/outline_assignment_white_24"
+                                android:drawablePadding="8dp"
+                                android:drawableTint="@color/white"
+                                android:padding="3dp"
+                                android:text="Tesi"
+                                android:textColor="@android:color/white"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                tools:visibility="visible" />
+
+                        </LinearLayout>
 
 
-                                <TextView
-                                    android:id="@+id/textViewLabel"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:drawableStart="@drawable/outline_assignment_white_24"
-                                    android:drawablePadding="8dp"
-                                    android:drawableTint="@color/white"
-                                    android:padding="3dp"
-                                    android:text="Tesi"
-                                    android:textColor="@android:color/white"
-                                    android:textSize="22sp"
-                                    android:textStyle="bold"
-                                    tools:visibility="visible" />
+                        <LinearLayout
+                            android:id="@+id/linearLayoutEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintBottom_toTopOf="@+id/linearLayoutCognome"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:id="@+id/linearLayoutEmail"
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/textViewTitolo"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+
                                 android:layout_gravity="start"
                                 android:layout_marginStart="16dp"
                                 android:orientation="horizontal"
@@ -385,41 +402,38 @@
                                 android:id="@+id/linearLayoutVincoli"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start"
-                                android:layout_marginStart="140dp"
-                                android:orientation="horizontal"
-                                android:paddingTop="2dp"
-                                android:paddingBottom="2dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCoRelatore">
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line12"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutCicloCdl"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutTipologia">
 
 
-                                <TextView
-                                    android:id="@+id/TextViewVincoli"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/vincoliTesi"
-                                    android:textColor="@color/color_primary"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    app:layout_constraintEnd_toEndOf="parent" />
-
-
-                            </LinearLayout>
-
-                            <View
-                                android:id="@+id/line6"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@android:color/darker_gray"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutVincoli" />
-
-                            <LinearLayout
-                                android:id="@+id/linearLayoutTempistiche"
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/TextViewCicloCDL"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
                                 android:layout_marginStart="16dp"
@@ -553,33 +567,15 @@
                                 android:id="@+id/linearLayoutSkill"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_marginStart="140dp"
-                                android:layout_marginEnd="100dp"
-                                android:orientation="horizontal"
-                                android:paddingTop="2dp"
-                                android:paddingBottom="2dp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutMateriale">
+                                android:text="Co-Relatore: "
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
 
-
-                                <TextView
-                                    android:id="@+id/TextViewSkill"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/MaterialeTesi"
-                                    android:textColor="@color/color_primary"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    app:layout_constraintEnd_toEndOf="parent" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/linearLayoutMateriale"
-                                android:layout_width="match_parent"
+                            <TextView
+                                android:id="@+id/insertTextViewCoRelatore"
+                                android:layout_width="246dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
                                 android:layout_marginStart="16dp"
@@ -634,35 +630,147 @@
                                 android:id="@+id/richiediTesi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="90dp"
-                                android:text="@string/richiedi_tesi"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/listViewFiles" />
+                                android:text="@string/esami_mancanti"
+                                android:textColor="@color/color_primary"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
 
-                            <ImageButton
-                                android:id="@+id/shareImageButton"
+                            <TextView
+                                android:id="@+id/insertTextViewEsamiMancanti"
+                                android:layout_width="246dp"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line9"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutSkill"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="140dp"
+                            android:layout_marginEnd="100dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutMateriale">
+
+
+                            <TextView
+                                android:id="@+id/TextViewSkill"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:layout_marginTop="11dp"
-                                android:background="@android:color/transparent"
-                                android:contentDescription="shareButton"
-                                android:src="@drawable/baseline_share_24"
-                                app:layout_constraintStart_toEndOf="@+id/richiediTesi"
-                                app:layout_constraintTop_toBottomOf="@+id/listViewFiles" />
+                                android:text="@string/MaterialeTesi"
+                                android:textColor="@color/color_primary"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent" />
 
 
-                            <!-- Aggiungi il RecyclerView per visualizzare i file sotto il LinearLayout -->
-                            <ListView
-                                android:id="@+id/listViewFiles"
-                                android:layout_width="match_parent"
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayoutMateriale"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="16dp"
+                            android:orientation="horizontal"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutEsamiMancanti">
+
+
+                        <TextView
+                            android:id="@+id/TextViewMaterialeTesi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Capacità e Skill:"
+                            android:textColor="@color/color_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent" />
+
+                            <TextView
+                                android:id="@+id/insertTextViewSkill"
+                                android:layout_width="246dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
-                            />
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toEndOf="parent" />
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
+                        <View
+                            android:id="@+id/line10"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+
+                        <View
+                            android:id="@+id/line5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutCicloCdl" />
+
+
+                        <Button
+                            android:id="@+id/richiediTesi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="90dp"
+                            android:text="@string/richiedi_tesi"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/listViewFiles" />
+
+                        <ImageButton
+                            android:id="@+id/shareImageButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="11dp"
+                            android:background="@android:color/transparent"
+                            android:contentDescription="shareButton"
+                            android:src="@drawable/baseline_share_24"
+                            app:layout_constraintStart_toEndOf="@+id/richiediTesi"
+                            app:layout_constraintTop_toBottomOf="@+id/listViewFiles" />
+
+
+                        <!-- Aggiungi il RecyclerView per visualizzare i file sotto il LinearLayout -->
+                        <ListView
+                            android:id="@+id/listViewFiles"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayoutSkill" />
+                        />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.core.widget.NestedScrollView>
 
 

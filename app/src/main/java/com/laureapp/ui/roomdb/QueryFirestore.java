@@ -20,9 +20,6 @@ import com.laureapp.ui.roomdb.entity.Utente;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Questa classe gestisce le query al database Firestore
- */
 public class QueryFirestore {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     CollectionReference utentiRef = db.collection("Utenti");
@@ -34,11 +31,6 @@ public class QueryFirestore {
     CollectionReference ricevimentiRef = db.collection("Ricevimenti");
 
 
-    /**
-     * Trova ID max degli utenti nel Firestore
-     * @param context Il contesto corrente dell'applicazione
-     * @return CompletableFuture che restituisce l'ID massimo degli utenti
-     */
     public CompletableFuture<Long> trovaIdUtenteMax(Context context) {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
@@ -67,11 +59,6 @@ public class QueryFirestore {
         return future;
     }
 
-    /**
-     * Trova ID max degli studenti nel Firestore
-     * @param context Il contesto corrente dell'applicazione
-     * @return CompletableFuture restituisce l'ID
-     */
     public CompletableFuture<Long> trovaIdStudenteMax(Context context) {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
@@ -100,11 +87,6 @@ public class QueryFirestore {
         return future;
     }
 
-    /**
-     * Trova ID max dei professori nel Firestore
-     * @param context Il contesto corrente dell'applicazione
-     * @return CompletableFuture restituisce l'ID
-     */
     public CompletableFuture<Long> trovaIdProfessoreMax(Context context) {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
@@ -133,11 +115,6 @@ public class QueryFirestore {
         return future;
     }
 
-    /**
-     * Trova ID max delle task nel Firestore
-     * @param context Il contesto corrente dell'applicazione
-     * @return CompletableFuture restituisce l'ID
-     */
     public CompletableFuture<Long> trovaIdTaskMax(Context context) {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
@@ -166,11 +143,6 @@ public class QueryFirestore {
         return future;
     }
 
-    /**
-     * Trova ID max delle task studente nel Firestore
-     * @param context Il contesto corrente dell'applicazione
-     * @return CompletableFuture restituisce l'ID
-     */
     public CompletableFuture<Long> trovaIdTaskStudenteMax(Context context) {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
@@ -199,11 +171,6 @@ public class QueryFirestore {
         return future;
     }
 
-    /**
-     * Trova ID max dei ricevimenti nel Firestore
-     * @param context Il contesto corrente dell'applicazione
-     * @return CompletableFuture restituisce l'ID
-     */
     public CompletableFuture<Long> trovaIdRicevimentiMax(Context context) {
         CompletableFuture<Long> future = new CompletableFuture<>();
 
@@ -232,11 +199,6 @@ public class QueryFirestore {
         return future;
     }
 
-    /**
-     * Trova ID max delle segnalazioni nel Firestore
-     * @param context Il contesto corrente dell'applicazione
-     * @return CompletableFuture restituisce l'ID
-     */
     public CompletableFuture<Long> trovaIdSegnMax(Context context) {
         CompletableFuture<Long> future = new CompletableFuture<>();
 

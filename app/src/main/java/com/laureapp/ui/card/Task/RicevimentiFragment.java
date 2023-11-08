@@ -55,7 +55,8 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * Questa classe rappresenta un frammento per la gestione dei ricevimenti associati a una specifica task di un tesista.
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
  */
 public class RicevimentiFragment extends Fragment {
 
@@ -347,12 +348,6 @@ public class RicevimentiFragment extends Fragment {
     */
 
 
-    /**
-     * Metodo per l'aggiunta di un nuovo ricevimento alla lista e al database.
-     * @param id_task l'ID della task associata al ricevimento.
-     * @param argomento l'argomento del ricevimento.
-     * @param dataRicevimento la data del ricevimento.
-     */
     private void addRicevimentoToFirestore(Long id_task, String argomento, Timestamp dataRicevimento) {
         CollectionReference ricevimentiRef = db.collection("Ricevimenti");
         QueryFirestore queryFirestore = new QueryFirestore();
@@ -396,10 +391,6 @@ public class RicevimentiFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    /**
-     * Metodo per l'eliminazione di un ricevimento dalla lista e dal database.
-     * @param position la posizione del ricevimento da eliminare nella lista.
-     */
     public static void deleteRicevimento(int position) {
         if (position >= 0 && position < ricevimentiList.size()) {
             Ricevimenti ricevimentoToDelete = ricevimentiList.get(position);
@@ -415,10 +406,7 @@ public class RicevimentiFragment extends Fragment {
         }
     }
 
-    /**
-     * Metodo per l'eliminazione di un ricevimento dal database.
-     * @param id_ricevimento l'ID del ricevimento da eliminare.
-     */
+
     private static void deleteRicevimentoFromFirestore(Long id_ricevimento) {
         // Ottieni il riferimento al documento della task da eliminare
         CollectionReference ricevimentiRef = db.collection("Ricevimenti");

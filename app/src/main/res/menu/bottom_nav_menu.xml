@@ -10,9 +10,4 @@
         android:icon="@drawable/baseline_person_outline_24"
         />
 
-    <item android:title="@string/scanQrCode"
-        android:id="@+id/itemScanQrCode"
-        android:icon="@drawable/baseline_qr_code_scanner_24"
-        />
-
 </menu>

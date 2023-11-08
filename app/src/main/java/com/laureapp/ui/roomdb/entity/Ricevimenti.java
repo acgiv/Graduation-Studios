@@ -14,9 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Questa classe rappresenta l'entità Ricevimenti nel database Room.
- */
 @Entity(tableName = "Ricevimenti", foreignKeys = {
         @ForeignKey(entity = TaskTesi.class, parentColumns = "id_task", childColumns = "id_task")},
         indices = {@Index("id_task")})
@@ -37,74 +34,38 @@ public class Ricevimenti implements Serializable {
     private Date data_ricevimento;
 
     //Getter e setter
-    /**
-     * Ottiene ID ricevimento
-     * @return ID ricevimento
-     */
     public Long getId_ricevimento() {
         return id_ricevimento;
     }
 
-    /**
-     * Modifica ID Ricevimenti
-     * @param idRicevimento ID da impostare
-     */
     public void setId_ricevimento(Long idRicevimento) {
         this.id_ricevimento = idRicevimento;
     }
 
-    /**
-     * Ottieni ID della task associata al Ricevimento
-     * @return ID task
-     */
     public Long getId_task() {
         return id_task;
     }
 
-    /**
-     * Modifica ID task
-     * @param idTask ID da impostare
-     */
     public void setId_task(Long idTask) {
         this.id_task = idTask;
     }
 
-    /**
-     * Ottieni argomento del ricevimento
-     * @return argomento
-     */
     public String getArgomento() {
         return argomento;
     }
 
-    /**
-     * Modifica argomento ricevimento
-     * @param argomento_ricevimento da impostare
-     */
     public void setArgomento(String argomento_ricevimento) {
         this.argomento = argomento_ricevimento;
     }
 
-    /**
-     * Ottieni data ricevimemto
-     * @return data ricevimento
-     */
     public Date getData_ricevimento() {
         return data_ricevimento;
     }
 
-    /**
-     * Modifica data ricevimento
-     * @param dataRicevimento da impostare
-     */
     public void setData_ricevimento(Date dataRicevimento) {
         this.data_ricevimento = dataRicevimento;
     }
 
-    /**
-     * Restituisce una mappa contenente le informazioni dell'entità Ricevimenti
-     * @return Mappa che contiene le informazioni dell'entità Ricevimenti
-     */
     public Map<String, Object> getRicevimentiMap() {
         Map<String, Object> getRicevimentiMap = new HashMap<>();
         getRicevimentiMap.put("id_ricevimento",this.id_ricevimento);
@@ -114,10 +75,6 @@ public class Ricevimenti implements Serializable {
         return getRicevimentiMap;
     }
 
-    /**
-     * Metodo toString rappresentazione testuale dell'oggetto Ricevimenti
-     * @return Una stringa che rappresenta l'oggetto Ricevimenti
-     */
     @Override
     public String toString() {
         return "Ricevimenti{" +

@@ -42,7 +42,7 @@ import java.util.Objects;
 
 /**
  * Questa classe rappresenta un fragment utilizzato per gestire la chat all'interno dell'applicazione.
- * La chat potrebbe essere parte di una funzionalità di segnalazioni o comunicazioni tra gli utenti.
+ * La chat potrebbe essere parte di una funzionalitÃ  di segnalazioni o comunicazioni tra gli utenti.
  * Il fragment visualizza una chat e permette agli utenti di scambiare messaggi.
  */
 

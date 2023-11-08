@@ -38,7 +38,8 @@
             android:background="@drawable/btn_send"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-        />
+            />
+
 
     </RelativeLayout>
 

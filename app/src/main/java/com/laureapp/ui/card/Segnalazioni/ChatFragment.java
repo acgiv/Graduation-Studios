@@ -69,12 +69,8 @@ public class ChatFragment extends Fragment {
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                utenteSend = args.getSerializable("Utente", Utente.class);
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                segnalazione = args.getSerializable("SelectedSegnalazione", Segnalazione.class);
-            }
+                utenteSend = (Utente) args.getSerializable("Utente");
+                segnalazione =(Segnalazione) args.getSerializable("SelectedSegnalazione");
         }
         if (StringUtils.equals(ruolo, getString(R.string.studente))){
             info_search_receiver.put("receiver_ruolo", "id_professore");

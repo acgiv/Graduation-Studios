@@ -53,8 +53,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Questa classe rappresenta un fragment per la gestione delle segnalazioni. Mostra una lista di segnalazioni
+ * e offre funzionalità per aggiungere nuove segnalazioni. La lista delle segnalazioni è associata all'utente
+ * attualmente loggato e può variare in base al ruolo (Studente o Professore).
  */
 public class SegnalazioniFragment extends Fragment {
 
@@ -77,7 +78,6 @@ public class SegnalazioniFragment extends Fragment {
     Long id_utente;
     String inputData;
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = requireContext();
@@ -87,12 +87,7 @@ public class SegnalazioniFragment extends Fragment {
             ruolo = args.getString("ruolo");
         }
 
-
-
         mAuth = FirebaseAuth.getInstance();
-
-
-
 
     }
 
@@ -146,12 +141,14 @@ public class SegnalazioniFragment extends Fragment {
             listView.setAdapter(adapter);
         }
 
-
-
-
     }
 
-
+    /**
+     * Questo metodo mostra un dialog per inserire una nuova segnalazione. Il dialog include un campo di testo
+     * in cui l'utente può inserire il titolo della segnalazione. Quando l'utente preme il pulsante "Ok" nel dialog,
+     * il testo inserito viene recuperato e quindi aggiunto a Firestore come nuova segnalazione associata all'utente
+     * attualmente loggato. Il dialog include anche un pulsante "Annulla" per chiudere il dialog senza salvare alcuna segnalazione.
+     */
     public void showInputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle(R.string.nuovaSegnalazione);
@@ -335,9 +332,6 @@ public class SegnalazioniFragment extends Fragment {
         });
     }
 
-
-
-
     /**
      * Questo metodo permette di caricare le task in base all'id della tesi
      * @param id_stud_tesi_in_studente_tesi è l'id della tesi nelle tasks
@@ -354,8 +348,6 @@ public class SegnalazioniFragment extends Fragment {
             }
         });
     }
-
-
 
     /**
      * Questo metodo aggiunge le tasks alla lista delle task e aggiorna l'adapter permettendo
@@ -377,13 +369,29 @@ public class SegnalazioniFragment extends Fragment {
     Metodi per l'aggiunta e visualizzazione di una nuova task
  */
 
-
+    /**
+     * Questo metodo carica le informazioni dello studente associato all'utente specificato e aggiunge la segnalazione alla tesi dello studente.
+     * Richiede l'ID dell'utente attualmente loggato e il testo della segnalazione da aggiungere. Il testo della segnalazione viene associato come
+     * dettaglio alla tesi dello studente.
+     *
+     * @param id_utente L'ID dell'utente attualmente loggato.
+     * @param inputData Il testo della segnalazione da aggiungere.
+     */
     private void addSegnalazioniToFirestoreLast(Long id_utente, String inputData) {
 
         // Ottieni l'ID della tesi in base all'ID utente fornito
         loadStudentAndAddSegnalazione(id_utente, inputData);
     }
 
+    /**
+     * Questo metodo carica le informazioni dello studente associato all'ID utente specificato e aggiunge la segnalazione alla tesi dello studente.
+     * Richiede l'ID dell'utente attualmente loggato e il testo della segnalazione da aggiungere. Il metodo chiama il metodo `loadStudentByUserId`
+     * per ottenere l'ID dello studente associato all'utente e successivamente chiama `loadStudenteTesiAndAddSegnalazione` per completare il processo
+     * di aggiunta della segnalazione alla tesi dello studente.
+     *
+     * @param id_utente L'ID dell'utente attualmente loggato.
+     * @param inputData Il testo della segnalazione da aggiungere.
+     */
     private void loadStudentAndAddSegnalazione(Long id_utente, String inputData) {
         loadStudentByUserId(id_utente).addOnCompleteListener(studentTask -> {
             if (studentTask.isSuccessful()) {
@@ -396,6 +404,15 @@ public class SegnalazioniFragment extends Fragment {
         });
     }
 
+    /**
+     * Questo metodo carica le informazioni della tesi dello studente associata all'ID dello studente specificato e aggiunge la segnalazione alla tesi.
+     * Richiede l'ID dello studente e il testo della segnalazione da aggiungere. Il metodo chiama il metodo `loadStudenteTesiByStudenteId`
+     * per ottenere l'ID della tesi dello studente associata al relativo studente e successivamente chiama `addSegnalazioneToFirestore` per completare
+     * il processo di aggiunta della segnalazione alla tesi.
+     *
+     * @param id_studente L'ID dello studente a cui è associata la tesi.
+     * @param inputData Il testo della segnalazione da aggiungere.
+     */
     private void loadStudenteTesiAndAddSegnalazione(Long id_studente, String inputData) {
         loadStudenteTesiByStudenteId(id_studente).addOnCompleteListener(studenteTesiTask -> {
             if (studenteTesiTask.isSuccessful()) {
@@ -407,8 +424,14 @@ public class SegnalazioniFragment extends Fragment {
         });
     }
 
-
-
+    /**
+     * Questo metodo aggiunge una nuova segnalazione al Firestore. Richiede l'ID della tesi dello studente associata
+     * alla segnalazione e il testo della segnalazione. Il metodo crea un nuovo documento nel Firestore con le informazioni
+     * della segnalazione, tra cui un titolo e un ID univoco per la segnalazione.
+     *
+     * @param id_studente_tesi L'ID della tesi dello studente a cui è associata la segnalazione.
+     * @param inputData Il testo della segnalazione da aggiungere.
+     */
     private void addSegnalazioneToFirestore(Long id_studente_tesi, String inputData) {
         CollectionReference segnalazioniRef = db.collection("Segnalazioni");
         QueryFirestore queryFirestore = new QueryFirestore();
@@ -419,7 +442,6 @@ public class SegnalazioniFragment extends Fragment {
                     segnalazioniData.put("id_segnalazione", idMax);
                     segnalazioniData.put("titolo", inputData);
                     segnalazioniData.put("id_studente_tesi", id_studente_tesi);
-
 
                     // Supponendo che 'taskRef' sia un oggetto valido di tipo CollectionReference
                     Long finalIdMax = idMax;
@@ -448,8 +470,5 @@ public class SegnalazioniFragment extends Fragment {
         segnalazioniList.add(segnalazione);
         adapter.notifyDataSetChanged();
     }
-
-
-
 
 }

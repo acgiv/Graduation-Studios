@@ -124,6 +124,7 @@ public class TesistiFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tesisti, container, false);
         listView = view.findViewById(R.id.listView);
+        listView.setNestedScrollingEnabled(true);
         adapter = new StudentAdapter(context, studentList);
 
         return view;

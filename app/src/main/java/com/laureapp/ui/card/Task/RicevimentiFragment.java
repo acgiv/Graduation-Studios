@@ -118,6 +118,7 @@ public class RicevimentiFragment extends Fragment {
         ImageButton addButton = view.findViewById(R.id.add_ricevimento_ImageButton);
         mNav = Navigation.findNavController(view);
         ListView listRicevimentoView = view.findViewById(R.id.listRicevimentiView);
+        listRicevimentoView.setNestedScrollingEnabled(true);
         TextView titleTask = view.findViewById(R.id.titleTextView);
         titleTask.setText(taskStudente.getTitolo());
 

@@ -64,6 +64,8 @@ public class RichiesteProfessoreFragment extends Fragment {
         context = getContext();
         email = getEmailFromSharedPreferences();
         ListView listView = view.findViewById(R.id.listRichiesteProfessoreView);
+        listView.setNestedScrollingEnabled(true);
+
 
         if (email != null) {
             UtenteModelView utenteView = new UtenteModelView(context);

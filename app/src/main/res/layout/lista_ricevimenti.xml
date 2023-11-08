@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="121dp" />
+        app:layout_constraintGuide_percent="0.31" />
 
     <!-- Linea guida orizzontale per la posizione della linea separatrice destra -->
     <androidx.constraintlayout.widget.Guideline
@@ -19,34 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="252dp" />
+        app:layout_constraintGuide_percent="0.7" />
 
 
     <!-- Prima colonna -->
-    <TextView
-        android:id="@+id/ricevimentiTextView"
-        android:layout_width="63dp"
-        android:layout_height="29dp"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="150dp" />
 
     <!-- Separatore sinistro -->
-    <View
-        android:id="@+id/separatore1"
-        android:layout_width="2dp"
-        android:layout_height="0dp"
-        android:background="#CCCCCC"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintStart_toEndOf="@+id/ricevimentiTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
 
 
     <!-- Seconda colonna -->
@@ -57,13 +35,37 @@
 
 
     <TextView
+        android:id="@+id/ricevimentiTextView"
+        android:layout_width="39dp"
+        android:layout_height="34dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="150dp" />
+
+    <View
+        android:id="@+id/separatore1"
+        android:layout_width="2dp"
+        android:layout_height="0dp"
+        android:background="#CCCCCC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ricevimentiTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/argomentoRicevimentoTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:text="@string/argomento"
         android:textColor="#000000"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
@@ -86,32 +88,38 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- TextView per la data con larghezza "0dp" e altezza "wrap_content" -->
+
+
     <TextView
         android:id="@+id/dataRicevimentoTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="#000000"
-        app:layout_constraintStart_toEndOf="@+id/guidelineRight"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintWidth_default="wrap"
-        android:layout_marginStart="8dp"
-        />
+        android:textSize="16sp"
+    android:textColor="#000000"
+    app:layout_constraintStart_toEndOf="@+id/guidelineRight"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintWidth_default="wrap"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="16dp" />
+
+    <!-- Rimuovi la linea guida destra ora che hai spostato il margine -->
+
+
 
     <!-- Icona "delete" ancorata alla sinistra del TextView "ricevimentoTextView" -->
     <ImageButton
         android:id="@+id/delete_ricevimento_ImageButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="46dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/baseline_delete_forever_48"
         android:contentDescription="@string/delete_icon"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/baseline_delete_forever_48"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ricevimentiTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 

@@ -248,5 +248,6 @@
     <string name="MaterialeTesi">Materiale Tesi</string>
     <string name="title_activity_capture">CaptureActivity</string>
     <string name="scanQrCode">Scan QR</string>
+    <string name="Ricevimento">Ricevimento</string>
 
 </resources>

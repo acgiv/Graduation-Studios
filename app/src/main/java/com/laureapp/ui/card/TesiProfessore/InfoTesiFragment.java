@@ -445,6 +445,8 @@ public class InfoTesiFragment extends Fragment {
 
                     InfoTesiProfessoreAdapter adapter = new InfoTesiProfessoreAdapter(getContext(), nomiFile);
                     ListView listViewFiles = view.findViewById(R.id.listViewFiles);
+                    listViewFiles.setNestedScrollingEnabled(true);
+
                     listViewFiles.setAdapter(adapter);
 
                     adapter.setDeleteButtonClickListener(new InfoTesiProfessoreAdapter.DeleteButtonClickListener() {

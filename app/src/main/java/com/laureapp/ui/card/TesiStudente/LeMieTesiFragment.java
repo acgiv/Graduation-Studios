@@ -77,6 +77,8 @@ public class LeMieTesiFragment extends Fragment {
 
                                 // Mostro sulla listview tutte le tesi dello studente
                                 listView = view.findViewById(R.id.listTesiView);
+                                listView.setNestedScrollingEnabled(true);
+
                                 adapter = new LeMieTesiAdapter(getContext(), tesiList);
                                 listView.setAdapter(adapter);
                             } else {

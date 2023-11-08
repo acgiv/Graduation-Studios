@@ -16,7 +16,7 @@
 
         <GridLayout
             android:id="@+id/grigliaDati"
-            android:layout_width="wrap_content"
+            android:layout_width="401dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:layout_marginEnd="36dp"
@@ -32,18 +32,19 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardViewDettagliTesi"
-                android:layout_width="375dp"
-                android:layout_height="480dp"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_gravity="center"
-                android:layout_margin="12dp"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="15dp"
-                app:cardElevation="8dp">
+                android:layout_width="345dp"
+                android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="24dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp">
 
 
-                <FrameLayout
+
+            <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -111,7 +112,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewTitolo"
-                                    android:layout_width="276dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="16sp"
@@ -154,7 +155,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewAbstract"
-                                    android:layout_width="272dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -196,7 +197,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewDataPubblicazione"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -239,7 +240,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewTipologia"
-                                    android:layout_width="244dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="16sp"
@@ -282,7 +283,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewCicloCDL"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -317,7 +318,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewRelatore"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -361,7 +362,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewCoRelatore"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -442,7 +443,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewTempistiche"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -486,7 +487,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewMedia"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -530,7 +531,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewEsamiMancanti"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"
@@ -602,7 +603,7 @@
 
                                 <TextView
                                     android:id="@+id/insertTextViewSkill"
-                                    android:layout_width="246dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/black"
                                     android:textSize="18sp"

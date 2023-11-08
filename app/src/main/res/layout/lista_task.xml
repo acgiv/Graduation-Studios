@@ -43,26 +43,28 @@
 
         <TextView
             android:id="@+id/taskTextView"
-            android:layout_width="290dp"
+            android:layout_width="220dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:textColor="#000000"
-            android:textSize="24sp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageButton
             android:id="@+id/delete_task_ImageButton"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-20dp"
+            android:background="@android:color/transparent"
             android:contentDescription="Elimina questa attività"
             android:descendantFocusability="blocksDescendants"
             android:src="@drawable/baseline_delete_forever_48"
-            app:layout_constraintTop_toTopOf="@+id/taskTextView"
             app:layout_constraintBottom_toBottomOf="@+id/taskTextView"
-            android:layout_marginStart="-36dp"
-            app:layout_constraintStart_toEndOf="@+id/taskTextView" />
+            app:layout_constraintStart_toEndOf="@+id/taskTextView"
+            app:layout_constraintTop_toTopOf="@+id/taskTextView"
+            app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

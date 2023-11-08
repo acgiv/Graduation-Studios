@@ -25,8 +25,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="36dp"
                 android:layout_marginTop="8dp">
 
                 <LinearLayout
@@ -44,9 +42,8 @@
 
                     <TextView
                         android:id="@+id/tempisticheTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/tempistiche"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
@@ -54,9 +51,8 @@
 
                     <TextView
                         android:id="@+id/insertTempisticheTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="135dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:textColor="@color/black"
                         android:textSize="22dp" />
 
@@ -91,9 +87,8 @@
 
                     <TextView
                         android:id="@+id/mediaVotiTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/media_voti"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
@@ -101,9 +96,8 @@
 
                     <TextView
                         android:id="@+id/insertMediaVotiTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="145dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:textColor="@color/black"
                         android:textSize="22dp" />
 
@@ -141,9 +135,8 @@
 
                     <TextView
                         android:id="@+id/esamiMancantiTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/esami_mancanti"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
@@ -151,9 +144,8 @@
 
                     <TextView
                         android:id="@+id/insertEsamiMancantiTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="90dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:textColor="@color/black"
                         android:textSize="22dp" />
 
@@ -190,9 +182,8 @@
 
                     <TextView
                         android:id="@+id/skillTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="@string/skill"
                         android:textColor="@color/color_primary"
                         android:textSize="22dp"
@@ -200,9 +191,8 @@
 
                     <TextView
                         android:id="@+id/insertSkillTesiProfessore"
-                        android:layout_width="0dp"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:textColor="@color/black"
                         android:textSize="22dp" />
 

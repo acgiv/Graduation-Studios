@@ -97,6 +97,8 @@ public class SegnalazioniFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_segnalazioni, container, false);
         listView = view.findViewById(R.id.listSegnalazioniView);
+        listView.setNestedScrollingEnabled(true);
+
         addButton = view.findViewById(R.id.add_segnalazioni_ImageButton);
 
         db = FirebaseFirestore.getInstance();

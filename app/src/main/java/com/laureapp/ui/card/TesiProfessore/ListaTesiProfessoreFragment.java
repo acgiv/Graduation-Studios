@@ -106,6 +106,8 @@ public class ListaTesiProfessoreFragment extends Fragment implements  ListaTesiP
 
                                 //Mostro sulla listview tutte le tesi dello studente associato al professore
                                 listView = view.findViewById(R.id.listTesiProfessoreView);
+                                listView.setNestedScrollingEnabled(true);
+
                                 adapter = new ListaTesiProfessoreAdapter(getContext(), tesiList);
                                 adapter.setDeleteButtonClickListener(this); // 'this' si riferisce al tuo fragment
                                 listView.setAdapter(adapter);

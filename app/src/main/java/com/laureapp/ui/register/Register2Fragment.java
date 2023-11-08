@@ -54,12 +54,13 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Questa classe rappresenta un frammento utilizzato nella seconda fase del processo di registrazione di un nuovo utente nell'applicazione.
- * Gestisce le informazioni relative alla facoltà e ai corsi di studio selezionati durante la registrazione.
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
  */
 public class Register2Fragment extends Fragment {
 
-
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private AutoCompleteTextView autoCompleteTextView;
     private AutoCompleteTextView autoCompleteTextViewcorso;
     private MultiAutoCompleteTextView professoreTextViewcorso;
@@ -129,10 +130,8 @@ public class Register2Fragment extends Fragment {
     }
 
     /**
-     * Questo metodo gestisce il processo di creazione di un account utente nell'applicazione.
-     * Verifica se tutti i campi di input sono corretti e, in base al ruolo dell'utente, effettua la registrazione
-     * utilizzando l'indirizzo email e la password forniti. Successivamente, memorizza le informazioni utente nel database Firestore
-     * e reindirizza l'utente alla schermata principale dell'applicazione.
+     * Crea l'account dell'utente su firebase
+
      */
     private  void createAccount()  {
         AtomicInteger cont = new AtomicInteger(0);
@@ -183,13 +182,6 @@ public class Register2Fragment extends Fragment {
         }
     }
 
-    /**
-     * Questo metodo salva le informazioni dell'utente nel database Firestore dopo la creazione dell'account.
-     *
-     * @param currentUser L'utente corrente autenticato.
-     * @param firestoreDB L'istanza del database Firestore.
-     * @return L'ID dell'utente memorizzato nel database Firestore.
-     */
     private Long saveToFirestore(FirebaseUser currentUser,  FirebaseFirestore firestoreDB)  {
 
         if (currentUser != null) {
@@ -240,10 +232,6 @@ public class Register2Fragment extends Fragment {
         return ut.getId_utente();
     }
 
-    /**
-     * Questo metodo inizializza la mappa "elem_text" associando i campi di input ai rispettivi identificatori.
-     * Questa mappa è utilizzata per gestire dinamicamente i campi di input in base al ruolo dell'utente.
-     */
     private void inizializzate_binding_text(){
         elem_text.put("matricola", binding.matricolaRegister);
         elem_text.put("Dipartimento", binding.filledExposedDropdown);
@@ -256,10 +244,6 @@ public class Register2Fragment extends Fragment {
         }
     }
 
-    /**
-     * Questo metodo configura i TextWatcher per gli elementi di input nella mappa "elem_text"
-     * e imposta i listener di focus per gestire le modifiche nei campi di input.
-     */
     private void setupTextWatchers(){
         // Configura i TextWatcher per tutti gli elementi nella mappa elem_text
         elem_text.forEach((key, value)->  {
@@ -294,15 +278,9 @@ public class Register2Fragment extends Fragment {
                 });
             }
         });
+
     }
 
-    /**
-     * Questo metodo verifica se il componente di input passato è compilato correttamente
-     * in base al suo hint (etichetta) e al ruolo dell'utente.
-     *
-     * @param component Il componente di input da verificare.
-     * @return true se il componente è compilato correttamente, altrimenti false.
-     */
     private  boolean is_correct_form(Object component) {
         String hint = getHintText(component);
         if(!ControlInput.is_empty_string(component, getInputText(component),  hint, context)) {
@@ -343,12 +321,6 @@ public class Register2Fragment extends Fragment {
         return false;
     }
 
-    /**
-     * Questo metodo restituisce il testo dell'etichetta (hint) associato al componente di input passato.
-     *
-     * @param component Il componente di input da cui ottenere l'etichetta.
-     * @return Il testo dell'etichetta se disponibile, altrimenti null.
-     */
     private String getHintText(Object component) {
         String text = null;
         if (component instanceof TextInputEditText) {
@@ -361,12 +333,6 @@ public class Register2Fragment extends Fragment {
         return text;
     }
 
-    /**
-     * Questo metodo restituisce l'elemento di input associato all'etichetta (hint) del componente passato.
-     *
-     * @param component Il componente di input da cui ottenere l'elemento di input associato all'etichetta.
-     * @return L'elemento di input (TextInputLayout) associato all'etichetta, o null se l'etichetta non corrisponde a nessun elemento noto.
-     */
     private TextInputLayout getInputText(Object component){
         switch (getHintText(component)) {
             case "Matricola" -> {
@@ -417,6 +383,7 @@ public class Register2Fragment extends Fragment {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             // Nessuna azione richiesta prima della modifica del testo.
+
 
         }
 

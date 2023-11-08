@@ -14,23 +14,10 @@ import com.laureapp.R;
 
 import java.util.ArrayList;
 
-/**
- * Questa classe è un adattatore personalizzato utilizzato per visualizzare una lista di nomi di file
- * associati a una tesi e fornire interazioni per il download e l'eliminazione dei file.
- */
 public class InfoTesiProfessoreAdapter extends BaseAdapter {
     private ArrayList<String> nomiFile;
     private LayoutInflater inflater;
 
-    /**
-     * Costruttore di InfoTesiProfessoreAdapter.
-     *
-     * Questo costruttore crea un'istanza della classe InfoTesiProfessoreAdapter, che è un adattatore personalizzato
-     * utilizzato per popolare una vista di elenco con una lista di nomi di file associati a una tesi.
-     *
-     * @param context
-     * @param nomiFile la lista di nomi di file associati a una tesi.
-     */
     public InfoTesiProfessoreAdapter(Context context, ArrayList<String> nomiFile) {
         this.nomiFile = nomiFile;
         inflater = LayoutInflater.from(context);
@@ -54,50 +41,26 @@ public class InfoTesiProfessoreAdapter extends BaseAdapter {
         return position;
     }
 
-    /**
-     * Interfaccia per la gestione del clic sul pulsante di eliminazione in un adapter.
-     */
     public interface DeleteButtonClickListener {
         void onDeleteButtonClick(int position);
     }
 
     private DeleteButtonClickListener deleteButtonClickListener;
 
-    /**
-     * Imposta un listener per il clic sul pulsante di eliminazione.
-     *
-     * @param listener
-     */
     public void setDeleteButtonClickListener(DeleteButtonClickListener listener) {
         this.deleteButtonClickListener = listener;
     }
 
-    /**
-     * Questa interfaccia definisce un listener per il clic sul pulsante di download in un elemento dell'adapter.
-     */
     public interface DownloadButtonClickListener {
         void onDownloadButtonClick(int position);
     }
 
     private DownloadButtonClickListener downloadButtonClickListener;
 
-    /**
-     * Imposta un listener per il clic sul pulsante di download nell'adapter.
-     *
-     * @param listener
-     */
     public void setDownloadButtonClickListener(DownloadButtonClickListener listener) {
         this.downloadButtonClickListener = listener;
     }
 
-    /**
-     * Restituisce la vista dell'elemento dell'adapter in base alla posizione specificata.
-     *
-     * @param position    la posizione dell'elemento nell'adapter.
-     * @param convertView la vista riutilizzata da un elemento precedentemente visualizzato (se disponibile).
-     * @param parent      il ViewGroup genitore a cui verrà eventualmente allegata la vista.
-     * @return            la vista dell'elemento dell'adapter.
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

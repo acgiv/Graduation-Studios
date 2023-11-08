@@ -30,14 +30,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-/**
- * Questa classe rappresenta un fragment utilizzato per consentire agli utenti di richiedere
- * il recupero della password tramite email. Il fragment contiene un campo per inserire l'indirizzo
- * email e un pulsante per inviare l'email di recupero della password.
- *
- * Questa classe gestisce il processo di invio dell'email di recupero e fornisce feedback
- * all'utente in caso di successo o errore.
- */
 public class PasswordRecoveryFragment extends Fragment {
 
     private NavController mNav;
@@ -69,16 +61,6 @@ public class PasswordRecoveryFragment extends Fragment {
             if(!StringUtils.isEmpty(email)) {
                 auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                            /**
-                             * Questo metodo viene chiamato quando il processo di recupero della password è completato.
-                             * Controlla se il recupero della password è stato eseguito con successo o se si è verificato un errore.
-                             * In caso di successo, imposta il campo di input dell'indirizzo email senza errori e reindirizza
-                             * l'utente alla schermata di accesso (loginFragment). In caso di errore, imposta un messaggio di
-                             * errore sull'input dell'indirizzo email.
-                             *
-                             * @param task L'oggetto Task contenente il risultato dell'operazione di recupero della password.
-                             */
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {

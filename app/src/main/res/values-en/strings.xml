@@ -199,10 +199,7 @@
     <string name="nuovoRicevimento">New appointment</string>
     <string name="nuovaTask">New task</string>
 
-    <string name="MaterialeTesi">Thesis Material</string>
-    <string name="title_activity_capture">Capture Activity</string>
-    <string name="scanQrCode">Scan QR Code</string>
-
+    <string name="TesiFiles">Tesi\'s Files</string>
 
 
 </resources>

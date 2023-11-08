@@ -35,67 +35,36 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Questa classe fornisce metodi utili per il controllo e la validazione dell'input dell'utente.
- */
 public class ControlInput {
 
     private static final int error_color = com.google.android.material.R.color.design_default_color_error;
 
-    /**
-     * Verifica se una stringa rappresenta un indirizzo email valido secondo un modello specifico.
-     *
-     * @param email la stringa da verificare come indirizzo email.
-     * @return true se la stringa è un indirizzo email valido, false altrimenti.
-     */
+    //controllo del formato dell'email
     public static boolean  isValidEmailFormat(String email) {
         String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
                 + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
         return Pattern.compile(regexPattern).matcher(email).matches();
     }
-
-    /**
-     * Rimuove gli spazi bianchi, le tabulazioni e le interruzioni di riga da una stringa data.
-     *
-     * @param stringa la stringa dalla quale rimuovere gli spazi bianchi, le tabulazioni e le interruzioni di riga.
-     * @return la stringa risultante dopo la rimozione degli spazi bianchi, delle tabulazioni e delle interruzioni di riga.
-     */
+    //metodo per eliminare gli spazi
     public static String deleteBlank(String stringa){
         stringa = stringa.replaceAll("\t", "");
         stringa = stringa.replaceAll("\n", "");
         stringa = stringa.replaceAll(" ", "");
         return stringa;
     }
-
-    /**
-     * Rimuove i caratteri numerici da una stringa data.
-     *
-     * @param stringa la stringa dalla quale rimuovere i caratteri numerici.
-     * @return la stringa risultante dopo la rimozione dei caratteri numerici.
-     */
+    //metodo per eliminare i numeri
     public static String deleteNumber(String stringa){
         stringa = stringa.replaceAll("[0-9]", "");
         return stringa;
     }
 
-    /**
-     * Rimuove i caratteri di punteggiatura da una stringa data.
-     *
-     * @param stringa la stringa dalla quale rimuovere i caratteri di punteggiatura.
-     * @return la stringa risultante dopo la rimozione dei caratteri di punteggiatura.
-     */
+    //metodo per eliminare la punteggiatura
     public static String deletePunctuation(String stringa){
         String regexPattern = "[!\\\"#$%&'()*+,-./:;<=>?@\\\\[\\\\]^_`{|}~]";
         stringa =  stringa.replaceAll(regexPattern, "");
         return stringa;
     }
 
-    /**
-     * Verifica se una password soddisfa i requisiti di sicurezza.
-     *
-     * @param password la password da verificare.
-     * @return true se la password soddisfa i requisiti di sicurezza (8 caratteri, almeno un numero e almeno un carattere speciale), altrimenti false.
-     */
     public static boolean isPasswordSafe(String password) {
         password = deleteBlank(password);
 
@@ -239,12 +208,6 @@ public class ControlInput {
         return  Pattern.compile(regexPattern).matcher(matricola).matches();
     }
 
-    /**
-     * Calcola l'hash SHA-256 di una stringa di testo.
-     *
-     * @param textToHash La stringa di testo da cui calcolare l'hash.
-     * @return Una stringa che rappresenta l'hash SHA-256 della stringa di testo, o una stringa vuota se si verifica un'eccezione.
-     */
     public static String hashWith256(String textToHash) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -258,10 +221,8 @@ public class ControlInput {
     }
 
     /**
-     * Verifica se il dispositivo è connesso a Internet attraverso una connessione WiFi o cellulare.
      *
-     * @param cm Il gestore di connettività (ConnectivityManager) utilizzato per controllare la connessione di rete.
-     * @return true se il dispositivo è connesso a Internet, false altrimenti.
+     * @return un booleano che indica se la connessione è presente: true se c'è connessione altrimenti false
      */
     public static boolean isConnected(ConnectivityManager cm) {
         if (cm != null) {
@@ -277,13 +238,6 @@ public class ControlInput {
 
     }
 
-    /**
-     * Verifica se un indirizzo email esiste già nel database dell'applicazione.
-     *
-     * @param email L'indirizzo email da verificare.
-     * @param context Il contesto dell'applicazione utilizzato per accedere al database.
-     * @return true se l'indirizzo email esiste nel database, false altrimenti.
-     */
     public static boolean isExistEmail(String email, Context context){
         boolean result = false;
         UtenteModelView ut_view = new UtenteModelView(context);
@@ -294,25 +248,12 @@ public class ControlInput {
         return result;
     }
 
-    /**
-     * Mostra un messaggio di notifica temporaneo (Toast) all'utente.
-     *
-     * @param context Il contesto dell'applicazione.
-     * @param message Il messaggio da mostrare come notifica.
-     */
+    // Questa funzione mostra un messaggio di toast
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * Verifica se il valore della matricola in un campo di input è valido e se è associato a un ruolo specifico.
-     *
-     * @param inputEditText Il campo di input contenente la matricola da verificare.
-     * @param inputLayout Il layout di input associato al campo di input.
-     * @param context Il contesto dell'applicazione.
-     * @param ruolo Il ruolo specifico a cui la matricola dovrebbe essere associata.
-     * @return true se la matricola è valida e non è associata al ruolo specifico, altrimenti false.
-     */
+
     public static boolean is_correct_matricola(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context, String ruolo){
         StudenteModelView st = new StudenteModelView(context);
         ProfessoreModelView pr = new ProfessoreModelView(context);
@@ -334,14 +275,6 @@ public class ControlInput {
         }
     }
 
-    /**
-     * Verifica se il valore nel campo di input della media è valido e rientra nell'intervallo accettabile.
-     *
-     * @param inputEditText Il campo di input contenente la media da verificare.
-     * @param inputLayout Il layout di input associato al campo di input.
-     * @param context Il contesto dell'applicazione.
-     * @return true se il valore della media è valido e rientra nell'intervallo accettabile, altrimenti false.
-     */
     public static boolean is_correct_media(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context){
         String media = Objects.requireNonNull(inputEditText.getText()).toString();
         if (StringUtils.isNumeric(media) && (Integer.parseInt(media)) >= 18 && Integer.parseInt(media) <= 30) {
@@ -354,14 +287,6 @@ public class ControlInput {
         }
     }
 
-    /**
-     * Verifica se il valore nel campo di input degli esami mancanti è valido e rientra nell'intervallo accettabile.
-     *
-     * @param inputEditText Il campo di input contenente il numero di esami mancanti da verificare.
-     * @param inputLayout Il layout di input associato al campo di input.
-     * @param context Il contesto dell'applicazione.
-     * @return true se il valore degli esami mancanti è valido e rientra nell'intervallo accettabile, altrimenti false.
-     */
     public static boolean is_correct_esami_mancanti(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context){
         String esami = Objects.requireNonNull(inputEditText.getText()).toString();
         if (StringUtils.isNumeric(esami) && (Integer.parseInt(esami)) >= 0 && Integer.parseInt(esami) <= 40) {
@@ -374,15 +299,6 @@ public class ControlInput {
         }
     }
 
-    /**
-     * Verifica se il valore nel campo di input della facoltà è una delle opzioni valide.
-     *
-     * @param inputEditText Il campo di input contenente la facoltà da verificare.
-     * @param inputLayout Il layout di input associato al campo di input.
-     * @param context Il contesto dell'applicazione.
-     * @param facolta Un array di stringhe che rappresentano le opzioni valide per la facoltà.
-     * @return true se il valore della facoltà è una delle opzioni valide, altrimenti false.
-     */
     public static boolean is_correct_facolta(MaterialAutoCompleteTextView inputEditText, TextInputLayout inputLayout, Context context, String[] facolta){
         String facolta_text = Objects.requireNonNull(inputEditText.getText()).toString();
         boolean isFacoltaTextEqual = Arrays.stream(facolta)
@@ -397,15 +313,6 @@ public class ControlInput {
         }
     }
 
-    /**
-     * Verifica se il valore nel campo di input del corso di laurea è una delle opzioni valide.
-     *
-     * @param inputEditText Il campo di input contenente il corso di laurea da verificare.
-     * @param inputLayout Il layout di input associato al campo di input.
-     * @param context Il contesto dell'applicazione.
-     * @param corsi Un array di stringhe che rappresentano le opzioni valide per il corso di laurea.
-     * @return true se il valore del corso di laurea è una delle opzioni valide, altrimenti false.
-     */
     public static boolean is_correct_corso_di_laurea(MaterialAutoCompleteTextView inputEditText, TextInputLayout inputLayout, Context context, String[] corsi){
         String corso_text = Objects.requireNonNull(inputEditText.getText()).toString();
         boolean iscorsiTextEqual = Arrays.stream(corsi)
@@ -420,15 +327,6 @@ public class ControlInput {
         }
     }
 
-    /**
-     * Verifica se la conferma della password è corretta e gestisce eventuali errori.
-     *
-     * @param editTextpassword     Il campo di input per la password.
-     * @param editTextConfpassword Il campo di input per la conferma della password.
-     * @param inputLayout          Il layout di input associato al campo di conferma della password.
-     * @param context              Il contesto dell'applicazione.
-     * @return Restituisce true se la conferma della password è corretta, altrimenti restituisce false.
-     */
     public static boolean is_correct_confirm_password(TextInputEditText editTextpassword, TextInputEditText editTextConfpassword,TextInputLayout inputLayout, Context context){
         boolean result_error = ControlInput.is_equal_password( Objects.requireNonNull(editTextConfpassword.getText()).toString(),
                 Objects.requireNonNull(editTextpassword.getText()).toString(), inputLayout, context);
@@ -437,14 +335,6 @@ public class ControlInput {
         return result_error;
     }
 
-    /**
-     * Verifica se il testo inserito in un campo di input contiene solo caratteri alfabetici e gestisce eventuali errori.
-     *
-     * @param inputEditText Il campo di input da validare.
-     * @param inputLayout   Il layout di input associato al campo.
-     * @param context       Il contesto dell'applicazione.
-     * @return Restituisce true se il testo inserito è valido (contiene solo caratteri alfabetici), altrimenti restituisce false.
-     */
     public static boolean is_correct_nome_cognome(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context){
         if (!StringUtils.isAlpha(Objects.requireNonNull(inputEditText.getText()).toString())) {
             String error_message = context.getString(R.string.errore_stringa).replace("{campo}", Objects.requireNonNull(inputEditText.getHint()).toString());
@@ -456,14 +346,6 @@ public class ControlInput {
         }
     }
 
-    /**
-     * Verifica se la password inserita è sicura e gestisce eventuali errori.
-     *
-     * @param inputEditText Il campo di input contenente la password da validare.
-     * @param inputLayout   Il layout di input associato al campo della password.
-     * @param context       Il contesto dell'applicazione.
-     * @return Restituisce true se la password è considerata sicura, altrimenti restituisce false.
-     */
     public static boolean is_correct_password(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context){
         if (!ControlInput.isPasswordSafe(Objects.requireNonNull(inputEditText.getText()).toString())) {
             String error_message = context.getString(R.string.password_not_safe_error);
@@ -475,15 +357,6 @@ public class ControlInput {
         }
     }
 
-    /**
-     * Verifica se una stringa inserita in un componente di input è vuota e gestisce eventuali errori.
-     *
-     * @param component     Il componente di input contenente la stringa da validare.
-     * @param layout_input  Il layout di input associato al componente.
-     * @param campo_error   Il nome del campo associato per la creazione del messaggio di errore.
-     * @param context       Il contesto dell'applicazione.
-     * @return Restituisce true se la stringa è vuota, altrimenti restituisce false.
-     */
     public static Boolean is_empty_string(Object component, TextInputLayout layout_input, String campo_error, Context context){
         String text = null;
         String error_message;
@@ -507,15 +380,6 @@ public class ControlInput {
         return false;
     }
 
-    /**
-     * Verifica se l'indirizzo email inserito è in un formato valido e se non esiste già nel contesto dell'applicazione,
-     * gestendo eventuali errori.
-     *
-     * @param inputEditText Il campo di input contenente l'indirizzo email da validare.
-     * @param inputLayout   Il layout di input associato al campo dell'indirizzo email.
-     * @param context       Il contesto dell'applicazione.
-     * @return Restituisce true se l'indirizzo email è valido e non esiste già, altrimenti restituisce false.
-     */
     public static boolean is_correct_email(TextInputEditText inputEditText, TextInputLayout inputLayout, Context context){
         String email = Objects.requireNonNull(inputEditText.getText()).toString();
         if (!ControlInput.isValidEmailFormat(email)) {
@@ -530,5 +394,6 @@ public class ControlInput {
         }
         return  false;
     }
+
 
 }

@@ -17,22 +17,11 @@ import com.laureapp.ui.roomdb.entity.Tesi;
 
 import java.util.ArrayList;
 
-/**
- * Questa classe rappresenta un adattatore personalizzato utilizzato per visualizzare una lista di richieste di tesi da parte degli studenti.
- */
 public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
     private Context mContext;
     private ArrayList<RichiesteTesi> mRichiesteTesiList;
     private ArrayList<Tesi> mTesiList;
     private String titolo;
-
-    /**
-     * Crea un nuovo adapter per la visualizzazione delle richieste di tesi.
-     *
-     * @param context           il contesto in cui viene utilizzato l'adapter.
-     * @param richiesteTesiList la lista delle richieste di tesi da visualizzare.
-     * @param tesiList          la lista delle tesi associate alle richieste.
-     */
     public RichiesteProfessoreAdapter(Context context, ArrayList<RichiesteTesi> richiesteTesiList, ArrayList<Tesi> tesiList) {
         super(context, 0, richiesteTesiList);
         mContext = context;
@@ -40,15 +29,6 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
         mTesiList = tesiList;
     }
 
-    /**
-     * Restituisce la vista che rappresenta un elemento della lista delle richieste di tesi
-     * nella posizione specificata.
-     *
-     * @param position    la posizione dell'elemento nella lista.
-     * @param convertView la vista precedentemente utilizzata per la riciclaggio, se disponibile.
-     * @param parent      il layout padre a cui questa vista verrà eventualmente allegata.
-     * @return            la vista che rappresenta l'elemento della lista nella posizione specificata.
-     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItemView = convertView;
@@ -102,12 +82,7 @@ public class RichiesteProfessoreAdapter extends ArrayAdapter<RichiesteTesi> {
         return listItemView;
     }
 
-    /**
-     * Trova il titolo di una tesi corrispondente all'ID della tesi specificato.
-     *
-     * @param id_tesi l'ID della tesi da cercare.
-     * @return il titolo della tesi corrispondente o null se non viene trovata alcuna corrispondenza.
-     */
+    // Metodo per trovare il titolo della tesi in base all'id_tesi
     private String findTitoloByTesiId(Long id_tesi) {
         for (Tesi tesi : mTesiList) {
             if (tesi.getId_tesi() != null && tesi.getId_tesi().equals(id_tesi)) {

@@ -24,6 +24,9 @@ public class TesiTabProfessoreFragment extends Fragment {
     private ViewPager2 viewPager2;
     private TesiTabProfessoreAdapter viewPagerAdapter;
 
+    private NavigationView navigationView;
+    private AppBarConfiguration mAppBarConfiguration;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tab_tesi_professore, container, false);

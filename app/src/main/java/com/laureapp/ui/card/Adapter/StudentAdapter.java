@@ -47,9 +47,11 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
     private List<StudenteWithUtente> filteredStudentList;
     private Context context;
 
+
+
+
+
     /**
-     * Costruisce un nuovo adapter per la visualizzazione della lista di studenti.
-     *
      * @param context     si riferisce al contesto in cui viene utilizzato
      * @param studentList corrisponde alla lista di studenti da passare
      */
@@ -64,9 +66,6 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
 
 
     /**
-     * Restituisce la vista che rappresenta un elemento nella lista degli studenti
-     * nella posizione specificata.
-     *
      * @param position    si riferisce alla posizione dell'item della lista
      * @param convertView si riferisce alla variabile che gestisce il cambiamento della view
      * @param parent      Interfaccia per le informazioni globali riguardo all'ambiente dell'applicazione.
@@ -106,4 +105,11 @@ public class StudentAdapter extends ArrayAdapter<StudenteWithUtente> implements 
         return convertView;
     }
 
+
+
+
+
 }
+
+
+

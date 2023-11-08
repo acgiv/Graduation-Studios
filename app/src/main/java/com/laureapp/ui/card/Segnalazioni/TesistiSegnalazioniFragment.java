@@ -1,5 +1,6 @@
 package com.laureapp.ui.card.Segnalazioni;
 
+
 import static com.laureapp.ui.controlli.ControlInput.showToast;
 import static com.laureapp.ui.home.HomeFragment.getEmailFromSharedPreferences;
 
@@ -46,9 +47,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
+
 /**
  * Questa classe gestisce la lista degli studenti mostrata dopo aver cliccato la card
  * Tesisti, lato professore. Questa lista viene filtrata in base al testo inserito dall'utente.
+ *
  */
 public class TesistiSegnalazioniFragment extends Fragment {
 
@@ -70,8 +73,10 @@ public class TesistiSegnalazioniFragment extends Fragment {
     private List<StudenteWithUtente> studentList = new ArrayList<>();
 
 
-    public TesistiSegnalazioniFragment() {
 
+
+    public TesistiSegnalazioniFragment() {
+        // Required empty public constructor
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,9 @@ public class TesistiSegnalazioniFragment extends Fragment {
         loadProfessorForUserId(id_utente);
 
         mAuth = FirebaseAuth.getInstance();
+
+
+
 
     }
 
@@ -134,14 +142,9 @@ public class TesistiSegnalazioniFragment extends Fragment {
 
     }
 
-    /**
-     * Carica un professore dal database Firestore in base all'ID utente fornito.
-     * Questo metodo esegue una query per cercare un professore associato all'ID utente specificato.
-     *
-     * @param id_utente L'ID dell'utente per il quale si desidera trovare il professore associato.
-     * @return Un oggetto Task<Long> che rappresenta l'ID del professore trovato.
-     * @throws NoSuchElementException Se non è stato trovato alcun professore con l'ID utente specificato.
-     */
+
+
+
     private Task<Long> loadProfessorByUserId(Long id_utente) {
         return FirebaseFirestore.getInstance()
                 .collection("Utenti/Professori/Professori")
@@ -270,10 +273,10 @@ public class TesistiSegnalazioniFragment extends Fragment {
      * @param id_studente id della tesi nella tabella StudenteTesi
      * @return l'id della tesi presente nella tabella studente_tesi
      */
-    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente,Long id_tesi) {
+    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente) {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi").whereEqualTo("id_tesi",id_tesi)
+                .collection("StudenteTesi").whereEqualTo("id_studente", id_studente)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -308,8 +311,20 @@ public class TesistiSegnalazioniFragment extends Fragment {
                         return studentiWithUtenti;
                     });
 
+
+
                 });
     }
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
@@ -371,7 +386,7 @@ public class TesistiSegnalazioniFragment extends Fragment {
         loadTesiByIdTesiInTesiStud(id_tesi).addOnCompleteListener(studTesiTask -> {
             if (studTesiTask.isSuccessful()) {
                 Long id_studente = studTesiTask.getResult();
-                loadStudForIdStudenteInStudenteTesi(id_studente,id_tesi);
+                loadStudForIdStudenteInStudenteTesi(id_studente);
             } else {
                 showToast(context, "Dati tesi professore non caricati correttamente");
 
@@ -384,8 +399,8 @@ public class TesistiSegnalazioniFragment extends Fragment {
      * È il secondo metodo(2) utile per poter recuperare le tasks.
      * @param id_studente è l'id dell'utente uguale a quello dello studente
      */
-    private void loadStudForIdStudenteInStudenteTesi(final Long id_studente,Long id_tesi) {
-        loadStudByIdStudenteInStudenteTesi(id_studente,id_tesi).addOnCompleteListener(studTask -> {
+    private void loadStudForIdStudenteInStudenteTesi(final Long id_studente) {
+        loadStudByIdStudenteInStudenteTesi(id_studente).addOnCompleteListener(studTask -> {
             if (studTask.isSuccessful()) {
                 requireActivity().runOnUiThread(() -> addStudentsToList(studTask.getResult()));
             } else {
@@ -406,15 +421,8 @@ public class TesistiSegnalazioniFragment extends Fragment {
         });
     }
 
-    /**
-     * Restituisce un oggetto che rappresenta uno studente insieme ai dettagli dell'utente associato.
-     * Questo metodo carica uno studente dal database Firestore in base all'ID studente fornito e
-     * successivamente carica l'utente associato a questo studente.
-     *
-     * @param studenteId L'ID dello studente per il quale si desidera ottenere l'oggetto StudenteWithUtente.
-     * @return Un oggetto Task<StudenteWithUtente> che rappresenta uno studente con l'utente associato.
-     * @throws NoSuchElementException Se lo studente o l'utente associato non sono stati trovati.
-     */
+
+
     public Task<StudenteWithUtente> getStudenteWithUtente(Long studenteId) {
         Task<Studente> studenteTask = loadStudenteById(studenteId);
 
@@ -435,13 +443,7 @@ public class TesistiSegnalazioniFragment extends Fragment {
         });
     }
 
-    /**
-     * Carica un oggetto Studente dal repository o da una fonte di dati specifica
-     * in base all'ID dello studente fornito.
-     *
-     * @param studenteId L'ID dello studente che si desidera caricare.
-     * @return Un oggetto Task<Studente> che rappresenta lo studente caricato.
-     */
+
     private Task<Studente> loadStudenteById(Long studenteId) {
         TaskCompletionSource<Studente> tcs = new TaskCompletionSource<>();
 
@@ -456,12 +458,7 @@ public class TesistiSegnalazioniFragment extends Fragment {
         return tcs.getTask();
     }
 
-    /**
-     * Carica un oggetto Utente associato a uno specifico Studente da una fonte di dati specifica.
-     *
-     * @param studente Lo studente per il quale si desidera caricare l'utente associato.
-     * @return Un oggetto Task<Utente> che rappresenta l'utente associato allo studente.
-     */
+
     private Task<Utente> loadUtenteByStudente(Studente studente) {
         TaskCompletionSource<Utente> tcs = new TaskCompletionSource<>();
 

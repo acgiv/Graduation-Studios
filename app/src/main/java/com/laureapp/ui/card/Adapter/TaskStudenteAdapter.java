@@ -1,5 +1,6 @@
 package com.laureapp.ui.card.Adapter;
 
+
 import static androidx.core.content.res.TypedArrayUtils.getString;
 import static com.laureapp.ui.card.Task.TaskStudenteFragment.deleteTask;
 
@@ -30,9 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Questa classe rappresenta un adattatore personalizzato utilizzato per visualizzare una lista di task, sia per studenti che per professori.
- */
+
 public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
     private final NavController mNav;
@@ -41,9 +40,11 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
     Bundle args;
     private ArrayList<TaskStudente> taskList;
 
+
+
+
+
     /**
-     * Costruisce un nuovo adapter per la visualizzazione della lista di task.
-     *
      * @param context  si riferisce al contesto in cui viene utilizzato
      * @param taskList corrisponde alla lista di task da passare
      */
@@ -57,8 +58,6 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
 
     /**
-     * Restituisce la vista che rappresenta un elemento nella lista dei task nella posizione specificata.
-     *
      * @param position    si riferisce alla posizione dell'item della lista
      * @param convertView si riferisce alla variabile che gestisce il cambiamento della view
      * @param parent      Interfaccia per le informazioni globali riguardo all'ambiente dell'applicazione.
@@ -113,6 +112,9 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
                 });
             }
 
+
+
+
         }
         // Gestisci il clic sull'elemento della lista
         itemView.setOnClickListener(v -> {
@@ -141,12 +143,6 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
         return itemView;
     }
 
-    /**
-     * Mostra una finestra di dialogo di conferma per l'eliminazione di un task.
-     *
-     * @param titolo   il titolo del task da eliminare.
-     * @param position la posizione del task nella lista.
-     */
     private void showConfirmationDialog(String titolo, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(context.getString(R.string.confermaEliminazioneTitle));

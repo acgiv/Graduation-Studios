@@ -24,11 +24,6 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-/**
- * Questa classe rappresenta un'attività di caricamento che viene visualizzata durante l'inizializzazione
- * dell'applicazione. L'attività è responsabile dell'inserimento di dati nell'applicazione,
- * come studenti e professori, tramite Firestore e della gestione degli eventi di inserimento completato.
- */
 public class LoadingPageActivity extends AppCompatActivity {
 
     private final Executor executor = Executors.newSingleThreadExecutor();
@@ -48,11 +43,6 @@ public class LoadingPageActivity extends AppCompatActivity {
 
         // Inizializza il callback
         onUsersInsertedListener = new OnUsersInsertedListener() {
-
-            /**
-             * Questo metodo è chiamato quando l'inserimento degli utenti è completato.
-             * Avvia i processi di inserimento degli studenti e dei professori.
-             */
             @Override
             public void onUsersInserted() {
                 // Chiamato quando l'inserimento degli utenti è completato
@@ -64,11 +54,7 @@ public class LoadingPageActivity extends AppCompatActivity {
         insertUtenti();
     }
 
-    /**
-     * Questo metodo recupera gli utenti dal database Firestore, crea oggetti Utente dai dati recuperati
-     * e li inserisce nel database SQLite locale utilizzando UtenteModelView. Inoltre, chiama il callback
-     * onUsersInsertedListener.onUsersInserted() quando l'inserimento degli utenti è completato.
-     */
+    // Metodo per inserire gli utenti
     private void insertUtenti() {
         UtenteModelView ut_view = new UtenteModelView(this);
         CollectionReference utentiRef = db_firestore.collection("Utenti");
@@ -99,11 +85,7 @@ public class LoadingPageActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Questo metodo recupera gli studenti dal database Firestore, crea oggetti Studente dai dati recuperati
-     * e li inserisce nel database SQLite locale utilizzando StudenteModelView. Inoltre, tiene traccia del
-     * numero di inserimenti completati e chiama checkInsertionsCompleted() quando l'inserimento degli studenti è completato.
-     */
+    // Metodo per inserire gli studenti
     private void insertStudenti() {
         StudenteModelView st_view = new StudenteModelView(this);
         CollectionReference studentiRef = db_firestore.collection("Utenti/Studenti/Studenti");
@@ -134,11 +116,6 @@ public class LoadingPageActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Questo metodo recupera i professori dal database Firestore, crea oggetti Professore dai dati recuperati
-     * e li inserisce nel database SQLite locale utilizzando ProfessoreModelView. Inoltre, tiene traccia del
-     * numero di inserimenti completati e chiama checkInsertionsCompleted() quando l'inserimento dei professori è completato.
-     */
     private void insertProfessori() {
         ProfessoreModelView pr_view = new ProfessoreModelView(this);
         CollectionReference professoreRef = db_firestore.collection("Utenti/Professori/Professori");
@@ -166,10 +143,7 @@ public class LoadingPageActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * Questo metodo verifica se l'inserimento degli studenti e dei professori è stato completato.
-     * Se entrambi sono stati completati, avvia l'activity di accesso (LoginActivity) e chiude l'activity corrente (LoadingPageActivity).
-     */
+    // Controlla se entrambi gli inserimenti sono completati e avvia l'activity successiva se lo sono
     private void checkInsertionsCompleted() {
         if (insertStudentiCompleted == 1 && insertProfessoriCompleted == 1) {
             // Avvia l'activity successiva qui
@@ -178,4 +152,5 @@ public class LoadingPageActivity extends AppCompatActivity {
             finish(); // Chiudi questa activity dopo il passaggio all'activity successiva
         }
     }
+
 }

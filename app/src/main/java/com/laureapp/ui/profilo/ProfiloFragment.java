@@ -51,8 +51,8 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Questa classe rappresenta un frammento che gestisce il profilo dell'utente nell'applicazione.
- * Include le informazioni e le azioni relative al profilo dell'utente.
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
  */
 public class ProfiloFragment extends Fragment {
 
@@ -243,12 +243,6 @@ public class ProfiloFragment extends Fragment {
         });
     }
 
-    /**
-     * Questo metodo gestisce la conferma delle modifiche a vari campi di un utente. I campi che possono essere modificati dipendono dai parametri `type` e `campo`. Questo metodo è chiamato quando l'utente preme un pulsante di conferma dopo aver apportato delle modifiche a un campo specifico.
-     *
-     * @param type  Una stringa che rappresenta il tipo di campo da modificare (es. "Nome", "Cognome", "Password", "Matricola", "Media", "Esami Mancanti").
-     * @param campo Una stringa che rappresenta il valore attuale del campo che si desidera modificare.
-     */
     private void confirm_modifiche(String type, String campo) {
         binding.buttonRegister.setOnClickListener(view -> {
             if(!StringUtils.equals(type, "CorsiProfessore") ){
@@ -365,16 +359,6 @@ public class ProfiloFragment extends Fragment {
         });
     }
 
-    /**
-     * Questo metodo confronta due campi e gestisce gli errori associati in base al tipo di controllo specificato.
-     *
-     * @param tipo_controllo  Una stringa che specifica il tipo di controllo ("VECCHIO" o "NUOVO").
-     * @param campo1          Il primo campo da confrontare.
-     * @param campo2          Il secondo campo da confrontare.
-     * @param error_message   Il messaggio di errore da visualizzare in caso di confronto non riuscito.
-     * @param layout          L'oggetto TextInputLayout associato al campo in cui visualizzare gli errori.
-     * @return                True se i campi sono uguali e il controllo ha avuto successo; altrimenti, restituisce False.
-     */
     private boolean is_equal_campi(String tipo_controllo, String campo1, String campo2, String error_message, TextInputLayout layout) {
         if (StringUtils.equals(tipo_controllo, "VECCHIO")) {
             if (!StringUtils.equals(campo1, campo2)) {
@@ -394,13 +378,6 @@ public class ProfiloFragment extends Fragment {
         return false;
     }
 
-    /**
-     * Questo metodo controlla se il campo attuale coincide con un campo specificato in base al tipo specificato.
-     *
-     * @param type  Una stringa che specifica il tipo di campo da confrontare ("Nome", "Cognome", "Media", "Matricola", "Esami Mancanti" o "Password").
-     * @param campo Il campo da confrontare con il campo attuale.
-     * @return      True se il campo attuale coincide con il campo specificato in base al tipo; altrimenti, restituisce False.
-     */
     private boolean is_control_campo_attuale(String type, String campo) {
             switch (type) {
                 case "Nome", "Cognome", "Media", "Matricola", "Esami Mancanti" -> {
@@ -417,10 +394,6 @@ public class ProfiloFragment extends Fragment {
             return false;
     }
 
-    /**
-     * Questo metodo imposta la vista per la modifica di un campo dell'anagrafica dell'utente.
-     * Nasconde alcune viste e mostra altre viste per consentire all'utente di apportare modifiche.
-     */
     private void set_view() {
         binding.cardViewAnagrafica.setVisibility(View.GONE);
         binding.cardViewCdl.setVisibility(View.GONE);
@@ -440,10 +413,6 @@ public class ProfiloFragment extends Fragment {
         });
     }
 
-    /**
-     * Questo metodo chiude la visualizzazione della modifica del campo dell'anagrafica dell'utente e ripristina lo stato precedente.
-     * Riporta alcune viste alla loro visibilità originale, reimposta i campi di testo e i messaggi di errore, e gestisce lo stato delle modifiche.
-     */
     private void close_card_modifica() {
         binding.cardViewAnagrafica.setVisibility(View.VISIBLE);
         binding.TextVecchio.setEnabled(true);
@@ -460,10 +429,8 @@ public class ProfiloFragment extends Fragment {
         component_pass.clear();
     }
 
-    /**
-     * Questo metodo aggiorna la password dell'utente nell'autenticazione. Utilizza la libreria Firebase Authentication per aggiornare la password dell'utente.
-     * Dopo l'aggiornamento della password, il metodo chiude la vista di modifica e gestisce eventuali risultati dell'aggiornamento.
-     */
+
+
     private void updatePasswordAutentication(){
         user.updatePassword(utente.getPassword())
                 .addOnCompleteListener(task -> {
@@ -478,12 +445,6 @@ public class ProfiloFragment extends Fragment {
         close_card_modifica();
     }
 
-    /**
-     * Questo metodo aggiorna un componente specifico in Firestore, il database cloud di Firebase, all'interno di un documento dell'utente corrente.
-     *
-     * @param key_component  Il nome del componente da aggiornare nel documento.
-     * @param path           Il percorso del documento in Firestore in cui effettuare l'aggiornamento.
-     */
     private void changeComponentFirestore(String key_component,String path) {
         FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -533,12 +494,10 @@ public class ProfiloFragment extends Fragment {
             // Gestisci il caso in cui l'ID utente non sia valido o vuoto
             Log.e("USER_ERROR", "ERRORE UTENTE NON VALIDO");
         }
+
+
     }
 
-    /**
-     * Questa classe personalizzata implementa un TextWatcher utilizzato per monitorare e gestire le modifiche al testo in un campo di input.
-     * È progettato per essere utilizzato in vari campi di input all'interno dell'applicazione.
-     */
     private  class CustomTextWatcher implements TextWatcher {
         Object component;
         private boolean programmaticTextChange = false;
@@ -601,34 +560,19 @@ public class ProfiloFragment extends Fragment {
 
             }
         }
-
-        /**
-         * Imposta il componente associato a questo TextWatcher.
-         *
-         * @param component Il componente da associare a questo TextWatcher.
-         */
-        public void setComponent(Object component) {
+            public void setComponent(Object component) {
             this.component = component;
         }
     }
 
-    /**
-     * Questo metodo inizializza gli elementi di testo (componenti di input) associati al ruolo dell'utente.
-     * I componenti di input vengono memorizzati in un dizionario `elem_text` per un successivo utilizzo.
-     * Nel caso del ruolo "Professore", viene inizializzato un componente associato ai "CorsiProfessore".
-     */
+
     private void inizializzate_binding_text(){
         if(StringUtils.equals(ruolo, getString(R.string.professore))){
             elem_text.put("CorsiProfessore", binding.dropdownprofessoreCorso);
         }
     }
 
-    /**
-     * Questo metodo imposta i TextWatcher per gli elementi di testo associati ai componenti di input.
-     * Per ciascun elemento di testo, verifica se è un componente di tipo MultiAutoCompleteTextView e, in tal caso,
-     * aggiunge il TextWatcher e il FocusChangeListener appropriati.
-     * Il TextWatcher monitora le modifiche al testo, mentre il FocusChangeListener gestisce il componente attualmente in focus.
-     */
+
     private void setupTextWatchers(){
         elem_text.forEach((key, value)->  {
         if(value instanceof  MultiAutoCompleteTextView){

@@ -8,7 +8,7 @@
     <!--Fragment delle impostazioni -->
     <fragment
         android:id="@+id/fragment_impostazioni"
-        android:name="com.laureapp.ui.home.ImpostazioniFragment"
+        android:name="com.laureapp.ui.ImpostazioniFragment"
         android:label="Laureapp"
         tools:layout="@layout/fragment_home"/>
 
@@ -18,6 +18,11 @@
         android:name="com.laureapp.ui.home.HomeFragment"
         android:label="Laureapp"
         tools:layout="@layout/fragment_home">
+
+        <!-- Home to social fragment -->
+        <action
+            android:id="@+id/action_fragment_home_to_social_fragment"
+            app:destination="@id/social_fragment" />
 
         <!-- Home to profilop studente fragment -->
         <action
@@ -69,9 +74,6 @@
         <action
             android:id="@+id/action_fragment_home_to_fragment_home"
             app:destination="@id/fragment_home" />
-        <action
-            android:id="@+id/action_fragment_home_to_dettagli_tesi_studente"
-            app:destination="@id/dettagliTesiStudente"/>
 
 
     </fragment>
@@ -102,6 +104,18 @@
         <action
             android:id="@+id/action_fragment_dettagli_task_home_to_impostazioniFragment"
             app:destination="@id/fragment_impostazioni" />
+    </fragment>
+
+    <!--Fragment dei social -->
+    <fragment
+        android:id="@+id/social_fragment"
+        android:name="com.laureapp.ui.home.SocialFragment"
+        android:label="Social"
+        tools:layout="@layout/fragment_social">
+
+        <action
+            android:id="@+id/action_to_profilo"
+            app:destination="@id/profilo_studente" />
     </fragment>
 
     <!--Fragment profilo studente -->
@@ -277,8 +291,6 @@
             android:id="@+id/action_fragment_dettagli_tesi_studente_to_impostazioniFragment"
             app:destination="@id/fragment_impostazioni" />
     </fragment>
-
-
 
     <!--Fragment Tesi Professore -->
 

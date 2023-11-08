@@ -40,4 +40,3 @@ public class Chat {
         this.sender = sender;
     }
 }
-

@@ -37,7 +37,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.laureapp.R;
-import com.laureapp.ui.MainActivity;
 import com.laureapp.ui.card.Adapter.StudentAdapter;
 import com.laureapp.ui.roomdb.entity.Professore;
 import com.laureapp.ui.roomdb.entity.Studente;
@@ -49,7 +48,6 @@ import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.repository.StudenteRepository;
 import com.laureapp.ui.roomdb.repository.UtenteRepository;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
-import com.laureapp.ui.roomdb.viewModel.sharedDataModelView.SharedDataModelView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +75,6 @@ public class TesistiFragment extends Fragment {
     String cognomeTesistaCercato;
     UtenteModelView utenteModelView;
     Long id_utente;
-    SharedDataModelView sharedViewModel;
 
 
 
@@ -147,7 +144,8 @@ public class TesistiFragment extends Fragment {
             StudenteWithUtente studenteWithUtente = studentList.get(position);
 
             // Crea un nuovo Bundle per passare i dati all'altro fragment
-            args.putString("emailStudente", studenteWithUtente.getUtente().getEmail());
+            args.putSerializable("Utente", studenteWithUtente.getUtente());
+            args.putSerializable("Studente", studenteWithUtente.getStudente());
 
 
             // Passa il Bundle al fragment di destinazione
@@ -157,9 +155,13 @@ public class TesistiFragment extends Fragment {
 
     }
 
-
-
-
+    /**
+     * Carica un professore dal database Firestore in base all'ID utente specificato.
+     *
+     * @param id_utente l'ID dell'utente associato al professore da cercare nel database Firestore.
+     * @return un oggetto di tipo Task<Long> che rappresenta un'operazione asincrona per ottenere l'ID del professore.
+     * @throws NoSuchElementException Se l'utente non è trovato nel database Firestore.
+     */
     private Task<Long> loadProfessorByUserId(Long id_utente) {
         return FirebaseFirestore.getInstance()
                 .collection("Utenti/Professori/Professori")
@@ -288,10 +290,10 @@ public class TesistiFragment extends Fragment {
      * @param id_studente id della tesi nella tabella StudenteTesi
      * @return l'id della tesi presente nella tabella studente_tesi
      */
-    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente) {
+    private Task<List<StudenteWithUtente>> loadStudByIdStudenteInStudenteTesi(Long id_studente, Long id_tesi) {
         // Ottieni gli id_studente dalla collezione "StudenteTesi"
         return FirebaseFirestore.getInstance()
-                .collection("StudenteTesi").whereEqualTo("id_studente", id_studente)
+                .collection("StudenteTesi").whereEqualTo("id_tesi",id_tesi)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful() && !task.getResult().isEmpty()) {
@@ -317,13 +319,13 @@ public class TesistiFragment extends Fragment {
 
 
                     return Tasks.whenAllSuccess(tasks).continueWith(resultTask -> {
+                        List<StudenteWithUtente> studenteWithUtenteList = new ArrayList<>();
                         // Otteniamo una lista di StudenteWithUtente
-                        List<StudenteWithUtente> studentiWithUtenti = new ArrayList<>();
                         for (Object studenteWithUtenteTask : resultTask.getResult()) {
-                            studentiWithUtenti.add((StudenteWithUtente) studenteWithUtenteTask);
+                            studenteWithUtenteList.add((StudenteWithUtente) studenteWithUtenteTask);
                         }
-                        Log.d("MOMOMOM", studentiWithUtenti.toString());
-                        return studentiWithUtenti;
+                        Log.d("MOMOMOM", studenteWithUtenteList.toString());
+                        return studenteWithUtenteList;
                     });
 
 
@@ -331,118 +333,86 @@ public class TesistiFragment extends Fragment {
                 });
     }
 
-
-
-
-
-
-
-
-
-
-
     /**
-     * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
-     * È il secondo metodo(2) utile per poter recuperare le tasks.
-     * @param id_utente è l'id dell'utente uguale a quello dello studente
-     */
-    private void loadProfessorForUserId(Long id_utente) {
-        loadProfessorByUserId(id_utente).addOnCompleteListener(professorTask -> {
-            if (professorTask.isSuccessful()) {
-                Long id_professore = professorTask.getResult();
-                loadTesiProfessoreForProfessoreId(id_professore);
-            } else {
-                showToast(context, "Dati professore non caricati correttamente");
-
-            }
-        });
-    }
-
-    /**
-     * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
-     * È il secondo metodo(2) utile per poter recuperare le tasks.
-     * @param id_professore è l'id dell'utente uguale a quello dello studente
-     */
-    private void loadTesiProfessoreForProfessoreId(Long id_professore) {
-        loadTesiProfessoreByProfessoreId(id_professore).addOnCompleteListener(tesiProfessoreTask -> {
-            if (tesiProfessoreTask.isSuccessful()) {
-                Long id_tesi_in_tesi_professore = tesiProfessoreTask.getResult();
-                loadTesiForIdTesiInProfessoreTesi(id_tesi_in_tesi_professore);
-            } else {
-                showToast(context, "Dati tesi professore 1 non caricati correttamente");
-
-            }
-        });
-    }
-
-    /**
-     * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
-     * È il secondo metodo(2) utile per poter recuperare le tasks.
-     * @param id_tesi_in_tesi_professore è l'id dell'utente uguale a quello dello studente
-     */
-    private void loadTesiForIdTesiInProfessoreTesi(Long id_tesi_in_tesi_professore) {
-        loadTesiByIdTesiInTesiProf(id_tesi_in_tesi_professore).addOnCompleteListener(tesiTask -> {
-            if (tesiTask.isSuccessful()) {
-                Long id_tesi = tesiTask.getResult();
-                loadStudTesiForIdTesi(id_tesi);
-            } else {
-                showToast(context, "Dati tesi 2 professore non caricati correttamente");
-
-            }
-        });
-    }
-
-    /**
-     * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
-     * È il secondo metodo(2) utile per poter recuperare le tasks.
-     * @param id_tesi è l'id dell'utente uguale a quello dello studente
-     */
-    private void loadStudTesiForIdTesi(Long id_tesi) {
-        loadTesiByIdTesiInTesiStud(id_tesi).addOnCompleteListener(studTesiTask -> {
-            if (studTesiTask.isSuccessful()) {
-                Long id_studente = studTesiTask.getResult();
-                loadStudForIdStudenteInStudenteTesi(id_studente);
-            } else {
-                showToast(context, "Dati tesi professore 3 non caricati correttamente");
-
-            }
-        });
-    }
-
-
-    /**
-     * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
-     * È il secondo metodo(2) utile per poter recuperare le tasks.
+     * Carica i professori associati a un utente specificato, insieme alle relative informazioni sulle tesi.
      *
-     * @param id_studente è l'id dell'utente uguale a quello dello studente
+     * @param id_utente l'ID dell'utente associato ai professori da cercare.
+     * @return un oggetto di tipo Task<List<StudenteWithUtente>> che rappresenta un'operazione asincrona per ottenere i professori e le relative informazioni sulle tesi.
      */
-    private void loadStudForIdStudenteInStudenteTesi(final Long id_studente) {
-        loadStudByIdStudenteInStudenteTesi(id_studente).addOnCompleteListener(studTask -> {
-            if (studTask.isSuccessful()) {
-                requireActivity().runOnUiThread(() -> addStudentsToList(studTask.getResult()));
-            } else {
-                showToast(context, "Dati tesi professore 4 non caricati correttamente");
-            }
-        });
+    private Task<List<StudenteWithUtente>> loadProfessorForUserId(Long id_utente) {
+        return loadProfessorByUserId(id_utente)
+                .onSuccessTask(this::loadTesiProfessoreForProfessoreId);
     }
 
     /**
-     * Questo metodo aggiunge le tasks alla lista delle task e aggiorna l'adapter permettendo
-     * la visualizzazione delle tasks.
-     * @param tasks è la lista delle tasks
+     * Carica le tesi associate a un professore specificato, insieme alle informazioni sulle tesi.
+     *
+     * @param id_professore l'ID del professore associato alle tesi da cercare.
+     * @return un oggetto di tipo Task<List<StudenteWithUtente>> che rappresenta un'operazione asincrona per ottenere le tesi e le relative informazioni.
      */
-    private void addStudentsToList(final List<StudenteWithUtente> tasks) {
-        requireActivity().runOnUiThread(() -> {
-            studentList.addAll(tasks); // Aggiungi tutti gli studenti alla lista esistente.
-            adapter.notifyDataSetChanged();
-        });
+    private Task<List<StudenteWithUtente>> loadTesiProfessoreForProfessoreId(Long id_professore) {
+        return loadTesiProfessoreByProfessoreId(id_professore)
+                .onSuccessTask(this::loadTesiForIdTesiInProfessoreTesi);
     }
 
+    /**
+     * Carica una tesi specificata in base all'ID tesi, insieme alle informazioni sugli studenti associati.
+     *
+     * @param id_tesi_in_tesi_professore l'ID della tesi da cercare.
+     * @return un oggetto di tipo Task<List<StudenteWithUtente>> che rappresenta un'operazione asincrona per ottenere la tesi e le relative informazioni sugli studenti.
+     */
+    private Task<List<StudenteWithUtente>> loadTesiForIdTesiInProfessoreTesi(Long id_tesi_in_tesi_professore) {
+        return loadTesiByIdTesiInTesiProf(id_tesi_in_tesi_professore)
+                .onSuccessTask(this::loadStudTesiForIdTesi);
+    }
 
+    /**
+     * Carica gli studenti associati a una tesi specificata, insieme alle relative informazioni sugli studenti e l'utente.
+     *
+     * @param id_tesi l'ID della tesi associata agli studenti.
+     * @return un oggetto di tipo Task<List<StudenteWithUtente>> che rappresenta un'operazione asincrona per ottenere gli studenti e le relative informazioni.
+     */
+    private Task<List<StudenteWithUtente>> loadStudTesiForIdTesi(Long id_tesi) {
+        return loadTesiByIdTesiInTesiStud(id_tesi)
+                .onSuccessTask(task -> {
+                    // Qui task rappresenta il risultato della query loadTesiByIdTesiInTesiStud
+                    // Puoi ottenere il valore di id_studente e id_tesi dall'ambiente circostante
 
+                    Long id_studente = task; // Assegna il valore corretto
 
+                    return loadStudForIdStudenteInStudenteTesi(id_studente, id_tesi);
+                });
+    }
 
+    /**
+     * Carica gli studenti associati a una tesi specificata in base all'ID studente e tesi, insieme alle relative informazioni sugli studenti e l'utente.
+     *
+     * @param id_studente l'ID dello studente da cercare.
+     * @param id_tesi l'ID della tesi associata allo studente.
+     * @return un oggetto di tipo Task<List<StudenteWithUtente>> che rappresenta un'operazione asincrona per ottenere gli studenti e le relative informazioni.
+     */
+    private Task<List<StudenteWithUtente>> loadStudForIdStudenteInStudenteTesi(Long id_studente,Long id_tesi) {
+        return loadStudByIdStudenteInStudenteTesi(id_studente,id_tesi)
+                .addOnCompleteListener(studTask -> {
+                    if (studTask.isSuccessful()) {
+                        requireActivity().runOnUiThread(() -> {
+                            List<StudenteWithUtente> students = studTask.getResult();
+                            studentList.addAll(students);
+                            adapter.notifyDataSetChanged();
+                        });
+                    } else {
+                        showToast(context, "Dati tesi professore 4 non caricati correttamente");
+                    }
+                    // Chiamare handleAllResults qui, poiché questo è il punto finale della catena.
+                });
+    }
 
+    /**
+     * Ottieni uno studente con le informazioni associate all'utente in base all'ID studente specificato.
+     *
+     * @param studenteId l'ID dello studente da cercare.
+     * @return un oggetto di tipo Task<StudenteWithUtente> che rappresenta un'operazione asincrona per ottenere uno studente e le relative informazioni sull'utente.
+     */
     public Task<StudenteWithUtente> getStudenteWithUtente(Long studenteId) {
         Task<Studente> studenteTask = loadStudenteById(studenteId);
 
@@ -464,7 +434,12 @@ public class TesistiFragment extends Fragment {
         });
     }
 
-
+    /**
+     * Carica uno studente dal database in base all'ID specificato.
+     *
+     * @param studenteId l'ID dello studente da cercare nel database.
+     * @return un oggetto di tipo Task<Studente> che rappresenta un'operazione asincrona per ottenere uno studente.
+     */
     private Task<Studente> loadStudenteById(Long studenteId) {
         TaskCompletionSource<Studente> tcs = new TaskCompletionSource<>();
 
@@ -479,7 +454,12 @@ public class TesistiFragment extends Fragment {
         return tcs.getTask();
     }
 
-
+    /**
+     * Carica l'utente associato a uno studente specificato.
+     *
+     * @param studente lo studente a cui è associato l'utente.
+     * @return un oggetto di tipo Task<Utente> che rappresenta un'operazione asincrona per ottenere l'utente associato allo studente.
+     */
     private Task<Utente> loadUtenteByStudente(Studente studente) {
         TaskCompletionSource<Utente> tcs = new TaskCompletionSource<>();
 
@@ -494,14 +474,7 @@ public class TesistiFragment extends Fragment {
         return tcs.getTask();
     }
 
-
-
-
-
-
-
-
-    }
+}
 
 
 

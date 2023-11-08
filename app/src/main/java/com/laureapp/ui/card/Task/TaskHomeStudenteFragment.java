@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,12 +40,9 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Questa classe rappresenta un frammento per la gestione delle task associate a uno studente.
  */
 public class TaskHomeStudenteFragment extends Fragment {
-
-
 
     public TaskHomeStudenteFragment() {
         // Required empty public constructor
@@ -57,14 +55,12 @@ public class TaskHomeStudenteFragment extends Fragment {
     FragmentTaskBinding binding;
 
 
-
     // Dichiarazione di una variabile di istanza per il dialog
     static TaskStudenteAdapter adapter;
 
     String ruolo;
 
     private static final List<TaskStudente> taskList = new ArrayList<>();
-    String email;
     Bundle args;
     Utente utente;
 
@@ -88,6 +84,7 @@ public class TaskHomeStudenteFragment extends Fragment {
 
                 utente = (Utente)args.getSerializable("Utente");
                 loadStudentForUserId(utente.getId_utente());
+                Log.d("id_utenteTask", utente.getId_utente().toString());
 
                 ruolo = args.getString("ruolo");
 
@@ -109,17 +106,11 @@ public class TaskHomeStudenteFragment extends Fragment {
         mNav = Navigation.findNavController(view);
         adapter = new TaskStudenteAdapter(context, (ArrayList<TaskStudente>) taskList,mNav, args);
 
-        email = getEmailFromSharedPreferences(context);
-
-
         addButton.setVisibility(View.GONE);
 
         listTaskView.setAdapter(adapter);
 
     }
-
-
-
 
 
     /**
@@ -130,7 +121,7 @@ public class TaskHomeStudenteFragment extends Fragment {
      */
     private Task<Long> loadStudentByUserId(Long id_utente) {
         return FirebaseFirestore.getInstance()
-                .collection("Utenti").document("Studenti").collection("Studenti")
+                .collection("Utenti/Studenti/Studenti")
                 .whereEqualTo("id_utente", id_utente)
                 .get()
                 .continueWith(task -> {
@@ -182,11 +173,11 @@ public class TaskHomeStudenteFragment extends Fragment {
                         studenteTesi.setId_studente(doc.getLong("id_studente"));
                         studenteTesi.setId_studente_tesi(doc.getLong("id_studente_tesi"));
                         studenteTesi.setId_tesi(doc.getLong("id_tesi"));
+                        Log.d("id_studente_tesi", studenteTesi.getId_studente_tesi().toString());
 
 
 
-
-                        return studenteTesi.getId_studente();
+                        return studenteTesi.getId_studente_tesi();
                     }
                     throw new NoSuchElementException("Utente non trovato con questa mail: " + id_studente);
                 });
@@ -235,7 +226,6 @@ public class TaskHomeStudenteFragment extends Fragment {
      */
 
 
-
     /**
      * Questo metodo permette di recuperare lo studente in base all'id dell'utente.
      * È il secondo metodo(2) utile per poter recuperare le tasks.
@@ -249,7 +239,7 @@ public class TaskHomeStudenteFragment extends Fragment {
             } else {
                 taskList.clear();
                 adapter.notifyDataSetChanged();
-                showToast(context, "Dati studenti non caricati correttamente e/o nessuna task assegnata");
+                showToast(context, "Dati studenti non caricati correttamente");
 
             }
         });
@@ -282,8 +272,12 @@ public class TaskHomeStudenteFragment extends Fragment {
         loadTaskById(id_stud_tesi_in_studente_tesi).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 taskList.clear();
+                //Mi stampa due volte l'id_studenteTesi, prima quello corretto e poi 4
+                Log.d("id_studente_tesi", id_stud_tesi_in_studente_tesi.toString() + task.getResult());
                 addTasksToList(task.getResult());
             } else {
+                taskList.clear();
+                adapter.notifyDataSetChanged();
                 showToast(context, "Dati task non caricati correttamente");
             }
         });
@@ -300,9 +294,10 @@ public class TaskHomeStudenteFragment extends Fragment {
         for (TaskStudente taskStudente : tasks) {
             if (taskStudente != null) {
                 taskList.add(taskStudente);
+                Log.d("id_studente_in_studente_tesi", taskStudente.getId_studente_tesi().toString());
+
             }
         }
-
         adapter.notifyDataSetChanged();
     }
 

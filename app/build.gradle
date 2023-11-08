@@ -106,8 +106,8 @@ dependencies {
         }
     }
     implementation  'org.apache.commons:commons-lang3:3.7'
-    implementation 'com.google.firebase:firebase-database:20.2.2'
-    implementation 'com.google.firebase:firebase-firestore:24.8.1'
+    implementation 'com.google.firebase:firebase-database:20.3.0'
+    implementation 'com.google.firebase:firebase-firestore:24.9.1'
     implementation 'com.google.zxing:core:3.4.1'
 
 

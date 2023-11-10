@@ -55,7 +55,11 @@ import com.laureapp.databinding.ActivityMainBinding;
 import com.laureapp.ui.card.TesiStudente.DettagliTesiStudenteFragment;
 import com.laureapp.ui.home.HomeFragment;
 import com.laureapp.ui.login.LoginActivity;
+import com.laureapp.ui.roomdb.entity.Studente;
 import com.laureapp.ui.roomdb.entity.Tesi;
+import com.laureapp.ui.roomdb.entity.Utente;
+import com.laureapp.ui.roomdb.viewModel.StudenteModelView;
+import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -76,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
     AppBarConfiguration mAppBarConfiguration;
     ActivityMainBinding binding;
     String ruolo;
+    UtenteModelView ut_view;
+    Utente utente;
+    Studente studente;
+    StudenteModelView st_view;
+
     NavController navController;
     Bundle bundle;
 
@@ -94,7 +103,12 @@ public class MainActivity extends AppCompatActivity {
         ruolo = bundle.getString("ruolo");
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_main);
         navController.navigate(R.id.fragment_home, bundle);
-
+        if (StringUtils.equals(ruolo, "Ospite")){
+            ut_view = new UtenteModelView(getApplicationContext());
+            utente = ut_view.findAllById(ut_view.getIdUtente("ospite@it.it"));
+            st_view = new StudenteModelView(getApplicationContext());
+            studente = st_view.findAllById(utente.getId_utente());
+        }
 
 
         // Imposta gli argomenti per il fragment
@@ -125,18 +139,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Impostazioni", Toast.LENGTH_LONG).show();
 
             } else if (id == R.id.itemSignOut) {
+                if (StringUtils.equals(ruolo, "Ospite")){
+                    ut_view.updateUtente(utente);
+                    st_view.updateStudente(studente);
+                }
                 FirebaseAuth.getInstance().signOut();
-
-                //faccio logout dell'utente se è loggato
-                //in entrambi i casi cancello i dati dal locale
-                   /* if(currentUser != null) {
-                        String uid = currentUser.getUid();
-                        db.userDao().deleteByUserId(uid);
-                        FirebaseAuth.getInstance().signOut();
-                    } else {
-                        db.userDao().deleteByUserId("guest");
-                    }
-                    */
                 //avvio l'activity di login
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);

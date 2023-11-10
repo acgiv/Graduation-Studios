@@ -81,10 +81,17 @@ public class TaskHomeStudenteFragment extends Fragment {
 
 
         if(args != null) {
+            utente = (Utente) args.getSerializable("Utente");
 
-                utente = (Utente)args.getSerializable("Utente");
+            if (utente == null) {
+                // L'utente è nullo, assegna l'ID utente a 0 o a un valore predefinito
+                loadStudentForUserId(0L);  // O assegna un valore diverso a seconda delle esigenze
+                Log.d("id_utenteTask", "ID utente è 0 o un valore predefinito");
+            } else {
+                // L'utente non è nullo, procedi con il caricamento dei dati delle task
                 loadStudentForUserId(utente.getId_utente());
                 Log.d("id_utenteTask", utente.getId_utente().toString());
+            }
 
                 ruolo = args.getString("ruolo");
 

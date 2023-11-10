@@ -128,9 +128,11 @@ public class HomeFragment extends Fragment {
                 Log.d("Task", "cliccato Task studente");
             } else if(StringUtils.equals("Professore", ruolo)){
                 mNav.navigate(R.id.action_fragment_home_to_richiesteProfessoreFragment,args);
-            }else {
-                mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment);
-                Log.d("Task", "cliccato Task Ospite");            }
+            }else if(StringUtils.equals("Ospite", ruolo)) {
+                Log.d("Task", "cliccato Task Ospite"+ruolo);
+
+                mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment,args);
+                           }
 
         });
 

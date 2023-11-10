@@ -104,7 +104,9 @@ public class SegnalazioniFragment extends Fragment {
         listView.setNestedScrollingEnabled(true);
 
         addButton = view.findViewById(R.id.add_segnalazioni_ImageButton);
-
+        if(StringUtils.equals(ruolo,"Ospite")){
+            addButton.setVisibility(View.GONE);
+        }
         db = FirebaseFirestore.getInstance();
 
 
@@ -117,7 +119,7 @@ public class SegnalazioniFragment extends Fragment {
         mNav = Navigation.findNavController(view);
         if(args != null) {
             adapter = new SegnalazioniAdapter(context, segnalazioniList, mNav, args);
-            if (StringUtils.equals("Professore", args.getString("ruolo"))) {
+            if (StringUtils.equals("Professore", ruolo)) {
                 String email = args.getString("emailStudente");
 
                 id_utente = utenteView.getIdUtente(email);
@@ -127,7 +129,7 @@ public class SegnalazioniFragment extends Fragment {
                         showInputDialog()
                 );
                 addButton.setVisibility(View.GONE);
-            } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
+            } else if (StringUtils.equals("Studente", ruolo)) {
                 String email = getEmailFromSharedPreferences(context);
 
                 id_utente = utenteView.getIdUtente(email);
@@ -143,6 +145,10 @@ public class SegnalazioniFragment extends Fragment {
                 addButton.setOnClickListener(view1 ->
                         showInputDialog()
                 );
+            } else if (StringUtils.equals("Ospite", args.getString("ruolo"))) {
+                String email = getEmailFromSharedPreferences(context);
+                id_utente = utenteView.getIdUtente(email);
+                loadStudentForUserId(id_utente);
             }
             listView.setAdapter(adapter);
         }

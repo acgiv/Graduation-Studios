@@ -81,6 +81,10 @@ public class SegnalazioniAdapter extends ArrayAdapter<Segnalazione> {
                     // Utilizza la NavHostController per navigare al dettaglio del task
                     args.putSerializable("SelectedSegnalazione", segnalazione);
                     mNav.navigate(R.id.action_fragment_segnalazioni_to_chat_fragment, args);
+                }else if (StringUtils.equals("Ospite", args.getString("ruolo"))) {
+                    args.putSerializable("SelectedSegnalazione", segnalazione);
+
+                    mNav.navigate(R.id.action_fragment_segnalazioni_to_chat_fragment, args);
                 }
             }
         });

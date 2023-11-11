@@ -32,6 +32,7 @@ import com.laureapp.ui.roomdb.entity.Tesi;
 import com.laureapp.ui.roomdb.entity.Utente;
 import com.laureapp.ui.roomdb.entity.Vincolo;
 import com.laureapp.ui.roomdb.viewModel.ProfessoreModelView;
+import com.laureapp.ui.roomdb.viewModel.TesiModelView;
 import com.laureapp.ui.roomdb.viewModel.UtenteModelView;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class ElencoTesiFragment extends Fragment {
     private String titoloTesiCercata = "";
 
     private AlertDialog filterDialog;
+
     ArrayList<Tesi> tesiList = new ArrayList<>();
 
     List<Utente> utentiList = new ArrayList<>();
@@ -62,6 +64,7 @@ public class ElencoTesiFragment extends Fragment {
     Long media;
     Long esami;
     Long tempistiche;
+    TesiModelView tesiModelView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +78,8 @@ public class ElencoTesiFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         context = getContext();
+        tesiModelView = new TesiModelView(context);
+
 
         //Ottengo la lista degli utenti che mi servirà nel filtra
         UtenteModelView utenteModelView = new UtenteModelView(context);
@@ -156,7 +161,7 @@ public class ElencoTesiFragment extends Fragment {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
 
         return FirebaseFirestore.getInstance()
-                .collection("Tesi")
+                .collection("Tesi").whereNotEqualTo("id_tesi", 7)
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful()) {
@@ -178,6 +183,7 @@ public class ElencoTesiFragment extends Fragment {
                             tesi.setVisualizzazioni((Long) document.get("visualizzazioni"));
                             if (tesi != null) {
                                 tesiList.add(tesi);
+
                             }
                         }
                     }
@@ -196,20 +202,26 @@ public class ElencoTesiFragment extends Fragment {
         final ArrayList<Tesi> tesiList = new ArrayList<>();
 
         return FirebaseFirestore.getInstance()
-                .collection("Tesi") //collection di firebase
-                .orderBy("titolo") //ordino i risultati in base al titolo
+                .collection("Tesi")
+                .orderBy("titolo") // Ordino i risultati in base al titolo
                 .startAt(searchText)
                 .endAt(searchText + "\uf8ff")
                 .get()
                 .continueWith(task -> {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            //se la ricerca ha successo, assegno i campi della tesi in un oggetto Tesi
+                            // Aggiungo una condizione per escludere la tesi con id=7
+                            Long idTesi = (Long) document.get("id_tesi");
+                            if (idTesi != null && idTesi.equals(7L)) {
+                                continue; // Salta l'iterazione e passa alla successiva
+                            }
+
+                            // Se la ricerca ha successo, assegno i campi della tesi in un oggetto Tesi
                             Tesi tesi = new Tesi();
-                            tesi.setId_tesi((Long) document.get("id_tesi"));
+                            tesi.setId_tesi(idTesi);
                             tesi.setId_vincolo((Long) document.get("id_vincolo"));
 
-                            // Converto da firebase timestamp a sql timestamp
+                            // Converto da Firebase Timestamp a SQL Timestamp
                             com.google.firebase.Timestamp firebaseTimestamp = (com.google.firebase.Timestamp) document.get("data_pubblicazione");
                             Date javaDate = firebaseTimestamp.toDate();
                             java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(javaDate.getTime());
@@ -222,7 +234,8 @@ public class ElencoTesiFragment extends Fragment {
 
                             tesiList.add(tesi);
                         }
-                        // aggiorno l'adapter con i nuovi dati
+
+                        // Aggiorno l'adapter con i nuovi dati
                         if (adapter != null) {
                             adapter.clear();
                             adapter.addAll(tesiList);
@@ -232,6 +245,7 @@ public class ElencoTesiFragment extends Fragment {
                     return tesiList;
                 });
     }
+
 
     /**
      * Questo metodo consente di visualizzare il popup filtra tesi e i relativi metodi per filtrare le stesse

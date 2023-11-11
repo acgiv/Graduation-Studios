@@ -85,7 +85,7 @@ public class ChatFragment extends Fragment {
             info_search_receiver.put("path_id_tesi_ruolo", "StudenteTesi");
             info_search_receiver.put("path_id_utente", "Utenti/Studenti/Studenti");
 
-        }else{
+        }else  if (StringUtils.equals(ruolo, "Ospite")){
             info_search_receiver.put("receiver_ruolo", "id_studente");
             info_search_receiver.put("path_id_tesi_ruolo", "StudenteTesi");
             info_search_receiver.put("path_id_utente", "Utenti/Studenti/Studenti");
@@ -196,7 +196,7 @@ public class ChatFragment extends Fragment {
         return FirebaseFirestore.getInstance()
                 .collection(Objects.requireNonNull(info_search_receiver.get("path_id_utente")).toString())
                 .whereEqualTo(Objects.requireNonNull(info_search_receiver.get("receiver_ruolo")).toString(), id_ruolo)
-                .limit(1) // Limita la query a un solo documento
+                .limit(2) // Limita la query a un solo documento
                 .get()
                 .continueWith(task4 -> {
                     if (task4.isSuccessful()) {
@@ -245,11 +245,10 @@ public class ChatFragment extends Fragment {
                             dataSnapshot.child("receiver").getValue(Long.class),dataSnapshot.child("sender").getValue(Long.class) );
 
                     if (chat.getReceiver() != null && chat.getReceiver() != null && utenteSend != null && utenteRecive != null) {
-                        if ((chat.getReceiver().equals(utenteSend.getId_utente()) && chat.getSender().equals(utenteRecive)) || (chat.getReceiver().equals(utenteRecive) && chat.getSender().equals(utenteSend.getId_utente()))) {
                             mChat.add(chat);
                             messageAdapter = new MessageAdapter(context, mChat,utenteSend.getId_utente(),"Default");
                             binding.recycleView.setAdapter(messageAdapter);
-                        }
+
                     }
 
                 }

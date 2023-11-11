@@ -105,6 +105,10 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
             if(StringUtils.equals("Studente", args.getString("ruolo"))){
                 Log.d("Task_studente_studente", "Cliccato la task");
                 deleteTaskImageButton.setVisibility(View.GONE);
+
+            } else if (StringUtils.equals("Ospite", args.getString("ruolo"))) {
+                deleteTaskImageButton.setVisibility(View.GONE);
+
             }else if(StringUtils.equals("Professore", args.getString("ruolo"))){
                 deleteTaskImageButton.setOnClickListener(view -> {
                     //Titolo della task
@@ -126,6 +130,13 @@ public class TaskStudenteAdapter extends ArrayAdapter<TaskStudente> {
 
                     mNav.navigate(R.id.action_task_to_dettagli_task, args);
                 } else if (StringUtils.equals("Studente", args.getString("ruolo"))) {
+
+                    // Utilizza la NavHostController per navigare al dettaglio del task
+                    args.putSerializable("SelectedTask", selectedTask);
+
+
+                    mNav.navigate(R.id.action_fragment_taskStudenteFragment_to_dettagli_task, args);
+                }else if (StringUtils.equals("Ospite", args.getString("ruolo"))) {
 
                     // Utilizza la NavHostController per navigare al dettaglio del task
                     args.putSerializable("SelectedTask", selectedTask);

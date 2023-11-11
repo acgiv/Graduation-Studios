@@ -136,6 +136,7 @@ public class LoginFragment extends Fragment {
             Intent HomeActivity = new Intent(requireActivity(), MainActivity.class);
             bundle = new Bundle();
             bundle.putString("ruolo", "Ospite");
+            bundle.putString("email","ospite@it.it");
             HomeActivity.putExtras(bundle);
             startActivity(HomeActivity);
             requireActivity().finish();

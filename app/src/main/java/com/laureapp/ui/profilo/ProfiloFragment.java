@@ -68,6 +68,7 @@ public class ProfiloFragment extends Fragment {
     private ProfiloFragment.CustomTextWatcher textWatcher;
     private final HashMap<String, Object> elem_text = new HashMap<>();
     private String ruolo;
+    private Boolean change;
     private String email;
     private Studente studente;
     private Utente utente;
@@ -107,14 +108,18 @@ public class ProfiloFragment extends Fragment {
 
         if (StringUtils.equals(ruolo, getString(R.string.studente))) {
             studente = st_view.findAllById(st_view.findStudente(utente.getId_utente()));
+            this.change = true;
         }else if(StringUtils.equals(ruolo, getString(R.string.professore))){
             corsi = getResources().getStringArray(R.array.Corsi);
             professore = pr_view.findAllById(pr_view.findProfessore(utente.getId_utente()));
             textWatcher = new ProfiloFragment.CustomTextWatcher();
             inizializzate_binding_text();
+            this.change = true;
             setupTextWatchers();
+        } if (StringUtils.equals(ruolo, "Ospite")){
+            studente = st_view.findAllById(st_view.findStudente(utente.getId_utente()));
+            this.change=false;
         }
-
 
         return binding.getRoot();
     }
@@ -190,7 +195,7 @@ public class ProfiloFragment extends Fragment {
             binding.Textnuovo.setTransformationMethod(null);
             binding.componentInputVecchio.setHint("Matricola attuale");
             binding.componentInputNuovo.setHint("Nuova Matricola");
-            if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+            if (StringUtils.equals(ruolo, getString(R.string.studente)) || StringUtils.equals(ruolo, "Ospite") ) {
                 confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
             }else{
                 confirm_modifiche("Matricola", String.valueOf(professore.getMatricola()));
@@ -287,9 +292,11 @@ public class ProfiloFragment extends Fragment {
                                 if (control_attuale && control_nuovo) {
                                     utente.setPassword(ControlInput.hashWith256(Objects.requireNonNull(binding.Textnuovo.getText()).toString()));
                                     ut_view.updateUtente(utente);
-                                    updatePasswordAutentication();
-                                    component_pass.put(String.class, utente.getPassword());
-                                    changeComponentFirestore("password","Utenti");
+                                    if (!StringUtils.equals(ruolo, "Ospite") ){
+                                        updatePasswordAutentication();
+                                        component_pass.put(String.class, utente.getPassword());
+                                        changeComponentFirestore("password","Utenti");
+                                    }
                                     close_card_modifica();
                                 }
                             }
@@ -298,7 +305,7 @@ public class ProfiloFragment extends Fragment {
                             if (ControlInput.is_correct_matricola(binding.Textnuovo, binding.componentInputNuovo, context, ruolo)) {
                                 control_nuovo = is_equal_campi("NUOVO", campo_nuovo_text, campo, message, Objects.requireNonNull(binding.componentInputNuovo));
                                 if (control_attuale && control_nuovo){
-                                    if (StringUtils.equals(ruolo, getString(R.string.studente))) {
+                                    if (StringUtils.equals(ruolo, getString(R.string.studente)) || StringUtils.equals(ruolo, "Ospite") ) {
                                         confirm_modifiche("Matricola", String.valueOf(studente.getMatricola()));
                                         studente.setMatricola(Long.valueOf(binding.Textnuovo.getText().toString()));
                                         st_view.updateStudente(studente);
@@ -485,53 +492,55 @@ public class ProfiloFragment extends Fragment {
      * @param path           Il percorso del documento in Firestore in cui effettuare l'aggiornamento.
      */
     private void changeComponentFirestore(String key_component,String path) {
-        FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        assert currentUser != null;
-        if (!StringUtils.isEmpty(currentUser.getUid())) {
-            // Crea un oggetto con i dati da aggiornare nel documento
-            Map<String, Object> updateData = new HashMap<>();
-            Map.Entry<Class<?>, Object> firstEntry = component_pass.entrySet().iterator().next();
-            Object value = firstEntry.getValue();
-            Class<?> type = firstEntry.getKey();
-            if (type == String.class) {
-                if (value instanceof String) {
-                    String stringValue = (String) value;
-                    updateData.put(key_component, stringValue);
-                } else {
-                    // Gestisci il caso in cui il valore non è una stringa.
+        if (change) {
+            FirebaseFirestore firestoreDB = FirebaseFirestore.getInstance();
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+            assert currentUser != null;
+            if (!StringUtils.isEmpty(currentUser.getUid())) {
+                // Crea un oggetto con i dati da aggiornare nel documento
+                Map<String, Object> updateData = new HashMap<>();
+                Map.Entry<Class<?>, Object> firstEntry = component_pass.entrySet().iterator().next();
+                Object value = firstEntry.getValue();
+                Class<?> type = firstEntry.getKey();
+                if (type == String.class) {
+                    if (value instanceof String) {
+                        String stringValue = (String) value;
+                        updateData.put(key_component, stringValue);
+                    } else {
+                        // Gestisci il caso in cui il valore non è una stringa.
+                    }
+                } else if (type == Long.class) {
+                    if (value instanceof Long) {
+                        Long longValue = (Long) value;
+                        updateData.put(key_component, longValue);
+                    } else {
+                        // Gestisci il caso in cui il valore non è un long.
+                    }
+                } else if (type == Integer.class) {
+                    if (value instanceof Integer) {
+                        Integer intValue = (Integer) value;
+                        updateData.put(key_component, intValue);
+                    } else {
+                        // Gestisci il caso in cui il valore non è un intero.
+                    }
                 }
-            } else if (type == Long.class) {
-                if (value instanceof Long) {
-                    Long longValue = (Long) value;
-                    updateData.put(key_component, longValue);
-                } else {
-                    // Gestisci il caso in cui il valore non è un long.
-                }
-            } else if (type == Integer.class) {
-                if (value instanceof Integer) {
-                    Integer intValue = (Integer) value;
-                    updateData.put(key_component, intValue);
-                } else {
-                    // Gestisci il caso in cui il valore non è un intero.
-                }
+                // "nome" è il nome del campo da aggiornare
+                // Esegui l'aggiornamento nel documento
+                firestoreDB.collection(path)
+                        .document(currentUser.getUid())
+                        .update(updateData) // Aggiorna il campo "nome" con il nuovo nome
+                        .addOnSuccessListener(aVoid -> {
+                            // Successo nell'aggiornamento
+                            // Puoi aggiungere qui le azioni da eseguire in caso di successo
+                        })
+                        .addOnFailureListener(e -> {
+                            // Errore nell'aggiornamento
+                            Log.e("ERRORE AGGIORNAMENTO", "Errore nell'aggiornamento della password in Firestore", e);
+                        });
+            } else {
+                // Gestisci il caso in cui l'ID utente non sia valido o vuoto
+                Log.e("USER_ERROR", "ERRORE UTENTE NON VALIDO");
             }
-            // "nome" è il nome del campo da aggiornare
-            // Esegui l'aggiornamento nel documento
-            firestoreDB.collection(path)
-                    .document(currentUser.getUid())
-                    .update(updateData) // Aggiorna il campo "nome" con il nuovo nome
-                    .addOnSuccessListener(aVoid -> {
-                        // Successo nell'aggiornamento
-                        // Puoi aggiungere qui le azioni da eseguire in caso di successo
-                    })
-                    .addOnFailureListener(e -> {
-                        // Errore nell'aggiornamento
-                        Log.e("ERRORE AGGIORNAMENTO", "Errore nell'aggiornamento della password in Firestore", e);
-                    });
-        } else {
-            // Gestisci il caso in cui l'ID utente non sia valido o vuoto
-            Log.e("USER_ERROR", "ERRORE UTENTE NON VALIDO");
         }
     }
 

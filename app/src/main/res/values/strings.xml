@@ -56,12 +56,12 @@
 
     <!-- Strings related to Change Password Page  -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="matricola">Matricola:</string>
+    <string name="matricola">Matricola</string>
     <string name="inserisci_l_email_di_registrazione">Inserisci l\'email di registrazione</string>
     <string name="avanti">Avanti</string>
     <string name="facolta">Facoltà</string>
     <string name="media">Media</string>
-    <string name="esami_mancanti">Esami mancanti:</string>
+    <string name="esami_mancanti">Esami mancanti</string>
     <string name="corsi">Corso di Laurea</string>
     <string name="impostaLingua">Seleziona lingua</string>
     <string name="italiano">Italiano</string>
@@ -212,7 +212,7 @@
     <string name="listaSegnalazioni">Lista segnalazioni</string>
     <string name="richiesta_num">Richiesta Num:</string>
     <string name="tesiRichiesta">Tesi:</string>
-    <string name="TaskStudente">Task-Studente</string>
+    <string name="TaskStudente">Task Studente</string>
     <string name="Profilo">Profilo</string>
     <string name="Tesisti">Tesisti</string>
     <string name="Tesista">Tesista</string>

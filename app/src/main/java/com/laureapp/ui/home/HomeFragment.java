@@ -62,6 +62,7 @@ public class HomeFragment extends Fragment {
             Log.d("ruolo ", ruolo);
             //questo è null quando fai login
             saveEmailToSharedPreferences(args.getString("email"));
+
             //args.putSerializable("UtenteLoggato", (Utente) args.getSerializable("Utente"));
 
 
@@ -127,9 +128,11 @@ public class HomeFragment extends Fragment {
                 Log.d("Task", "cliccato Task studente");
             } else if(StringUtils.equals("Professore", ruolo)){
                 mNav.navigate(R.id.action_fragment_home_to_richiesteProfessoreFragment,args);
-            }else {
-                mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment);
-                Log.d("Task", "cliccato Task Ospite");            }
+            }else if(StringUtils.equals("Ospite", ruolo)) {
+                Log.d("Task", "cliccato Task Ospite" +ruolo);
+
+                mNav.navigate(R.id.action_fragment_home_to_taskStudenteFragment,args);
+                           }
 
         });
 
@@ -152,6 +155,9 @@ public class HomeFragment extends Fragment {
                 mNav.navigate(R.id.action_fragment_home_to_tesisti_segnalazione_fragment, args);
             }else if(StringUtils.equals("Studente", ruolo)){
                 Log.d("Segn", "cliccato Segnalazione Studente"  + ruolo);
+                mNav.navigate(R.id.action_fragment_home_to_segnalazione_fragment, args);
+            }else if(StringUtils.equals("Ospite", ruolo)) {
+                Log.d("Segn", "cliccato Segnalazione Ospite" + ruolo);
                 mNav.navigate(R.id.action_fragment_home_to_segnalazione_fragment, args);
             }
         });

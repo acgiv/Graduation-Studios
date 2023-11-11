@@ -10,11 +10,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,17 +72,40 @@ public class ChatFragment extends Fragment {
         args = getArguments();
         if (args != null) {
             ruolo = args.getString("ruolo");
-            utenteSend = (Utente) args.getSerializable("Utente");
             segnalazione =(Segnalazione) args.getSerializable("SelectedSegnalazione");
+            utenteSend = (Utente) args.getSerializable("Utente");
         }
         if (StringUtils.equals(ruolo, getString(R.string.studente))){
             info_search_receiver.put("receiver_ruolo", "id_professore");
             info_search_receiver.put("path_id_tesi_ruolo", "TesiProfessore");
             info_search_receiver.put("path_id_utente", "Utenti/Professori/Professori");
-        }else{
+            utenteSend = (Utente) args.getSerializable("Utente");
+        }else if (StringUtils.equals(ruolo, getString(R.string.professore))) {
             info_search_receiver.put("receiver_ruolo", "id_studente");
             info_search_receiver.put("path_id_tesi_ruolo", "StudenteTesi");
             info_search_receiver.put("path_id_utente", "Utenti/Studenti/Studenti");
+
+        }else  if (StringUtils.equals(ruolo, "Ospite")){
+            info_search_receiver.put("receiver_ruolo", "id_studente");
+            info_search_receiver.put("path_id_tesi_ruolo", "StudenteTesi");
+            info_search_receiver.put("path_id_utente", "Utenti/Studenti/Studenti");
+            utenteSend = new Utente();
+            utenteSend.setId_utente(0L);
+            DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference("Segnalazione/0/Chats");
+
+            chatReference.removeValue()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Firebase", "Messaggi eliminati con successo");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Firebase", "Errore durante l'eliminazione dei messaggi", e);
+                        }
+                    });
         }
 
         reference = FirebaseDatabase.getInstance().getReference("Segnalazione").child(String.valueOf(segnalazione.getId_segnalazione()));
@@ -103,17 +129,21 @@ public class ChatFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if(!StringUtils.equals(ruolo,"Ospite")){
+            loadIdTesi().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    info_search_receiver.put("id_tesi", task.getResult());
+                    loadIdReceiver(task.getResult()).addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            utenteRecive = task2.getResult() ;
+                            readMessage();
+                        }
+                    });
+                }});
+        }else{
+            utenteRecive= -1L;
+        }
 
-        loadIdTesi().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                info_search_receiver.put("id_tesi", task.getResult());
-                loadIdReceiver(task.getResult()).addOnCompleteListener(task2 -> {
-                    if (task2.isSuccessful()) {
-                        utenteRecive = task2.getResult() ;
-                        readMessage();
-                    }
-                });
-            }});
 
         binding.btcSend.setOnClickListener(v -> {
             if (!StringUtils.isEmpty(binding.textSend.getText().toString())){
@@ -166,7 +196,7 @@ public class ChatFragment extends Fragment {
         return FirebaseFirestore.getInstance()
                 .collection(Objects.requireNonNull(info_search_receiver.get("path_id_utente")).toString())
                 .whereEqualTo(Objects.requireNonNull(info_search_receiver.get("receiver_ruolo")).toString(), id_ruolo)
-                .limit(1) // Limita la query a un solo documento
+                .limit(2) // Limita la query a un solo documento
                 .get()
                 .continueWith(task4 -> {
                     if (task4.isSuccessful()) {
@@ -215,11 +245,10 @@ public class ChatFragment extends Fragment {
                             dataSnapshot.child("receiver").getValue(Long.class),dataSnapshot.child("sender").getValue(Long.class) );
 
                     if (chat.getReceiver() != null && chat.getReceiver() != null && utenteSend != null && utenteRecive != null) {
-                        if ((chat.getReceiver().equals(utenteSend.getId_utente()) && chat.getSender().equals(utenteRecive)) || (chat.getReceiver().equals(utenteRecive) && chat.getSender().equals(utenteSend.getId_utente()))) {
                             mChat.add(chat);
                             messageAdapter = new MessageAdapter(context, mChat,utenteSend.getId_utente(),"Default");
                             binding.recycleView.setAdapter(messageAdapter);
-                        }
+
                     }
 
                 }
